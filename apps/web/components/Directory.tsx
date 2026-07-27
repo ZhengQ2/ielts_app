@@ -6,6 +6,8 @@ import {
   cityFacets,
   filterCentres,
   operatorFacets,
+  operatorShape,
+  operatorStyle,
   sortCentres,
   type Centre,
   type CentreFilter,
@@ -125,21 +127,37 @@ export function Directory({ centres }: { centres: Centre[] }) {
         </label>
 
         <div className="flex flex-wrap items-center gap-2 sm:col-span-2 lg:col-span-4">
-          {operatorOptions.map(({ operator, count }) => (
-            <button
-              key={operator}
-              type="button"
-              onClick={() => toggleOperator(operator)}
-              aria-pressed={operators.includes(operator)}
-              className={`rounded-full border px-3 py-1 text-sm transition ${
-                operators.includes(operator)
-                  ? 'border-brand bg-brand-soft text-brand'
-                  : 'border-line text-muted hover:border-muted'
-              }`}
-            >
-              {operator} ({count})
-            </button>
-          ))}
+          {operatorOptions.map(({ operator, count }) => {
+            const active = operators.includes(operator);
+            const style = operatorStyle(operator);
+            return (
+              <button
+                key={operator}
+                type="button"
+                onClick={() => toggleOperator(operator)}
+                aria-pressed={active}
+                className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm transition ${
+                  active ? '' : 'border-line text-muted hover:border-muted'
+                }`}
+                style={
+                  active
+                    ? { borderColor: style.base, background: style.soft, color: style.text }
+                    : undefined
+                }
+              >
+                <span
+                  aria-hidden
+                  className="inline-block h-2 w-2 shrink-0"
+                  style={{
+                    background: style.base,
+                    borderRadius: operatorShape(operator) === 'circle' ? '9999px' : '1px',
+                    transform: operatorShape(operator) === 'diamond' ? 'rotate(45deg)' : undefined,
+                  }}
+                />
+                {operator} ({count})
+              </button>
+            );
+          })}
           {hasFilters && (
             <button
               type="button"

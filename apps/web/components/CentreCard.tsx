@@ -6,6 +6,7 @@ import {
   isPinnable,
   type CentreWithDistance,
 } from '@ielts-map/core';
+import { OperatorBadge } from './OperatorBadge';
 
 interface Props {
   centre: CentreWithDistance;
@@ -31,9 +32,7 @@ export function CentreCard({ centre, selected, onHover, onSelect }: Props) {
             {centre.name}
           </Link>
         </h3>
-        <span className="shrink-0 rounded-full bg-brand-soft px-2 py-0.5 text-xs font-medium text-brand">
-          {centre.operator}
-        </span>
+        <OperatorBadge operator={centre.operator} />
       </div>
 
       <p className="mt-1 text-sm text-muted">

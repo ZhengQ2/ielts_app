@@ -2,7 +2,13 @@
 
 import { useEffect, useRef } from 'react';
 import maplibregl, { type LngLatBoundsLike, type Map as MapLibreMap } from 'maplibre-gl';
-import { isPinnable, type Centre } from '@ielts-map/core';
+import {
+  isPinnable,
+  operatorShape,
+  operatorStyle,
+  type Centre,
+  type Operator,
+} from '@ielts-map/core';
 
 /**
  * Raster OpenStreetMap tiles, so the map works with no API key and no account.
@@ -78,8 +84,11 @@ export default function CentreMap({ centres, selectedId, onSelect }: Props) {
     for (const centre of located) {
       const el = document.createElement('button');
       el.type = 'button';
-      el.setAttribute('aria-label', centre.name);
+      // The operator is in the label too — a screen reader gets no colour.
+      el.setAttribute('aria-label', `${centre.name} (${centre.operator})`);
       el.className = 'maplibre-pin';
+      el.style.setProperty('--pin', operatorStyle(centre.operator).base);
+      el.dataset.shape = operatorShape(centre.operator);
       // A coarse coordinate gets a hollow, softer marker so the map never
       // implies more precision than the data supports.
       el.dataset.precise = String(isPinnable(centre.geo));
@@ -117,26 +126,74 @@ export default function CentreMap({ centres, selectedId, onSelect }: Props) {
     }
   }, [selectedId, centres]);
 
+  // Only show operators that are actually on screen.
+  const legend = [...new Set(centres.map((c) => c.operator))].sort();
+
   return (
     <div className="relative h-full w-full">
       <div ref={container} className="h-full w-full" />
+
+      {legend.length > 0 && (
+        <div className="pointer-events-none absolute left-3 top-3 rounded-lg border border-line bg-white/95 px-3 py-2 shadow-sm backdrop-blur-sm">
+          <ul className="flex flex-col gap-1.5">
+            {legend.map((operator) => (
+              <li key={operator} className="flex items-center gap-2 text-xs">
+                <LegendSwatch operator={operator} />
+                <span>{operator}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
       <style>{`
         .maplibre-pin {
-          width: 18px; height: 18px; border-radius: 9999px; cursor: pointer;
-          background: oklch(0.52 0.14 250); border: 2px solid white;
-          box-shadow: 0 1px 4px rgb(0 0 0 / 0.35); transition: transform .12s ease;
+          --scale: 1;
+          --rotate: 0deg;
+          width: 16px; height: 16px; cursor: pointer;
+          background: var(--pin); border: 2px solid white; border-radius: 9999px;
+          box-shadow: 0 1px 4px rgb(0 0 0 / 0.35);
+          transform: rotate(var(--rotate)) scale(var(--scale));
+          transition: transform .12s ease;
         }
+        /* Shape carries the operator alongside colour, so the distinction
+           survives colour blindness and greyscale. Rotated squares are sized
+           down: a 16px square turned 45° has a ~22px diagonal, which would read
+           as a heavier mark than the circles it sits beside. */
+        .maplibre-pin[data-shape="diamond"] {
+          width: 13px; height: 13px; border-radius: 2px; --rotate: 45deg;
+        }
+        .maplibre-pin[data-shape="square"]  { width: 14px; height: 14px; border-radius: 2px; }
         .maplibre-pin[data-precise="false"] {
           background: transparent;
-          border: 2px dashed oklch(0.52 0.14 250);
+          border-style: dashed;
+          border-color: var(--pin);
           box-shadow: none;
         }
+        /* Selection is scale plus a dark ring — never a colour change, which
+           would collide with the operator colours. */
         .maplibre-pin[data-selected="true"] {
-          transform: scale(1.45);
-          background: oklch(0.55 0.19 25);
-          border-color: white;
+          --scale: 1.5;
+          box-shadow: 0 0 0 3px rgb(15 23 42 / 0.45), 0 1px 4px rgb(0 0 0 / 0.35);
+          z-index: 1;
         }
       `}</style>
     </div>
+  );
+}
+
+function LegendSwatch({ operator }: { operator: Operator }) {
+  const shape = operatorShape(operator);
+  return (
+    <span
+      aria-hidden
+      className="inline-block h-2.5 w-2.5 shrink-0 border-2 border-white"
+      style={{
+        background: operatorStyle(operator).base,
+        borderRadius: shape === 'circle' ? '9999px' : '2px',
+        transform: shape === 'diamond' ? 'rotate(45deg)' : undefined,
+        boxShadow: '0 0 0 1px rgb(0 0 0 / 0.15)',
+      }}
+    />
   );
 }

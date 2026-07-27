@@ -8,8 +8,10 @@ import {
   formatPrice,
   geoCaveat,
   isPinnable,
+  operatorStyle,
 } from '@ielts-map/core';
 import DetailMap from '@/components/LazyDetailMap';
+import { OperatorBadge } from '@/components/OperatorBadge';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -53,9 +55,7 @@ export default async function CentrePage({ params }: Props) {
           <h1 className="text-2xl font-semibold tracking-tight">{centre.name}</h1>
           <p className="mt-1 text-muted">{centre.address.raw}</p>
         </div>
-        <span className="rounded-full bg-brand-soft px-3 py-1 text-sm font-medium text-brand">
-          {centre.operator}
-        </span>
+        <OperatorBadge operator={centre.operator} size="md" />
       </header>
 
       <div className="mt-6 grid gap-6 sm:grid-cols-3">
@@ -126,6 +126,7 @@ export default async function CentrePage({ params }: Props) {
               lng={centre.geo.lng}
               precise={isPinnable(centre.geo)}
               label={centre.name}
+              color={operatorStyle(centre.operator).base}
             />
           </div>
         ) : (

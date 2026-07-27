@@ -22,9 +22,11 @@ interface Props {
   /** False for coarse coordinates — drawn as a radius, not a point. */
   precise: boolean;
   label: string;
+  /** Operator colour, so the pin matches the badge above it. */
+  color: string;
 }
 
-export function DetailMap({ lat, lng, precise, label }: Props) {
+export function DetailMap({ lat, lng, precise, label, color }: Props) {
   const container = useRef<HTMLDivElement>(null);
   const map = useRef<MapLibreMap | null>(null);
 
@@ -44,7 +46,7 @@ export function DetailMap({ lat, lng, precise, label }: Props) {
     map.current = instance;
 
     if (precise) {
-      new maplibregl.Marker({ color: '#3b5bdb' }).setLngLat([lng, lat]).addTo(instance);
+      new maplibregl.Marker({ color }).setLngLat([lng, lat]).addTo(instance);
     } else {
       // An approximate coordinate gets an area, never a pin that implies a door.
       instance.on('load', () => {
@@ -58,10 +60,10 @@ export function DetailMap({ lat, lng, precise, label }: Props) {
           source: 'area',
           paint: {
             'circle-radius': 48,
-            'circle-color': '#3b5bdb',
+            'circle-color': color,
             'circle-opacity': 0.15,
             'circle-stroke-width': 2,
-            'circle-stroke-color': '#3b5bdb',
+            'circle-stroke-color': color,
             'circle-stroke-opacity': 0.5,
           },
         });
@@ -72,7 +74,7 @@ export function DetailMap({ lat, lng, precise, label }: Props) {
       instance.remove();
       map.current = null;
     };
-  }, [lat, lng, precise]);
+  }, [lat, lng, precise, color]);
 
   return <div ref={container} aria-label={`Map showing ${label}`} className="h-full w-full" />;
 }
