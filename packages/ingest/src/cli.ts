@@ -13,7 +13,7 @@ import { fetchText, mapWithConcurrency } from './fetcher.ts';
 import { readSitemap } from './sitemap.ts';
 import { ParseError, parseCentrePage } from './parse.ts';
 import { GeocodeCache } from './geocode.ts';
-import { resolveCluster } from './resolve.ts';
+import { clusterId, resolveCluster } from './resolve.ts';
 import {
   diffDatasets,
   renderDiff,
@@ -22,6 +22,7 @@ import {
 } from './diff.ts';
 
 interface Options {
+  /** ISO code, or 'ALL' to keep every country the master lists. */
   country: string;
   force: boolean;
   limit: number | null;
@@ -29,17 +30,39 @@ interface Options {
   noGeocode: boolean;
   /** Write a dedup audit file alongside the dataset. */
   audit: boolean;
+  /** Ceiling on billable Google requests for this run. */
+  googleBudget: number;
+  /** Re-resolve locations even for centres whose address has not changed. */
+  regeocode: boolean;
 }
 
+/**
+ * Deliberately finite by default. A run that suddenly needs thousands of
+ * lookups is far more likely to be a parser regression than a real change, and
+ * the ceiling turns that into a degraded dataset rather than a surprise bill.
+ */
+const DEFAULT_GOOGLE_BUDGET = 500;
+
 function parseArgs(argv: string[]): Options {
-  const opts: Options = { country: 'CA', force: false, limit: null, noGeocode: false, audit: true };
+  const opts: Options = {
+    country: 'CA',
+    force: false,
+    limit: null,
+    noGeocode: false,
+    audit: true,
+    googleBudget: DEFAULT_GOOGLE_BUDGET,
+    regeocode: false,
+  };
   for (let i = 0; i < argv.length; i++) {
     const arg = argv[i]!;
     if (arg === '--country') opts.country = (argv[++i] ?? 'CA').toUpperCase();
+    else if (arg === '--all') opts.country = 'ALL';
     else if (arg === '--force') opts.force = true;
     else if (arg === '--limit') opts.limit = Number(argv[++i]);
     else if (arg === '--no-geocode') opts.noGeocode = true;
     else if (arg === '--no-audit') opts.audit = false;
+    else if (arg === '--google-budget') opts.googleBudget = Number(argv[++i]);
+    else if (arg === '--regeocode') opts.regeocode = true;
     else if (arg === '--help' || arg === '-h') {
       console.log(HELP);
       process.exit(0);
@@ -56,12 +79,15 @@ const HELP = `ielts-ingest — build the centre dataset from the IELTS.org maste
 
 Usage: npm run ingest -- [options]
 
-  --country <ISO>   Country to filter to (default: CA)
-  --limit <n>       Only crawl the first n slugs (for a quick smoke run)
-  --force           Ignore the HTML cache and refetch every page
-  --no-geocode      Use page-embedded coordinates only; skip Nominatim
-  --no-audit        Don't write the dedup audit file
-  -h, --help        Show this help
+  --country <ISO>       Country to filter to (default: CA)
+  --all                 Keep every country the master lists
+  --limit <n>           Only crawl the first n slugs (for a quick smoke run)
+  --force               Ignore the HTML cache and refetch every page
+  --no-geocode          Page-embedded coordinates only; no geocoder at all
+  --google-budget <n>   Max billable Google calls this run (default: 500)
+  --regeocode           Re-resolve even unchanged addresses (costs money)
+  --no-audit            Don't write the dedup audit file
+  -h, --help            Show this help
 
 Raw pages are cached in .cache/ (gitignored) so local re-runs are fast and cost
 the source nothing; pass --force to see the site as it is now. Geocode results
@@ -118,9 +144,16 @@ async function main(): Promise<void> {
     if (failures.length > 10) console.log(`    … and ${failures.length - 10} more`);
   }
 
-  console.log(`\n▸ Filtering to ${opts.country}`);
-  const inCountry = parsed.filter((c) => c.address.country === opts.country);
+  const global = opts.country === 'ALL';
+  console.log(`\n▸ ${global ? 'Keeping every country' : `Filtering to ${opts.country}`}`);
+  const inCountry = global ? parsed : parsed.filter((c) => c.address.country === opts.country);
   console.log(`  ${inCountry.length} centres`);
+  if (global) {
+    const known = inCountry.filter((c) => c.address.country).length;
+    console.log(
+      `  country identified for ${known}/${inCountry.length} (${Math.round((known / inCountry.length) * 100)}%)`,
+    );
+  }
   if (inCountry.length === 0) {
     throw new Error(
       `No centres matched country ${opts.country}. Check address parsing before writing a dataset.`,
@@ -134,26 +167,46 @@ async function main(): Promise<void> {
   for (const l of links) byReason.set(l.reason, (byReason.get(l.reason) ?? 0) + 1);
   for (const [reason, n] of byReason) console.log(`    ${reason}: ${n}`);
 
+  const outFile = path.join(DATA_DIR, `centres.${opts.country.toLowerCase()}.json`);
+  const previous = await readPrevious(outFile);
+  // Keyed by centre id so an already-resolved address needs no lookup at all.
+  const priorById = new Map((previous?.centres ?? []).map((c) => [c.id, c]));
+
   console.log(`\n▸ Resolving locations${opts.noGeocode ? ' (embedded only)' : ''}`);
-  const cache = new GeocodeCache({ disabled: opts.noGeocode });
+  const cache = new GeocodeCache({
+    disabled: opts.noGeocode,
+    googleBudget: opts.googleBudget,
+  });
   await cache.load();
-  const needsGeocode = clusters.filter((c) => !c.some((p) => p.embeddedGeo)).length;
-  console.log(`  ${clusters.length - needsGeocode} from page embeds, ${needsGeocode} need lookup`);
+  const embedded = clusters.filter((c) => c.some((p) => p.embeddedGeo)).length;
+  console.log(
+    `  ${embedded} from page embeds, ${clusters.length - embedded} may need lookup` +
+      (opts.regeocode ? ' (forced re-geocode)' : '') +
+      `; Google budget ${opts.googleBudget}`,
+  );
 
   const centres: Centre[] = [];
   for (const [i, cluster] of clusters.entries()) {
-    centres.push(await resolveCluster(cluster, cache));
+    const id = clusterId(cluster);
+    centres.push(
+      await resolveCluster(cluster, cache, {
+        previous: id ? priorById.get(id) : undefined,
+        regeocode: opts.regeocode,
+      }),
+    );
     if ((i + 1) % 25 === 0 || i === clusters.length - 1) {
       process.stdout.write(`\r  ${i + 1}/${clusters.length} resolved`);
     }
   }
   process.stdout.write('\n');
   await cache.save();
+  console.log(
+    `  geocoder: ${cache.stats.googleCalls} Google, ${cache.stats.nominatimCalls} Nominatim, ` +
+      `${cache.stats.cacheHits} cached` +
+      (cache.stats.budgetSkips ? `, ${cache.stats.budgetSkips} skipped over budget` : ''),
+  );
 
   centres.sort((a, b) => a.name.localeCompare(b.name));
-
-  const outFile = path.join(DATA_DIR, `centres.${opts.country.toLowerCase()}.json`);
-  const previous = await readPrevious(outFile);
 
   // `firstSeenAt` means what it says: carry it forward rather than stamping
   // "now" on every run, which would make the freshness signal meaningless.

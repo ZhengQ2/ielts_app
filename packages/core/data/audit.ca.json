@@ -1,38 +1,26 @@
 {
-  "generatedAt": "2026-07-27T12:05:13.573Z",
+  "generatedAt": "2026-07-27T12:31:04.384Z",
   "fuzzyMerges": [],
   "parseFailures": [
     {
-      "slug": "british-council-humber-college-ital-humber-college-downtown-igs-2",
-      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-humber-college-ital-humber-college-downtown-igs-2"
-    },
-    {
       "slug": "british-council-ad-phonetic-reading-centre-inc-ad-tutoring-3",
       "error": "HTTP 404 for https://ielts.org/test-centres/british-council-ad-phonetic-reading-centre-inc-ad-tutoring-3"
-    },
-    {
-      "slug": "british-council-global-citizen-panthapath",
-      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-global-citizen-panthapath"
     },
     {
       "slug": "british-council-global-citizen-uttara",
       "error": "HTTP 404 for https://ielts.org/test-centres/british-council-global-citizen-uttara"
     },
     {
-      "slug": "british-council-synergi-2",
-      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-synergi-2"
+      "slug": "british-council-humber-college-ital-humber-college-downtown-igs-2",
+      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-humber-college-ital-humber-college-downtown-igs-2"
     },
     {
-      "slug": "british-council-can-esl-inc-regina-canesl",
-      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-can-esl-inc-regina-canesl"
+      "slug": "british-council-global-citizen-panthapath",
+      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-global-citizen-panthapath"
     },
     {
       "slug": "british-council-bitts-west-bitts-coquitlam-2",
       "error": "HTTP 404 for https://ielts.org/test-centres/british-council-bitts-west-bitts-coquitlam-2"
-    },
-    {
-      "slug": "british-council-university-of-kufa",
-      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-university-of-kufa"
     },
     {
       "slug": "british-council-mosaic-203-newton",
@@ -47,6 +35,18 @@
       "error": "HTTP 404 for https://ielts.org/test-centres/british-council-etc-central-grace-christian-church"
     },
     {
+      "slug": "british-council-synergi-2",
+      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-synergi-2"
+    },
+    {
+      "slug": "british-council-university-of-kufa",
+      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-university-of-kufa"
+    },
+    {
+      "slug": "british-council-can-esl-inc-regina-canesl",
+      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-can-esl-inc-regina-canesl"
+    },
+    {
       "slug": "british-council-bitts-testing-services-mcadam-2",
       "error": "HTTP 404 for https://ielts.org/test-centres/british-council-bitts-testing-services-mcadam-2"
     },
@@ -55,24 +55,16 @@
       "error": "HTTP 404 for https://ielts.org/test-centres/british-council-inlingua-victoria-college-of-languages-and-careers-inlingua-victoria-2"
     },
     {
-      "slug": "british-council-ilsc-toronto-downtown-main-campus-3",
-      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-ilsc-toronto-downtown-main-campus-3"
-    },
-    {
       "slug": "british-council-oxford-international-north-america-oxford-international-3",
       "error": "HTTP 404 for https://ielts.org/test-centres/british-council-oxford-international-north-america-oxford-international-3"
     },
     {
+      "slug": "british-council-ilsc-toronto-downtown-main-campus-3",
+      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-ilsc-toronto-downtown-main-campus-3"
+    },
+    {
       "slug": "british-council-humber-college-ital-lakeshore-campus-2",
       "error": "HTTP 404 for https://ielts.org/test-centres/british-council-humber-college-ital-lakeshore-campus-2"
-    },
-    {
-      "slug": "british-council-humber-college-ital-cambrian-college-2",
-      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-humber-college-ital-cambrian-college-2"
-    },
-    {
-      "slug": "british-council-kaplan-ielts-test-centre-kaplan-vancouver-2",
-      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-kaplan-ielts-test-centre-kaplan-vancouver-2"
     },
     {
       "slug": "british-council-humber-college-ital-north-main-campus-2",
@@ -87,10 +79,6 @@
       "error": "HTTP 404 for https://ielts.org/test-centres/british-council-london-training-institute-sawary-centre"
     },
     {
-      "slug": "british-council-princess-nourah-bint-abdul-rahman-university-females-only",
-      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-princess-nourah-bint-abdul-rahman-university-females-only"
-    },
-    {
       "slug": "british-council-british-council-lilongwe-2",
       "error": "HTTP 404 for https://ielts.org/test-centres/british-council-british-council-lilongwe-2"
     },
@@ -99,8 +87,20 @@
       "error": "HTTP 404 for https://ielts.org/test-centres/idp-ielts-saudi-arabia-hinti-academy-riyadh"
     },
     {
+      "slug": "british-council-princess-nourah-bint-abdul-rahman-university-females-only",
+      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-princess-nourah-bint-abdul-rahman-university-females-only"
+    },
+    {
+      "slug": "british-council-humber-college-ital-cambrian-college-2",
+      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-humber-college-ital-cambrian-college-2"
+    },
+    {
       "slug": "idp-ielts-saudi-arabia-fahad-bin-sultan-university-riyadh",
       "error": "HTTP 404 for https://ielts.org/test-centres/idp-ielts-saudi-arabia-fahad-bin-sultan-university-riyadh"
+    },
+    {
+      "slug": "british-council-kaplan-ielts-test-centre-kaplan-vancouver-2",
+      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-kaplan-ielts-test-centre-kaplan-vancouver-2"
     },
     {
       "slug": "idp-ielts-oman-university-of-technology-and-applied-sciences-sur",

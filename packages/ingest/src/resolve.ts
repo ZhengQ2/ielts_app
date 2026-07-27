@@ -26,10 +26,18 @@ import { streetLine } from './address.ts';
 
 const SOURCE_NAME = 'IELTS.org';
 
+export interface ResolveOptions {
+  /** The committed record for this centre, if it already existed. */
+  previous?: Centre | undefined;
+  /** Re-resolve locations even when the address is unchanged. Costs money. */
+  regeocode?: boolean;
+}
+
 /** Turn one dedup cluster into the single Centre record we publish. */
 export async function resolveCluster(
   cluster: ParsedCentre[],
   cache: GeocodeCache,
+  options: ResolveOptions = {},
 ): Promise<Centre> {
   const canonical = pickCanonical(cluster);
   const offerings = mergeOfferings(cluster);
@@ -39,7 +47,7 @@ export async function resolveCluster(
   const priceFrom = priced.length ? Math.min(...priced.map((o) => o.price!)) : null;
   const currency = priced[0]?.currency ?? null;
 
-  const located = await resolveLocation(canonical, cluster, cache);
+  const located = await resolveLocation(canonical, cluster, cache, options);
   const geo = located.geo;
 
   const now = new Date().toISOString();
@@ -85,6 +93,14 @@ export async function resolveCluster(
  * pattern. Stability matters because these ids will become primary keys when
  * the dataset moves to Postgres.
  */
+/**
+ * The id a cluster will be published under, computed without resolving it — so
+ * the caller can look up the previous record and skip geocoding entirely.
+ */
+export function clusterId(cluster: ParsedCentre[]): string {
+  return centreId(pickCanonical(cluster));
+}
+
 function centreId(canonical: ParsedCentre): string {
   if (canonical.operator === 'British Council' && canonical.externalId) {
     return `bc-${canonical.externalId}`;
@@ -101,7 +117,24 @@ async function resolveLocation(
   canonical: ParsedCentre,
   cluster: ParsedCentre[],
   cache: GeocodeCache,
+  options: ResolveOptions,
 ): Promise<{ geo: Geo | null; placeId: string | null }> {
+  // Cheapest path of all: this centre is already resolved and its address has
+  // not moved, so there is nothing to look up. This is what keeps a scheduled
+  // run from re-billing every address every week — the query cache alone would
+  // not, since any change to address parsing rewrites the cache keys.
+  const prior = options.previous;
+  if (
+    !options.regeocode &&
+    prior?.geo &&
+    prior.address.raw === canonical.address.raw &&
+    // A page-embedded coordinate always wins, so let it take over if the page
+    // has gained one since.
+    !cluster.some((c) => c.embeddedGeo)
+  ) {
+    return { geo: prior.geo, placeId: prior.googlePlaceId };
+  }
+
   const embedded = cluster.find((c) => c.embeddedGeo)?.embeddedGeo;
   if (embedded) {
     return {

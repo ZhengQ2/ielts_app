@@ -8,6 +8,7 @@ import type {
 } from '@ielts-map/core';
 import { CENTRE_URL_PREFIX } from './config.ts';
 import { parseAddress } from './address.ts';
+import { resolveCountry } from './country.ts';
 import { decodeEntities, hrefs, paragraphs, sliceElement, stripTags } from './html.ts';
 
 /**
@@ -39,6 +40,15 @@ export function parseCentrePage(slug: string, html: string, fetchedAt: string): 
   const embeddedGeo = extractEmbeddedGeo(html);
   const { offerings, bookingUrl } = extractOfferings(html);
   const { operator, operatorSource, externalId } = detectOperator(bookingUrl, slug, name);
+
+  // The address parser only recognises CA/US shapes. Outside those markets the
+  // booking link's `country=` and the listed currency carry the answer, so fill
+  // the gap here rather than shipping a worldwide dataset that is 91% unplaced.
+  address.country = resolveCountry(
+    address.country,
+    bookingUrl,
+    offerings.find((o) => o.currency)?.currency,
+  );
 
   return {
     slug,

@@ -248,13 +248,16 @@ export const google: GeocodeProvider = {
 };
 
 /**
- * Provider chain per country (DEV_PLAN §5.3). Google first where a key exists —
- * its Canadian coverage is materially better — with Nominatim as the always
- * available fallback. Local providers (Amap, Kakao) slot in here per country
- * when those markets come into scope.
+ * Provider chain per country (DEV_PLAN §5.3).
+ *
+ * Free provider first, paid one only when it cannot produce a usable answer.
+ * Nominatim is slower and less complete, but every address it resolves is an
+ * address Google is never billed for — and the caller stops walking the chain
+ * as soon as a street-level hit lands. Local providers (Amap, Kakao) slot in
+ * here per country when those markets come into scope.
  */
 export function providerChain(_country: string | null | undefined): GeocodeProvider[] {
-  return process.env.GOOGLE_MAPS_API_KEY ? [google, nominatim] : [nominatim];
+  return process.env.GOOGLE_MAPS_API_KEY ? [nominatim, google] : [nominatim];
 }
 
 /** Disk-backed memo so re-runs never re-hit the geocoder. */
@@ -263,9 +266,16 @@ export class GeocodeCache {
   private dirty = false;
   /** When disabled, every lookup returns nothing and no request is made. */
   private readonly disabled: boolean;
+  /** Hard ceiling on billable Google requests for one run. */
+  private readonly googleBudget: number;
+  private budgetWarned = false;
 
-  constructor(opts: { disabled?: boolean } = {}) {
+  /** Billable requests actually issued, and lookups served from disk. */
+  readonly stats = { googleCalls: 0, nominatimCalls: 0, cacheHits: 0, budgetSkips: 0 };
+
+  constructor(opts: { disabled?: boolean; googleBudget?: number } = {}) {
     this.disabled = opts.disabled ?? false;
+    this.googleBudget = opts.googleBudget ?? Number.POSITIVE_INFINITY;
   }
 
   async load(): Promise<void> {
@@ -293,7 +303,29 @@ export class GeocodeCache {
       q.structured ? `s:${JSON.stringify(q.structured)}` : q.text
     }`;
     const hit = this.map.get(key);
-    if (hit) return hit;
+    if (hit) {
+      this.stats.cacheHits++;
+      return hit;
+    }
+
+    // A cache miss on Google is the only thing in this pipeline that costs
+    // money, so it is the only thing with a ceiling. Exceeding it degrades the
+    // run (some centres stay coarse) rather than running up a bill.
+    if (provider.name === 'google') {
+      if (this.stats.googleCalls >= this.googleBudget) {
+        this.stats.budgetSkips++;
+        if (!this.budgetWarned) {
+          console.warn(
+            `\n    ⚠ Google budget of ${this.googleBudget} calls reached — remaining lookups fall back to what is already cached.`,
+          );
+          this.budgetWarned = true;
+        }
+        return [];
+      }
+      this.stats.googleCalls++;
+    } else {
+      this.stats.nominatimCalls++;
+    }
 
     let result: GeocodeCandidateRaw[];
     try {
