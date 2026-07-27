@@ -240,8 +240,24 @@ export default function CentreMap({ centres, selectedId, onSelect }: Props) {
           border-radius: 0.5rem;
           box-shadow: 0 2px 10px rgb(0 0 0 / 0.18);
         }
+        .centre-popup__operator {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.35rem;
+          padding: 0.1rem 0.5rem;
+          border-radius: 9999px;
+          font-size: 0.6875rem;
+          font-weight: 500;
+        }
+        .centre-popup__operator-swatch {
+          display: inline-block;
+          width: 0.5rem;
+          height: 0.5rem;
+          flex-shrink: 0;
+        }
         .centre-popup__name {
           display: block;
+          margin-top: 0.4rem;
           font-size: 0.8125rem;
           font-weight: 500;
           line-height: 1.25;
@@ -273,6 +289,7 @@ export default function CentreMap({ centres, selectedId, onSelect }: Props) {
 function popupContent(centre: Centre): HTMLElement {
   const root = document.createElement('div');
   root.className = 'centre-popup';
+  root.appendChild(popupOperatorBadge(centre.operator));
 
   const name = document.createElement('a');
   name.href = `/centres/${centre.ieltsOrgSlug}`;
@@ -291,6 +308,32 @@ function popupContent(centre: Centre): HTMLElement {
   root.appendChild(price);
 
   return root;
+}
+
+/**
+ * Same colour + shape language as the map legend and the list's
+ * OperatorBadge, rebuilt with plain DOM APIs since popup content isn't a React
+ * tree. The legend implies the operator through colour/shape alone; naming it
+ * here too means the popup doesn't require already knowing that mapping.
+ */
+function popupOperatorBadge(operator: Operator): HTMLElement {
+  const style = operatorStyle(operator);
+  const shape = operatorShape(operator);
+
+  const badge = document.createElement('span');
+  badge.className = 'centre-popup__operator';
+  badge.style.background = style.soft;
+  badge.style.color = style.text;
+
+  const swatch = document.createElement('span');
+  swatch.className = 'centre-popup__operator-swatch';
+  swatch.style.background = style.base;
+  swatch.style.borderRadius = shape === 'circle' ? '9999px' : '2px';
+  if (shape === 'diamond') swatch.style.transform = 'rotate(45deg)';
+  badge.appendChild(swatch);
+
+  badge.appendChild(document.createTextNode(operator));
+  return badge;
 }
 
 /** `hollow` mirrors the dashed marker used for coarse coordinates. */
