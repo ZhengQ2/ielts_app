@@ -1,7 +1,7 @@
 {
   "version": 1,
   "country": "CA",
-  "generatedAt": "2026-07-27T12:31:04.384Z",
+  "generatedAt": "2026-07-27T16:15:49.409Z",
   "stats": {
     "sitemapSlugs": 1854,
     "pagesParsed": 1819,
@@ -50,20 +50,21 @@
       },
       "googlePlaceId": null,
       "formats": [
+        "computer_delivered",
         "paper_based"
       ],
       "offerings": [
         {
           "label": "IELTS Academic on computer",
           "kind": "academic",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 379
         },
         {
           "label": "IELTS General Training on computer",
           "kind": "general_training",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 379
         },
@@ -92,12 +93,12 @@
           "source": "IELTS.org",
           "externalSlug": "algonquin-college",
           "url": "https://ielts.org/test-centres/algonquin-college",
-          "seenAt": "2026-07-27T12:30:40.662Z",
+          "seenAt": "2026-07-27T16:15:48.513Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:13.556Z",
-      "lastSeenAt": "2026-07-27T12:31:04.361Z"
+      "lastSeenAt": "2026-07-27T16:15:49.398Z"
     },
     {
       "id": "bc-13403",
@@ -157,12 +158,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-710-dunton-tower",
           "url": "https://ielts.org/test-centres/british-council-710-dunton-tower",
-          "seenAt": "2026-07-27T12:30:35.107Z",
+          "seenAt": "2026-07-27T16:15:41.518Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:03:02.809Z",
-      "lastSeenAt": "2026-07-27T12:31:00.285Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-13435",
@@ -209,7 +210,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 346.5
         },
@@ -238,12 +239,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-ad-phonetic-reading-centre-inc-ad-tutoring-2",
           "url": "https://ielts.org/test-centres/british-council-ad-phonetic-reading-centre-inc-ad-tutoring-2",
-          "seenAt": "2026-07-27T12:30:37.781Z",
+          "seenAt": "2026-07-27T16:15:45.493Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:04:54.377Z",
-      "lastSeenAt": "2026-07-27T12:31:04.359Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-12302",
@@ -290,7 +291,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 346.5
         },
@@ -319,12 +320,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-ad-phonetic-reading-centre-inc-ad-tutoring",
           "url": "https://ielts.org/test-centres/british-council-ad-phonetic-reading-centre-inc-ad-tutoring",
-          "seenAt": "2026-07-27T12:30:38.461Z",
+          "seenAt": "2026-07-27T16:15:45.822Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:04.104Z",
-      "lastSeenAt": "2026-07-27T12:31:04.360Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-13105",
@@ -374,7 +375,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 365
         },
@@ -403,19 +404,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-atlantic-testing-services-halifax-dartmouth-2",
           "url": "https://ielts.org/test-centres/british-council-bitts-atlantic-testing-services-halifax-dartmouth-2",
-          "seenAt": "2026-07-27T12:30:38.364Z",
+          "seenAt": "2026-07-27T16:15:45.735Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-atlantic-testing-services-halifax-dartmouth",
           "url": "https://ielts.org/test-centres/british-council-bitts-atlantic-testing-services-halifax-dartmouth",
-          "seenAt": "2026-07-27T12:30:38.509Z",
+          "seenAt": "2026-07-27T16:15:45.884Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:04.103Z",
-      "lastSeenAt": "2026-07-27T12:31:04.360Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-13383",
@@ -465,7 +466,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 365
         },
@@ -494,19 +495,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-atlantic-testing-services-halifax-nova-scotia-2",
           "url": "https://ielts.org/test-centres/british-council-bitts-atlantic-testing-services-halifax-nova-scotia-2",
-          "seenAt": "2026-07-27T12:30:36.778Z",
+          "seenAt": "2026-07-27T16:15:43.799Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-atlantic-testing-services-halifax-nova-scotia",
           "url": "https://ielts.org/test-centres/british-council-bitts-atlantic-testing-services-halifax-nova-scotia",
-          "seenAt": "2026-07-27T12:30:38.083Z",
+          "seenAt": "2026-07-27T16:15:45.497Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:03:27.168Z",
-      "lastSeenAt": "2026-07-27T12:31:04.359Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-13102",
@@ -556,7 +557,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 365
         },
@@ -585,19 +586,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-atlantic-testing-services-moncton-2",
           "url": "https://ielts.org/test-centres/british-council-bitts-atlantic-testing-services-moncton-2",
-          "seenAt": "2026-07-27T12:30:38.367Z",
+          "seenAt": "2026-07-27T16:15:45.736Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-atlantic-testing-services-moncton",
           "url": "https://ielts.org/test-centres/british-council-bitts-atlantic-testing-services-moncton",
-          "seenAt": "2026-07-27T12:30:38.512Z",
+          "seenAt": "2026-07-27T16:15:45.886Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:04.103Z",
-      "lastSeenAt": "2026-07-27T12:31:04.360Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-13775",
@@ -653,7 +654,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 365
         },
@@ -675,19 +676,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-atlantic-testing-services-st-johns-nl-2",
           "url": "https://ielts.org/test-centres/british-council-bitts-atlantic-testing-services-st-johns-nl-2",
-          "seenAt": "2026-07-27T12:30:34.831Z",
+          "seenAt": "2026-07-27T16:15:41.173Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-atlantic-testing-services-st-johns-nl",
           "url": "https://ielts.org/test-centres/british-council-bitts-atlantic-testing-services-st-johns-nl",
-          "seenAt": "2026-07-27T12:30:36.838Z",
+          "seenAt": "2026-07-27T16:15:43.858Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:01:07.671Z",
-      "lastSeenAt": "2026-07-27T12:30:41.379Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-13776",
@@ -743,7 +744,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 365
         },
@@ -765,19 +766,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-atlantic-testing-services-sydney-ns-2",
           "url": "https://ielts.org/test-centres/british-council-bitts-atlantic-testing-services-sydney-ns-2",
-          "seenAt": "2026-07-27T12:30:34.833Z",
+          "seenAt": "2026-07-27T16:15:41.171Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-atlantic-testing-services-sydney-ns",
           "url": "https://ielts.org/test-centres/british-council-bitts-atlantic-testing-services-sydney-ns",
-          "seenAt": "2026-07-27T12:30:36.834Z",
+          "seenAt": "2026-07-27T16:15:43.852Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:00:58.139Z",
-      "lastSeenAt": "2026-07-27T12:30:41.379Z"
+      "lastSeenAt": "2026-07-27T16:15:49.396Z"
     },
     {
       "id": "bc-13163",
@@ -826,7 +827,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 346.5
         },
@@ -855,19 +856,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-central-bitts-calgary-2",
           "url": "https://ielts.org/test-centres/british-council-bitts-central-bitts-calgary-2",
-          "seenAt": "2026-07-27T12:30:38.095Z",
+          "seenAt": "2026-07-27T16:15:45.504Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-central-bitts-calgary",
           "url": "https://ielts.org/test-centres/british-council-bitts-central-bitts-calgary",
-          "seenAt": "2026-07-27T12:30:38.464Z",
+          "seenAt": "2026-07-27T16:15:45.824Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:04.103Z",
-      "lastSeenAt": "2026-07-27T12:31:04.359Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-13162",
@@ -917,7 +918,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 346.5
         },
@@ -946,19 +947,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-central-bitts-edmonton-2",
           "url": "https://ielts.org/test-centres/british-council-bitts-central-bitts-edmonton-2",
-          "seenAt": "2026-07-27T12:30:38.097Z",
+          "seenAt": "2026-07-27T16:15:45.506Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-central-bitts-edmonton",
           "url": "https://ielts.org/test-centres/british-council-bitts-central-bitts-edmonton",
-          "seenAt": "2026-07-27T12:30:38.466Z",
+          "seenAt": "2026-07-27T16:15:45.829Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:04.103Z",
-      "lastSeenAt": "2026-07-27T12:31:04.359Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-12292",
@@ -1008,7 +1009,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 361.5
         },
@@ -1037,19 +1038,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-testing-services-bitts-brampton-2",
           "url": "https://ielts.org/test-centres/british-council-bitts-testing-services-bitts-brampton-2",
-          "seenAt": "2026-07-27T12:30:38.467Z",
+          "seenAt": "2026-07-27T16:15:45.828Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-testing-services-bitts-brampton",
           "url": "https://ielts.org/test-centres/british-council-bitts-testing-services-bitts-brampton",
-          "seenAt": "2026-07-27T12:30:39.379Z",
+          "seenAt": "2026-07-27T16:15:47.457Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:04.104Z",
-      "lastSeenAt": "2026-07-27T12:31:04.360Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-12120",
@@ -1099,7 +1100,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 361.5
         },
@@ -1128,19 +1129,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-testing-services-bitts-guelph-venue-2",
           "url": "https://ielts.org/test-centres/british-council-bitts-testing-services-bitts-guelph-venue-2",
-          "seenAt": "2026-07-27T12:30:38.458Z",
+          "seenAt": "2026-07-27T16:15:45.819Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-testing-services-bitts-guelph-venue",
           "url": "https://ielts.org/test-centres/british-council-bitts-testing-services-bitts-guelph-venue",
-          "seenAt": "2026-07-27T12:30:39.362Z",
+          "seenAt": "2026-07-27T16:15:47.440Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:04.104Z",
-      "lastSeenAt": "2026-07-27T12:31:04.360Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-12398",
@@ -1190,7 +1191,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 361.5
         },
@@ -1219,19 +1220,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-testing-services-bitts-hamilton-2",
           "url": "https://ielts.org/test-centres/british-council-bitts-testing-services-bitts-hamilton-2",
-          "seenAt": "2026-07-27T12:30:38.455Z",
+          "seenAt": "2026-07-27T16:15:45.815Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-testing-services-bitts-hamilton",
           "url": "https://ielts.org/test-centres/british-council-bitts-testing-services-bitts-hamilton",
-          "seenAt": "2026-07-27T12:30:39.274Z",
+          "seenAt": "2026-07-27T16:15:47.335Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:04.104Z",
-      "lastSeenAt": "2026-07-27T12:31:04.360Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-1227",
@@ -1267,7 +1268,8 @@
       },
       "googlePlaceId": null,
       "formats": [
-        "computer_delivered"
+        "computer_delivered",
+        "paper_based"
       ],
       "offerings": [
         {
@@ -1280,7 +1282,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 361.5
         },
@@ -1302,19 +1304,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-testing-services-bitts-main-office-2",
           "url": "https://ielts.org/test-centres/british-council-bitts-testing-services-bitts-main-office-2",
-          "seenAt": "2026-07-27T12:30:38.487Z",
+          "seenAt": "2026-07-27T16:15:45.852Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-testing-services-bitts-main-office",
           "url": "https://ielts.org/test-centres/british-council-bitts-testing-services-bitts-main-office",
-          "seenAt": "2026-07-27T12:30:39.427Z",
+          "seenAt": "2026-07-27T16:15:47.510Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:04.104Z",
-      "lastSeenAt": "2026-07-27T12:31:04.361Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-3340",
@@ -1364,7 +1366,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 361.5
         },
@@ -1393,19 +1395,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-testing-services-bitts-milton-venue-2",
           "url": "https://ielts.org/test-centres/british-council-bitts-testing-services-bitts-milton-venue-2",
-          "seenAt": "2026-07-27T12:30:38.465Z",
+          "seenAt": "2026-07-27T16:15:45.825Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-testing-services-bitts-milton-venue",
           "url": "https://ielts.org/test-centres/british-council-bitts-testing-services-bitts-milton-venue",
-          "seenAt": "2026-07-27T12:30:39.371Z",
+          "seenAt": "2026-07-27T16:15:47.448Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:04.104Z",
-      "lastSeenAt": "2026-07-27T12:31:04.360Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-12439",
@@ -1453,7 +1455,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 361.5
         },
@@ -1482,12 +1484,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-testing-services-bitts-nort-york-steeles-2",
           "url": "https://ielts.org/test-centres/british-council-bitts-testing-services-bitts-nort-york-steeles-2",
-          "seenAt": "2026-07-27T12:30:38.446Z",
+          "seenAt": "2026-07-27T16:15:45.806Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:04.104Z",
-      "lastSeenAt": "2026-07-27T12:31:04.360Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-13134",
@@ -1537,7 +1539,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 361.5
         },
@@ -1566,19 +1568,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-testing-services-bitts-north-york-consumer-2",
           "url": "https://ielts.org/test-centres/british-council-bitts-testing-services-bitts-north-york-consumer-2",
-          "seenAt": "2026-07-27T12:30:38.106Z",
+          "seenAt": "2026-07-27T16:15:45.513Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-testing-services-bitts-north-york-consumer",
           "url": "https://ielts.org/test-centres/british-council-bitts-testing-services-bitts-north-york-consumer",
-          "seenAt": "2026-07-27T12:30:38.487Z",
+          "seenAt": "2026-07-27T16:15:45.853Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:04.103Z",
-      "lastSeenAt": "2026-07-27T12:31:04.359Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-13135",
@@ -1628,7 +1630,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 361.5
         },
@@ -1657,19 +1659,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-testing-services-bitts-ottawa-2",
           "url": "https://ielts.org/test-centres/british-council-bitts-testing-services-bitts-ottawa-2",
-          "seenAt": "2026-07-27T12:30:38.105Z",
+          "seenAt": "2026-07-27T16:15:45.512Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-testing-services-bitts-ottawa",
           "url": "https://ielts.org/test-centres/british-council-bitts-testing-services-bitts-ottawa",
-          "seenAt": "2026-07-27T12:30:38.484Z",
+          "seenAt": "2026-07-27T16:15:45.851Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:04.103Z",
-      "lastSeenAt": "2026-07-27T12:31:04.359Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-13132",
@@ -1719,7 +1721,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 361.5
         },
@@ -1748,19 +1750,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-testing-services-bitts-scarbrough-2",
           "url": "https://ielts.org/test-centres/british-council-bitts-testing-services-bitts-scarbrough-2",
-          "seenAt": "2026-07-27T12:30:38.100Z",
+          "seenAt": "2026-07-27T16:15:45.508Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-testing-services-bitts-scarbrough",
           "url": "https://ielts.org/test-centres/british-council-bitts-testing-services-bitts-scarbrough",
-          "seenAt": "2026-07-27T12:30:38.482Z",
+          "seenAt": "2026-07-27T16:15:45.846Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:04.103Z",
-      "lastSeenAt": "2026-07-27T12:31:04.359Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-13136",
@@ -1810,7 +1812,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 361.5
         },
@@ -1839,19 +1841,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-testing-services-bitts-spadina-2",
           "url": "https://ielts.org/test-centres/british-council-bitts-testing-services-bitts-spadina-2",
-          "seenAt": "2026-07-27T12:30:38.358Z",
+          "seenAt": "2026-07-27T16:15:45.731Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-testing-services-bitts-spadina",
           "url": "https://ielts.org/test-centres/british-council-bitts-testing-services-bitts-spadina",
-          "seenAt": "2026-07-27T12:30:38.491Z",
+          "seenAt": "2026-07-27T16:15:45.858Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:04.103Z",
-      "lastSeenAt": "2026-07-27T12:31:04.360Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-13137",
@@ -1901,7 +1903,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 361.5
         },
@@ -1930,19 +1932,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-testing-services-bitts-st-catharines-2",
           "url": "https://ielts.org/test-centres/british-council-bitts-testing-services-bitts-st-catharines-2",
-          "seenAt": "2026-07-27T12:30:38.103Z",
+          "seenAt": "2026-07-27T16:15:45.510Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-testing-services-bitts-st-catharines",
           "url": "https://ielts.org/test-centres/british-council-bitts-testing-services-bitts-st-catharines",
-          "seenAt": "2026-07-27T12:30:38.485Z",
+          "seenAt": "2026-07-27T16:15:45.850Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:04.103Z",
-      "lastSeenAt": "2026-07-27T12:31:04.359Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-13143",
@@ -1991,7 +1993,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 361.5
         },
@@ -2020,19 +2022,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-testing-services-bitts-windsor-2",
           "url": "https://ielts.org/test-centres/british-council-bitts-testing-services-bitts-windsor-2",
-          "seenAt": "2026-07-27T12:30:38.102Z",
+          "seenAt": "2026-07-27T16:15:45.509Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-testing-services-bitts-windsor",
           "url": "https://ielts.org/test-centres/british-council-bitts-testing-services-bitts-windsor",
-          "seenAt": "2026-07-27T12:30:38.483Z",
+          "seenAt": "2026-07-27T16:15:45.848Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:04.103Z",
-      "lastSeenAt": "2026-07-27T12:31:04.359Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-13142",
@@ -2081,7 +2083,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 361.5
         },
@@ -2110,19 +2112,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-testing-services-bitts-ajax-pickering-2",
           "url": "https://ielts.org/test-centres/british-council-bitts-testing-services-bitts-ajax-pickering-2",
-          "seenAt": "2026-07-27T12:30:38.092Z",
+          "seenAt": "2026-07-27T16:15:45.502Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-testing-services-bitts-ajax-pickering",
           "url": "https://ielts.org/test-centres/british-council-bitts-testing-services-bitts-ajax-pickering",
-          "seenAt": "2026-07-27T12:30:38.452Z",
+          "seenAt": "2026-07-27T16:15:45.812Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:04.103Z",
-      "lastSeenAt": "2026-07-27T12:31:04.359Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-13133",
@@ -2170,7 +2172,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 361.5
         },
@@ -2199,12 +2201,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-testing-services-mcadam",
           "url": "https://ielts.org/test-centres/british-council-bitts-testing-services-mcadam",
-          "seenAt": "2026-07-27T12:30:38.489Z",
+          "seenAt": "2026-07-27T16:15:45.855Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:04.104Z",
-      "lastSeenAt": "2026-07-27T12:31:04.361Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-13774",
@@ -2250,7 +2252,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 361.5
         },
@@ -2279,12 +2281,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-testing-services-oxford-st",
           "url": "https://ielts.org/test-centres/british-council-bitts-testing-services-oxford-st",
-          "seenAt": "2026-07-27T12:30:36.829Z",
+          "seenAt": "2026-07-27T16:15:43.849Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:03:46.821Z",
-      "lastSeenAt": "2026-07-27T12:31:04.359Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-12477",
@@ -2334,7 +2336,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 346.5
         },
@@ -2363,19 +2365,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-west-bitts-abbotsford-2",
           "url": "https://ielts.org/test-centres/british-council-bitts-west-bitts-abbotsford-2",
-          "seenAt": "2026-07-27T12:30:38.443Z",
+          "seenAt": "2026-07-27T16:15:45.800Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-west-bitts-abbotsford",
           "url": "https://ielts.org/test-centres/british-council-bitts-west-bitts-abbotsford",
-          "seenAt": "2026-07-27T12:30:39.268Z",
+          "seenAt": "2026-07-27T16:15:47.135Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:04.104Z",
-      "lastSeenAt": "2026-07-27T12:31:04.360Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-13667",
@@ -2422,7 +2424,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 346.5
         },
@@ -2451,12 +2453,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-west-bitts-coquitlam",
           "url": "https://ielts.org/test-centres/british-council-bitts-west-bitts-coquitlam",
-          "seenAt": "2026-07-27T12:30:37.455Z",
+          "seenAt": "2026-07-27T16:15:45.462Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:04:16.356Z",
-      "lastSeenAt": "2026-07-27T12:31:04.359Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-13659",
@@ -2512,7 +2514,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 346.5
         },
@@ -2534,19 +2536,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-west-kingsway-2",
           "url": "https://ielts.org/test-centres/british-council-bitts-west-kingsway-2",
-          "seenAt": "2026-07-27T12:30:34.887Z",
+          "seenAt": "2026-07-27T16:15:41.234Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-west-kingsway",
           "url": "https://ielts.org/test-centres/british-council-bitts-west-kingsway",
-          "seenAt": "2026-07-27T12:30:37.461Z",
+          "seenAt": "2026-07-27T16:15:45.465Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:01:17.549Z",
-      "lastSeenAt": "2026-07-27T12:30:45.798Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-13668",
@@ -2593,7 +2595,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 346.5
         },
@@ -2622,12 +2624,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-west-mg-education",
           "url": "https://ielts.org/test-centres/british-council-bitts-west-mg-education",
-          "seenAt": "2026-07-27T12:30:36.844Z",
+          "seenAt": "2026-07-27T16:15:43.865Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:04:06.175Z",
-      "lastSeenAt": "2026-07-27T12:31:04.359Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-13664",
@@ -2684,7 +2686,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 346.5
         },
@@ -2706,19 +2708,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-west-surrey-2",
           "url": "https://ielts.org/test-centres/british-council-bitts-west-surrey-2",
-          "seenAt": "2026-07-27T12:30:34.890Z",
+          "seenAt": "2026-07-27T16:15:41.239Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-west-surrey",
           "url": "https://ielts.org/test-centres/british-council-bitts-west-surrey",
-          "seenAt": "2026-07-27T12:30:37.464Z",
+          "seenAt": "2026-07-27T16:15:45.473Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:01:27.260Z",
-      "lastSeenAt": "2026-07-27T12:30:45.798Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-13669",
@@ -2765,7 +2767,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 346.5
         },
@@ -2794,12 +2796,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-west-vgc-international-college",
           "url": "https://ielts.org/test-centres/british-council-bitts-west-vgc-international-college",
-          "seenAt": "2026-07-27T12:30:36.842Z",
+          "seenAt": "2026-07-27T16:15:43.862Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:03:56.657Z",
-      "lastSeenAt": "2026-07-27T12:31:04.359Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-13661",
@@ -2860,12 +2862,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-west-winston-college-2",
           "url": "https://ielts.org/test-centres/british-council-bitts-west-winston-college-2",
-          "seenAt": "2026-07-27T12:30:34.943Z",
+          "seenAt": "2026-07-27T16:15:41.301Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:01:55.682Z",
-      "lastSeenAt": "2026-07-27T12:30:45.798Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-13402",
@@ -2926,12 +2928,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-boreal-college",
           "url": "https://ielts.org/test-centres/british-council-boreal-college",
-          "seenAt": "2026-07-27T12:30:35.109Z",
+          "seenAt": "2026-07-27T16:15:41.521Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:03:17.329Z",
-      "lastSeenAt": "2026-07-27T12:31:04.359Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-13438",
@@ -2992,12 +2994,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-brown-academy",
           "url": "https://ielts.org/test-centres/british-council-brown-academy",
-          "seenAt": "2026-07-27T12:30:35.034Z",
+          "seenAt": "2026-07-27T16:15:41.419Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:31:00.285Z",
-      "lastSeenAt": "2026-07-27T12:31:00.285Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-13401",
@@ -3053,7 +3055,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 369
         },
@@ -3075,19 +3077,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-can-esl-inc-canesl-4",
           "url": "https://ielts.org/test-centres/british-council-can-esl-inc-canesl-4",
-          "seenAt": "2026-07-27T12:30:35.110Z",
+          "seenAt": "2026-07-27T16:15:41.523Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-can-esl-inc-canesl-3",
           "url": "https://ielts.org/test-centres/british-council-can-esl-inc-canesl-3",
-          "seenAt": "2026-07-27T12:30:38.080Z",
+          "seenAt": "2026-07-27T16:15:45.496Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:03:17.329Z",
-      "lastSeenAt": "2026-07-27T12:31:04.359Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-13027",
@@ -3135,7 +3137,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 369
         },
@@ -3164,19 +3166,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-can-esl-inc-canesl-2",
           "url": "https://ielts.org/test-centres/british-council-can-esl-inc-canesl-2",
-          "seenAt": "2026-07-27T12:30:38.374Z",
+          "seenAt": "2026-07-27T16:15:45.741Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-can-esl-inc-canesl",
           "url": "https://ielts.org/test-centres/british-council-can-esl-inc-canesl",
-          "seenAt": "2026-07-27T12:30:38.834Z",
+          "seenAt": "2026-07-27T16:15:46.542Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:04.104Z",
-      "lastSeenAt": "2026-07-27T12:31:04.360Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-2279",
@@ -3236,12 +3238,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-concordia-university-language-test-centre-concordia-university-language-test-center",
           "url": "https://ielts.org/test-centres/british-council-concordia-university-language-test-centre-concordia-university-language-test-center",
-          "seenAt": "2026-07-27T12:30:40.344Z",
+          "seenAt": "2026-07-27T16:15:48.172Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:13.556Z",
-      "lastSeenAt": "2026-07-27T12:31:04.361Z"
+      "lastSeenAt": "2026-07-27T16:15:49.398Z"
     },
     {
       "id": "bc-12482",
@@ -3302,12 +3304,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-concordia-university-of-edmonton",
           "url": "https://ielts.org/test-centres/british-council-concordia-university-of-edmonton",
-          "seenAt": "2026-07-27T12:30:38.440Z",
+          "seenAt": "2026-07-27T16:15:45.796Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:04.104Z",
-      "lastSeenAt": "2026-07-27T12:31:04.360Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-12534",
@@ -3357,7 +3359,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 330
         },
@@ -3386,19 +3388,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-elc-college-2",
           "url": "https://ielts.org/test-centres/british-council-elc-college-2",
-          "seenAt": "2026-07-27T12:30:38.437Z",
+          "seenAt": "2026-07-27T16:15:45.793Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-elc-college",
           "url": "https://ielts.org/test-centres/british-council-elc-college",
-          "seenAt": "2026-07-27T12:30:39.212Z",
+          "seenAt": "2026-07-27T16:15:47.054Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:04.104Z",
-      "lastSeenAt": "2026-07-27T12:31:04.360Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-13745",
@@ -3457,12 +3459,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-equilibrium-international-education-institute",
           "url": "https://ielts.org/test-centres/british-council-equilibrium-international-education-institute",
-          "seenAt": "2026-07-27T12:30:34.856Z",
+          "seenAt": "2026-07-27T16:15:41.197Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:30:45.798Z",
-      "lastSeenAt": "2026-07-27T12:30:45.798Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-2257",
@@ -3509,7 +3511,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 389
         },
@@ -3538,12 +3540,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-etc-central-assiniboine-college",
           "url": "https://ielts.org/test-centres/british-council-etc-central-assiniboine-college",
-          "seenAt": "2026-07-27T12:30:38.690Z",
+          "seenAt": "2026-07-27T16:15:46.160Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:04.104Z",
-      "lastSeenAt": "2026-07-27T12:31:04.361Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-2274",
@@ -3591,7 +3593,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 389
         },
@@ -3620,12 +3622,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-etc-central-regent-avenue",
           "url": "https://ielts.org/test-centres/british-council-etc-central-regent-avenue",
-          "seenAt": "2026-07-27T12:30:38.469Z",
+          "seenAt": "2026-07-27T16:15:45.832Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:04.104Z",
-      "lastSeenAt": "2026-07-27T12:31:04.361Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-2266",
@@ -3673,7 +3675,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 360
         },
@@ -3702,12 +3704,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-george-brown-college-ielts-test-centre-200-king-assessment-centre",
           "url": "https://ielts.org/test-centres/british-council-george-brown-college-ielts-test-centre-200-king-assessment-centre",
-          "seenAt": "2026-07-27T12:30:38.757Z",
+          "seenAt": "2026-07-27T16:15:46.170Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:04.104Z",
-      "lastSeenAt": "2026-07-27T12:31:04.361Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-2260",
@@ -3755,7 +3757,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 360
         },
@@ -3784,12 +3786,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-george-brown-college-ielts-test-centre-sheridan-college-davis",
           "url": "https://ielts.org/test-centres/british-council-george-brown-college-ielts-test-centre-sheridan-college-davis",
-          "seenAt": "2026-07-27T12:30:38.694Z",
+          "seenAt": "2026-07-27T16:15:46.164Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:04.104Z",
-      "lastSeenAt": "2026-07-27T12:31:04.361Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-12952",
@@ -3837,7 +3839,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 359.5
         },
@@ -3866,19 +3868,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-holland-college-2",
           "url": "https://ielts.org/test-centres/british-council-holland-college-2",
-          "seenAt": "2026-07-27T12:30:38.420Z",
+          "seenAt": "2026-07-27T16:15:45.787Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-holland-college",
           "url": "https://ielts.org/test-centres/british-council-holland-college",
-          "seenAt": "2026-07-27T12:30:39.164Z",
+          "seenAt": "2026-07-27T16:15:46.983Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:04.104Z",
-      "lastSeenAt": "2026-07-27T12:31:04.360Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-13374",
@@ -3925,7 +3927,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 359.5
         },
@@ -3954,12 +3956,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-holland-college-summerside-ielts",
           "url": "https://ielts.org/test-centres/british-council-holland-college-summerside-ielts",
-          "seenAt": "2026-07-27T12:30:38.085Z",
+          "seenAt": "2026-07-27T16:15:45.498Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:04.103Z",
-      "lastSeenAt": "2026-07-27T12:31:04.359Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-2268",
@@ -4006,7 +4008,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 369
         },
@@ -4035,12 +4037,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-humber-college-ital-cambrian-college",
           "url": "https://ielts.org/test-centres/british-council-humber-college-ital-cambrian-college",
-          "seenAt": "2026-07-27T12:30:40.601Z",
+          "seenAt": "2026-07-27T16:15:48.338Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:13.556Z",
-      "lastSeenAt": "2026-07-27T12:31:04.361Z"
+      "lastSeenAt": "2026-07-27T16:15:49.398Z"
     },
     {
       "id": "bc-13415",
@@ -4099,12 +4101,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-humber-college-ital-humber-college-downtown-igs",
           "url": "https://ielts.org/test-centres/british-council-humber-college-ital-humber-college-downtown-igs",
-          "seenAt": "2026-07-27T12:30:37.783Z",
+          "seenAt": "2026-07-27T16:15:45.495Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:04:54.377Z",
-      "lastSeenAt": "2026-07-27T12:31:04.359Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-3335",
@@ -4166,12 +4168,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-humber-college-ital-lakeshore-campus",
           "url": "https://ielts.org/test-centres/british-council-humber-college-ital-lakeshore-campus",
-          "seenAt": "2026-07-27T12:30:40.321Z",
+          "seenAt": "2026-07-27T16:15:48.147Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:13.556Z",
-      "lastSeenAt": "2026-07-27T12:31:04.361Z"
+      "lastSeenAt": "2026-07-27T16:15:49.398Z"
     },
     {
       "id": "bc-2269",
@@ -4218,7 +4220,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 369
         },
@@ -4247,12 +4249,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-humber-college-ital-north-main-campus",
           "url": "https://ielts.org/test-centres/british-council-humber-college-ital-north-main-campus",
-          "seenAt": "2026-07-27T12:30:40.606Z",
+          "seenAt": "2026-07-27T16:15:48.342Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:13.556Z",
-      "lastSeenAt": "2026-07-27T12:31:04.361Z"
+      "lastSeenAt": "2026-07-27T16:15:49.398Z"
     },
     {
       "id": "bc-5533",
@@ -4331,19 +4333,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-ilsc-montreal-downtown-2",
           "url": "https://ielts.org/test-centres/british-council-ilsc-montreal-downtown-2",
-          "seenAt": "2026-07-27T12:30:38.502Z",
+          "seenAt": "2026-07-27T16:15:45.875Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-ilsc-montreal-downtown",
           "url": "https://ielts.org/test-centres/british-council-ilsc-montreal-downtown",
-          "seenAt": "2026-07-27T12:30:39.575Z",
+          "seenAt": "2026-07-27T16:15:47.660Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:04.104Z",
-      "lastSeenAt": "2026-07-27T12:31:04.361Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-12525",
@@ -4403,12 +4405,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-ilsc-toronto-a-academy",
           "url": "https://ielts.org/test-centres/british-council-ilsc-toronto-a-academy",
-          "seenAt": "2026-07-27T12:30:39.225Z",
+          "seenAt": "2026-07-27T16:15:47.070Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:13.556Z",
-      "lastSeenAt": "2026-07-27T12:31:04.361Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-2247",
@@ -4469,12 +4471,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-ilsc-toronto-lakehead-university",
           "url": "https://ielts.org/test-centres/british-council-ilsc-toronto-lakehead-university",
-          "seenAt": "2026-07-27T12:30:40.575Z",
+          "seenAt": "2026-07-27T16:15:48.318Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:13.556Z",
-      "lastSeenAt": "2026-07-27T12:31:04.361Z"
+      "lastSeenAt": "2026-07-27T16:15:49.398Z"
     },
     {
       "id": "bc-13548",
@@ -4535,12 +4537,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-ilsc-toronto-lambton-college-sarnia",
           "url": "https://ielts.org/test-centres/british-council-ilsc-toronto-lambton-college-sarnia",
-          "seenAt": "2026-07-27T12:30:34.981Z",
+          "seenAt": "2026-07-27T16:15:41.353Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:02:24.295Z",
-      "lastSeenAt": "2026-07-27T12:30:45.799Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-2242",
@@ -4618,19 +4620,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-ilsc-toronto-trios-college-brampton-2",
           "url": "https://ielts.org/test-centres/british-council-ilsc-toronto-trios-college-brampton-2",
-          "seenAt": "2026-07-27T12:30:38.791Z",
+          "seenAt": "2026-07-27T16:15:46.207Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-ilsc-toronto-trios-college-brampton",
           "url": "https://ielts.org/test-centres/british-council-ilsc-toronto-trios-college-brampton",
-          "seenAt": "2026-07-27T12:30:40.616Z",
+          "seenAt": "2026-07-27T16:15:48.353Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:04.104Z",
-      "lastSeenAt": "2026-07-27T12:31:04.361Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-2243",
@@ -4690,12 +4692,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-ilsc-toronto-trios-college-kitchener",
           "url": "https://ielts.org/test-centres/british-council-ilsc-toronto-trios-college-kitchener",
-          "seenAt": "2026-07-27T12:30:40.372Z",
+          "seenAt": "2026-07-27T16:15:48.175Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:13.556Z",
-      "lastSeenAt": "2026-07-27T12:31:04.361Z"
+      "lastSeenAt": "2026-07-27T16:15:49.398Z"
     },
     {
       "id": "bc-3330",
@@ -4756,12 +4758,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-ilsc-toronto-trios-college-mississauga",
           "url": "https://ielts.org/test-centres/british-council-ilsc-toronto-trios-college-mississauga",
-          "seenAt": "2026-07-27T12:30:40.326Z",
+          "seenAt": "2026-07-27T16:15:48.154Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:13.556Z",
-      "lastSeenAt": "2026-07-27T12:31:04.361Z"
+      "lastSeenAt": "2026-07-27T16:15:49.398Z"
     },
     {
       "id": "bc-11936",
@@ -4840,19 +4842,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-ilsc-toronto-downtown-main-campus-2",
           "url": "https://ielts.org/test-centres/british-council-ilsc-toronto-downtown-main-campus-2",
-          "seenAt": "2026-07-27T12:30:39.476Z",
+          "seenAt": "2026-07-27T16:15:47.559Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-ilsc-toronto-downtown-main-campus",
           "url": "https://ielts.org/test-centres/british-council-ilsc-toronto-downtown-main-campus",
-          "seenAt": "2026-07-27T12:30:39.485Z",
+          "seenAt": "2026-07-27T16:15:47.569Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:13.556Z",
-      "lastSeenAt": "2026-07-27T12:31:04.361Z"
+      "lastSeenAt": "2026-07-27T16:15:49.398Z"
     },
     {
       "id": "bc-2248",
@@ -4912,12 +4914,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-ilsc-toronto-main-campus",
           "url": "https://ielts.org/test-centres/british-council-ilsc-toronto-main-campus",
-          "seenAt": "2026-07-27T12:30:40.610Z",
+          "seenAt": "2026-07-27T16:15:48.347Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:31:04.361Z",
-      "lastSeenAt": "2026-07-27T12:31:04.361Z"
+      "lastSeenAt": "2026-07-27T16:15:49.398Z"
     },
     {
       "id": "bc-5442",
@@ -4966,7 +4968,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 359
         },
@@ -4995,19 +4997,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-ilsc-vancouver-simon-fraser-university-surrey-2",
           "url": "https://ielts.org/test-centres/british-council-ilsc-vancouver-simon-fraser-university-surrey-2",
-          "seenAt": "2026-07-27T12:30:38.513Z",
+          "seenAt": "2026-07-27T16:15:45.888Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-ilsc-vancouver-simon-fraser-university-surrey",
           "url": "https://ielts.org/test-centres/british-council-ilsc-vancouver-simon-fraser-university-surrey",
-          "seenAt": "2026-07-27T12:30:40.238Z",
+          "seenAt": "2026-07-27T16:15:47.983Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:04.104Z",
-      "lastSeenAt": "2026-07-27T12:31:04.361Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-2256",
@@ -5055,7 +5057,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 359
         },
@@ -5084,19 +5086,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-ilsc-vancouver-downtown",
           "url": "https://ielts.org/test-centres/british-council-ilsc-vancouver-downtown",
-          "seenAt": "2026-07-27T12:30:38.686Z",
+          "seenAt": "2026-07-27T16:15:46.158Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-ilsc-vancouver-downtown-vancouver",
           "url": "https://ielts.org/test-centres/british-council-ilsc-vancouver-downtown-vancouver",
-          "seenAt": "2026-07-27T12:30:39.464Z",
+          "seenAt": "2026-07-27T16:15:47.547Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:04.104Z",
-      "lastSeenAt": "2026-07-27T12:31:04.361Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-13525",
@@ -5151,12 +5153,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-inlingua-victoria-college-of-languages-and-careers-inlingua-nanaimo-test-venue",
           "url": "https://ielts.org/test-centres/british-council-inlingua-victoria-college-of-languages-and-careers-inlingua-nanaimo-test-venue",
-          "seenAt": "2026-07-27T12:30:37.777Z",
+          "seenAt": "2026-07-27T16:15:45.491Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:04:35.317Z",
-      "lastSeenAt": "2026-07-27T12:31:04.359Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-13606",
@@ -5212,7 +5214,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 357
         },
@@ -5234,19 +5236,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-inlingua-victoria-college-of-languages-and-careers-inlingua-richmond-testing-venue-2",
           "url": "https://ielts.org/test-centres/british-council-inlingua-victoria-college-of-languages-and-careers-inlingua-richmond-testing-venue-2",
-          "seenAt": "2026-07-27T12:30:34.920Z",
+          "seenAt": "2026-07-27T16:15:41.274Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-inlingua-victoria-college-of-languages-and-careers-inlingua-richmond-testing-venue",
           "url": "https://ielts.org/test-centres/british-council-inlingua-victoria-college-of-languages-and-careers-inlingua-richmond-testing-venue",
-          "seenAt": "2026-07-27T12:30:37.469Z",
+          "seenAt": "2026-07-27T16:15:45.480Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:01:36.701Z",
-      "lastSeenAt": "2026-07-27T12:30:45.798Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-13404",
@@ -5305,12 +5307,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-international-language-institute-limited",
           "url": "https://ielts.org/test-centres/british-council-international-language-institute-limited",
-          "seenAt": "2026-07-27T12:30:35.108Z",
+          "seenAt": "2026-07-27T16:15:41.521Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:31:04.359Z",
-      "lastSeenAt": "2026-07-27T12:31:04.359Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-11993",
@@ -5360,7 +5362,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 360
         },
@@ -5389,19 +5391,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-international-language-training-and-testing-services-iltts-cambridge-2",
           "url": "https://ielts.org/test-centres/british-council-international-language-training-and-testing-services-iltts-cambridge-2",
-          "seenAt": "2026-07-27T12:30:38.494Z",
+          "seenAt": "2026-07-27T16:15:45.865Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-international-language-training-and-testing-services-iltts-cambridge",
           "url": "https://ielts.org/test-centres/british-council-international-language-training-and-testing-services-iltts-cambridge",
-          "seenAt": "2026-07-27T12:30:39.463Z",
+          "seenAt": "2026-07-27T16:15:47.547Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:04.104Z",
-      "lastSeenAt": "2026-07-27T12:31:04.361Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-1256",
@@ -5451,7 +5453,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 360
         },
@@ -5480,19 +5482,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-international-language-training-and-testing-services-iltts-london-2",
           "url": "https://ielts.org/test-centres/british-council-international-language-training-and-testing-services-iltts-london-2",
-          "seenAt": "2026-07-27T12:30:38.483Z",
+          "seenAt": "2026-07-27T16:15:45.849Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-international-language-training-and-testing-services-iltts-london",
           "url": "https://ielts.org/test-centres/british-council-international-language-training-and-testing-services-iltts-london",
-          "seenAt": "2026-07-27T12:30:39.401Z",
+          "seenAt": "2026-07-27T16:15:47.480Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:04.104Z",
-      "lastSeenAt": "2026-07-27T12:31:04.361Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-1258",
@@ -5540,7 +5542,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 360
         },
@@ -5569,19 +5571,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-international-language-training-and-testing-services-iltts-mississauga-2",
           "url": "https://ielts.org/test-centres/british-council-international-language-training-and-testing-services-iltts-mississauga-2",
-          "seenAt": "2026-07-27T12:30:38.827Z",
+          "seenAt": "2026-07-27T16:15:46.533Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-international-language-training-and-testing-services-iltts-mississauga",
           "url": "https://ielts.org/test-centres/british-council-international-language-training-and-testing-services-iltts-mississauga",
-          "seenAt": "2026-07-27T12:30:40.913Z",
+          "seenAt": "2026-07-27T16:15:48.675Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:04.104Z",
-      "lastSeenAt": "2026-07-27T12:31:04.361Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-1259",
@@ -5643,12 +5645,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-international-language-training-and-testing-services-iltts-scarborough-2",
           "url": "https://ielts.org/test-centres/british-council-international-language-training-and-testing-services-iltts-scarborough-2",
-          "seenAt": "2026-07-27T12:30:38.444Z",
+          "seenAt": "2026-07-27T16:15:45.801Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:04.104Z",
-      "lastSeenAt": "2026-07-27T12:31:04.360Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-2238",
@@ -5710,12 +5712,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-kaplan-ielts-test-centre-kaplan-toronto",
           "url": "https://ielts.org/test-centres/british-council-kaplan-ielts-test-centre-kaplan-toronto",
-          "seenAt": "2026-07-27T12:30:40.619Z",
+          "seenAt": "2026-07-27T16:15:48.357Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:13.556Z",
-      "lastSeenAt": "2026-07-27T12:31:04.361Z"
+      "lastSeenAt": "2026-07-27T16:15:49.398Z"
     },
     {
       "id": "bc-2237",
@@ -5763,7 +5765,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 360
         },
@@ -5792,12 +5794,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-kaplan-ielts-test-centre-kaplan-vancouver",
           "url": "https://ielts.org/test-centres/british-council-kaplan-ielts-test-centre-kaplan-vancouver",
-          "seenAt": "2026-07-27T12:30:40.622Z",
+          "seenAt": "2026-07-27T16:15:48.359Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:13.556Z",
-      "lastSeenAt": "2026-07-27T12:31:04.361Z"
+      "lastSeenAt": "2026-07-27T16:15:49.398Z"
     },
     {
       "id": "bc-13588",
@@ -5857,12 +5859,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-mississauga-itechskills-academy",
           "url": "https://ielts.org/test-centres/british-council-mississauga-itechskills-academy",
-          "seenAt": "2026-07-27T12:30:34.939Z",
+          "seenAt": "2026-07-27T16:15:41.297Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:01:46.280Z",
-      "lastSeenAt": "2026-07-27T12:30:45.798Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-11957",
@@ -5911,7 +5913,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 375
         },
@@ -5940,19 +5942,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-mosaic-boundary-road-2",
           "url": "https://ielts.org/test-centres/british-council-mosaic-boundary-road-2",
-          "seenAt": "2026-07-27T12:30:38.495Z",
+          "seenAt": "2026-07-27T16:15:45.867Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-mosaic-boundary-road",
           "url": "https://ielts.org/test-centres/british-council-mosaic-boundary-road",
-          "seenAt": "2026-07-27T12:30:39.475Z",
+          "seenAt": "2026-07-27T16:15:47.558Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:04.104Z",
-      "lastSeenAt": "2026-07-27T12:31:04.361Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-12441",
@@ -5998,7 +6000,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 375
         },
@@ -6027,12 +6029,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-mosaic-commercial-drive-2",
           "url": "https://ielts.org/test-centres/british-council-mosaic-commercial-drive-2",
-          "seenAt": "2026-07-27T12:30:38.448Z",
+          "seenAt": "2026-07-27T16:15:45.803Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:04.104Z",
-      "lastSeenAt": "2026-07-27T12:31:04.360Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-13324",
@@ -6081,7 +6083,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 375
         },
@@ -6110,19 +6112,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-mosaic-metropolis-at-metrotown-2",
           "url": "https://ielts.org/test-centres/british-council-mosaic-metropolis-at-metrotown-2",
-          "seenAt": "2026-07-27T12:30:36.811Z",
+          "seenAt": "2026-07-27T16:15:43.829Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-mosaic-metropolis-at-metrotown",
           "url": "https://ielts.org/test-centres/british-council-mosaic-metropolis-at-metrotown",
-          "seenAt": "2026-07-27T12:30:38.090Z",
+          "seenAt": "2026-07-27T16:15:45.501Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:03:36.787Z",
-      "lastSeenAt": "2026-07-27T12:31:04.359Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-3313",
@@ -6171,7 +6173,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 375
         },
@@ -6200,19 +6202,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-mosaic-newton-surrey-2",
           "url": "https://ielts.org/test-centres/british-council-mosaic-newton-surrey-2",
-          "seenAt": "2026-07-27T12:30:38.683Z",
+          "seenAt": "2026-07-27T16:15:46.154Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-mosaic-newton-surrey",
           "url": "https://ielts.org/test-centres/british-council-mosaic-newton-surrey",
-          "seenAt": "2026-07-27T12:30:40.334Z",
+          "seenAt": "2026-07-27T16:15:48.163Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:04.104Z",
-      "lastSeenAt": "2026-07-27T12:31:04.361Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-13557",
@@ -6259,7 +6261,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 375
         },
@@ -6288,12 +6290,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-mosaic-north-van",
           "url": "https://ielts.org/test-centres/british-council-mosaic-north-van",
-          "seenAt": "2026-07-27T12:30:37.776Z",
+          "seenAt": "2026-07-27T16:15:45.489Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:04:25.939Z",
-      "lastSeenAt": "2026-07-27T12:31:04.359Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-2267",
@@ -6342,7 +6344,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 360
         },
@@ -6371,19 +6373,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-nait-2",
           "url": "https://ielts.org/test-centres/british-council-nait-2",
-          "seenAt": "2026-07-27T12:30:38.790Z",
+          "seenAt": "2026-07-27T16:15:46.205Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-nait",
           "url": "https://ielts.org/test-centres/british-council-nait",
-          "seenAt": "2026-07-27T12:30:40.613Z",
+          "seenAt": "2026-07-27T16:15:48.351Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:04.104Z",
-      "lastSeenAt": "2026-07-27T12:31:04.361Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-13486",
@@ -6443,12 +6445,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-north-york-seneca-polytechnic",
           "url": "https://ielts.org/test-centres/british-council-north-york-seneca-polytechnic",
-          "seenAt": "2026-07-27T12:30:35.005Z",
+          "seenAt": "2026-07-27T16:15:41.383Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:02:43.671Z",
-      "lastSeenAt": "2026-07-27T12:30:45.799Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-1264",
@@ -6494,7 +6496,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 361.5
         },
@@ -6523,12 +6525,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-oxford-international-thompson-rivers-university",
           "url": "https://ielts.org/test-centres/british-council-oxford-international-thompson-rivers-university",
-          "seenAt": "2026-07-27T12:30:38.679Z",
+          "seenAt": "2026-07-27T16:15:46.150Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:04.104Z",
-      "lastSeenAt": "2026-07-27T12:31:04.361Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-2230",
@@ -6575,7 +6577,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 361.5
         },
@@ -6604,12 +6606,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-oxford-international-kelowna-ii",
           "url": "https://ielts.org/test-centres/british-council-oxford-international-kelowna-ii",
-          "seenAt": "2026-07-27T12:30:38.458Z",
+          "seenAt": "2026-07-27T16:15:45.818Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:04.104Z",
-      "lastSeenAt": "2026-07-27T12:31:04.360Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-12257",
@@ -6658,7 +6660,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 367
         },
@@ -6687,19 +6689,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-oxford-international-north-america-oxford-international-2",
           "url": "https://ielts.org/test-centres/british-council-oxford-international-north-america-oxford-international-2",
-          "seenAt": "2026-07-27T12:30:38.477Z",
+          "seenAt": "2026-07-27T16:15:45.841Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-oxford-international-north-america-oxford-international",
           "url": "https://ielts.org/test-centres/british-council-oxford-international-north-america-oxford-international",
-          "seenAt": "2026-07-27T12:30:39.390Z",
+          "seenAt": "2026-07-27T16:15:47.468Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:04.104Z",
-      "lastSeenAt": "2026-07-27T12:31:04.361Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-12924",
@@ -6748,7 +6750,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 367
         },
@@ -6777,19 +6779,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-oxford-international-north-america-oxford-international-halifax-2",
           "url": "https://ielts.org/test-centres/british-council-oxford-international-north-america-oxford-international-halifax-2",
-          "seenAt": "2026-07-27T12:30:38.426Z",
+          "seenAt": "2026-07-27T16:15:45.791Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-oxford-international-north-america-oxford-international-halifax",
           "url": "https://ielts.org/test-centres/british-council-oxford-international-north-america-oxford-international-halifax",
-          "seenAt": "2026-07-27T12:30:39.183Z",
+          "seenAt": "2026-07-27T16:15:47.009Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:04.104Z",
-      "lastSeenAt": "2026-07-27T12:31:04.360Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-13454",
@@ -6835,7 +6837,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 361.5
         },
@@ -6864,12 +6866,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-oxford-international-surrey-king-george",
           "url": "https://ielts.org/test-centres/british-council-oxford-international-surrey-king-george",
-          "seenAt": "2026-07-27T12:30:37.778Z",
+          "seenAt": "2026-07-27T16:15:45.490Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:04:44.754Z",
-      "lastSeenAt": "2026-07-27T12:31:04.359Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-1268",
@@ -6916,7 +6918,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 361.5
         },
@@ -6945,12 +6947,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-oxford-international-vancouver",
           "url": "https://ielts.org/test-centres/british-council-oxford-international-vancouver",
-          "seenAt": "2026-07-27T12:30:38.820Z",
+          "seenAt": "2026-07-27T16:15:46.523Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:04.104Z",
-      "lastSeenAt": "2026-07-27T12:31:04.361Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-13532",
@@ -7011,12 +7013,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-saint-john-university-of-new-brunswick",
           "url": "https://ielts.org/test-centres/british-council-saint-john-university-of-new-brunswick",
-          "seenAt": "2026-07-27T12:30:34.988Z",
+          "seenAt": "2026-07-27T16:15:41.360Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:02:34.017Z",
-      "lastSeenAt": "2026-07-27T12:30:45.799Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-13746",
@@ -7077,12 +7079,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-seneca-polytechnic-york-campus",
           "url": "https://ielts.org/test-centres/british-council-seneca-polytechnic-york-campus",
-          "seenAt": "2026-07-27T12:30:34.857Z",
+          "seenAt": "2026-07-27T16:15:41.197Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:01:07.671Z",
-      "lastSeenAt": "2026-07-27T12:30:45.798Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-13485",
@@ -7143,12 +7145,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-whitby-durham-college-of-applied-arts-technology",
           "url": "https://ielts.org/test-centres/british-council-whitby-durham-college-of-applied-arts-technology",
-          "seenAt": "2026-07-27T12:30:35.004Z",
+          "seenAt": "2026-07-27T16:15:41.381Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:02:43.671Z",
-      "lastSeenAt": "2026-07-27T12:30:45.799Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-13559",
@@ -7205,7 +7207,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 346.5
         },
@@ -7227,19 +7229,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-xyna-central-calgary-2",
           "url": "https://ielts.org/test-centres/british-council-xyna-central-calgary-2",
-          "seenAt": "2026-07-27T12:30:34.967Z",
+          "seenAt": "2026-07-27T16:15:41.334Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-xyna-central-calgary",
           "url": "https://ielts.org/test-centres/british-council-xyna-central-calgary",
-          "seenAt": "2026-07-27T12:30:37.478Z",
+          "seenAt": "2026-07-27T16:15:45.488Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:02:14.691Z",
-      "lastSeenAt": "2026-07-27T12:30:45.798Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-13560",
@@ -7296,7 +7298,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 346.5
         },
@@ -7318,19 +7320,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-xyna-central-edmonton-2",
           "url": "https://ielts.org/test-centres/british-council-xyna-central-edmonton-2",
-          "seenAt": "2026-07-27T12:30:34.967Z",
+          "seenAt": "2026-07-27T16:15:41.332Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-xyna-central-edmonton",
           "url": "https://ielts.org/test-centres/british-council-xyna-central-edmonton",
-          "seenAt": "2026-07-27T12:30:37.477Z",
+          "seenAt": "2026-07-27T16:15:45.486Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:02:05.229Z",
-      "lastSeenAt": "2026-07-27T12:30:45.798Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-1229",
@@ -7380,7 +7382,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 359
         },
@@ -7409,19 +7411,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-xyna-international-school-2",
           "url": "https://ielts.org/test-centres/british-council-xyna-international-school-2",
-          "seenAt": "2026-07-27T12:30:38.825Z",
+          "seenAt": "2026-07-27T16:15:46.529Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-xyna-international-school",
           "url": "https://ielts.org/test-centres/british-council-xyna-international-school",
-          "seenAt": "2026-07-27T12:30:40.911Z",
+          "seenAt": "2026-07-27T16:15:48.672Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:04.104Z",
-      "lastSeenAt": "2026-07-27T12:31:04.361Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-13158",
@@ -7471,7 +7473,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 359
         },
@@ -7500,19 +7502,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-xyna-international-school-xyna-international-barrie-2",
           "url": "https://ielts.org/test-centres/british-council-xyna-international-school-xyna-international-barrie-2",
-          "seenAt": "2026-07-27T12:30:38.099Z",
+          "seenAt": "2026-07-27T16:15:45.507Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-xyna-international-school-xyna-international-barrie",
           "url": "https://ielts.org/test-centres/british-council-xyna-international-school-xyna-international-barrie",
-          "seenAt": "2026-07-27T12:30:38.470Z",
+          "seenAt": "2026-07-27T16:15:45.831Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:04.103Z",
-      "lastSeenAt": "2026-07-27T12:31:04.359Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-11759",
@@ -7561,7 +7563,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 359
         },
@@ -7590,19 +7592,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-xyna-international-school-xyna-international-guelph-2",
           "url": "https://ielts.org/test-centres/british-council-xyna-international-school-xyna-international-guelph-2",
-          "seenAt": "2026-07-27T12:30:38.500Z",
+          "seenAt": "2026-07-27T16:15:45.873Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-xyna-international-school-xyna-international-guelph",
           "url": "https://ielts.org/test-centres/british-council-xyna-international-school-xyna-international-guelph",
-          "seenAt": "2026-07-27T12:30:39.517Z",
+          "seenAt": "2026-07-27T16:15:47.601Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:04.104Z",
-      "lastSeenAt": "2026-07-27T12:31:04.361Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-12252",
@@ -7651,7 +7653,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 359
         },
@@ -7680,19 +7682,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-xyna-international-school-xyna-international-hamilton-2",
           "url": "https://ielts.org/test-centres/british-council-xyna-international-school-xyna-international-hamilton-2",
-          "seenAt": "2026-07-27T12:30:38.481Z",
+          "seenAt": "2026-07-27T16:15:45.847Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-xyna-international-school-xyna-international-hamilton",
           "url": "https://ielts.org/test-centres/british-council-xyna-international-school-xyna-international-hamilton",
-          "seenAt": "2026-07-27T12:30:39.396Z",
+          "seenAt": "2026-07-27T16:15:47.476Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:04.104Z",
-      "lastSeenAt": "2026-07-27T12:31:04.361Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-12405",
@@ -7742,7 +7744,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 359
         },
@@ -7771,19 +7773,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-xyna-international-school-xyna-international-kitchener-2",
           "url": "https://ielts.org/test-centres/british-council-xyna-international-school-xyna-international-kitchener-2",
-          "seenAt": "2026-07-27T12:30:38.453Z",
+          "seenAt": "2026-07-27T16:15:45.809Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-xyna-international-school-xyna-international-kitchener",
           "url": "https://ielts.org/test-centres/british-council-xyna-international-school-xyna-international-kitchener",
-          "seenAt": "2026-07-27T12:30:39.272Z",
+          "seenAt": "2026-07-27T16:15:47.139Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:04.104Z",
-      "lastSeenAt": "2026-07-27T12:31:04.360Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-12423",
@@ -7831,7 +7833,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 359
         },
@@ -7860,12 +7862,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-xyna-international-school-xyna-international-markham-2",
           "url": "https://ielts.org/test-centres/british-council-xyna-international-school-xyna-international-markham-2",
-          "seenAt": "2026-07-27T12:30:38.450Z",
+          "seenAt": "2026-07-27T16:15:45.808Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:04.104Z",
-      "lastSeenAt": "2026-07-27T12:31:04.360Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-12251",
@@ -7915,7 +7917,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 359
         },
@@ -7944,19 +7946,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-xyna-international-school-xyna-international-oakville-2",
           "url": "https://ielts.org/test-centres/british-council-xyna-international-school-xyna-international-oakville-2",
-          "seenAt": "2026-07-27T12:30:38.480Z",
+          "seenAt": "2026-07-27T16:15:45.844Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-xyna-international-school-xyna-international-oakville",
           "url": "https://ielts.org/test-centres/british-council-xyna-international-school-xyna-international-oakville",
-          "seenAt": "2026-07-27T12:30:39.395Z",
+          "seenAt": "2026-07-27T16:15:47.475Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:04.104Z",
-      "lastSeenAt": "2026-07-27T12:31:04.361Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-13420",
@@ -8018,12 +8020,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-xyna-international-school-xyna-international-waterloo",
           "url": "https://ielts.org/test-centres/british-council-xyna-international-school-xyna-international-waterloo",
-          "seenAt": "2026-07-27T12:30:35.080Z",
+          "seenAt": "2026-07-27T16:15:41.485Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:02:53.472Z",
-      "lastSeenAt": "2026-07-27T12:31:00.285Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-13129",
@@ -8073,7 +8075,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 359
         },
@@ -8102,19 +8104,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-xyna-international-school-xyna-international-windsor-2",
           "url": "https://ielts.org/test-centres/british-council-xyna-international-school-xyna-international-windsor-2",
-          "seenAt": "2026-07-27T12:30:38.361Z",
+          "seenAt": "2026-07-27T16:15:45.733Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-xyna-international-school-xyna-international-windsor",
           "url": "https://ielts.org/test-centres/british-council-xyna-international-school-xyna-international-windsor",
-          "seenAt": "2026-07-27T12:30:38.496Z",
+          "seenAt": "2026-07-27T16:15:45.868Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:04.103Z",
-      "lastSeenAt": "2026-07-27T12:31:04.360Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "bc-3329",
@@ -8164,7 +8166,7 @@
         {
           "label": "Academic Test - Computer, Writing on Paper",
           "kind": "academic",
-          "format": "computer_delivered",
+          "format": "paper_based",
           "currency": "CAD",
           "price": 359
         },
@@ -8193,19 +8195,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-xyna-international-school-brampton-2",
           "url": "https://ielts.org/test-centres/british-council-xyna-international-school-brampton-2",
-          "seenAt": "2026-07-27T12:30:38.517Z",
+          "seenAt": "2026-07-27T16:15:45.893Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-xyna-international-school-brampton",
           "url": "https://ielts.org/test-centres/british-council-xyna-international-school-brampton",
-          "seenAt": "2026-07-27T12:30:40.294Z",
+          "seenAt": "2026-07-27T16:15:48.115Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:04.104Z",
-      "lastSeenAt": "2026-07-27T12:31:04.361Z"
+      "lastSeenAt": "2026-07-27T16:15:49.397Z"
     },
     {
       "id": "canada-college-mississauga",
@@ -8239,20 +8241,21 @@
       },
       "googlePlaceId": null,
       "formats": [
+        "computer_delivered",
         "paper_based"
       ],
       "offerings": [
         {
           "label": "IELTS Academic on computer",
           "kind": "academic",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 379
         },
         {
           "label": "IELTS General Training on computer",
           "kind": "general_training",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 379
         },
@@ -8281,12 +8284,12 @@
           "source": "IELTS.org",
           "externalSlug": "canada-college-mississauga",
           "url": "https://ielts.org/test-centres/canada-college-mississauga",
-          "seenAt": "2026-07-27T12:30:40.998Z",
+          "seenAt": "2026-07-27T16:15:48.776Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:13.556Z",
-      "lastSeenAt": "2026-07-27T12:31:04.362Z"
+      "lastSeenAt": "2026-07-27T16:15:49.398Z"
     },
     {
       "id": "canada-college-royal-campus",
@@ -8319,20 +8322,21 @@
       },
       "googlePlaceId": null,
       "formats": [
+        "computer_delivered",
         "paper_based"
       ],
       "offerings": [
         {
           "label": "IELTS Academic on computer",
           "kind": "academic",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 379
         },
         {
           "label": "IELTS General Training on computer",
           "kind": "general_training",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 379
         },
@@ -8361,12 +8365,12 @@
           "source": "IELTS.org",
           "externalSlug": "canada-college-royal-campus",
           "url": "https://ielts.org/test-centres/canada-college-royal-campus",
-          "seenAt": "2026-07-27T12:30:40.994Z",
+          "seenAt": "2026-07-27T16:15:48.769Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:13.556Z",
-      "lastSeenAt": "2026-07-27T12:31:04.362Z"
+      "lastSeenAt": "2026-07-27T16:15:49.398Z"
     },
     {
       "id": "centennial-college-ashtonbee-campus",
@@ -8401,20 +8405,21 @@
       },
       "googlePlaceId": null,
       "formats": [
+        "computer_delivered",
         "paper_based"
       ],
       "offerings": [
         {
           "label": "IELTS Academic on computer",
           "kind": "academic",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 379
         },
         {
           "label": "IELTS General Training on computer",
           "kind": "general_training",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 379
         },
@@ -8443,12 +8448,12 @@
           "source": "IELTS.org",
           "externalSlug": "centennial-college-ashtonbee-campus",
           "url": "https://ielts.org/test-centres/centennial-college-ashtonbee-campus",
-          "seenAt": "2026-07-27T12:30:40.330Z",
+          "seenAt": "2026-07-27T16:15:48.160Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:13.556Z",
-      "lastSeenAt": "2026-07-27T12:31:04.361Z"
+      "lastSeenAt": "2026-07-27T16:15:49.398Z"
     },
     {
       "id": "centennial-college-progress-campus",
@@ -8481,20 +8486,21 @@
       },
       "googlePlaceId": null,
       "formats": [
+        "computer_delivered",
         "paper_based"
       ],
       "offerings": [
         {
           "label": "IELTS Academic on computer",
           "kind": "academic",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 379
         },
         {
           "label": "IELTS General Training on computer",
           "kind": "general_training",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 379
         },
@@ -8523,12 +8529,12 @@
           "source": "IELTS.org",
           "externalSlug": "centennial-college-progress-campus",
           "url": "https://ielts.org/test-centres/centennial-college-progress-campus",
-          "seenAt": "2026-07-27T12:30:40.325Z",
+          "seenAt": "2026-07-27T16:15:48.152Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:13.556Z",
-      "lastSeenAt": "2026-07-27T12:31:04.361Z"
+      "lastSeenAt": "2026-07-27T16:15:49.398Z"
     },
     {
       "id": "ces-exams-calgary",
@@ -8561,20 +8567,21 @@
       },
       "googlePlaceId": null,
       "formats": [
+        "computer_delivered",
         "paper_based"
       ],
       "offerings": [
         {
           "label": "IELTS Academic on computer",
           "kind": "academic",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 359
         },
         {
           "label": "IELTS General Training on computer",
           "kind": "general_training",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 359
         },
@@ -8603,12 +8610,12 @@
           "source": "IELTS.org",
           "externalSlug": "ces-exams-calgary",
           "url": "https://ielts.org/test-centres/ces-exams-calgary",
-          "seenAt": "2026-07-27T12:30:41.193Z",
+          "seenAt": "2026-07-27T16:15:49.024Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:13.556Z",
-      "lastSeenAt": "2026-07-27T12:31:04.362Z"
+      "lastSeenAt": "2026-07-27T16:15:49.398Z"
     },
     {
       "id": "ces-toronto-ces-exams",
@@ -8642,20 +8649,21 @@
       },
       "googlePlaceId": null,
       "formats": [
+        "computer_delivered",
         "paper_based"
       ],
       "offerings": [
         {
           "label": "IELTS Academic on computer",
           "kind": "academic",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 379
         },
         {
           "label": "IELTS General Training on computer",
           "kind": "general_training",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 379
         },
@@ -8684,12 +8692,12 @@
           "source": "IELTS.org",
           "externalSlug": "ces-toronto-ces-exams",
           "url": "https://ielts.org/test-centres/ces-toronto-ces-exams",
-          "seenAt": "2026-07-27T12:30:39.936Z",
+          "seenAt": "2026-07-27T16:15:47.788Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:13.556Z",
-      "lastSeenAt": "2026-07-27T12:31:04.361Z"
+      "lastSeenAt": "2026-07-27T16:15:49.398Z"
     },
     {
       "id": "conestoga-college-waterloo",
@@ -8750,12 +8758,12 @@
           "source": "IELTS.org",
           "externalSlug": "conestoga-college-waterloo",
           "url": "https://ielts.org/test-centres/conestoga-college-waterloo",
-          "seenAt": "2026-07-27T12:30:39.429Z",
+          "seenAt": "2026-07-27T16:15:47.513Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:13.556Z",
-      "lastSeenAt": "2026-07-27T12:31:04.361Z"
+      "lastSeenAt": "2026-07-27T16:15:49.398Z"
     },
     {
       "id": "global-village-calgary",
@@ -8816,12 +8824,12 @@
           "source": "IELTS.org",
           "externalSlug": "global-village-calgary",
           "url": "https://ielts.org/test-centres/global-village-calgary",
-          "seenAt": "2026-07-27T12:30:41.192Z",
+          "seenAt": "2026-07-27T16:15:49.023Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:13.556Z",
-      "lastSeenAt": "2026-07-27T12:31:04.362Z"
+      "lastSeenAt": "2026-07-27T16:15:49.398Z"
     },
     {
       "id": "global-village-victoria",
@@ -8855,20 +8863,21 @@
       },
       "googlePlaceId": null,
       "formats": [
+        "computer_delivered",
         "paper_based"
       ],
       "offerings": [
         {
           "label": "IELTS Academic on computer",
           "kind": "academic",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 359
         },
         {
           "label": "IELTS General Training on computer",
           "kind": "general_training",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 359
         },
@@ -8897,12 +8906,12 @@
           "source": "IELTS.org",
           "externalSlug": "global-village-victoria",
           "url": "https://ielts.org/test-centres/global-village-victoria",
-          "seenAt": "2026-07-27T12:30:39.441Z",
+          "seenAt": "2026-07-27T16:15:47.524Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:13.556Z",
-      "lastSeenAt": "2026-07-27T12:31:04.361Z"
+      "lastSeenAt": "2026-07-27T16:15:49.398Z"
     },
     {
       "id": "heartland-international-english-school-richmond-hill-lead-academy",
@@ -8963,12 +8972,12 @@
           "source": "IELTS.org",
           "externalSlug": "heartland-international-english-school-richmond-hill-lead-academy",
           "url": "https://ielts.org/test-centres/heartland-international-english-school-richmond-hill-lead-academy",
-          "seenAt": "2026-07-27T12:30:40.596Z",
+          "seenAt": "2026-07-27T16:15:48.334Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:13.556Z",
-      "lastSeenAt": "2026-07-27T12:31:04.361Z"
+      "lastSeenAt": "2026-07-27T16:15:49.398Z"
     },
     {
       "id": "heartland-international-english-school-winnipeg",
@@ -9001,20 +9010,21 @@
       },
       "googlePlaceId": null,
       "formats": [
+        "computer_delivered",
         "paper_based"
       ],
       "offerings": [
         {
           "label": "IELTS Academic on computer",
           "kind": "academic",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 379
         },
         {
           "label": "IELTS General Training on computer",
           "kind": "general_training",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 379
         },
@@ -9043,12 +9053,12 @@
           "source": "IELTS.org",
           "externalSlug": "heartland-international-english-school-winnipeg",
           "url": "https://ielts.org/test-centres/heartland-international-english-school-winnipeg",
-          "seenAt": "2026-07-27T12:30:39.423Z",
+          "seenAt": "2026-07-27T16:15:47.507Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:13.556Z",
-      "lastSeenAt": "2026-07-27T12:31:04.361Z"
+      "lastSeenAt": "2026-07-27T16:15:49.398Z"
     },
     {
       "id": "homeland-testing-centres-homeland-english-kitchener",
@@ -9109,12 +9119,12 @@
           "source": "IELTS.org",
           "externalSlug": "homeland-testing-centres-homeland-english-kitchener",
           "url": "https://ielts.org/test-centres/homeland-testing-centres-homeland-english-kitchener",
-          "seenAt": "2026-07-27T12:30:41.099Z",
+          "seenAt": "2026-07-27T16:15:48.907Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:13.556Z",
-      "lastSeenAt": "2026-07-27T12:31:04.362Z"
+      "lastSeenAt": "2026-07-27T16:15:49.398Z"
     },
     {
       "id": "idp-canada-test-centre-vancouver-test-room",
@@ -9148,21 +9158,21 @@
       },
       "googlePlaceId": null,
       "formats": [
-        "paper_based",
-        "computer_delivered"
+        "computer_delivered",
+        "paper_based"
       ],
       "offerings": [
         {
           "label": "IELTS Academic on computer",
           "kind": "academic",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 379
         },
         {
           "label": "IELTS General Training on computer",
           "kind": "general_training",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 379
         },
@@ -9205,18 +9215,18 @@
           "source": "IELTS.org",
           "externalSlug": "idp-canada-test-centre-vancouver-test-room",
           "url": "https://ielts.org/test-centres/idp-canada-test-centre-vancouver-test-room",
-          "seenAt": "2026-07-27T12:30:39.596Z",
+          "seenAt": "2026-07-27T16:15:47.683Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:13.556Z",
-      "lastSeenAt": "2026-07-27T12:31:04.361Z"
+      "lastSeenAt": "2026-07-27T16:15:49.398Z"
     },
     {
       "id": "idp-education-canada-vancouver-life-skills",
       "name": "IDP Education Canada-Vancouver - Life Skills",
       "operator": "IDP",
-      "operatorSource": "slug",
+      "operatorSource": "booking_domain",
       "externalId": null,
       "ieltsOrgSlug": "idp-education-canada-vancouver-life-skills",
       "mergedSlugs": [],
@@ -9264,20 +9274,20 @@
       ],
       "priceFrom": 238,
       "currency": "CAD",
-      "bookingUrl": null,
+      "bookingUrl": "https://ielts.idp.com/book/UKVI?countryId=35&testCentreId=17165&testCentreLocationId=2648&testVenueId=3969&testModuleId=5&isSELT=true&lang=en&utm_source=ielts.org&utm_medium=referral",
       "isActive": true,
-      "confidence": 0.7,
+      "confidence": 1,
       "sources": [
         {
           "source": "IELTS.org",
           "externalSlug": "idp-education-canada-vancouver-life-skills",
           "url": "https://ielts.org/test-centres/idp-education-canada-vancouver-life-skills",
-          "seenAt": "2026-07-27T12:30:39.599Z",
+          "seenAt": "2026-07-27T16:15:47.685Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:13.556Z",
-      "lastSeenAt": "2026-07-27T12:31:04.361Z"
+      "lastSeenAt": "2026-07-27T16:15:49.398Z"
     },
     {
       "id": "idp-education-markham-test-room",
@@ -9311,21 +9321,21 @@
       },
       "googlePlaceId": null,
       "formats": [
-        "paper_based",
-        "computer_delivered"
+        "computer_delivered",
+        "paper_based"
       ],
       "offerings": [
         {
           "label": "IELTS Academic on computer",
           "kind": "academic",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 379
         },
         {
           "label": "IELTS General Training on computer",
           "kind": "general_training",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 379
         },
@@ -9368,18 +9378,18 @@
           "source": "IELTS.org",
           "externalSlug": "idp-education-markham-test-room",
           "url": "https://ielts.org/test-centres/idp-education-markham-test-room",
-          "seenAt": "2026-07-27T12:30:41.024Z",
+          "seenAt": "2026-07-27T16:15:48.807Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:13.556Z",
-      "lastSeenAt": "2026-07-27T12:31:04.362Z"
+      "lastSeenAt": "2026-07-27T16:15:49.398Z"
     },
     {
       "id": "idp-education-markham-ls",
       "name": "IDP Education-Markham LS",
       "operator": "IDP",
-      "operatorSource": "slug",
+      "operatorSource": "booking_domain",
       "externalId": null,
       "ieltsOrgSlug": "idp-education-markham-ls",
       "mergedSlugs": [],
@@ -9427,20 +9437,20 @@
       ],
       "priceFrom": 257,
       "currency": "CAD",
-      "bookingUrl": null,
+      "bookingUrl": "https://ielts.idp.com/book/UKVI?countryId=35&testCentreId=18616&testCentreLocationId=3539&testVenueId=4898&testModuleId=5&isSELT=true&lang=en&utm_source=ielts.org&utm_medium=referral",
       "isActive": true,
-      "confidence": 0.7,
+      "confidence": 1,
       "sources": [
         {
           "source": "IELTS.org",
           "externalSlug": "idp-education-markham-ls",
           "url": "https://ielts.org/test-centres/idp-education-markham-ls",
-          "seenAt": "2026-07-27T12:30:41.023Z",
+          "seenAt": "2026-07-27T16:15:48.808Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:13.556Z",
-      "lastSeenAt": "2026-07-27T12:31:04.362Z"
+      "lastSeenAt": "2026-07-27T16:15:49.398Z"
     },
     {
       "id": "idp-ielts-canada-anderson-college-brampton",
@@ -9473,20 +9483,21 @@
       },
       "googlePlaceId": null,
       "formats": [
+        "computer_delivered",
         "paper_based"
       ],
       "offerings": [
         {
           "label": "IELTS Academic on computer",
           "kind": "academic",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 379
         },
         {
           "label": "IELTS General Training on computer",
           "kind": "general_training",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 379
         },
@@ -9515,12 +9526,12 @@
           "source": "IELTS.org",
           "externalSlug": "idp-ielts-canada-anderson-college-brampton",
           "url": "https://ielts.org/test-centres/idp-ielts-canada-anderson-college-brampton",
-          "seenAt": "2026-07-27T12:30:41.208Z",
+          "seenAt": "2026-07-27T16:15:49.045Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:13.557Z",
-      "lastSeenAt": "2026-07-27T12:31:04.362Z"
+      "lastSeenAt": "2026-07-27T16:15:49.398Z"
     },
     {
       "id": "idp-ielts-canada-anderson-college-mississauga",
@@ -9554,20 +9565,21 @@
       },
       "googlePlaceId": null,
       "formats": [
+        "computer_delivered",
         "paper_based"
       ],
       "offerings": [
         {
           "label": "IELTS Academic on computer",
           "kind": "academic",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 379
         },
         {
           "label": "IELTS General Training on computer",
           "kind": "general_training",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 379
         },
@@ -9596,12 +9608,12 @@
           "source": "IELTS.org",
           "externalSlug": "idp-ielts-canada-anderson-college-mississauga",
           "url": "https://ielts.org/test-centres/idp-ielts-canada-anderson-college-mississauga",
-          "seenAt": "2026-07-27T12:30:41.000Z",
+          "seenAt": "2026-07-27T16:15:48.777Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:13.556Z",
-      "lastSeenAt": "2026-07-27T12:31:04.362Z"
+      "lastSeenAt": "2026-07-27T16:15:49.398Z"
     },
     {
       "id": "idp-ielts-canada-anderson-college-north-york",
@@ -9634,20 +9646,21 @@
       },
       "googlePlaceId": null,
       "formats": [
+        "computer_delivered",
         "paper_based"
       ],
       "offerings": [
         {
           "label": "IELTS Academic on computer",
           "kind": "academic",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 379
         },
         {
           "label": "IELTS General Training on computer",
           "kind": "general_training",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 379
         },
@@ -9676,12 +9689,12 @@
           "source": "IELTS.org",
           "externalSlug": "idp-ielts-canada-anderson-college-north-york",
           "url": "https://ielts.org/test-centres/idp-ielts-canada-anderson-college-north-york",
-          "seenAt": "2026-07-27T12:30:40.674Z",
+          "seenAt": "2026-07-27T16:15:48.525Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:13.556Z",
-      "lastSeenAt": "2026-07-27T12:31:04.361Z"
+      "lastSeenAt": "2026-07-27T16:15:49.398Z"
     },
     {
       "id": "idp-ielts-canada-brampton",
@@ -9715,20 +9728,21 @@
       },
       "googlePlaceId": null,
       "formats": [
+        "computer_delivered",
         "paper_based"
       ],
       "offerings": [
         {
           "label": "IELTS Academic on computer",
           "kind": "academic",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 379
         },
         {
           "label": "IELTS General Training on computer",
           "kind": "general_training",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 379
         },
@@ -9757,12 +9771,12 @@
           "source": "IELTS.org",
           "externalSlug": "idp-ielts-canada-brampton",
           "url": "https://ielts.org/test-centres/idp-ielts-canada-brampton",
-          "seenAt": "2026-07-27T12:30:41.206Z",
+          "seenAt": "2026-07-27T16:15:49.042Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:13.557Z",
-      "lastSeenAt": "2026-07-27T12:31:04.362Z"
+      "lastSeenAt": "2026-07-27T16:15:49.398Z"
     },
     {
       "id": "idp-ielts-canada-british-oxford-consultants-inc",
@@ -9796,20 +9810,21 @@
       },
       "googlePlaceId": null,
       "formats": [
+        "computer_delivered",
         "paper_based"
       ],
       "offerings": [
         {
           "label": "IELTS Academic on computer",
           "kind": "academic",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 379
         },
         {
           "label": "IELTS General Training on computer",
           "kind": "general_training",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 379
         },
@@ -9838,12 +9853,12 @@
           "source": "IELTS.org",
           "externalSlug": "idp-ielts-canada-british-oxford-consultants-inc",
           "url": "https://ielts.org/test-centres/idp-ielts-canada-british-oxford-consultants-inc",
-          "seenAt": "2026-07-27T12:30:41.208Z",
+          "seenAt": "2026-07-27T16:15:49.045Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:13.557Z",
-      "lastSeenAt": "2026-07-27T12:31:04.362Z"
+      "lastSeenAt": "2026-07-27T16:15:49.398Z"
     },
     {
       "id": "idp-ielts-canada-burnaby",
@@ -9877,20 +9892,21 @@
       },
       "googlePlaceId": null,
       "formats": [
+        "computer_delivered",
         "paper_based"
       ],
       "offerings": [
         {
           "label": "IELTS Academic on computer",
           "kind": "academic",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 379
         },
         {
           "label": "IELTS General Training on computer",
           "kind": "general_training",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 379
         },
@@ -9919,12 +9935,12 @@
           "source": "IELTS.org",
           "externalSlug": "idp-ielts-canada-burnaby",
           "url": "https://ielts.org/test-centres/idp-ielts-canada-burnaby",
-          "seenAt": "2026-07-27T12:30:41.199Z",
+          "seenAt": "2026-07-27T16:15:49.032Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:13.556Z",
-      "lastSeenAt": "2026-07-27T12:31:04.362Z"
+      "lastSeenAt": "2026-07-27T16:15:49.398Z"
     },
     {
       "id": "idp-ielts-canada-canadian-college-for-higher-studies",
@@ -9958,20 +9974,21 @@
       },
       "googlePlaceId": null,
       "formats": [
+        "computer_delivered",
         "paper_based"
       ],
       "offerings": [
         {
           "label": "IELTS Academic on computer",
           "kind": "academic",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 379
         },
         {
           "label": "IELTS General Training on computer",
           "kind": "general_training",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 379
         },
@@ -10000,12 +10017,12 @@
           "source": "IELTS.org",
           "externalSlug": "idp-ielts-canada-canadian-college-for-higher-studies",
           "url": "https://ielts.org/test-centres/idp-ielts-canada-canadian-college-for-higher-studies",
-          "seenAt": "2026-07-27T12:30:40.327Z",
+          "seenAt": "2026-07-27T16:15:48.155Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:13.556Z",
-      "lastSeenAt": "2026-07-27T12:31:04.361Z"
+      "lastSeenAt": "2026-07-27T16:15:49.398Z"
     },
     {
       "id": "idp-ielts-canada-canadian-systems-inc",
@@ -10038,20 +10055,21 @@
       },
       "googlePlaceId": null,
       "formats": [
+        "computer_delivered",
         "paper_based"
       ],
       "offerings": [
         {
           "label": "IELTS Academic on computer",
           "kind": "academic",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 379
         },
         {
           "label": "IELTS General Training on computer",
           "kind": "general_training",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 379
         },
@@ -10080,12 +10098,12 @@
           "source": "IELTS.org",
           "externalSlug": "idp-ielts-canada-canadian-systems-inc",
           "url": "https://ielts.org/test-centres/idp-ielts-canada-canadian-systems-inc",
-          "seenAt": "2026-07-27T12:30:41.113Z",
+          "seenAt": "2026-07-27T16:15:48.924Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:13.556Z",
-      "lastSeenAt": "2026-07-27T12:31:04.362Z"
+      "lastSeenAt": "2026-07-27T16:15:49.398Z"
     },
     {
       "id": "idp-ielts-canada-canlanguage-test-and-training-centre",
@@ -10118,20 +10136,21 @@
       },
       "googlePlaceId": null,
       "formats": [
+        "computer_delivered",
         "paper_based"
       ],
       "offerings": [
         {
           "label": "IELTS Academic on computer",
           "kind": "academic",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 359
         },
         {
           "label": "IELTS General Training on computer",
           "kind": "general_training",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 359
         },
@@ -10160,12 +10179,12 @@
           "source": "IELTS.org",
           "externalSlug": "idp-ielts-canada-canlanguage-test-and-training-centre",
           "url": "https://ielts.org/test-centres/idp-ielts-canada-canlanguage-test-and-training-centre",
-          "seenAt": "2026-07-27T12:30:41.191Z",
+          "seenAt": "2026-07-27T16:15:49.022Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:13.556Z",
-      "lastSeenAt": "2026-07-27T12:31:04.362Z"
+      "lastSeenAt": "2026-07-27T16:15:49.398Z"
     },
     {
       "id": "idp-ielts-canada-cgh-college-edmonton",
@@ -10199,20 +10218,21 @@
       },
       "googlePlaceId": null,
       "formats": [
+        "computer_delivered",
         "paper_based"
       ],
       "offerings": [
         {
           "label": "IELTS Academic on computer",
           "kind": "academic",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 359
         },
         {
           "label": "IELTS General Training on computer",
           "kind": "general_training",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 359
         },
@@ -10241,12 +10261,12 @@
           "source": "IELTS.org",
           "externalSlug": "idp-ielts-canada-cgh-college-edmonton",
           "url": "https://ielts.org/test-centres/idp-ielts-canada-cgh-college-edmonton",
-          "seenAt": "2026-07-27T12:30:41.122Z",
+          "seenAt": "2026-07-27T16:15:48.936Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:13.556Z",
-      "lastSeenAt": "2026-07-27T12:31:04.362Z"
+      "lastSeenAt": "2026-07-27T16:15:49.398Z"
     },
     {
       "id": "idp-ielts-canada-cimt-college",
@@ -10280,20 +10300,21 @@
       },
       "googlePlaceId": null,
       "formats": [
+        "computer_delivered",
         "paper_based"
       ],
       "offerings": [
         {
           "label": "IELTS Academic on computer",
           "kind": "academic",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 379
         },
         {
           "label": "IELTS General Training on computer",
           "kind": "general_training",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 379
         },
@@ -10322,12 +10343,12 @@
           "source": "IELTS.org",
           "externalSlug": "idp-ielts-canada-cimt-college",
           "url": "https://ielts.org/test-centres/idp-ielts-canada-cimt-college",
-          "seenAt": "2026-07-27T12:30:40.324Z",
+          "seenAt": "2026-07-27T16:15:48.151Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:13.556Z",
-      "lastSeenAt": "2026-07-27T12:31:04.361Z"
+      "lastSeenAt": "2026-07-27T16:15:49.398Z"
     },
     {
       "id": "idp-ielts-canada-delca-education",
@@ -10361,20 +10382,21 @@
       },
       "googlePlaceId": null,
       "formats": [
+        "computer_delivered",
         "paper_based"
       ],
       "offerings": [
         {
           "label": "IELTS Academic on computer",
           "kind": "academic",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 379
         },
         {
           "label": "IELTS General Training on computer",
           "kind": "general_training",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 379
         },
@@ -10403,12 +10425,12 @@
           "source": "IELTS.org",
           "externalSlug": "idp-ielts-canada-delca-education",
           "url": "https://ielts.org/test-centres/idp-ielts-canada-delca-education",
-          "seenAt": "2026-07-27T12:30:40.257Z",
+          "seenAt": "2026-07-27T16:15:47.997Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:13.556Z",
-      "lastSeenAt": "2026-07-27T12:31:04.361Z"
+      "lastSeenAt": "2026-07-27T16:15:49.398Z"
     },
     {
       "id": "idp-ielts-canada-edmonton",
@@ -10442,20 +10464,21 @@
       },
       "googlePlaceId": null,
       "formats": [
+        "computer_delivered",
         "paper_based"
       ],
       "offerings": [
         {
           "label": "IELTS Academic on computer",
           "kind": "academic",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 359
         },
         {
           "label": "IELTS General Training on computer",
           "kind": "general_training",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 359
         },
@@ -10484,12 +10507,12 @@
           "source": "IELTS.org",
           "externalSlug": "idp-ielts-canada-edmonton",
           "url": "https://ielts.org/test-centres/idp-ielts-canada-edmonton",
-          "seenAt": "2026-07-27T12:30:41.120Z",
+          "seenAt": "2026-07-27T16:15:48.933Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:13.556Z",
-      "lastSeenAt": "2026-07-27T12:31:04.362Z"
+      "lastSeenAt": "2026-07-27T16:15:49.398Z"
     },
     {
       "id": "idp-ielts-canada-learn-talk-calgary",
@@ -10523,20 +10546,21 @@
       },
       "googlePlaceId": null,
       "formats": [
+        "computer_delivered",
         "paper_based"
       ],
       "offerings": [
         {
           "label": "IELTS Academic on computer",
           "kind": "academic",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 359
         },
         {
           "label": "IELTS General Training on computer",
           "kind": "general_training",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 359
         },
@@ -10565,12 +10589,12 @@
           "source": "IELTS.org",
           "externalSlug": "idp-ielts-canada-learn-talk-calgary",
           "url": "https://ielts.org/test-centres/idp-ielts-canada-learn-talk-calgary",
-          "seenAt": "2026-07-27T12:30:41.190Z",
+          "seenAt": "2026-07-27T16:15:49.021Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:13.556Z",
-      "lastSeenAt": "2026-07-27T12:31:04.362Z"
+      "lastSeenAt": "2026-07-27T16:15:49.398Z"
     },
     {
       "id": "idp-ielts-canada-national-testing-centre-north-york",
@@ -10603,20 +10627,21 @@
       },
       "googlePlaceId": null,
       "formats": [
+        "computer_delivered",
         "paper_based"
       ],
       "offerings": [
         {
           "label": "IELTS Academic on computer",
           "kind": "academic",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 379
         },
         {
           "label": "IELTS General Training on computer",
           "kind": "general_training",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 379
         },
@@ -10645,12 +10670,12 @@
           "source": "IELTS.org",
           "externalSlug": "idp-ielts-canada-national-testing-centre-north-york",
           "url": "https://ielts.org/test-centres/idp-ielts-canada-national-testing-centre-north-york",
-          "seenAt": "2026-07-27T12:30:40.675Z",
+          "seenAt": "2026-07-27T16:15:48.526Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:13.556Z",
-      "lastSeenAt": "2026-07-27T12:31:04.361Z"
+      "lastSeenAt": "2026-07-27T16:15:49.398Z"
     },
     {
       "id": "idp-ielts-canada-netplus-college-of-information-technology",
@@ -10684,20 +10709,21 @@
       },
       "googlePlaceId": null,
       "formats": [
+        "computer_delivered",
         "paper_based"
       ],
       "offerings": [
         {
           "label": "IELTS Academic on computer",
           "kind": "academic",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 379
         },
         {
           "label": "IELTS General Training on computer",
           "kind": "general_training",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 379
         },
@@ -10726,12 +10752,12 @@
           "source": "IELTS.org",
           "externalSlug": "idp-ielts-canada-netplus-college-of-information-technology",
           "url": "https://ielts.org/test-centres/idp-ielts-canada-netplus-college-of-information-technology",
-          "seenAt": "2026-07-27T12:30:40.329Z",
+          "seenAt": "2026-07-27T16:15:48.157Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:13.556Z",
-      "lastSeenAt": "2026-07-27T12:31:04.361Z"
+      "lastSeenAt": "2026-07-27T16:15:49.398Z"
     },
     {
       "id": "idp-ielts-canada-regina-open-door-society-inc",
@@ -10764,20 +10790,21 @@
       },
       "googlePlaceId": null,
       "formats": [
+        "computer_delivered",
         "paper_based"
       ],
       "offerings": [
         {
           "label": "IELTS Academic on computer",
           "kind": "academic",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 379
         },
         {
           "label": "IELTS General Training on computer",
           "kind": "general_training",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 379
         },
@@ -10806,12 +10833,12 @@
           "source": "IELTS.org",
           "externalSlug": "idp-ielts-canada-regina-open-door-society-inc",
           "url": "https://ielts.org/test-centres/idp-ielts-canada-regina-open-door-society-inc",
-          "seenAt": "2026-07-27T12:30:40.600Z",
+          "seenAt": "2026-07-27T16:15:48.337Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:13.556Z",
-      "lastSeenAt": "2026-07-27T12:31:04.361Z"
+      "lastSeenAt": "2026-07-27T16:15:49.398Z"
     },
     {
       "id": "idp-ielts-canada-rupielts-institute-inc",
@@ -10845,20 +10872,21 @@
       },
       "googlePlaceId": null,
       "formats": [
+        "computer_delivered",
         "paper_based"
       ],
       "offerings": [
         {
           "label": "IELTS Academic on computer",
           "kind": "academic",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 379
         },
         {
           "label": "IELTS General Training on computer",
           "kind": "general_training",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 379
         },
@@ -10887,12 +10915,12 @@
           "source": "IELTS.org",
           "externalSlug": "idp-ielts-canada-rupielts-institute-inc",
           "url": "https://ielts.org/test-centres/idp-ielts-canada-rupielts-institute-inc",
-          "seenAt": "2026-07-27T12:30:40.261Z",
+          "seenAt": "2026-07-27T16:15:48.000Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:13.556Z",
-      "lastSeenAt": "2026-07-27T12:31:04.361Z"
+      "lastSeenAt": "2026-07-27T16:15:49.398Z"
     },
     {
       "id": "idp-ielts-canada-rupielts-institute-inc-edmonton",
@@ -10925,20 +10953,21 @@
       },
       "googlePlaceId": null,
       "formats": [
+        "computer_delivered",
         "paper_based"
       ],
       "offerings": [
         {
           "label": "IELTS Academic on computer",
           "kind": "academic",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 359
         },
         {
           "label": "IELTS General Training on computer",
           "kind": "general_training",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 359
         },
@@ -10967,12 +10996,12 @@
           "source": "IELTS.org",
           "externalSlug": "idp-ielts-canada-rupielts-institute-inc-edmonton",
           "url": "https://ielts.org/test-centres/idp-ielts-canada-rupielts-institute-inc-edmonton",
-          "seenAt": "2026-07-27T12:30:41.121Z",
+          "seenAt": "2026-07-27T16:15:48.935Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:13.556Z",
-      "lastSeenAt": "2026-07-27T12:31:04.362Z"
+      "lastSeenAt": "2026-07-27T16:15:49.398Z"
     },
     {
       "id": "idp-ielts-canada-surrey",
@@ -11006,20 +11035,21 @@
       },
       "googlePlaceId": null,
       "formats": [
+        "computer_delivered",
         "paper_based"
       ],
       "offerings": [
         {
           "label": "IELTS Academic on computer",
           "kind": "academic",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 379
         },
         {
           "label": "IELTS General Training on computer",
           "kind": "general_training",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 379
         },
@@ -11048,12 +11078,12 @@
           "source": "IELTS.org",
           "externalSlug": "idp-ielts-canada-surrey",
           "url": "https://ielts.org/test-centres/idp-ielts-canada-surrey",
-          "seenAt": "2026-07-27T12:30:40.265Z",
+          "seenAt": "2026-07-27T16:15:48.004Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:13.556Z",
-      "lastSeenAt": "2026-07-27T12:31:04.361Z"
+      "lastSeenAt": "2026-07-27T16:15:49.398Z"
     },
     {
       "id": "idp-ielts-canada-techomatic-solutions-inc",
@@ -11086,20 +11116,21 @@
       },
       "googlePlaceId": null,
       "formats": [
+        "computer_delivered",
         "paper_based"
       ],
       "offerings": [
         {
           "label": "IELTS Academic on computer",
           "kind": "academic",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 379
         },
         {
           "label": "IELTS General Training on computer",
           "kind": "general_training",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 379
         },
@@ -11128,12 +11159,12 @@
           "source": "IELTS.org",
           "externalSlug": "idp-ielts-canada-techomatic-solutions-inc",
           "url": "https://ielts.org/test-centres/idp-ielts-canada-techomatic-solutions-inc",
-          "seenAt": "2026-07-27T12:30:40.262Z",
+          "seenAt": "2026-07-27T16:15:48.001Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:13.556Z",
-      "lastSeenAt": "2026-07-27T12:31:04.361Z"
+      "lastSeenAt": "2026-07-27T16:15:49.398Z"
     },
     {
       "id": "ilac-toronto-ielts-central",
@@ -11167,20 +11198,21 @@
       },
       "googlePlaceId": null,
       "formats": [
+        "computer_delivered",
         "paper_based"
       ],
       "offerings": [
         {
           "label": "IELTS Academic on computer",
           "kind": "academic",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 379
         },
         {
           "label": "IELTS General Training on computer",
           "kind": "general_training",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 379
         },
@@ -11209,12 +11241,12 @@
           "source": "IELTS.org",
           "externalSlug": "ilac-toronto-ielts-central",
           "url": "https://ielts.org/test-centres/ilac-toronto-ielts-central",
-          "seenAt": "2026-07-27T12:30:39.935Z",
+          "seenAt": "2026-07-27T16:15:47.786Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:13.556Z",
-      "lastSeenAt": "2026-07-27T12:31:04.361Z"
+      "lastSeenAt": "2026-07-27T16:15:49.398Z"
     },
     {
       "id": "ilac-vancouver-downtown",
@@ -11248,20 +11280,21 @@
       },
       "googlePlaceId": null,
       "formats": [
+        "computer_delivered",
         "paper_based"
       ],
       "offerings": [
         {
           "label": "IELTS Academic on computer",
           "kind": "academic",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 379
         },
         {
           "label": "IELTS General Training on computer",
           "kind": "general_training",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 379
         },
@@ -11290,12 +11323,12 @@
           "source": "IELTS.org",
           "externalSlug": "ilac-vancouver-downtown",
           "url": "https://ielts.org/test-centres/ilac-vancouver-downtown",
-          "seenAt": "2026-07-27T12:30:39.595Z",
+          "seenAt": "2026-07-27T16:15:47.682Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:13.556Z",
-      "lastSeenAt": "2026-07-27T12:31:04.361Z"
+      "lastSeenAt": "2026-07-27T16:15:49.398Z"
     },
     {
       "id": "precise-solutions-mississauga",
@@ -11329,20 +11362,21 @@
       },
       "googlePlaceId": null,
       "formats": [
+        "computer_delivered",
         "paper_based"
       ],
       "offerings": [
         {
           "label": "IELTS Academic on computer",
           "kind": "academic",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 379
         },
         {
           "label": "IELTS General Training on computer",
           "kind": "general_training",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 379
         },
@@ -11371,12 +11405,12 @@
           "source": "IELTS.org",
           "externalSlug": "precise-solutions-mississauga",
           "url": "https://ielts.org/test-centres/precise-solutions-mississauga",
-          "seenAt": "2026-07-27T12:30:40.998Z",
+          "seenAt": "2026-07-27T16:15:48.775Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:13.556Z",
-      "lastSeenAt": "2026-07-27T12:31:04.362Z"
+      "lastSeenAt": "2026-07-27T16:15:49.398Z"
     },
     {
       "id": "precise-solutions-toronto",
@@ -11410,20 +11444,21 @@
       },
       "googlePlaceId": null,
       "formats": [
+        "computer_delivered",
         "paper_based"
       ],
       "offerings": [
         {
           "label": "IELTS Academic on computer",
           "kind": "academic",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 379
         },
         {
           "label": "IELTS General Training on computer",
           "kind": "general_training",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 379
         },
@@ -11452,12 +11487,12 @@
           "source": "IELTS.org",
           "externalSlug": "precise-solutions-toronto",
           "url": "https://ielts.org/test-centres/precise-solutions-toronto",
-          "seenAt": "2026-07-27T12:30:39.933Z",
+          "seenAt": "2026-07-27T16:15:47.783Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:13.556Z",
-      "lastSeenAt": "2026-07-27T12:31:04.361Z"
+      "lastSeenAt": "2026-07-27T16:15:49.398Z"
     },
     {
       "id": "saskatchewan-polytechnic-regina",
@@ -11490,20 +11525,21 @@
       },
       "googlePlaceId": null,
       "formats": [
+        "computer_delivered",
         "paper_based"
       ],
       "offerings": [
         {
           "label": "IELTS Academic on computer",
           "kind": "academic",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 379
         },
         {
           "label": "IELTS General Training on computer",
           "kind": "general_training",
-          "format": "paper_based",
+          "format": "computer_delivered",
           "currency": "CAD",
           "price": 379
         },
@@ -11532,12 +11568,12 @@
           "source": "IELTS.org",
           "externalSlug": "saskatchewan-polytechnic-regina",
           "url": "https://ielts.org/test-centres/saskatchewan-polytechnic-regina",
-          "seenAt": "2026-07-27T12:30:40.603Z",
+          "seenAt": "2026-07-27T16:15:48.340Z",
           "stillPresent": true
         }
       ],
       "firstSeenAt": "2026-07-27T12:05:13.556Z",
-      "lastSeenAt": "2026-07-27T12:31:04.361Z"
+      "lastSeenAt": "2026-07-27T16:15:49.398Z"
     }
   ]
 }

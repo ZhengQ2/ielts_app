@@ -245,19 +245,31 @@ export const google: GeocodeProvider = {
       ];
     });
   },
+
 };
 
 /**
  * Provider chain per country (DEV_PLAN §5.3).
  *
- * Free provider first, paid one only when it cannot produce a usable answer.
- * Nominatim is slower and less complete, but every address it resolves is an
- * address Google is never billed for — and the caller stops walking the chain
- * as soon as a street-level hit lands. Local providers (Amap, Kakao) slot in
- * here per country when those markets come into scope.
+ * Free-first by default: Nominatim before Google, paid provider only when the
+ * free one cannot produce a usable answer. Nominatim is slower and less
+ * complete, but every address it resolves is an address Google is never billed
+ * for — and the caller stops walking the chain as soon as a street-level hit
+ * lands. Local providers (Amap, Kakao) slot in here per country when those
+ * markets come into scope.
+ *
+ * `preferGoogle` inverts the order for a deliberate one-time backfill — e.g.
+ * bringing 500+ addresses to rooftop precision in minutes instead of the ~2.5
+ * hours Nominatim's 1 req/s ceiling would take. It is not the default because
+ * every run after the backfill should cost nothing: an unchanged address is
+ * never re-geocoded at all (see resolve.ts), so this only matters once.
  */
-export function providerChain(_country: string | null | undefined): GeocodeProvider[] {
-  return process.env.GOOGLE_MAPS_API_KEY ? [nominatim, google] : [nominatim];
+export function providerChain(
+  _country: string | null | undefined,
+  preferGoogle = false,
+): GeocodeProvider[] {
+  if (!process.env.GOOGLE_MAPS_API_KEY) return [nominatim];
+  return preferGoogle ? [google, nominatim] : [nominatim, google];
 }
 
 /** Disk-backed memo so re-runs never re-hit the geocoder. */

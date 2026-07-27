@@ -7,6 +7,7 @@ import type {
   ParsedCentre,
 } from '@ielts-map/core';
 import {
+  isPlausibleForCountry,
   mergeFormats,
   mergeOfferings,
   pickCanonical,
@@ -31,6 +32,8 @@ export interface ResolveOptions {
   previous?: Centre | undefined;
   /** Re-resolve locations even when the address is unchanged. Costs money. */
   regeocode?: boolean;
+  /** Try Google before Nominatim. See providerChain's doc for when this is right. */
+  preferGoogle?: boolean;
 }
 
 /** Turn one dedup cluster into the single Centre record we publish. */
@@ -119,23 +122,53 @@ async function resolveLocation(
   cache: GeocodeCache,
   options: ResolveOptions,
 ): Promise<{ geo: Geo | null; placeId: string | null }> {
+  const { address, name } = canonical;
+
+  // A page-embedded coordinate is normally trusted outright, but two real
+  // pages have shown it can't be trusted blindly: a Manchester, UK centre
+  // embedded `53.48098,2.23259` — a sign error putting the pin over the North
+  // Sea instead of at -2.23259°W — and a Hai Phong, Vietnam one embedded the
+  // literal placeholder `1,1` (Gulf of Guinea). Neither looks malformed on its
+  // own, so implausibility relative to the centre's known country is the only
+  // signal that catches them; where the country is unknown or uncovered by
+  // country-bounds.ts, this stays permissive and keeps trusting the embed
+  // exactly as before.
+  const embedded = cluster
+    .map((c) => c.embeddedGeo)
+    .find((g): g is { lat: number; lng: number } => {
+      if (!g) return false;
+      if (isPlausibleForCountry(g.lat, g.lng, address.country)) return true;
+      console.warn(
+        `    ⚠ discarding implausible embedded coordinate for "${canonical.name}": ` +
+          `${g.lat},${g.lng} is not in ${address.country} — falling back to geocoding`,
+      );
+      return false;
+    });
+
   // Cheapest path of all: this centre is already resolved and its address has
   // not moved, so there is nothing to look up. This is what keeps a scheduled
   // run from re-billing every address every week — the query cache alone would
   // not, since any change to address parsing rewrites the cache keys.
+  //
+  // The committed geo is re-checked against the same plausibility gate as a
+  // fresh embed, not just trusted because it's already there: the committed
+  // dataset can itself hold a coordinate carried forward from before this gate
+  // existed (Manchester, Hai Phong — see above). Without this, fixing the
+  // fresh-embed case above would still leave the bad value in place forever,
+  // since address-unchanged would keep re-approving it every run.
   const prior = options.previous;
   if (
     !options.regeocode &&
     prior?.geo &&
     prior.address.raw === canonical.address.raw &&
-    // A page-embedded coordinate always wins, so let it take over if the page
-    // has gained one since.
-    !cluster.some((c) => c.embeddedGeo)
+    isPlausibleForCountry(prior.geo.lat, prior.geo.lng, canonical.address.country) &&
+    // A (plausible) page-embedded coordinate always wins, so let it take over
+    // if the page has gained one since.
+    !embedded
   ) {
     return { geo: prior.geo, placeId: prior.googlePlaceId };
   }
 
-  const embedded = cluster.find((c) => c.embeddedGeo)?.embeddedGeo;
   if (embedded) {
     return {
       geo: {
@@ -149,13 +182,20 @@ async function resolveLocation(
     };
   }
 
-  const { address, name } = canonical;
   const country = address.country;
   const candidates: GeoCandidate[] = [];
-  const chain = providerChain(country);
+  const chain = providerChain(country, options.preferGoogle);
   const expect = { postcode: address.postcode, city: address.city, country };
 
   const street = streetLine(address.lines);
+
+  // Below this, a query is worth trying; at or above, the chain already has
+  // enough to stop. Applied before *every* query, not just the last one —
+  // structured, raw-address and name all cost a real billed call on Google,
+  // and running the other two after structured alone already lands a rooftop
+  // hit would spend calls for no improvement. This is what "only when
+  // necessary" means in practice, not just which provider goes first.
+  const goodEnough = () => bestTier(candidates, expect) >= precisionTier('street');
 
   const runProvider = async (provider: GeocodeProvider): Promise<void> => {
     const add = async (q: Parameters<GeocodeProvider['lookup']>[0]) => {
@@ -178,12 +218,14 @@ async function resolveLocation(
       });
     }
 
-    // The address query and the name query fail in opposite situations, so both
-    // run: a centre whose name is just a city geocodes from its address, and
-    // one with a vague address geocodes from its (precise institutional) name.
-    if (address.raw) await add({ text: address.raw, country });
+    // The address query and the name query fail in opposite situations, so
+    // either can be needed: a centre whose name is just a city geocodes from
+    // its address, and one with a vague address geocodes from its (precise
+    // institutional) name. Neither runs once something street-level or better
+    // has already been found.
+    if (!goodEnough() && address.raw) await add({ text: address.raw, country });
 
-    if (bestTier(candidates, expect) < precisionTier('rooftop')) {
+    if (!goodEnough()) {
       const named = [name, address.city, address.region].filter(Boolean).join(', ');
       if (named) await add({ text: named, country });
     }

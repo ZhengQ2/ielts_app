@@ -36,6 +36,14 @@ export const SITEMAP_INDEX = 'https://ielts.org/sitemap.xml';
 export const CENTRE_URL_PREFIX = 'https://ielts.org/test-centres/';
 
 /**
+ * The country-filtered listing (`?country=<alpha3>&city=all`) is server-
+ * rendered and authoritative — IELTS.org's own country assignment, rather than
+ * an inference from address, currency or phone prefix.
+ */
+export const COUNTRY_LISTING_URL = 'https://ielts.org/test-centres';
+export const LISTING_CACHE_DIR = path.join(CACHE_DIR, 'listings');
+
+/**
  * Identify ourselves honestly. robots.txt permits /test-centres/; we stay well
  * under any reasonable rate and cache aggressively so a re-run costs nothing.
  */
@@ -44,6 +52,19 @@ export const USER_AGENT =
 
 /** Concurrent page fetches. Deliberately modest. */
 export const FETCH_CONCURRENCY = 4;
+
+/**
+ * Concurrent centre *resolutions* (geocoding), separate from FETCH_CONCURRENCY
+ * because it gates a different bottleneck: each Google Geocoding call measured
+ * ~0.9s round-trip, and resolving centres one at a time made that additive —
+ * 565 lookups at ~1-3 sequential calls each took the better part of an hour
+ * doing nothing concurrently. Safe to raise: Nominatim serialises itself
+ * internally regardless of outer concurrency (its own 1 req/s policy is
+ * enforced inside `geocode.ts`, not here), and the Google budget counter is
+ * checked-then-incremented synchronously with no `await` in between, so it
+ * stays correct under concurrent callers despite JS having no real threads.
+ */
+export const RESOLVE_CONCURRENCY = 8;
 /** Minimum delay between requests per worker, milliseconds. */
 export const FETCH_DELAY_MS = 250;
 export const FETCH_TIMEOUT_MS = 30_000;

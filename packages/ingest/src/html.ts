@@ -60,9 +60,17 @@ export function sliceElement(html: string, startIndex: number, tag: string): str
       i = o.index + o[0].length;
       continue;
     }
-    if (depth === 0) return html.slice(startIndex, c.index);
     depth--;
     i = c.index + c[0].length;
+    // Depth reaches 0 exactly when this close matches the element's own
+    // opening tag at startIndex (counted as the first "open" above) — stop
+    // there. The previous version checked depth===0 *before* decrementing,
+    // which only guards malformed HTML, and otherwise kept scanning past the
+    // element's real end until it happened to run out of closing tags
+    // anywhere later in the document — silently over-including everything in
+    // between, including content the caller never intended to see (here, a
+    // shared page footer, once nothing else remained to stop it early).
+    if (depth <= 0) return html.slice(startIndex, i);
   }
   return html.slice(startIndex);
 }

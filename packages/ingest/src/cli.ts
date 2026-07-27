@@ -8,10 +8,12 @@ import {
   DATA_DIR,
   FETCH_CONCURRENCY,
   PAGE_CACHE_DIR,
+  RESOLVE_CONCURRENCY,
 } from './config.ts';
 import { fetchText, mapWithConcurrency } from './fetcher.ts';
 import { readSitemap } from './sitemap.ts';
 import { ParseError, parseCentrePage } from './parse.ts';
+import { fetchCountryIndex } from './country-index.ts';
 import { GeocodeCache } from './geocode.ts';
 import { clusterId, resolveCluster } from './resolve.ts';
 import {
@@ -34,6 +36,10 @@ interface Options {
   googleBudget: number;
   /** Re-resolve locations even for centres whose address has not changed. */
   regeocode: boolean;
+  /** Skip fetching IELTS.org's own country listing; use inference alone. */
+  noCountryIndex: boolean;
+  /** Try Google before Nominatim — for a deliberate one-time backfill. */
+  googleFirst: boolean;
 }
 
 /**
@@ -52,6 +58,8 @@ function parseArgs(argv: string[]): Options {
     audit: true,
     googleBudget: DEFAULT_GOOGLE_BUDGET,
     regeocode: false,
+    noCountryIndex: false,
+    googleFirst: false,
   };
   for (let i = 0; i < argv.length; i++) {
     const arg = argv[i]!;
@@ -63,6 +71,8 @@ function parseArgs(argv: string[]): Options {
     else if (arg === '--no-audit') opts.audit = false;
     else if (arg === '--google-budget') opts.googleBudget = Number(argv[++i]);
     else if (arg === '--regeocode') opts.regeocode = true;
+    else if (arg === '--no-country-index') opts.noCountryIndex = true;
+    else if (arg === '--google-first') opts.googleFirst = true;
     else if (arg === '--help' || arg === '-h') {
       console.log(HELP);
       process.exit(0);
@@ -86,6 +96,8 @@ Usage: npm run ingest -- [options]
   --no-geocode          Page-embedded coordinates only; no geocoder at all
   --google-budget <n>   Max billable Google calls this run (default: 500)
   --regeocode           Re-resolve even unchanged addresses (costs money)
+  --google-first        Try Google before Nominatim (fast one-time backfill)
+  --no-country-index    Skip IELTS.org's own country listing; infer only
   --no-audit            Don't write the dedup audit file
   -h, --help            Show this help
 
@@ -93,6 +105,11 @@ Raw pages are cached in .cache/ (gitignored) so local re-runs are fast and cost
 the source nothing; pass --force to see the site as it is now. Geocode results
 are cached in data/geocode-cache.json, which IS committed — it is what stops a
 scheduled run re-billing every address on a fresh checkout.
+
+Country comes primarily from IELTS.org's own /test-centres?country=<alpha3>
+listing (stated fact, not inferred), which is fetched once per run and cached
+under .cache/listings/. Address parsing, the booking link's country=, and the
+phone's dialling code are the fallback for the rare slug that listing omits.
 
 The run ends by diffing against the committed dataset and only rewrites it when
 something a reader would care about moved. Timestamps alone never count.`;
@@ -144,6 +161,33 @@ async function main(): Promise<void> {
     if (failures.length > 10) console.log(`    … and ${failures.length - 10} more`);
   }
 
+  if (!opts.noCountryIndex) {
+    console.log(`\n▸ Reading IELTS.org's own country listing`);
+    const index = await fetchCountryIndex(opts.force);
+    console.log(
+      `  ${index.stats.countries} countries, ${index.stats.slugs} centres attributed` +
+        (index.stats.unmappedCodes.length
+          ? ` (${index.stats.unmappedCodes.length} territory codes skipped: ${index.stats.unmappedCodes.join(', ')})`
+          : ''),
+    );
+
+    // Authoritative when it has an answer — the operator's own filing, not an
+    // inference from address, currency or phone. Address parsing, the booking
+    // link and the phone prefix remain the fallback for whatever this listing
+    // does not cover (a slug added between the two fetches, a naming mismatch).
+    let fromIndex = 0;
+    for (const centre of parsed) {
+      const known = index.bySlug.get(centre.slug);
+      if (known && known !== centre.address.country) {
+        centre.address.country = known;
+        fromIndex++;
+      } else if (known) {
+        fromIndex++;
+      }
+    }
+    console.log(`  ${fromIndex}/${parsed.length} centres matched to a country this way`);
+  }
+
   const global = opts.country === 'ALL';
   console.log(`\n▸ ${global ? 'Keeping every country' : `Filtering to ${opts.country}`}`);
   const inCountry = global ? parsed : parsed.filter((c) => c.address.country === opts.country);
@@ -182,22 +226,32 @@ async function main(): Promise<void> {
   console.log(
     `  ${embedded} from page embeds, ${clusters.length - embedded} may need lookup` +
       (opts.regeocode ? ' (forced re-geocode)' : '') +
+      (opts.googleFirst ? ' (Google first)' : '') +
       `; Google budget ${opts.googleBudget}`,
   );
 
-  const centres: Centre[] = [];
-  for (const [i, cluster] of clusters.entries()) {
-    const id = clusterId(cluster);
-    centres.push(
-      await resolveCluster(cluster, cache, {
+  // Concurrent, not sequential: resolving one centre at a time made per-call
+  // network latency (Google measured ~0.9s round-trip) additive across the
+  // whole run. mapWithConcurrency preserves output order despite the
+  // out-of-order completion, and cache/budget state stays correct under this
+  // (see RESOLVE_CONCURRENCY's doc).
+  const centres = await mapWithConcurrency(
+    clusters,
+    RESOLVE_CONCURRENCY,
+    (cluster) => {
+      const id = clusterId(cluster);
+      return resolveCluster(cluster, cache, {
         previous: id ? priorById.get(id) : undefined,
         regeocode: opts.regeocode,
-      }),
-    );
-    if ((i + 1) % 25 === 0 || i === clusters.length - 1) {
-      process.stdout.write(`\r  ${i + 1}/${clusters.length} resolved`);
-    }
-  }
+        preferGoogle: opts.googleFirst,
+      });
+    },
+    (done, total) => {
+      if (done % 25 === 0 || done === total) {
+        process.stdout.write(`\r  ${done}/${total} resolved`);
+      }
+    },
+  );
   process.stdout.write('\n');
   await cache.save();
   console.log(

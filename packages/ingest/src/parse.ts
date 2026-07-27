@@ -23,10 +23,20 @@ import { decodeEntities, hrefs, paragraphs, sliceElement, stripTags } from './ht
 const BOOKING_DOMAINS: { pattern: RegExp; operator: Operator }[] = [
   { pattern: /(^|\.)bxsearch\.ielts\.idp\.com$/i, operator: 'IDP' },
   { pattern: /(^|\.)idpielts\.cn$/i, operator: 'IDP' },
+  // ielts.idp.com bare is also the footer's generic IDP link on every page —
+  // but hrefs() is only ever called on a test-row div (extractOfferings),
+  // never on the whole page, so the footer's copy is structurally unreachable
+  // here and this stays safe. The real per-centre link carries a path
+  // (`/book/UKVI?testCentreId=…`); the footer's does not.
+  { pattern: /(^|\.)ielts\.idp\.com$/i, operator: 'IDP' },
+  // India books through a separate IDP-run site (DEV_PLAN §5.1).
+  { pattern: /(^|\.)ieltsidpindia\.com$/i, operator: 'IDP' },
   { pattern: /(^|\.)ieltsregistration\.britishcouncil\.org$/i, operator: 'British Council' },
   // In China the British Council routes bookings through NEEA.
   { pattern: /(^|\.)ielts\.neea\.cn$/i, operator: 'British Council' },
   { pattern: /(^|\.)ieltsusa\.org$/i, operator: 'IELTS USA' },
+  // A separate registered domain from ieltsusa.org, not a subdomain of it.
+  { pattern: /(^|\.)registration-ieltsusa\.org$/i, operator: 'IELTS USA' },
 ];
 
 export class ParseError extends Error {}
@@ -42,13 +52,9 @@ export function parseCentrePage(slug: string, html: string, fetchedAt: string): 
   const { operator, operatorSource, externalId } = detectOperator(bookingUrl, slug, name);
 
   // The address parser only recognises CA/US shapes. Outside those markets the
-  // booking link's `country=` and the listed currency carry the answer, so fill
-  // the gap here rather than shipping a worldwide dataset that is 91% unplaced.
-  address.country = resolveCountry(
-    address.country,
-    bookingUrl,
-    offerings.find((o) => o.currency)?.currency,
-  );
+  // booking link's `country=` and the phone's dialling prefix carry the answer.
+  // Whatever is still unknown is filled from the geocoder during resolution.
+  address.country = resolveCountry(address.country, bookingUrl, phone);
 
   return {
     slug,
@@ -109,7 +115,11 @@ function extractEmbeddedGeo(html: string): { lat: number; lng: number } | null {
   const lat = Number(m[1]);
   const lng = Number(m[2]);
   if (!Number.isFinite(lat) || !Number.isFinite(lng)) return null;
-  if (lat === 0 && lng === 0) return null;
+  // Not just exact (0,0): a real page ("British Council, VTED COETI Hai
+  // Phong") embedded the literal placeholder (1,1) — a coordinate in the Gulf
+  // of Guinea, nowhere near Vietnam. Any point this close to (0,0) is a
+  // sentinel, not a real address, for any centre this dataset will ever cover.
+  if (Math.abs(lat) < 1 && Math.abs(lng) < 1) return null;
   if (Math.abs(lat) > 90 || Math.abs(lng) > 180) return null;
   return { lat, lng };
 }
