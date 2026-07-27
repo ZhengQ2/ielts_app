@@ -1,0 +1,26 @@
+{
+  "name": "ielts-map",
+  "private": true,
+  "version": "0.1.0",
+  "description": "IELTS test centre directory — neutral, all-operator, ratings layered on top",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "npm run dev --workspace @ielts-map/web",
+    "build": "npm run build --workspace @ielts-map/web",
+    "start": "npm run start --workspace @ielts-map/web",
+    "lint": "npm run lint --workspace @ielts-map/web",
+    "typecheck": "tsc -b packages/core packages/ingest --pretty",
+    "test": "node --test --experimental-strip-types \"packages/*/test/*.test.ts\"",
+    "ingest": "npm run ingest --workspace @ielts-map/ingest"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.1",
+    "typescript": "^5.7.3"
+  }
+}

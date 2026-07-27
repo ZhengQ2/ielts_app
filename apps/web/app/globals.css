@@ -1,0 +1,27 @@
+@import 'tailwindcss';
+@import 'maplibre-gl/dist/maplibre-gl.css';
+
+@theme {
+  --color-ink: oklch(0.24 0.02 250);
+  --color-muted: oklch(0.52 0.015 250);
+  --color-line: oklch(0.92 0.005 250);
+  --color-surface: oklch(0.99 0.002 250);
+  --color-brand: oklch(0.52 0.14 250);
+  --color-brand-soft: oklch(0.96 0.02 250);
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    background: var(--color-surface);
+    color: var(--color-ink);
+  }
+}
+
+/* MapLibre's controls default to a heavier chrome than the rest of the page. */
+.maplibregl-ctrl-group {
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.12);
+}

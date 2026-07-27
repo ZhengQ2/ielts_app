@@ -1,0 +1,32 @@
+# dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# build output
+dist/
+build/
+.next/
+out/
+*.tsbuildinfo
+
+# ingestion cache — raw fetched HTML, regenerable, large
+.cache/
+
+# env
+.env
+.env.local
+.env*.local
+
+# editor / OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# logs
+*.log
+npm-debug.log*
+
+# vercel
+.vercel

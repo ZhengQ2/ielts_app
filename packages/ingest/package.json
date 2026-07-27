@@ -1,0 +1,17 @@
+{
+  "name": "@ielts-map/ingest",
+  "version": "0.1.0",
+  "private": true,
+  "description": "IELTS.org master ingestion: sitemap → centre pages → parse → dedup → geocode → dataset",
+  "type": "module",
+  "bin": {
+    "ielts-ingest": "./src/cli.ts"
+  },
+  "scripts": {
+    "ingest": "node --experimental-strip-types src/cli.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@ielts-map/core": "*"
+  }
+}

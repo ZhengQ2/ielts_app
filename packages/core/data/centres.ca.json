@@ -1,0 +1,146 @@
+{
+  "version": 1,
+  "country": "CA",
+  "generatedAt": "2026-07-27T10:25:14.651Z",
+  "stats": {
+    "sitemapSlugs": 1854,
+    "pagesParsed": 40,
+    "matchedCountry": 2,
+    "afterDedup": 2,
+    "active": 2,
+    "byOperator": {
+      "British Council": 2
+    },
+    "byGeoPrecision": {
+      "postcode": 1,
+      "none": 1
+    },
+    "ungeocoded": 1
+  },
+  "centres": [
+    {
+      "id": "bc-13775",
+      "name": "British Council, BITTS Atlantic Testing Services - St. John's NL",
+      "operator": "British Council",
+      "operatorSource": "booking_domain",
+      "externalId": "13775",
+      "ieltsOrgSlug": "british-council-bitts-atlantic-testing-services-st-johns-nl-2",
+      "mergedSlugs": [],
+      "address": {
+        "raw": "31 Pippy Place, Unit 3006, 3rd Floor, St Johns (NL), A1B3X2",
+        "lines": [
+          "31 Pippy Place, Unit 3006",
+          "3rd Floor",
+          "St Johns (NL)",
+          "A1B3X2"
+        ],
+        "city": "3rd Floor",
+        "region": null,
+        "postcode": "A1B 3X2",
+        "country": "CA"
+      },
+      "phone": null,
+      "geo": {
+        "lat": 47.5560652,
+        "lng": -52.7683536,
+        "precision": "postcode",
+        "source": "nominatim",
+        "confidence": 0.7
+      },
+      "formats": [
+        "computer_delivered"
+      ],
+      "offerings": [
+        {
+          "label": "Academic Test",
+          "kind": "academic",
+          "format": "computer_delivered",
+          "currency": "CAD",
+          "price": 368
+        },
+        {
+          "label": "General Training Test",
+          "kind": "general_training",
+          "format": "computer_delivered",
+          "currency": "CAD",
+          "price": 368
+        }
+      ],
+      "priceFrom": 368,
+      "currency": "CAD",
+      "bookingUrl": "https://ieltsregistration.britishcouncil.org/ors/find-test?country=CA&location=13775&examType=ac&examFormat=cd",
+      "isActive": true,
+      "confidence": 0.9,
+      "sources": [
+        {
+          "source": "IELTS.org",
+          "externalSlug": "british-council-bitts-atlantic-testing-services-st-johns-nl-2",
+          "url": "https://ielts.org/test-centres/british-council-bitts-atlantic-testing-services-st-johns-nl-2",
+          "seenAt": "2026-07-27T10:24:54.132Z",
+          "stillPresent": true
+        }
+      ],
+      "firstSeenAt": "2026-07-27T10:25:14.631Z",
+      "lastSeenAt": "2026-07-27T10:25:14.631Z"
+    },
+    {
+      "id": "bc-13776",
+      "name": "British Council, BITTS Atlantic Testing Services - Sydney, NS",
+      "operator": "British Council",
+      "operatorSource": "booking_domain",
+      "externalId": "13776",
+      "ieltsOrgSlug": "british-council-bitts-atlantic-testing-services-sydney-ns-2",
+      "mergedSlugs": [],
+      "address": {
+        "raw": "Unit 210, Bentinck St Level, 500 George St, Sydney, B1P 1K6",
+        "lines": [
+          "Unit 210, Bentinck St Level",
+          "500 George St",
+          "Sydney",
+          "B1P 1K6"
+        ],
+        "city": null,
+        "region": null,
+        "postcode": "B1P 1K6",
+        "country": "CA"
+      },
+      "phone": null,
+      "geo": null,
+      "formats": [
+        "computer_delivered"
+      ],
+      "offerings": [
+        {
+          "label": "Academic Test",
+          "kind": "academic",
+          "format": "computer_delivered",
+          "currency": "CAD",
+          "price": 364.8
+        },
+        {
+          "label": "General Training Test",
+          "kind": "general_training",
+          "format": "computer_delivered",
+          "currency": "CAD",
+          "price": 364.8
+        }
+      ],
+      "priceFrom": 364.8,
+      "currency": "CAD",
+      "bookingUrl": "https://ieltsregistration.britishcouncil.org/ors/find-test?country=CA&location=13776&examType=ac&examFormat=cd",
+      "isActive": true,
+      "confidence": 0.8,
+      "sources": [
+        {
+          "source": "IELTS.org",
+          "externalSlug": "british-council-bitts-atlantic-testing-services-sydney-ns-2",
+          "url": "https://ielts.org/test-centres/british-council-bitts-atlantic-testing-services-sydney-ns-2",
+          "seenAt": "2026-07-27T10:24:53.547Z",
+          "stillPresent": true
+        }
+      ],
+      "firstSeenAt": "2026-07-27T10:25:08.924Z",
+      "lastSeenAt": "2026-07-27T10:25:08.924Z"
+    }
+  ]
+}
