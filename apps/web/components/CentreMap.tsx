@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 import maplibregl, { type LngLatBoundsLike, type Map as MapLibreMap } from 'maplibre-gl';
 import {
   isPinnable,
@@ -51,6 +52,9 @@ export default function CentreMap({ centres, selectedId, onSelect }: Props) {
   // Keep the latest callback without re-running the marker effect on every render.
   const onSelectRef = useRef(onSelect);
   onSelectRef.current = onSelect;
+  const router = useRouter();
+  const routerRef = useRef(router);
+  routerRef.current = router;
 
   useEffect(() => {
     if (!container.current || map.current) return;
@@ -82,8 +86,13 @@ export default function CentreMap({ centres, selectedId, onSelect }: Props) {
 
     const located = centres.filter((c) => c.geo);
     for (const centre of located) {
-      const el = document.createElement('button');
-      el.type = 'button';
+      const href = `/centres/${centre.ieltsOrgSlug}`;
+
+      // A real anchor, not a button: it gives keyboard activation, cmd-click to
+      // open in a new tab and the browser's own context menu for free — none of
+      // which a click handler on a <button> would provide.
+      const el = document.createElement('a');
+      el.href = href;
       // The operator is in the label too — a screen reader gets no colour.
       el.setAttribute('aria-label', `${centre.name} (${centre.operator})`);
       el.className = 'maplibre-pin';
@@ -92,9 +101,22 @@ export default function CentreMap({ centres, selectedId, onSelect }: Props) {
       // A coarse coordinate gets a hollow, softer marker so the map never
       // implies more precision than the data supports.
       el.dataset.precise = String(isPinnable(centre.geo));
+
       el.addEventListener('click', (e) => {
         e.stopPropagation();
+        // Let the browser handle cmd/ctrl/shift-click and middle-click so
+        // "open in a new tab" keeps working.
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+        // A plain single click selects; opening the page is the double click.
+        e.preventDefault();
         onSelectRef.current(centre.id);
+      });
+
+      el.addEventListener('dblclick', (e) => {
+        // Without this the map's own double-click-to-zoom also fires.
+        e.stopPropagation();
+        e.preventDefault();
+        routerRef.current.push(href);
       });
 
       const marker = new maplibregl.Marker({ element: el })
@@ -128,13 +150,14 @@ export default function CentreMap({ centres, selectedId, onSelect }: Props) {
 
   // Only show operators that are actually on screen.
   const legend = [...new Set(centres.map((c) => c.operator))].sort();
+  const approximate = centres.filter((c) => c.geo && !isPinnable(c.geo)).length;
 
   return (
     <div className="relative h-full w-full">
       <div ref={container} className="h-full w-full" />
 
       {legend.length > 0 && (
-        <div className="pointer-events-none absolute left-3 top-3 rounded-lg border border-line bg-white/95 px-3 py-2 shadow-sm backdrop-blur-sm">
+        <div className="pointer-events-none absolute left-3 top-3 max-w-[15rem] rounded-lg border border-line bg-white/95 px-3 py-2 shadow-sm backdrop-blur-sm">
           <ul className="flex flex-col gap-1.5">
             {legend.map((operator) => (
               <li key={operator} className="flex items-center gap-2 text-xs">
@@ -142,7 +165,18 @@ export default function CentreMap({ centres, selectedId, onSelect }: Props) {
                 <span>{operator}</span>
               </li>
             ))}
+            {approximate > 0 && (
+              <li className="flex items-center gap-2 border-t border-line pt-1.5 text-xs">
+                <LegendSwatch operator={legend[0] ?? 'unknown'} hollow />
+                <span className="text-muted">
+                  Approximate location ({approximate})
+                </span>
+              </li>
+            )}
           </ul>
+          <p className="mt-1.5 border-t border-line pt-1.5 text-[0.6875rem] leading-tight text-muted">
+            Double-click a marker to open the centre
+          </p>
         </div>
       )}
 
@@ -150,11 +184,19 @@ export default function CentreMap({ centres, selectedId, onSelect }: Props) {
         .maplibre-pin {
           --scale: 1;
           --rotate: 0deg;
+          /* An <a> is inline by default, which would ignore width/height. */
+          display: block;
+          /* Stops the double-click from selecting surrounding text. */
+          user-select: none; -webkit-user-select: none;
           width: 16px; height: 16px; cursor: pointer;
           background: var(--pin); border: 2px solid white; border-radius: 9999px;
           box-shadow: 0 1px 4px rgb(0 0 0 / 0.35);
           transform: rotate(var(--rotate)) scale(var(--scale));
           transition: transform .12s ease;
+        }
+        .maplibre-pin:focus-visible {
+          outline: 2px solid #0f172a;
+          outline-offset: 2px;
         }
         /* Shape carries the operator alongside colour, so the distinction
            survives colour blindness and greyscale. Rotated squares are sized
@@ -182,17 +224,20 @@ export default function CentreMap({ centres, selectedId, onSelect }: Props) {
   );
 }
 
-function LegendSwatch({ operator }: { operator: Operator }) {
+/** `hollow` mirrors the dashed marker used for coarse coordinates. */
+function LegendSwatch({ operator, hollow }: { operator: Operator; hollow?: boolean }) {
   const shape = operatorShape(operator);
+  const color = operatorStyle(operator).base;
   return (
     <span
       aria-hidden
-      className="inline-block h-2.5 w-2.5 shrink-0 border-2 border-white"
+      className="inline-block h-2.5 w-2.5 shrink-0"
       style={{
-        background: operatorStyle(operator).base,
+        background: hollow ? 'transparent' : color,
+        border: hollow ? `1.5px dashed ${color}` : '2px solid white',
         borderRadius: shape === 'circle' ? '9999px' : '2px',
         transform: shape === 'diamond' ? 'rotate(45deg)' : undefined,
-        boxShadow: '0 0 0 1px rgb(0 0 0 / 0.15)',
+        boxShadow: hollow ? undefined : '0 0 0 1px rgb(0 0 0 / 0.15)',
       }}
     />
   );

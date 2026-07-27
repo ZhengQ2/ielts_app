@@ -22,7 +22,8 @@ export function CentreCard({ centre, selected, onHover, onSelect }: Props) {
     <li
       onMouseEnter={onHover}
       onClick={onSelect}
-      className={`rounded-lg border bg-white p-4 transition ${
+      aria-current={selected ? 'true' : undefined}
+      className={`cursor-pointer rounded-lg border bg-white p-4 transition ${
         selected ? 'border-brand ring-1 ring-brand' : 'border-line hover:border-muted'
       }`}
     >
@@ -42,11 +43,13 @@ export function CentreCard({ centre, selected, onHover, onSelect }: Props) {
 
       <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm">
         <span className="font-medium">
-          {centre.priceFrom !== null ? `from ${formatPrice(centre.priceFrom, centre.currency)}` : 'Price not published'}
+          {centre.priceFrom !== null
+            ? `from ${formatPrice(centre.priceFrom, centre.currency)}`
+            : 'Price not published'}
         </span>
         <span className="text-muted">{centre.formats.map(formatFormat).join(' · ')}</span>
         {!isPinnable(centre.geo) && (
-          <span className="text-xs text-muted italic">approximate location</span>
+          <span className="text-xs italic text-muted">approximate location</span>
         )}
       </div>
     </li>

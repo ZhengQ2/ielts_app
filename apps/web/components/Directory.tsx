@@ -15,6 +15,7 @@ import {
   type SortKey,
 } from '@ielts-map/core';
 import { CentreCard } from './CentreCard';
+import { SelectedCentrePanel } from './SelectedCentrePanel';
 
 // MapLibre touches `window` on load, so it stays out of the server render.
 const CentreMap = dynamic(() => import('./CentreMap'), {
@@ -28,7 +29,15 @@ export function Directory({ centres }: { centres: Centre[] }) {
   const [operators, setOperators] = useState<Operator[]>([]);
   const [maxPrice, setMaxPrice] = useState<number | null>(null);
   const [sort, setSort] = useState<SortKey>('name');
+
+  /**
+   * Hover and selection are tracked separately. Hovering a card only highlights
+   * its marker; clicking selects. Folding the two together would make the
+   * summary panel flicker as the pointer swept the list.
+   */
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const highlightedId = selectedId ?? hoveredId;
 
   const cities = useMemo(() => cityFacets(centres), [centres]);
   const operatorOptions = useMemo(() => operatorFacets(centres), [centres]);
@@ -46,6 +55,12 @@ export function Directory({ centres }: { centres: Centre[] }) {
     };
     return sortCentres(filterCentres(centres, filter), sort);
   }, [centres, query, city, operators, maxPrice, sort]);
+
+  // Cleared automatically when filters exclude the selected centre.
+  const selectedCentre = useMemo(
+    () => results.find((c) => c.id === selectedId) ?? null,
+    [results, selectedId],
+  );
 
   const toggleOperator = (op: Operator) => {
     setOperators((prev) => (prev.includes(op) ? prev.filter((o) => o !== op) : [...prev, op]));
@@ -172,6 +187,10 @@ export function Directory({ centres }: { centres: Centre[] }) {
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
         <div>
+          {selectedCentre && (
+            <SelectedCentrePanel centre={selectedCentre} onClose={() => setSelectedId(null)} />
+          )}
+
           <p className="mb-3 text-sm text-muted" aria-live="polite">
             {results.length} {results.length === 1 ? 'centre' : 'centres'}
           </p>
@@ -184,14 +203,15 @@ export function Directory({ centres }: { centres: Centre[] }) {
               </button>
             </div>
           ) : (
-            <ul className="flex flex-col gap-3">
+            <ul className="flex flex-col gap-3" onMouseLeave={() => setHoveredId(null)}>
               {results.map((centre) => (
                 <CentreCard
                   key={centre.id}
                   centre={centre}
                   selected={centre.id === selectedId}
-                  onHover={() => setSelectedId(centre.id)}
-                  onSelect={() => setSelectedId(centre.id)}
+                  onHover={() => setHoveredId(centre.id)}
+                  // Clicking the already-selected card clears it.
+                  onSelect={() => setSelectedId((prev) => (prev === centre.id ? null : centre.id))}
                 />
               ))}
             </ul>
@@ -199,7 +219,11 @@ export function Directory({ centres }: { centres: Centre[] }) {
         </div>
 
         <div className="h-[24rem] overflow-hidden rounded-lg border border-line lg:sticky lg:top-6 lg:h-[calc(100vh-8rem)]">
-          <CentreMap centres={results} selectedId={selectedId} onSelect={setSelectedId} />
+          <CentreMap
+            centres={results}
+            selectedId={highlightedId}
+            onSelect={setSelectedId}
+          />
         </div>
       </div>
     </div>
