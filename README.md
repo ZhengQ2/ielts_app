@@ -63,7 +63,24 @@ cd packages/ingest && node --experimental-strip-types src/cli.ts --country CA --
 | `--country <ISO>` | Country to filter to (default `CA`) |
 | `--limit <n>` | Crawl only the first n slugs — a quick smoke run |
 | `--force` | Ignore the HTML cache and refetch |
-| `--no-geocode` | Page-embedded coordinates only; no Nominatim calls |
+| `--no-geocode` | Page-embedded coordinates only; no geocoder calls |
+
+### Credentials (all optional)
+
+Copy `.env.example` to `.env.local` — gitignored, and loaded automatically by the
+ingester. Nothing here is required: with no credentials at all, the pipeline still builds the
+full dataset from page-embedded coordinates plus Nominatim.
+
+| Variable | Effect |
+|---|---|
+| `GOOGLE_MAPS_API_KEY` | Ingest-time geocoding. Tried before Nominatim; resolves the Canadian street addresses OpenStreetMap does not carry. The web app never receives it. |
+
+**Retention caveat.** Google's Maps Platform terms cap how long their geocoding results may be
+cached, with Place IDs the documented exception — so committing Google-derived coordinates to git
+indefinitely is not obviously within them. Two things keep this honest: the scheduled re-crawl
+(M1.5) is what refreshes those coordinates, and `googlePlaceId` is stored precisely because it is
+the value that *is* durably storable. Check the current terms before launch; dropping the key falls
+back to Nominatim, whose ODbL data carries no such limit.
 
 The pipeline runs: sitemap → fetch every centre page → parse → filter by country → dedup → resolve
 locations → write `packages/core/data/centres.ca.json` plus an `audit.ca.json` listing the fuzzy
@@ -102,6 +119,10 @@ the Mapbox GL API shape, so moving to Mapbox is a style-URL and token change, an
 
 Coordinates are stored as WGS-84 only. Conversion to GCJ-02 happens at render time, keyed off the
 *centre's* region, if and when China is ever in scope.
+
+Geocoding and the basemap are deliberately separate concerns: Google may resolve a centre's
+coordinate at ingest time, but nothing Google-rendered is displayed — the map is MapLibre over OSM
+tiles. That keeps the render layer free of Google's mapping terms and cost.
 
 ## Testing
 

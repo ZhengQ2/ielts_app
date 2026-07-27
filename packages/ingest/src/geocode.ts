@@ -1,13 +1,22 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import type { GeoCandidate, GeoPrecision } from '@ielts-map/core';
-import { GEOCODE_CACHE, NOMINATIM_DELAY_MS, NOMINATIM_URL, USER_AGENT } from './config.ts';
+import {
+  GEOCODE_CACHE,
+  GOOGLE_GEOCODE_URL,
+  NOMINATIM_DELAY_MS,
+  NOMINATIM_URL,
+  USER_AGENT,
+} from './config.ts';
 
 /**
- * Geocoding provider registry (DEV_PLAN §5.3). Only Nominatim is wired up:
- * Canada geocodes cleanly with it and it needs no key, so the MVP is not gated
- * on a paid provider. Google/Mapbox/Amap/Kakao slot in behind the same
- * interface when a country needs them.
+ * Geocoding provider registry (DEV_PLAN §5.3).
+ *
+ * Nominatim needs no key, so a clone with no credentials still builds the whole
+ * dataset — the MVP is never gated on a paid provider. Google is used when
+ * GOOGLE_MAPS_API_KEY is set, because its Canadian street coverage is
+ * materially better on the addresses Nominatim cannot resolve. Amap and Kakao
+ * slot in behind the same interface if CN/KR ever come into scope.
  */
 
 export interface GeocodeQuery {
@@ -40,6 +49,12 @@ export interface GeocodeCandidateRaw {
   echoedPostcode: string | null;
   echoedCity: string | null;
   echoedCountry: string | null;
+  /**
+   * Google only. Per DEV_PLAN §7 this is the one Google-derived value we treat
+   * as durably storable — Google's terms exempt Place IDs from the caching
+   * limit that applies to everything else they return.
+   */
+  placeId?: string | null;
 }
 
 interface NominatimHit {
@@ -130,6 +145,117 @@ export const nominatim: GeocodeProvider = {
  * for every query already on disk.
  */
 const MAPPING_VERSION = 2;
+
+interface GoogleResult {
+  formatted_address?: string;
+  place_id?: string;
+  types?: string[];
+  geometry?: { location?: { lat: number; lng: number }; location_type?: string };
+  address_components?: { long_name: string; short_name: string; types: string[] }[];
+}
+
+function component(r: GoogleResult, type: string, short = false): string | null {
+  const c = r.address_components?.find((a) => a.types.includes(type));
+  return c ? (short ? c.short_name : c.long_name) : null;
+}
+
+/**
+ * Google's `location_type` alone is too coarse: APPROXIMATE covers everything
+ * from a postcode to a country. The result's `types` say what was actually
+ * resolved, so they set the floor.
+ */
+function googlePrecision(r: GoogleResult): GeoPrecision {
+  const types = r.types ?? [];
+  if (types.some((t) => ['street_address', 'premise', 'subpremise'].includes(t))) {
+    return r.geometry?.location_type === 'ROOFTOP' ? 'rooftop' : 'street';
+  }
+  if (types.includes('route') || types.includes('intersection')) return 'street';
+  if (types.some((t) => t.startsWith('postal_code'))) return 'postcode';
+  if (types.some((t) => ['locality', 'sublocality', 'neighborhood', 'postal_town'].includes(t))) {
+    return 'city';
+  }
+  if (types.includes('country')) return 'country';
+
+  switch (r.geometry?.location_type) {
+    case 'ROOFTOP':
+      return 'rooftop';
+    case 'RANGE_INTERPOLATED':
+      return 'street';
+    case 'GEOMETRIC_CENTER':
+      return 'street';
+    default:
+      return 'city';
+  }
+}
+
+/**
+ * Google Geocoding. Optional: enabled only when GOOGLE_MAPS_API_KEY is present,
+ * so a clone with no key still builds the dataset from Nominatim alone.
+ *
+ * The key is read from the environment and never written to the dataset, the
+ * cache or the logs.
+ */
+export const google: GeocodeProvider = {
+  name: 'google',
+  async lookup(q) {
+    const key = process.env.GOOGLE_MAPS_API_KEY;
+    if (!key) return [];
+
+    // Google takes one address string; `components` constrains the country the
+    // way Nominatim's countrycodes does.
+    const address =
+      q.text ??
+      [q.structured?.street, q.structured?.city, q.structured?.state, q.structured?.postalcode]
+        .filter(Boolean)
+        .join(', ');
+    if (!address) return [];
+
+    const url = new URL(GOOGLE_GEOCODE_URL);
+    url.searchParams.set('address', address);
+    if (q.country) url.searchParams.set('components', `country:${q.country.toUpperCase()}`);
+    url.searchParams.set('key', key);
+
+    const res = await fetch(url, { headers: { accept: 'application/json' } });
+    if (!res.ok) throw new Error(`Google HTTP ${res.status} for "${address}"`);
+
+    const body = (await res.json()) as { status?: string; results?: GoogleResult[]; error_message?: string };
+    if (body.status === 'ZERO_RESULTS') return [];
+    if (body.status !== 'OK') {
+      // Surface the status, never the key.
+      throw new Error(`Google ${body.status ?? 'UNKNOWN'} for "${address}"${body.error_message ? `: ${body.error_message}` : ''}`);
+    }
+
+    return (body.results ?? []).slice(0, 3).flatMap((r) => {
+      const loc = r.geometry?.location;
+      if (!loc || !Number.isFinite(loc.lat) || !Number.isFinite(loc.lng)) return [];
+      return [
+        {
+          lat: loc.lat,
+          lng: loc.lng,
+          precision: googlePrecision(r),
+          echoedPostcode: component(r, 'postal_code'),
+          echoedCity:
+            component(r, 'locality') ??
+            component(r, 'postal_town') ??
+            component(r, 'sublocality') ??
+            component(r, 'administrative_area_level_2'),
+          echoedCountry: component(r, 'country', true),
+          placeId: r.place_id ?? null,
+        },
+      ];
+    });
+  },
+};
+
+/**
+ * Provider chain per country (DEV_PLAN §5.3). Google first where a key exists —
+ * its Canadian coverage is materially better — with Nominatim as the always
+ * available fallback. Local providers (Amap, Kakao) slot in here per country
+ * when those markets come into scope.
+ */
+export function providerChain(_country: string | null | undefined): GeocodeProvider[] {
+  return process.env.GOOGLE_MAPS_API_KEY ? [google, nominatim] : [nominatim];
+}
 
 /** Disk-backed memo so re-runs never re-hit the geocoder. */
 export class GeocodeCache {

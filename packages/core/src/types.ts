@@ -74,6 +74,11 @@ export interface Geo {
   source: GeoSource;
   /** 0..1 from the scoring rule in DEV_PLAN §5.3. */
   confidence: number;
+  /**
+   * Internal: carried out of the scoring step so the caller can lift it onto
+   * `Centre.googlePlaceId`. Not persisted here — see that field.
+   */
+  placeId?: string | null;
 }
 
 /** Provenance: which source listed this centre, and when we last saw it. */
@@ -102,6 +107,13 @@ export interface Centre {
   phone: string | null;
   /** Null when no coordinate could be resolved at any precision. */
   geo: Geo | null;
+  /**
+   * The only Google-derived value we store durably. Google's terms cap caching
+   * of their Content but exempt Place IDs, and this is the key that later
+   * unlocks live ratings and photos (DEV_PLAN §7) without persisting any of
+   * that content itself.
+   */
+  googlePlaceId: string | null;
   formats: TestFormat[];
   offerings: TestOffering[];
   /** Lowest listed fee, for list-view sorting. */

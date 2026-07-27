@@ -15,7 +15,13 @@ import {
   scoreCandidate,
   slugBase,
 } from '@ielts-map/core';
-import { GeocodeCache, nominatim, toCandidates } from './geocode.ts';
+import {
+  GeocodeCache,
+  nominatim,
+  providerChain,
+  toCandidates,
+  type GeocodeProvider,
+} from './geocode.ts';
 import { streetLine } from './address.ts';
 
 const SOURCE_NAME = 'IELTS.org';
@@ -33,7 +39,8 @@ export async function resolveCluster(
   const priceFrom = priced.length ? Math.min(...priced.map((o) => o.price!)) : null;
   const currency = priced[0]?.currency ?? null;
 
-  const geo = await resolveLocation(canonical, cluster, cache);
+  const located = await resolveLocation(canonical, cluster, cache);
+  const geo = located.geo;
 
   const now = new Date().toISOString();
   const sources: CentreSourceRef[] = cluster.map((c) => ({
@@ -58,6 +65,7 @@ export async function resolveCluster(
     address: canonical.address,
     phone: cluster.find((c) => c.phone)?.phone ?? null,
     geo,
+    googlePlaceId: located.placeId,
     formats,
     offerings,
     priceFrom,
@@ -93,21 +101,68 @@ async function resolveLocation(
   canonical: ParsedCentre,
   cluster: ParsedCentre[],
   cache: GeocodeCache,
-): Promise<Geo | null> {
+): Promise<{ geo: Geo | null; placeId: string | null }> {
   const embedded = cluster.find((c) => c.embeddedGeo)?.embeddedGeo;
   if (embedded) {
     return {
-      lat: embedded.lat,
-      lng: embedded.lng,
-      precision: 'rooftop',
-      source: 'page_embed',
-      confidence: 0.9,
+      geo: {
+        lat: embedded.lat,
+        lng: embedded.lng,
+        precision: 'rooftop',
+        source: 'page_embed',
+        confidence: 0.9,
+      },
+      placeId: null,
     };
   }
 
   const { address, name } = canonical;
   const country = address.country;
   const candidates: GeoCandidate[] = [];
+  const chain = providerChain(country);
+  const expect = { postcode: address.postcode, city: address.city, country };
+
+  const street = streetLine(address.lines);
+
+  const runProvider = async (provider: GeocodeProvider): Promise<void> => {
+    const add = async (q: Parameters<GeocodeProvider['lookup']>[0]) => {
+      candidates.push(...toCandidates(await cache.lookup(provider, q), provider.name));
+    };
+
+    // Structured first. Free-text geocoding trips over the unit, suite and
+    // floor designators these addresses are full of — "Unit 210, Bentinck St
+    // Level, 500 George St" resolved only to the city — whereas naming the
+    // street, city and postcode as separate fields resolves the building.
+    if (street) {
+      await add({
+        structured: {
+          street,
+          city: address.city,
+          state: address.region,
+          postalcode: address.postcode,
+        },
+        country,
+      });
+    }
+
+    // The address query and the name query fail in opposite situations, so both
+    // run: a centre whose name is just a city geocodes from its address, and
+    // one with a vague address geocodes from its (precise institutional) name.
+    if (address.raw) await add({ text: address.raw, country });
+
+    if (bestTier(candidates, expect) < precisionTier('rooftop')) {
+      const named = [name, address.city, address.region].filter(Boolean).join(', ');
+      if (named) await add({ text: named, country });
+    }
+  };
+
+  // Walk the chain in order, stopping as soon as a provider lands a
+  // street-level-or-better hit. With a Google key configured that is almost
+  // always the first provider, so Nominatim is only consulted for the tail.
+  for (const provider of chain) {
+    await runProvider(provider);
+    if (bestTier(candidates, expect) >= precisionTier('street')) break;
+  }
 
   const tryQuery = async (text: string | null): Promise<void> => {
     if (!text) return;
@@ -116,41 +171,11 @@ async function resolveLocation(
     );
   };
 
-  // Structured first. Free-text geocoding trips over the unit, suite and floor
-  // designators these addresses are full of — "Unit 210, Bentinck St Level,
-  // 500 George St" resolved only to the city — whereas naming the street,
-  // city and postcode as separate fields resolves the building.
-  const street = streetLine(address.lines);
-  if (street) {
-    candidates.push(
-      ...toCandidates(
-        await cache.lookup(nominatim, {
-          structured: {
-            street,
-            city: address.city,
-            state: address.region,
-            postalcode: address.postcode,
-          },
-          country,
-        }),
-        'nominatim',
-      ),
-    );
-  }
-
-  // The address query and the name query fail in opposite situations, so both
-  // run: a centre whose name is just a city geocodes from its address, and one
-  // with a vague address geocodes from its (precise institutional) name.
-  await tryQuery(address.raw || null);
-  await tryQuery([name, address.city, address.region].filter(Boolean).join(', ') || null);
-
-  const expect = { postcode: address.postcode, city: address.city, country };
-
-  // Keep climbing while the best hit so far is coarser than postcode level.
-  // The trigger is candidate *quality*, not emptiness: a geocoder that answers
-  // a full street address with a country centroid has technically returned
-  // something, and stopping there pins a centre in the middle of the country
-  // when its postcode would have placed it within a few blocks.
+  // Coarser rungs, tried only if no provider managed better. The trigger is
+  // candidate *quality*, not emptiness: a geocoder that answers a full street
+  // address with a country centroid has technically returned something, and
+  // stopping there pins a centre in the middle of the country when its postcode
+  // would have placed it within a few blocks.
   const needsBetter = () => bestTier(candidates, expect) < precisionTier('postcode');
 
   if (needsBetter() && street) {
@@ -164,7 +189,13 @@ async function resolveLocation(
     await tryQuery([address.city, address.region].filter(Boolean).join(', ') || null);
   }
 
-  return resolveGeo(candidates, expect);
+  const resolved = resolveGeo(candidates, expect);
+  if (!resolved) return { geo: null, placeId: null };
+
+  // The Place ID moves onto the centre; the stored coordinate keeps only the
+  // fields the dataset schema defines.
+  const { placeId, ...geo } = resolved;
+  return { geo, placeId: placeId ?? null };
 }
 
 /** Best precision tier among candidates that survive the country check. */

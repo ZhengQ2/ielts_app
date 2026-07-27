@@ -6,6 +6,18 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 /** Repo root, resolved from this file so the CLI works from any cwd. */
 export const REPO_ROOT = path.resolve(here, '../../..');
 
+/**
+ * Load repo-root `.env.local` if present, so credentials can live in a
+ * gitignored file rather than being exported by hand. Values already in the
+ * environment win, and a missing file is not an error — the whole pipeline runs
+ * without any key.
+ */
+try {
+  process.loadEnvFile(path.join(REPO_ROOT, '.env.local'));
+} catch {
+  // No .env.local; environment variables (if any) are used as-is.
+}
+
 /** Raw fetched HTML lives here. Gitignored: large and fully regenerable. */
 export const CACHE_DIR = path.join(REPO_ROOT, '.cache');
 export const PAGE_CACHE_DIR = path.join(CACHE_DIR, 'pages');
@@ -30,6 +42,12 @@ export const FETCH_CONCURRENCY = 4;
 export const FETCH_DELAY_MS = 250;
 export const FETCH_TIMEOUT_MS = 30_000;
 export const FETCH_RETRIES = 3;
+
+/**
+ * Google Geocoding, used only when GOOGLE_MAPS_API_KEY is set. The key lives in
+ * the environment — never in the repo, the dataset or the cache.
+ */
+export const GOOGLE_GEOCODE_URL = 'https://maps.googleapis.com/maps/api/geocode/json';
 
 /** Nominatim's usage policy is a hard 1 request/second. */
 export const NOMINATIM_URL = 'https://nominatim.openstreetmap.org/search';

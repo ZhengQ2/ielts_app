@@ -43,6 +43,8 @@ export interface GeoCandidate {
   lng: number;
   precision: GeoPrecision;
   source: Geo['source'];
+  /** Google Place ID, when the candidate came from Google. */
+  placeId?: string | null;
   /** What the geocoder echoed back, used to corroborate the parsed record. */
   echoedPostcode?: string | null;
   echoedCity?: string | null;
@@ -148,5 +150,6 @@ export function resolveGeo(
     precision,
     source: best.c.source,
     confidence: Number(confidence.toFixed(2)),
+    placeId: best.c.placeId ?? null,
   };
 }

@@ -44,8 +44,13 @@ export default function AboutPage() {
         <p>
           Where a centre page embeds a map coordinate, we use it. Otherwise we geocode the address
           and the centre name separately and keep the better result — those two approaches fail in
-          opposite situations. When they disagree badly, we say the location is approximate rather
-          than showing a confident pin in the wrong place.
+          opposite situations. When they disagree badly, or when the result names a different
+          postal region than the address does, we say the location is approximate rather than
+          showing a confident pin in the wrong place.
+        </p>
+        <p>
+          Geocoding uses the Google Geocoding API where available and OpenStreetMap&rsquo;s
+          Nominatim otherwise. The map you see is drawn from OpenStreetMap data throughout.
         </p>
         <ul className="mt-3 flex flex-wrap gap-2">
           {precision.map(([key, count]) => (
