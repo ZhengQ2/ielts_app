@@ -3,6 +3,7 @@ import type {
   CentreSourceRef,
   Geo,
   GeoCandidate,
+  GeoExpectation,
   ParsedCentre,
 } from '@ielts-map/core';
 import {
@@ -11,6 +12,7 @@ import {
   pickCanonical,
   precisionTier,
   resolveGeo,
+  scoreCandidate,
   slugBase,
 } from '@ielts-map/core';
 import { GeocodeCache, nominatim, toCandidates } from './geocode.ts';
@@ -119,27 +121,42 @@ async function resolveLocation(
   await tryQuery(address.raw || null);
   await tryQuery([name, address.city, address.region].filter(Boolean).join(', ') || null);
 
-  // Degrade rather than drop (§5.3): each rung is coarser than the last, and
-  // the precision recorded on the winning candidate keeps that honest.
-  if (candidates.length === 0) {
+  const expect = { postcode: address.postcode, city: address.city, country };
+
+  // Keep climbing while the best hit so far is coarser than postcode level.
+  // The trigger is candidate *quality*, not emptiness: a geocoder that answers
+  // a full street address with a country centroid has technically returned
+  // something, and stopping there pins a centre in the middle of the country
+  // when its postcode would have placed it within a few blocks.
+  const needsBetter = () => bestTier(candidates, expect) < precisionTier('postcode');
+
+  if (needsBetter()) {
     const street = address.lines.find((l) => /\d/.test(l)) ?? null;
     await tryQuery(
-      street ? [street, address.city, address.region, address.postcode].filter(Boolean).join(', ') : null,
+      street
+        ? [street, address.city, address.region, address.postcode].filter(Boolean).join(', ')
+        : null,
     );
   }
-  if (candidates.length === 0 && address.postcode) {
+  if (needsBetter() && address.postcode) {
     await tryQuery([address.postcode, address.city].filter(Boolean).join(', '));
-    if (candidates.length === 0) await tryQuery(address.postcode);
+    if (needsBetter()) await tryQuery(address.postcode);
   }
   if (candidates.length === 0) {
     await tryQuery([address.city, address.region].filter(Boolean).join(', ') || null);
   }
 
-  return resolveGeo(candidates, {
-    postcode: address.postcode,
-    city: address.city,
-    country,
-  });
+  return resolveGeo(candidates, expect);
+}
+
+/** Best precision tier among candidates that survive the country check. */
+function bestTier(candidates: GeoCandidate[], expect: GeoExpectation): number {
+  let best = -1;
+  for (const c of candidates) {
+    if (scoreCandidate(c, expect) === null) continue;
+    best = Math.max(best, precisionTier(c.precision));
+  }
+  return best;
 }
 
 /**

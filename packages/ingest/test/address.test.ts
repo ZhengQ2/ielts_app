@@ -49,6 +49,62 @@ test('unpostcoded foreign address degrades without inventing a country', () => {
   assert.equal(a.city, 'Alkhobar/Dammam');
 });
 
+test('an Australian NT address is not mistaken for Northwest Territories', () => {
+  // Real page: this landed in the Canadian dataset and put a pin in Darwin.
+  const a = parseAddress([
+    'Australian City International College, 25 Cavenagh St',
+    'Darwin',
+    'NT',
+    '0800',
+  ]);
+  assert.notEqual(a.country, 'CA');
+  assert.equal(a.city, 'Darwin');
+});
+
+test('the full province name is unambiguous even without a postcode', () => {
+  const a = parseAddress(['1335 Matheson Blvd East', 'Mississauga', 'Ontario']);
+  assert.equal(a.country, 'CA');
+  assert.equal(a.region, 'ON');
+});
+
+test('a malformed Canadian postcode still resolves the country from the province', () => {
+  // "M2N063" is a typo on the source page — it is not a valid postcode.
+  const a = parseAddress(['4789 Yonge St Suite 508', 'North York', 'Ontario', 'M2N063']);
+  assert.equal(a.country, 'CA');
+  assert.equal(a.city, 'North York');
+});
+
+test('a five-digit street number is not a US ZIP', () => {
+  // This stole the postcode slot, leaving the real postcode to become the city.
+  const a = parseAddress(['14505 Bannister Rd SE #101', 'Calgary', 'AB', 'T2X 3J3']);
+  assert.equal(a.postcode, 'T2X 3J3');
+  assert.equal(a.city, 'Calgary');
+  assert.equal(a.country, 'CA');
+});
+
+test('a repeated postcode never becomes the city', () => {
+  const a = parseAddress(['155 Skinner St #101', 'Nanaimo, BC V9R 5E8', 'Nanaimo', 'BC', 'V9R 5E8']);
+  assert.equal(a.city, 'Nanaimo');
+  assert.equal(a.postcode, 'V9R 5E8');
+});
+
+test('a postcode embedded in the street line does not displace the city', () => {
+  const a = parseAddress([
+    'Assiniboine Community College 1430 Victoria Ave East, R7A 2A9 Brandon',
+    'Brandon',
+    'Manitoba',
+    'R7A 2A9',
+  ]);
+  assert.equal(a.city, 'Brandon');
+  assert.equal(a.region, 'MB');
+});
+
+test('a genuine US address still parses', () => {
+  const a = parseAddress(['1600 Amphitheatre Pkwy', 'Mountain View', 'CA 94043']);
+  assert.equal(a.postcode, '94043');
+  assert.equal(a.country, 'US');
+});
+
 test('postcode without a space is normalised', () => {
   assert.equal(parseAddress(['1 Main St', 'Halifax', 'B3H4R2']).postcode, 'B3H 4R2');
 });

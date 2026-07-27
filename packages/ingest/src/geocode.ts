@@ -57,13 +57,20 @@ function serialise<T>(fn: () => Promise<T>): Promise<T> {
   return run;
 }
 
-function precisionFromRank(hit: NominatimHit): GeoPrecision {
+/**
+ * `place_rank` alone is not enough: Nominatim returns large municipalities as
+ * administrative boundaries with a rank low enough to look country-level, which
+ * would label Edmonton's centroid 'country' and render a pin in the middle of
+ * Canada. The floor is therefore set by what the result actually resolved — a
+ * hit that echoes a city is city-level by definition.
+ */
+function precisionFrom(hit: NominatimHit, city: string | null): GeoPrecision {
   if (hit.type === 'postcode') return 'postcode';
   const rank = hit.place_rank ?? 0;
   if (rank >= 30) return 'rooftop';
   if (rank >= 26) return 'street';
   if (rank >= 21) return 'postcode';
-  if (rank >= 13) return 'city';
+  if (rank >= 13 || city) return 'city';
   return 'country';
 }
 
@@ -83,17 +90,27 @@ export const nominatim: GeocodeProvider = {
     if (!res.ok) throw new Error(`Nominatim HTTP ${res.status} for "${q.text}"`);
     const hits = (await res.json()) as NominatimHit[];
 
-    return hits.map((h) => ({
-      lat: Number(h.lat),
-      lng: Number(h.lon),
-      precision: precisionFromRank(h),
-      echoedPostcode: h.address?.postcode ?? null,
-      echoedCity:
-        h.address?.city ?? h.address?.town ?? h.address?.village ?? h.address?.municipality ?? null,
-      echoedCountry: h.address?.country_code?.toUpperCase() ?? null,
-    }));
+    return hits.map((h) => {
+      const echoedCity =
+        h.address?.city ?? h.address?.town ?? h.address?.village ?? h.address?.municipality ?? null;
+      return {
+        lat: Number(h.lat),
+        lng: Number(h.lon),
+        precision: precisionFrom(h, echoedCity),
+        echoedPostcode: h.address?.postcode ?? null,
+        echoedCity,
+        echoedCountry: h.address?.country_code?.toUpperCase() ?? null,
+      };
+    });
   },
 };
+
+/**
+ * Bump when the raw-response → candidate mapping changes. Cached entries store
+ * the *mapped* result, so without this a mapping fix would be silently ignored
+ * for every query already on disk.
+ */
+const MAPPING_VERSION = 2;
 
 /** Disk-backed memo so re-runs never re-hit the geocoder. */
 export class GeocodeCache {
@@ -127,7 +144,7 @@ export class GeocodeCache {
 
   async lookup(provider: GeocodeProvider, q: GeocodeQuery): Promise<GeocodeCandidateRaw[]> {
     if (this.disabled) return [];
-    const key = `${provider.name}|${q.country ?? ''}|${q.text}`;
+    const key = `v${MAPPING_VERSION}|${provider.name}|${q.country ?? ''}|${q.text}`;
     const hit = this.map.get(key);
     if (hit) return hit;
     let result: GeocodeCandidateRaw[];

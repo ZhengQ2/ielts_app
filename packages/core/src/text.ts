@@ -82,8 +82,12 @@ export function similarity(a: string, b: string): number {
 }
 
 /**
- * Token-overlap similarity, which handles reordering and extra words better
- * than edit distance for names like "BITTS Central" vs "Central BITTS Calgary".
+ * Token-overlap similarity, which handles reordering better than edit distance.
+ *
+ * Divided by the *larger* token set, not the smaller: dividing by the smaller
+ * one scores any strict subset as a perfect match, which merged genuinely
+ * different centres ("Canada College Mississauga" vs "Anderson College
+ * Mississauga", both reduced to a subset relationship).
  */
 export function tokenSimilarity(a: string, b: string): number {
   const ta = new Set(a.split(' ').filter(Boolean));
@@ -91,7 +95,7 @@ export function tokenSimilarity(a: string, b: string): number {
   if (!ta.size || !tb.size) return 0;
   let shared = 0;
   for (const t of ta) if (tb.has(t)) shared++;
-  return shared / Math.min(ta.size, tb.size);
+  return shared / Math.max(ta.size, tb.size);
 }
 
 /** Best of edit-distance and token-overlap similarity. */

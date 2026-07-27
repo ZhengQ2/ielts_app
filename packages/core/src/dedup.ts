@@ -21,7 +21,7 @@ const PROXIMITY_KM = 0.15;
 export interface MergeLink {
   a: string;
   b: string;
-  reason: 'bc_location_id' | 'slug_base' | 'name_postcode' | 'name_proximity' | 'name_city';
+  reason: 'bc_location_id' | 'slug_base' | 'name_postcode' | 'name_proximity';
   /** 1 for exact-id links; the name similarity otherwise. */
   strength: number;
 }
@@ -106,13 +106,9 @@ export function dedupe(centres: ParsedCentre[]): DedupResult {
     for (let i = 1; i < bucket.length; i++) {
       const a = bucket[0]!;
       const b = bucket[i]!;
-      // A shared slug base is normally the `…-2` duplicate-page pattern, but
-      // two British Council centres with *different* `location=` ids are
-      // genuinely different centres however their slugs collide. The real id
-      // always wins over the slug heuristic.
-      if (a.centre.externalId && b.centre.externalId && a.centre.externalId !== b.centre.externalId) {
-        continue;
-      }
+      // A shared slug base is normally the `…-2` duplicate-page pattern, but a
+      // real id or a contradicting operator always beats the slug heuristic.
+      if (!mergeable(a.centre, b.centre)) continue;
       uf.union(a.centre.slug, b.centre.slug);
       links.push({ a: a.centre.slug, b: b.centre.slug, reason: 'slug_base', strength: 1 });
     }
@@ -149,15 +145,7 @@ export function dedupe(centres: ParsedCentre[]): DedupResult {
         if (considered.has(pairKey)) continue;
         considered.add(pairKey);
 
-        // Two centres with *different* BC ids are definitively different
-        // centres, however similar their names look.
-        if (
-          a.centre.externalId &&
-          b.centre.externalId &&
-          a.centre.externalId !== b.centre.externalId
-        ) {
-          continue;
-        }
+        if (!mergeable(a.centre, b.centre)) continue;
 
         const sim = nameSimilarity(a.key, b.key);
         const link = classify(a, b, sim, isPostcodeBlock);
@@ -179,6 +167,36 @@ export function dedupe(centres: ParsedCentre[]): DedupResult {
   return { clusters: [...grouped.values()], links };
 }
 
+/**
+ * Hard blocks that no amount of name similarity can override.
+ *
+ * Both were learned from real false merges: "British Council, ILSC Vancouver
+ * Downtown" and "ILAC - Vancouver Downtown" are one edit apart but are
+ * different companies at different addresses run by different operators.
+ */
+function mergeable(a: ParsedCentre, b: ParsedCentre): boolean {
+  // Different British Council ids mean definitively different centres.
+  if (a.externalId && b.externalId && a.externalId !== b.externalId) return false;
+
+  // A centre has one operator. When both were read from a booking-link domain
+  // — the reliable signal — a disagreement means these are not the same place.
+  if (
+    a.operatorSource === 'booking_domain' &&
+    b.operatorSource === 'booking_domain' &&
+    a.operator !== b.operator
+  ) {
+    return false;
+  }
+
+  return true;
+}
+
+/**
+ * Note what is absent: there is no city-level rule. City agreement plus a
+ * similar name is not evidence of identity — it merged three distinct pairs of
+ * Canadian centres that merely shared a city and a common word like "College".
+ * Identity needs a shared postcode or physical proximity.
+ */
 function classify(
   a: Indexed,
   b: Indexed,
@@ -192,9 +210,6 @@ function classify(
   if (ga && gb && haversineKm(ga, gb) <= PROXIMITY_KM && sim >= 0.75) {
     return 'name_proximity';
   }
-
-  // City-only agreement is weak, so demand a near-identical name.
-  if (!isPostcodeBlock && a.city && sim >= 0.92) return 'name_city';
 
   return null;
 }

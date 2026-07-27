@@ -1,12 +1,148 @@
 {
-  "generatedAt": "2026-07-27T10:25:14.651Z",
+  "generatedAt": "2026-07-27T11:03:18.052Z",
   "fuzzyMerges": [],
-  "parseFailures": [],
-  "ungeocoded": [
+  "parseFailures": [
     {
-      "id": "bc-13776",
-      "name": "British Council, BITTS Atlantic Testing Services - Sydney, NS"
+      "slug": "british-council-global-citizen-uttara",
+      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-global-citizen-uttara"
+    },
+    {
+      "slug": "british-council-global-citizen-panthapath",
+      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-global-citizen-panthapath"
+    },
+    {
+      "slug": "british-council-humber-college-ital-humber-college-downtown-igs-2",
+      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-humber-college-ital-humber-college-downtown-igs-2"
+    },
+    {
+      "slug": "british-council-ad-phonetic-reading-centre-inc-ad-tutoring-3",
+      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-ad-phonetic-reading-centre-inc-ad-tutoring-3"
+    },
+    {
+      "slug": "british-council-university-of-kufa",
+      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-university-of-kufa"
+    },
+    {
+      "slug": "british-council-can-esl-inc-regina-canesl",
+      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-can-esl-inc-regina-canesl"
+    },
+    {
+      "slug": "british-council-bitts-west-bitts-coquitlam-2",
+      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-bitts-west-bitts-coquitlam-2"
+    },
+    {
+      "slug": "british-council-mosaic-203-newton",
+      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-mosaic-203-newton"
+    },
+    {
+      "slug": "british-council-paradise-complex-2",
+      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-paradise-complex-2"
+    },
+    {
+      "slug": "british-council-etc-central-grace-christian-church",
+      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-etc-central-grace-christian-church"
+    },
+    {
+      "slug": "british-council-bitts-testing-services-mcadam-2",
+      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-bitts-testing-services-mcadam-2"
+    },
+    {
+      "slug": "british-council-inlingua-victoria-college-of-languages-and-careers-inlingua-victoria-2",
+      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-inlingua-victoria-college-of-languages-and-careers-inlingua-victoria-2"
+    },
+    {
+      "slug": "british-council-humber-college-ital-lakeshore-campus-2",
+      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-humber-college-ital-lakeshore-campus-2"
+    },
+    {
+      "slug": "british-council-synergi-2",
+      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-synergi-2"
+    },
+    {
+      "slug": "british-council-humber-college-ital-cambrian-college-2",
+      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-humber-college-ital-cambrian-college-2"
+    },
+    {
+      "slug": "british-council-humber-college-ital-north-main-campus-2",
+      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-humber-college-ital-north-main-campus-2"
+    },
+    {
+      "slug": "british-council-american-university-of-sharjah-2",
+      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-american-university-of-sharjah-2"
+    },
+    {
+      "slug": "british-council-oxford-international-north-america-oxford-international-3",
+      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-oxford-international-north-america-oxford-international-3"
+    },
+    {
+      "slug": "british-council-ilsc-toronto-downtown-main-campus-3",
+      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-ilsc-toronto-downtown-main-campus-3"
+    },
+    {
+      "slug": "british-council-london-training-institute-sawary-centre",
+      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-london-training-institute-sawary-centre"
+    },
+    {
+      "slug": "british-council-british-council-lilongwe-2",
+      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-british-council-lilongwe-2"
+    },
+    {
+      "slug": "idp-ielts-saudi-arabia-hinti-academy-riyadh",
+      "error": "HTTP 404 for https://ielts.org/test-centres/idp-ielts-saudi-arabia-hinti-academy-riyadh"
+    },
+    {
+      "slug": "british-council-princess-nourah-bint-abdul-rahman-university-females-only",
+      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-princess-nourah-bint-abdul-rahman-university-females-only"
+    },
+    {
+      "slug": "british-council-kaplan-ielts-test-centre-kaplan-vancouver-2",
+      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-kaplan-ielts-test-centre-kaplan-vancouver-2"
+    },
+    {
+      "slug": "idp-ielts-saudi-arabia-fahad-bin-sultan-university-riyadh",
+      "error": "HTTP 404 for https://ielts.org/test-centres/idp-ielts-saudi-arabia-fahad-bin-sultan-university-riyadh"
+    },
+    {
+      "slug": "idp-ielts-oman-university-of-technology-and-applied-sciences-sur",
+      "error": "HTTP 404 for https://ielts.org/test-centres/idp-ielts-oman-university-of-technology-and-applied-sciences-sur"
+    },
+    {
+      "slug": "idp-ielts-oman-university-of-technology-and-applied-sciences-sohar",
+      "error": "HTTP 404 for https://ielts.org/test-centres/idp-ielts-oman-university-of-technology-and-applied-sciences-sohar"
+    },
+    {
+      "slug": "idp-ielts-oman-university-of-technology-and-applied-sciences-salalah",
+      "error": "HTTP 404 for https://ielts.org/test-centres/idp-ielts-oman-university-of-technology-and-applied-sciences-salalah"
+    },
+    {
+      "slug": "idp-ielts-oman-university-of-technology-and-applied-sciences-rustaq",
+      "error": "HTTP 404 for https://ielts.org/test-centres/idp-ielts-oman-university-of-technology-and-applied-sciences-rustaq"
+    },
+    {
+      "slug": "idp-ielts-saudi-arabia-riyadh-kingdom-schools-female",
+      "error": "HTTP 404 for https://ielts.org/test-centres/idp-ielts-saudi-arabia-riyadh-kingdom-schools-female"
+    },
+    {
+      "slug": "idp-ielts-vanuatu-port-vila",
+      "error": "HTTP 404 for https://ielts.org/test-centres/idp-ielts-vanuatu-port-vila"
+    },
+    {
+      "slug": "idp-ielts-oman-university-of-technology-and-applied-sciences-nizwa",
+      "error": "HTTP 404 for https://ielts.org/test-centres/idp-ielts-oman-university-of-technology-and-applied-sciences-nizwa"
+    },
+    {
+      "slug": "idp-ielts-vietnam-ielts-arena-ninh-binh",
+      "error": "HTTP 404 for https://ielts.org/test-centres/idp-ielts-vietnam-ielts-arena-ninh-binh"
+    },
+    {
+      "slug": "homeland-testing-centres-homeland-international-english-school",
+      "error": "HTTP 404 for https://ielts.org/test-centres/homeland-testing-centres-homeland-international-english-school"
+    },
+    {
+      "slug": "idp-lahore-cantonment-test-center-from-june-2024",
+      "error": "HTTP 404 for https://ielts.org/test-centres/idp-lahore-cantonment-test-center-from-june-2024"
     }
   ],
+  "ungeocoded": [],
   "lowConfidence": []
 }
