@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import maplibregl, { type LngLatBoundsLike, type Map as MapLibreMap } from 'maplibre-gl';
 import {
+  formatPrice,
   isPinnable,
   operatorShape,
   operatorStyle,
@@ -49,6 +50,7 @@ export default function CentreMap({ centres, selectedId, onSelect }: Props) {
   const container = useRef<HTMLDivElement>(null);
   const map = useRef<MapLibreMap | null>(null);
   const markers = useRef(new Map<string, maplibregl.Marker>());
+  const popup = useRef<maplibregl.Popup | null>(null);
   // Keep the latest callback without re-running the marker effect on every render.
   const onSelectRef = useRef(onSelect);
   onSelectRef.current = onSelect;
@@ -132,20 +134,33 @@ export default function CentreMap({ centres, selectedId, onSelect }: Props) {
     }
   }, [centres]);
 
-  // Reflect selection, and pan to the chosen centre.
+  // Reflect selection: highlight the marker, pan to it, and open a small
+  // popup with the basics right there. The popup is what makes a click
+  // "obvious" no matter where else on the page the reader is scrolled — the
+  // map is already what they're looking at, so nothing needs to move to show
+  // it, unlike a panel living elsewhere on the page.
   useEffect(() => {
     for (const [id, marker] of markers.current) {
       marker.getElement().dataset.selected = String(id === selectedId);
     }
+
+    popup.current?.remove();
+    popup.current = null;
+
     if (!selectedId || !map.current) return;
     const centre = centres.find((c) => c.id === selectedId);
-    if (centre?.geo) {
-      map.current.easeTo({
-        center: [centre.geo.lng, centre.geo.lat],
-        zoom: Math.max(map.current.getZoom(), 12),
-        duration: 400,
-      });
-    }
+    if (!centre?.geo) return;
+
+    map.current.easeTo({
+      center: [centre.geo.lng, centre.geo.lat],
+      zoom: Math.max(map.current.getZoom(), 12),
+      duration: 400,
+    });
+
+    popup.current = new maplibregl.Popup({ closeButton: true, closeOnClick: true, maxWidth: '15rem' })
+      .setLngLat([centre.geo.lng, centre.geo.lat])
+      .setDOMContent(popupContent(centre))
+      .addTo(map.current);
   }, [selectedId, centres]);
 
   // Only show operators that are actually on screen.
@@ -219,9 +234,63 @@ export default function CentreMap({ centres, selectedId, onSelect }: Props) {
           box-shadow: 0 0 0 3px rgb(15 23 42 / 0.45), 0 1px 4px rgb(0 0 0 / 0.35);
           z-index: 1;
         }
+
+        .maplibregl-popup-content {
+          padding: 0.65rem 0.85rem;
+          border-radius: 0.5rem;
+          box-shadow: 0 2px 10px rgb(0 0 0 / 0.18);
+        }
+        .centre-popup__name {
+          display: block;
+          font-size: 0.8125rem;
+          font-weight: 500;
+          line-height: 1.25;
+          color: inherit;
+          text-decoration: none;
+        }
+        .centre-popup__name:hover { text-decoration: underline; }
+        .centre-popup__address {
+          margin-top: 0.25rem;
+          font-size: 0.75rem;
+          line-height: 1.3;
+          color: oklch(0.52 0.015 250);
+        }
+        .centre-popup__price {
+          margin-top: 0.35rem;
+          font-size: 0.8125rem;
+          font-weight: 500;
+        }
       `}</style>
     </div>
   );
+}
+
+/**
+ * Small popup content: name, address, price — built with DOM APIs and
+ * `textContent` rather than an HTML string, since centre names and addresses
+ * come from scraped third-party pages and must never be parsed as markup.
+ */
+function popupContent(centre: Centre): HTMLElement {
+  const root = document.createElement('div');
+  root.className = 'centre-popup';
+
+  const name = document.createElement('a');
+  name.href = `/centres/${centre.ieltsOrgSlug}`;
+  name.className = 'centre-popup__name';
+  name.textContent = centre.name;
+  root.appendChild(name);
+
+  const address = document.createElement('p');
+  address.className = 'centre-popup__address';
+  address.textContent = centre.address.raw;
+  root.appendChild(address);
+
+  const price = document.createElement('p');
+  price.className = 'centre-popup__price';
+  price.textContent = formatPrice(centre.priceFrom, centre.currency);
+  root.appendChild(price);
+
+  return root;
 }
 
 /** `hollow` mirrors the dashed marker used for coarse coordinates. */

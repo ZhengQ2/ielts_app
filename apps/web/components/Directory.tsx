@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import {
   cityFacets,
@@ -38,6 +38,25 @@ export function Directory({ centres }: { centres: Centre[] }) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const highlightedId = selectedId ?? hoveredId;
+
+  /**
+   * The summary panel always renders at the top of the list column. Selecting
+   * a card scrolled deep into a 142-centre list can leave it off-screen with
+   * no visible change to show for the click — scrolling the panel into view
+   * fixes that. A map-marker click doesn't need this: the map now opens its
+   * own small popup right at the marker (see CentreMap), which is already
+   * exactly where the reader is looking, so scrolling the page away from the
+   * map to show a second, redundant summary would undo that. `selectionSource`
+   * is a ref rather than state — it only gates this effect and never itself
+   * needs to trigger a render.
+   */
+  const selectionSource = useRef<'list' | 'map'>('list');
+  const panelRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (selectedId && selectionSource.current === 'list') {
+      panelRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [selectedId]);
 
   const cities = useMemo(() => cityFacets(centres), [centres]);
   const operatorOptions = useMemo(() => operatorFacets(centres), [centres]);
@@ -188,7 +207,9 @@ export function Directory({ centres }: { centres: Centre[] }) {
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
         <div>
           {selectedCentre && (
-            <SelectedCentrePanel centre={selectedCentre} onClose={() => setSelectedId(null)} />
+            <div ref={panelRef}>
+              <SelectedCentrePanel centre={selectedCentre} onClose={() => setSelectedId(null)} />
+            </div>
           )}
 
           <p className="mb-3 text-sm text-muted" aria-live="polite">
@@ -211,7 +232,10 @@ export function Directory({ centres }: { centres: Centre[] }) {
                   selected={centre.id === selectedId}
                   onHover={() => setHoveredId(centre.id)}
                   // Clicking the already-selected card clears it.
-                  onSelect={() => setSelectedId((prev) => (prev === centre.id ? null : centre.id))}
+                  onSelect={() => {
+                    selectionSource.current = 'list';
+                    setSelectedId((prev) => (prev === centre.id ? null : centre.id));
+                  }}
                 />
               ))}
             </ul>
@@ -222,7 +246,10 @@ export function Directory({ centres }: { centres: Centre[] }) {
           <CentreMap
             centres={results}
             selectedId={highlightedId}
-            onSelect={setSelectedId}
+            onSelect={(id) => {
+              selectionSource.current = 'map';
+              setSelectedId(id);
+            }}
           />
         </div>
       </div>
