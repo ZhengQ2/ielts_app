@@ -14,6 +14,12 @@ import { readSitemap } from './sitemap.ts';
 import { ParseError, parseCentrePage } from './parse.ts';
 import { GeocodeCache } from './geocode.ts';
 import { resolveCluster } from './resolve.ts';
+import {
+  diffDatasets,
+  renderDiff,
+  summariseDiff,
+  type DatasetDiff,
+} from './diff.ts';
 
 interface Options {
   country: string;
@@ -57,7 +63,13 @@ Usage: npm run ingest -- [options]
   --no-audit        Don't write the dedup audit file
   -h, --help        Show this help
 
-Raw pages are cached in .cache/ so re-runs are fast and cost the source nothing.`;
+Raw pages are cached in .cache/ (gitignored) so local re-runs are fast and cost
+the source nothing; pass --force to see the site as it is now. Geocode results
+are cached in data/geocode-cache.json, which IS committed — it is what stops a
+scheduled run re-billing every address on a fresh checkout.
+
+The run ends by diffing against the committed dataset and only rewrites it when
+something a reader would care about moved. Timestamps alone never count.`;
 
 async function main(): Promise<void> {
   const opts = parseArgs(process.argv.slice(2));
@@ -140,6 +152,17 @@ async function main(): Promise<void> {
 
   centres.sort((a, b) => a.name.localeCompare(b.name));
 
+  const outFile = path.join(DATA_DIR, `centres.${opts.country.toLowerCase()}.json`);
+  const previous = await readPrevious(outFile);
+
+  // `firstSeenAt` means what it says: carry it forward rather than stamping
+  // "now" on every run, which would make the freshness signal meaningless.
+  const firstSeen = new Map((previous?.centres ?? []).map((c) => [c.id, c.firstSeenAt]));
+  for (const centre of centres) {
+    const original = firstSeen.get(centre.id);
+    if (original) centre.firstSeenAt = original;
+  }
+
   const stats = buildStats(sitemap.slugs.length, parsed.length, inCountry.length, centres);
   const dataset: CentreDataset = {
     version: 1,
@@ -149,7 +172,25 @@ async function main(): Promise<void> {
     centres,
   };
 
-  const outFile = path.join(DATA_DIR, `centres.${opts.country.toLowerCase()}.json`);
+  console.log(`\n▸ Comparing against the committed dataset`);
+  const diff = diffDatasets(previous, dataset);
+  console.log(`  ${summariseDiff(diff)} (${diff.unchanged} unchanged)`);
+  for (const c of diff.added.slice(0, 15)) console.log(`    + ${c.name}`);
+  for (const c of diff.removed.slice(0, 15)) console.log(`    - ${c.name}`);
+  for (const c of diff.changed.slice(0, 15)) console.log(`    ~ ${c.name} (${c.fields.join(', ')})`);
+
+  await reportToCi(diff);
+
+  // Writing an unchanged dataset would still churn `generatedAt` and every
+  // `lastSeenAt`, producing a commit a night that says nothing. Skip it, so
+  // `generatedAt` reads as "when the data last actually moved".
+  if (!diff.meaningful && previous) {
+    console.log(`\n▸ No meaningful change — leaving ${path.basename(outFile)} untouched`);
+    printSummary(stats);
+    console.log(`\nDone in ${((Date.now() - started) / 1000).toFixed(1)}s\n`);
+    return;
+  }
+
   await fs.mkdir(DATA_DIR, { recursive: true });
   await fs.writeFile(outFile, `${JSON.stringify(dataset, null, 2)}\n`, 'utf8');
   console.log(`\n▸ Wrote ${path.relative(process.cwd(), outFile)}`);
@@ -180,6 +221,40 @@ async function main(): Promise<void> {
 
   printSummary(stats);
   console.log(`\nDone in ${((Date.now() - started) / 1000).toFixed(1)}s\n`);
+}
+
+async function readPrevious(file: string): Promise<CentreDataset | null> {
+  try {
+    return JSON.parse(await fs.readFile(file, 'utf8')) as CentreDataset;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Hand the result to GitHub Actions when running there: `changed` gates the
+ * commit step, `summary` becomes the commit subject, and the detail lands on
+ * the job summary page. Outside CI these variables are unset and this is a
+ * no-op.
+ */
+async function reportToCi(diff: DatasetDiff): Promise<void> {
+  const { GITHUB_OUTPUT, GITHUB_STEP_SUMMARY } = process.env;
+
+  if (GITHUB_OUTPUT) {
+    await fs.appendFile(
+      GITHUB_OUTPUT,
+      `changed=${diff.meaningful}\nsummary=${summariseDiff(diff)}\n`,
+      'utf8',
+    );
+  }
+
+  if (GITHUB_STEP_SUMMARY) {
+    await fs.appendFile(
+      GITHUB_STEP_SUMMARY,
+      `## Centre refresh — ${summariseDiff(diff)}\n\n${renderDiff(diff)}\n`,
+      'utf8',
+    );
+  }
 }
 
 function buildStats(

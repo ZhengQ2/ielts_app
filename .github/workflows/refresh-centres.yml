@@ -1,0 +1,99 @@
+name: Refresh IELTS centre dataset
+
+on:
+  schedule:
+    # Weekly, Mondays 05:00 UTC. Weekly rather than nightly on purpose: a run
+    # re-fetches all ~1,850 centre pages from ielts.org, and the source changes
+    # far more slowly than that. DEV_PLAN §5.6 specifies a weekly re-crawl.
+    - cron: "0 5 * * 1"
+  workflow_dispatch:
+    inputs:
+      country:
+        description: "ISO country code to build"
+        required: false
+        default: "CA"
+
+permissions:
+  contents: write
+
+concurrency:
+  # Never let two crawls race to commit the same dataset.
+  group: refresh-centres
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        # A parser regression would quietly rewrite the dataset with garbage,
+        # and the job commits its own output — so the guard runs before the
+        # crawl, not after.
+        run: npm test
+
+      # Note there is deliberately no cache of the fetched HTML. The point of a
+      # scheduled run is to see the source as it is *now*, so it refetches every
+      # page; caching ~300 MB weekly to then ignore it would be pure waste.
+      # The geocode cache is the one worth keeping, and that lives in the repo.
+      - name: Crawl, geocode and diff
+        id: ingest
+        env:
+          # Optional. Without it the ingester falls back to Nominatim and the
+          # job still succeeds — it just resolves fewer addresses precisely.
+          GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
+        run: |
+          cd packages/ingest
+          node --experimental-strip-types src/cli.ts \
+            --country "${{ inputs.country || 'CA' }}" \
+            --force
+
+      - name: Verify the site still builds against the new data
+        # The dataset is bundled at build time, so a shape change that breaks
+        # the app must not be committed.
+        run: npm run build
+
+      - name: Commit the refreshed dataset
+        if: steps.ingest.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add packages/core/data data/geocode-cache.json
+
+          # Test the index rather than the working tree: --porcelain also
+          # reports untracked build output and would fail on an empty commit.
+          if git diff --cached --quiet; then
+            echo "Nothing staged."
+          else
+            git commit -m "Refresh centres: ${{ steps.ingest.outputs.summary }} [skip ci]"
+            git push
+          fi
+
+      # New geocode results are worth keeping even when no centre changed —
+      # they are what stops the next run re-billing Google for the same address.
+      - name: Commit geocode cache only
+        if: steps.ingest.outputs.changed != 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/geocode-cache.json
+          if git diff --cached --quiet; then
+            echo "No new geocode entries."
+          else
+            git commit -m "Update geocode cache [skip ci]"
+            git push
+          fi

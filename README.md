@@ -89,6 +89,38 @@ merges, parse failures and low-confidence rows worth eyeballing.
 Raw HTML caches to `.cache/` (gitignored), so re-runs are fast and cost the source almost nothing.
 Fetches are rate-limited and identify themselves; `robots.txt` permits `/test-centres/`.
 
+## Automation
+
+[`.github/workflows/refresh-centres.yml`](.github/workflows/refresh-centres.yml) re-runs the whole
+pipeline on a schedule — this is M1.5's self-maintaining re-crawl.
+
+**Weekly, Mondays 05:00 UTC**, plus a manual **Run workflow** button. Weekly rather than nightly
+because a run refetches all ~1,850 centre pages and the source moves far more slowly than that.
+
+Each run: installs, runs the tests, crawls with `--force`, geocodes, diffs against the committed
+dataset, verifies the site still builds, and commits only if something moved.
+
+Two details make the schedule work rather than just churn:
+
+- **Change detection ignores bookkeeping.** Every record carries `firstSeenAt`, `lastSeenAt` and
+  per-source `seenAt`, all of which move on every crawl. Comparing raw records would report a
+  change every single week. The diff compares only fields a reader would care about — name,
+  operator, address, price, offerings, coordinates, booking link, active flag — so an unchanged
+  week produces no commit at all. There is a regression test pinning exactly this.
+- **The geocode cache is committed** (`data/geocode-cache.json`, ~44 KB). CI checks out fresh, so
+  without it every run would re-bill every address to Google. The fetched HTML is *not* committed
+  and not cached in CI: the point of a scheduled crawl is to see the source as it is now.
+
+To enable Google geocoding in CI, add the key as a repository secret — run this yourself, so the
+key stays between you and GitHub:
+
+```bash
+gh secret set GOOGLE_MAPS_API_KEY --repo ZhengQ2/ielts_app
+```
+
+The workflow runs fine without it and falls back to Nominatim; it just resolves fewer addresses to
+the building.
+
 ## Things worth knowing before you touch the ingester
 
 These each cost real debugging time during the feasibility work, and there is a regression test for

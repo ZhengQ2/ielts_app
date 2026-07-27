@@ -18,11 +18,17 @@ try {
   // No .env.local; environment variables (if any) are used as-is.
 }
 
-/** Raw fetched HTML lives here. Gitignored: large and fully regenerable. */
+/** Raw fetched HTML lives here. Gitignored: ~300 MB and fully regenerable. */
 export const CACHE_DIR = path.join(REPO_ROOT, '.cache');
 export const PAGE_CACHE_DIR = path.join(CACHE_DIR, 'pages');
 export const SITEMAP_CACHE_DIR = path.join(CACHE_DIR, 'sitemaps');
-export const GEOCODE_CACHE = path.join(CACHE_DIR, 'geocode.json');
+
+/**
+ * The geocode cache IS committed, unlike the HTML cache. It is small, and it is
+ * what stops a scheduled re-crawl from re-billing every address to Google on
+ * every run — a fresh CI checkout has no other memory of past lookups.
+ */
+export const GEOCODE_CACHE = path.join(REPO_ROOT, 'data/geocode-cache.json');
 
 export const DATA_DIR = path.join(REPO_ROOT, 'packages/core/data');
 
