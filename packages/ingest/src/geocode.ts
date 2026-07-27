@@ -12,7 +12,18 @@ import { GEOCODE_CACHE, NOMINATIM_DELAY_MS, NOMINATIM_URL, USER_AGENT } from './
 
 export interface GeocodeQuery {
   /** Free-text query — either the full address or the centre name + city. */
-  text: string;
+  text?: string;
+  /**
+   * Structured components. Far more accurate than free text for addresses
+   * carrying unit/suite noise, but Nominatim forbids mixing the two, so a query
+   * uses either `text` or `structured`, never both.
+   */
+  structured?: {
+    street?: string | null;
+    city?: string | null;
+    state?: string | null;
+    postalcode?: string | null;
+  };
   /** ISO 3166-1 alpha-2 to constrain the search to. */
   country?: string | null;
 }
@@ -78,7 +89,15 @@ export const nominatim: GeocodeProvider = {
   name: 'nominatim',
   async lookup(q) {
     const url = new URL(NOMINATIM_URL);
-    url.searchParams.set('q', q.text);
+    if (q.structured) {
+      for (const [key, value] of Object.entries(q.structured)) {
+        if (value) url.searchParams.set(key, value);
+      }
+    } else if (q.text) {
+      url.searchParams.set('q', q.text);
+    } else {
+      return [];
+    }
     url.searchParams.set('format', 'jsonv2');
     url.searchParams.set('addressdetails', '1');
     url.searchParams.set('limit', '3');
@@ -87,7 +106,7 @@ export const nominatim: GeocodeProvider = {
     const res = await serialise(() =>
       fetch(url, { headers: { 'user-agent': USER_AGENT, accept: 'application/json' } }),
     );
-    if (!res.ok) throw new Error(`Nominatim HTTP ${res.status} for "${q.text}"`);
+    if (!res.ok) throw new Error(`Nominatim HTTP ${res.status} for ${url.search}`);
     const hits = (await res.json()) as NominatimHit[];
 
     return hits.map((h) => {
@@ -144,16 +163,24 @@ export class GeocodeCache {
 
   async lookup(provider: GeocodeProvider, q: GeocodeQuery): Promise<GeocodeCandidateRaw[]> {
     if (this.disabled) return [];
-    const key = `v${MAPPING_VERSION}|${provider.name}|${q.country ?? ''}|${q.text}`;
+    const key = `v${MAPPING_VERSION}|${provider.name}|${q.country ?? ''}|${
+      q.structured ? `s:${JSON.stringify(q.structured)}` : q.text
+    }`;
     const hit = this.map.get(key);
     if (hit) return hit;
+
     let result: GeocodeCandidateRaw[];
     try {
       result = await provider.lookup(q);
     } catch (err) {
-      console.warn(`    geocode failed: ${(err as Error).message}`);
-      result = [];
+      // Deliberately NOT cached. A rate-limited or failed request is not the
+      // same as "this address has no match", and storing it as an empty result
+      // poisons the cache permanently — the next run would skip the lookup and
+      // silently leave the centre unlocated.
+      console.warn(`    geocode failed (not cached): ${(err as Error).message}`);
+      return [];
     }
+
     this.map.set(key, result);
     this.dirty = true;
     return result;

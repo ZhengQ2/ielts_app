@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { parseAddress } from '../src/address.ts';
+import { parseAddress, streetLine } from '../src/address.ts';
 
 /**
  * Every case here is a real address-block shape observed on IELTS.org. The
@@ -113,4 +113,40 @@ test('raw text is preserved verbatim as the source of truth', () => {
   const lines = ['Suite 5', 'Vancouver', 'BC', 'V6B 1A1'];
   assert.equal(parseAddress(lines).raw, 'Suite 5, Vancouver, BC, V6B 1A1');
   assert.deepEqual(parseAddress(lines).lines, lines);
+});
+
+/**
+ * `streetLine` feeds the geocoder's structured query. Every case below is a
+ * real Canadian centre whose free-text lookup resolved no better than its city,
+ * because unit and floor designators defeat free-text address parsing.
+ */
+test('strips unit and suite designators', () => {
+  assert.equal(streetLine(['31 Pippy Place, Unit 3006', '3rd Floor']), '31 Pippy Place');
+  assert.equal(streetLine(['980 W 1st St, Unit 106', 'North Vancouver']), '980 W 1st St');
+  assert.equal(streetLine(['155 Skinner St #101', 'Nanaimo']), '155 Skinner St');
+});
+
+test('keeps the quadrant, which distinguishes real streets', () => {
+  // Bannister Rd SE and Bannister Rd NW are different places in Calgary.
+  assert.equal(streetLine(['14505 Bannister Rd SE #101', 'Calgary']), '14505 Bannister Rd SE');
+  assert.equal(streetLine(['1803 91 St W, Unit 104', 'Edmonton']), '1803 91 St W');
+});
+
+test('prefers the line that actually carries the street', () => {
+  assert.equal(
+    streetLine(['Unit 210, Bentinck St Level', '500 George St', 'Sydney']),
+    '500 George St',
+  );
+});
+
+test('unwraps a unit number placed before the civic number', () => {
+  assert.equal(streetLine(['Unit 208 - 4250 Kingsway', 'Burnaby']), '4250 Kingsway');
+  assert.equal(
+    streetLine(['Bld. 5, 110 - 13571 Commerce Parkway', 'Richmond']),
+    '13571 Commerce Parkway',
+  );
+});
+
+test('returns null when no line carries a civic number', () => {
+  assert.equal(streetLine(['KFUPM square', 'Alkhobar/Dammam']), null);
 });

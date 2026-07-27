@@ -16,6 +16,7 @@ import {
   slugBase,
 } from '@ielts-map/core';
 import { GeocodeCache, nominatim, toCandidates } from './geocode.ts';
+import { streetLine } from './address.ts';
 
 const SOURCE_NAME = 'IELTS.org';
 
@@ -115,6 +116,28 @@ async function resolveLocation(
     );
   };
 
+  // Structured first. Free-text geocoding trips over the unit, suite and floor
+  // designators these addresses are full of — "Unit 210, Bentinck St Level,
+  // 500 George St" resolved only to the city — whereas naming the street,
+  // city and postcode as separate fields resolves the building.
+  const street = streetLine(address.lines);
+  if (street) {
+    candidates.push(
+      ...toCandidates(
+        await cache.lookup(nominatim, {
+          structured: {
+            street,
+            city: address.city,
+            state: address.region,
+            postalcode: address.postcode,
+          },
+          country,
+        }),
+        'nominatim',
+      ),
+    );
+  }
+
   // The address query and the name query fail in opposite situations, so both
   // run: a centre whose name is just a city geocodes from its address, and one
   // with a vague address geocodes from its (precise institutional) name.
@@ -130,13 +153,8 @@ async function resolveLocation(
   // when its postcode would have placed it within a few blocks.
   const needsBetter = () => bestTier(candidates, expect) < precisionTier('postcode');
 
-  if (needsBetter()) {
-    const street = address.lines.find((l) => /\d/.test(l)) ?? null;
-    await tryQuery(
-      street
-        ? [street, address.city, address.region, address.postcode].filter(Boolean).join(', ')
-        : null,
-    );
+  if (needsBetter() && street) {
+    await tryQuery([street, address.city, address.region, address.postcode].filter(Boolean).join(', '));
   }
   if (needsBetter() && address.postcode) {
     await tryQuery([address.postcode, address.city].filter(Boolean).join(', '));

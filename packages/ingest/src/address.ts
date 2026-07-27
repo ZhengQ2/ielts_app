@@ -88,8 +88,10 @@ const COUNTRY_NAMES: Record<string, string> = {
   'new zealand': 'NZ',
 };
 
-const STREET_RE =
-  /\b\d{1,6}\s+[\w'.-]+(?:\s+[\w'.-]+)*\s+(st|street|ave|avenue|rd|road|blvd|boulevard|dr|drive|way|hwy|highway|lane|ln|crescent|cres|court|ct|place|pl|terrace|trail|parkway|pkwy)\b\.?/i;
+const STREET_TYPES =
+  '(?:st|street|ave|avenue|rd|road|blvd|boulevard|dr|drive|way|hwy|highway|lane|ln|crescent|cres|court|ct|place|pl|terrace|trail|parkway|pkwy)';
+
+const STREET_RE = new RegExp(`\\b\\d{1,6}\\s+[\\w'.-]+(?:\\s+[\\w'.-]+)*\\s+${STREET_TYPES}\\b\\.?`, 'i');
 
 export function parseAddress(lines: string[]): CentreAddress {
   const cleaned = lines.map((l) => l.replace(/\s+/g, ' ').trim()).filter(Boolean);
@@ -195,6 +197,63 @@ export function parseAddress(lines: string[]): CentreAddress {
     postcode: found.postcode,
     country: found.country,
   };
+}
+
+/** Unit / suite / floor designators, which geocoders cannot parse. */
+const UNIT_NOISE =
+  /\b(?:unit|suite|ste|apt|apartment|floor|fl|room|rm|bldg|building|bld|blk|level|office|annex|campus)\b\.?\s*[\w&-]*/gi;
+
+/**
+ * The best "house number + street" line for a structured geocoder query.
+ *
+ * Free-text geocoding fails on these addresses precisely because of the parts
+ * this strips: "Unit 210, Bentinck St Level, 500 George St" resolved only to
+ * the city, while "500 George St" with the city and postcode alongside resolves
+ * to the building.
+ */
+export function streetLine(lines: string[]): string | null {
+  const candidates = lines.map(cleanStreet).filter((l): l is string => Boolean(l));
+  // Prefer a line with a recognised street type, then any with a house number.
+  return (
+    candidates.find((l) => HOUSE_NUMBER_RE.test(l) && STREET_RE.test(l)) ??
+    candidates.find((l) => HOUSE_NUMBER_RE.test(l)) ??
+    null
+  );
+}
+
+const HOUSE_NUMBER_RE = /^\d+[a-z]?\s+\S/i;
+
+/** Quadrant / directional suffix, which is load-bearing in grid-planned cities. */
+const DIRECTION = '(?:\\s+(?:n|s|e|w|ne|nw|se|sw|north|south|east|west)\\b\\.?)?';
+
+const trimPunctuation = (s: string) =>
+  s
+    .replace(/^[\s,;.–-]+/, '')
+    .replace(/[\s,;–-]+$/, '')
+    .replace(/\s*,\s*/g, ', ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+function cleanStreet(line: string): string | null {
+  let s = trimPunctuation(
+    line
+      .replace(/\([^)]*\)/g, ' ') // "(OG Level)"
+      .replace(/#\s*[\w-]+/g, ' ') // "#101"
+      .replace(UNIT_NOISE, ' ')
+      .replace(CA_POSTCODE, ' '),
+  );
+
+  // "110 - 13571 Commerce Parkway" and "476, 4800 Kingsway" are a unit number
+  // followed by the real civic number. Keep the part carrying the street name.
+  const unitPrefixed = /^\d+[a-z]?\s*[-–,]\s*(\d+\s+.+)$/i.exec(s);
+  if (unitPrefixed?.[1]) s = trimPunctuation(unitPrefixed[1]);
+
+  // Drop anything trailing after the street type ("4800 Kingsway in"), but keep
+  // a quadrant: "14505 Bannister Rd SE" and "…Rd NW" are different streets.
+  const upToType = new RegExp(`^(\\d+[a-z]?\\s+.*?\\b${STREET_TYPES}\\b\\.?${DIRECTION})`, 'i').exec(s);
+  if (upToType?.[1]) s = upToType[1];
+
+  return s.length >= 4 ? s : null;
 }
 
 function takeCountry(line: string): { code: string; rest: string } | null {

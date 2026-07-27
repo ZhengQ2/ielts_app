@@ -75,6 +75,25 @@ export function scoreCandidate(
   ) {
     return null;
   }
+
+  const cityAgrees =
+    Boolean(expect.city) && Boolean(c.echoedCity) && norm(c.echoedCity) === norm(expect.city);
+
+  // A hit echoing a *different* region's postcode is a different place, however
+  // precise it claims to be. Searching "A1B 3X2, St Johns" returned a rooftop
+  // hit in Prescott, Ontario echoing K0E 1T0; it beat the correct St John's
+  // postcode hit on precision alone and pinned the centre 1,500 km away.
+  //
+  // Compared on the leading three characters — the Canadian forward sortation
+  // area, the regional key — and only decisive when the city *also* disagrees.
+  // Source pages carry wrong postcodes often enough that a rooftop match on the
+  // right street in the right city should win: 3030 Lincoln Ave, Coquitlam is
+  // really V3B, though its listing claims V3N.
+  if (expect.postcode && c.echoedPostcode && !cityAgrees) {
+    const want = norm(expect.postcode).slice(0, 3);
+    const got = norm(c.echoedPostcode).slice(0, 3);
+    if (want && got && want !== got) return null;
+  }
   let score = precisionTier(c.precision);
   if (expect.postcode && c.echoedPostcode && norm(c.echoedPostcode) === norm(expect.postcode)) {
     score += 1;

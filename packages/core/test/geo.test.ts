@@ -29,6 +29,46 @@ test('a hit in the wrong country is rejected outright', () => {
   assert.equal(score, null);
 });
 
+test('a hit echoing a different postcode is rejected however precise it is', () => {
+  // Real failure: searching "A1B 3X2, St Johns" returned a rooftop hit in
+  // Prescott, Ontario echoing K0E 1T0, which won on precision and pinned a
+  // Newfoundland centre 1,500 km away.
+  const score = scoreCandidate(
+    candidate({ precision: 'rooftop', echoedPostcode: 'K0E 1T0', echoedCity: 'Prescott' }),
+    { country: 'CA', postcode: 'A1B 3X2', city: 'St Johns' },
+  );
+  assert.equal(score, null);
+});
+
+test('a matching city outweighs a wrong postcode on the source page', () => {
+  // 3030 Lincoln Ave, Coquitlam is really V3B; its listing claims V3N. The
+  // rooftop hit on the right street in the right city must still win.
+  const score = scoreCandidate(
+    candidate({ precision: 'rooftop', echoedPostcode: 'V3B 2H6', echoedCity: 'Coquitlam' }),
+    { country: 'CA', postcode: 'V3N 2H6', city: 'Coquitlam' },
+  );
+  assert.ok(score !== null && score > 0);
+});
+
+test('neighbouring postcodes in the same area are not treated as conflicts', () => {
+  const score = scoreCandidate(
+    candidate({ precision: 'rooftop', echoedPostcode: 'A1B 9Z9' }),
+    { country: 'CA', postcode: 'A1B 3X2' },
+  );
+  assert.ok(score !== null && score > 0);
+});
+
+test('the correct postcode hit survives when a wrong-region rival is rejected', () => {
+  const geo = resolveGeo(
+    [
+      candidate({ precision: 'rooftop', echoedPostcode: 'K0E 1T0', lat: 44.71, lng: -75.52 }),
+      candidate({ precision: 'postcode', echoedPostcode: 'A1B 3X2', lat: 47.556, lng: -52.768 }),
+    ],
+    { country: 'CA', postcode: 'A1B 3X2' },
+  )!;
+  assert.ok(Math.abs(geo.lat - 47.556) < 0.01, `expected St John's, got ${geo.lat}`);
+});
+
 test('echoed postcode and city each add to the score', () => {
   const bare = scoreCandidate(candidate({}), { country: 'CA' });
   const corroborated = scoreCandidate(

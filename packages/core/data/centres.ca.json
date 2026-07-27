@@ -1,7 +1,7 @@
 {
   "version": 1,
   "country": "CA",
-  "generatedAt": "2026-07-27T11:03:18.052Z",
+  "generatedAt": "2026-07-27T11:50:55.210Z",
   "stats": {
     "sitemapSlugs": 1854,
     "pagesParsed": 1819,
@@ -13,12 +13,14 @@
       "British Council": 95
     },
     "byGeoPrecision": {
-      "rooftop": 125,
-      "city": 6,
-      "approximate": 4,
-      "postcode": 3
+      "rooftop": 131,
+      "street": 1,
+      "postcode": 2,
+      "none": 1,
+      "approximate": 2,
+      "city": 1
     },
-    "ungeocoded": 0
+    "ungeocoded": 1
   },
   "centres": [
     {
@@ -94,12 +96,12 @@
           "source": "IELTS.org",
           "externalSlug": "algonquin-college",
           "url": "https://ielts.org/test-centres/algonquin-college",
-          "seenAt": "2026-07-27T11:02:51.419Z",
+          "seenAt": "2026-07-27T11:49:01.450Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.029Z",
-      "lastSeenAt": "2026-07-27T11:03:18.029Z"
+      "firstSeenAt": "2026-07-27T11:50:55.186Z",
+      "lastSeenAt": "2026-07-27T11:50:55.186Z"
     },
     {
       "id": "bc-13403",
@@ -158,12 +160,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-710-dunton-tower",
           "url": "https://ielts.org/test-centres/british-council-710-dunton-tower",
-          "seenAt": "2026-07-27T11:02:45.658Z",
+          "seenAt": "2026-07-27T11:48:54.630Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:02.958Z",
-      "lastSeenAt": "2026-07-27T11:03:02.958Z"
+      "firstSeenAt": "2026-07-27T11:50:07.963Z",
+      "lastSeenAt": "2026-07-27T11:50:07.963Z"
     },
     {
       "id": "bc-13435",
@@ -188,11 +190,11 @@
       },
       "phone": null,
       "geo": {
-        "lat": 51.0456064,
-        "lng": -114.057541,
-        "precision": "city",
+        "lat": 50.9143037,
+        "lng": -114.065045,
+        "precision": "street",
         "source": "nominatim",
-        "confidence": 0.55
+        "confidence": 0.85
       },
       "formats": [
         "computer_delivered",
@@ -232,18 +234,18 @@
       "currency": "CAD",
       "bookingUrl": "https://ieltsregistration.britishcouncil.org/ors/find-test?country=CA&location=13435&examType=ac&examFormat=cd",
       "isActive": true,
-      "confidence": 0.8,
+      "confidence": 1,
       "sources": [
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-ad-phonetic-reading-centre-inc-ad-tutoring-2",
           "url": "https://ielts.org/test-centres/british-council-ad-phonetic-reading-centre-inc-ad-tutoring-2",
-          "seenAt": "2026-07-27T11:02:48.125Z",
+          "seenAt": "2026-07-27T11:48:59.362Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.026Z",
-      "lastSeenAt": "2026-07-27T11:03:18.026Z"
+      "firstSeenAt": "2026-07-27T11:50:51.580Z",
+      "lastSeenAt": "2026-07-27T11:50:51.580Z"
     },
     {
       "id": "bc-12302",
@@ -318,12 +320,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-ad-phonetic-reading-centre-inc-ad-tutoring",
           "url": "https://ielts.org/test-centres/british-council-ad-phonetic-reading-centre-inc-ad-tutoring",
-          "seenAt": "2026-07-27T11:02:48.472Z",
+          "seenAt": "2026-07-27T11:48:59.683Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.028Z",
-      "lastSeenAt": "2026-07-27T11:03:18.028Z"
+      "firstSeenAt": "2026-07-27T11:50:53.067Z",
+      "lastSeenAt": "2026-07-27T11:50:53.067Z"
     },
     {
       "id": "bc-13105",
@@ -401,19 +403,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-atlantic-testing-services-halifax-dartmouth-2",
           "url": "https://ielts.org/test-centres/british-council-bitts-atlantic-testing-services-halifax-dartmouth-2",
-          "seenAt": "2026-07-27T11:02:48.410Z",
+          "seenAt": "2026-07-27T11:48:59.515Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-atlantic-testing-services-halifax-dartmouth",
           "url": "https://ielts.org/test-centres/british-council-bitts-atlantic-testing-services-halifax-dartmouth",
-          "seenAt": "2026-07-27T11:02:48.726Z",
+          "seenAt": "2026-07-27T11:48:59.757Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.027Z",
-      "lastSeenAt": "2026-07-27T11:03:18.027Z"
+      "firstSeenAt": "2026-07-27T11:50:53.066Z",
+      "lastSeenAt": "2026-07-27T11:50:53.066Z"
     },
     {
       "id": "bc-13383",
@@ -491,19 +493,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-atlantic-testing-services-halifax-nova-scotia-2",
           "url": "https://ielts.org/test-centres/british-council-bitts-atlantic-testing-services-halifax-nova-scotia-2",
-          "seenAt": "2026-07-27T11:02:47.729Z",
+          "seenAt": "2026-07-27T11:48:57.618Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-atlantic-testing-services-halifax-nova-scotia",
           "url": "https://ielts.org/test-centres/british-council-bitts-atlantic-testing-services-halifax-nova-scotia",
-          "seenAt": "2026-07-27T11:02:48.348Z",
+          "seenAt": "2026-07-27T11:48:59.367Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:02.958Z",
-      "lastSeenAt": "2026-07-27T11:03:02.958Z"
+      "firstSeenAt": "2026-07-27T11:50:13.008Z",
+      "lastSeenAt": "2026-07-27T11:50:13.008Z"
     },
     {
       "id": "bc-13102",
@@ -581,19 +583,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-atlantic-testing-services-moncton-2",
           "url": "https://ielts.org/test-centres/british-council-bitts-atlantic-testing-services-moncton-2",
-          "seenAt": "2026-07-27T11:02:48.412Z",
+          "seenAt": "2026-07-27T11:48:59.516Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-atlantic-testing-services-moncton",
           "url": "https://ielts.org/test-centres/british-council-bitts-atlantic-testing-services-moncton",
-          "seenAt": "2026-07-27T11:02:48.729Z",
+          "seenAt": "2026-07-27T11:48:59.759Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.027Z",
-      "lastSeenAt": "2026-07-27T11:03:18.027Z"
+      "firstSeenAt": "2026-07-27T11:50:53.066Z",
+      "lastSeenAt": "2026-07-27T11:50:53.066Z"
     },
     {
       "id": "bc-13775",
@@ -620,11 +622,11 @@
       },
       "phone": null,
       "geo": {
-        "lat": 44.7114341,
-        "lng": -75.5164718,
-        "precision": "approximate",
+        "lat": 47.5560652,
+        "lng": -52.7683536,
+        "precision": "postcode",
         "source": "nominatim",
-        "confidence": 0.3
+        "confidence": 0.85
       },
       "formats": [
         "computer_delivered",
@@ -664,25 +666,25 @@
       "currency": "CAD",
       "bookingUrl": "https://ieltsregistration.britishcouncil.org/ors/find-test?country=CA&location=13775&examType=ac&examFormat=cd",
       "isActive": true,
-      "confidence": 0.85,
+      "confidence": 0.95,
       "sources": [
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-atlantic-testing-services-st-johns-nl-2",
           "url": "https://ielts.org/test-centres/british-council-bitts-atlantic-testing-services-st-johns-nl-2",
-          "seenAt": "2026-07-27T11:02:45.333Z",
+          "seenAt": "2026-07-27T11:48:54.292Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-atlantic-testing-services-st-johns-nl",
           "url": "https://ielts.org/test-centres/british-council-bitts-atlantic-testing-services-st-johns-nl",
-          "seenAt": "2026-07-27T11:02:47.788Z",
+          "seenAt": "2026-07-27T11:48:57.689Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:02:52.233Z",
-      "lastSeenAt": "2026-07-27T11:02:52.233Z"
+      "firstSeenAt": "2026-07-27T11:49:09.086Z",
+      "lastSeenAt": "2026-07-27T11:49:09.086Z"
     },
     {
       "id": "bc-13776",
@@ -709,11 +711,11 @@
       },
       "phone": null,
       "geo": {
-        "lat": 46.1382112,
-        "lng": -60.1941912,
-        "precision": "city",
+        "lat": 46.1365233,
+        "lng": -60.1921267,
+        "precision": "rooftop",
         "source": "nominatim",
-        "confidence": 0.55
+        "confidence": 1
       },
       "formats": [
         "computer_delivered",
@@ -753,25 +755,25 @@
       "currency": "CAD",
       "bookingUrl": "https://ieltsregistration.britishcouncil.org/ors/find-test?country=CA&location=13776&examType=ac&examFormat=cd",
       "isActive": true,
-      "confidence": 0.85,
+      "confidence": 1,
       "sources": [
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-atlantic-testing-services-sydney-ns-2",
           "url": "https://ielts.org/test-centres/british-council-bitts-atlantic-testing-services-sydney-ns-2",
-          "seenAt": "2026-07-27T11:02:45.331Z",
+          "seenAt": "2026-07-27T11:48:54.293Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-atlantic-testing-services-sydney-ns",
           "url": "https://ielts.org/test-centres/british-council-bitts-atlantic-testing-services-sydney-ns",
-          "seenAt": "2026-07-27T11:02:47.783Z",
+          "seenAt": "2026-07-27T11:48:57.684Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:02:52.233Z",
-      "lastSeenAt": "2026-07-27T11:02:52.233Z"
+      "firstSeenAt": "2026-07-27T11:49:12.350Z",
+      "lastSeenAt": "2026-07-27T11:49:12.350Z"
     },
     {
       "id": "bc-13163",
@@ -848,19 +850,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-central-bitts-calgary-2",
           "url": "https://ielts.org/test-centres/british-council-bitts-central-bitts-calgary-2",
-          "seenAt": "2026-07-27T11:02:48.357Z",
+          "seenAt": "2026-07-27T11:48:59.374Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-central-bitts-calgary",
           "url": "https://ielts.org/test-centres/british-council-bitts-central-bitts-calgary",
-          "seenAt": "2026-07-27T11:02:48.475Z",
+          "seenAt": "2026-07-27T11:48:59.686Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.027Z",
-      "lastSeenAt": "2026-07-27T11:03:18.027Z"
+      "firstSeenAt": "2026-07-27T11:50:53.066Z",
+      "lastSeenAt": "2026-07-27T11:50:53.066Z"
     },
     {
       "id": "bc-13162",
@@ -938,19 +940,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-central-bitts-edmonton-2",
           "url": "https://ielts.org/test-centres/british-council-bitts-central-bitts-edmonton-2",
-          "seenAt": "2026-07-27T11:02:48.358Z",
+          "seenAt": "2026-07-27T11:48:59.375Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-central-bitts-edmonton",
           "url": "https://ielts.org/test-centres/british-council-bitts-central-bitts-edmonton",
-          "seenAt": "2026-07-27T11:02:48.477Z",
+          "seenAt": "2026-07-27T11:48:59.688Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.027Z",
-      "lastSeenAt": "2026-07-27T11:03:18.027Z"
+      "firstSeenAt": "2026-07-27T11:50:53.066Z",
+      "lastSeenAt": "2026-07-27T11:50:53.066Z"
     },
     {
       "id": "bc-12292",
@@ -1028,19 +1030,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-testing-services-bitts-brampton-2",
           "url": "https://ielts.org/test-centres/british-council-bitts-testing-services-bitts-brampton-2",
-          "seenAt": "2026-07-27T11:02:48.479Z",
+          "seenAt": "2026-07-27T11:48:59.689Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-testing-services-bitts-brampton",
           "url": "https://ielts.org/test-centres/british-council-bitts-testing-services-bitts-brampton",
-          "seenAt": "2026-07-27T11:02:50.392Z",
+          "seenAt": "2026-07-27T11:49:00.513Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.028Z",
-      "lastSeenAt": "2026-07-27T11:03:18.028Z"
+      "firstSeenAt": "2026-07-27T11:50:53.067Z",
+      "lastSeenAt": "2026-07-27T11:50:53.067Z"
     },
     {
       "id": "bc-12120",
@@ -1118,19 +1120,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-testing-services-bitts-guelph-venue-2",
           "url": "https://ielts.org/test-centres/british-council-bitts-testing-services-bitts-guelph-venue-2",
-          "seenAt": "2026-07-27T11:02:48.468Z",
+          "seenAt": "2026-07-27T11:48:59.680Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-testing-services-bitts-guelph-venue",
           "url": "https://ielts.org/test-centres/british-council-bitts-testing-services-bitts-guelph-venue",
-          "seenAt": "2026-07-27T11:02:50.375Z",
+          "seenAt": "2026-07-27T11:49:00.497Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.028Z",
-      "lastSeenAt": "2026-07-27T11:03:18.028Z"
+      "firstSeenAt": "2026-07-27T11:50:53.067Z",
+      "lastSeenAt": "2026-07-27T11:50:53.067Z"
     },
     {
       "id": "bc-12398",
@@ -1208,19 +1210,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-testing-services-bitts-hamilton-2",
           "url": "https://ielts.org/test-centres/british-council-bitts-testing-services-bitts-hamilton-2",
-          "seenAt": "2026-07-27T11:02:48.461Z",
+          "seenAt": "2026-07-27T11:48:59.674Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-testing-services-bitts-hamilton",
           "url": "https://ielts.org/test-centres/british-council-bitts-testing-services-bitts-hamilton",
-          "seenAt": "2026-07-27T11:02:50.256Z",
+          "seenAt": "2026-07-27T11:49:00.402Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.028Z",
-      "lastSeenAt": "2026-07-27T11:03:18.028Z"
+      "firstSeenAt": "2026-07-27T11:50:53.067Z",
+      "lastSeenAt": "2026-07-27T11:50:53.067Z"
     },
     {
       "id": "bc-1227",
@@ -1290,19 +1292,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-testing-services-bitts-main-office-2",
           "url": "https://ielts.org/test-centres/british-council-bitts-testing-services-bitts-main-office-2",
-          "seenAt": "2026-07-27T11:02:48.689Z",
+          "seenAt": "2026-07-27T11:48:59.717Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-testing-services-bitts-main-office",
           "url": "https://ielts.org/test-centres/british-council-bitts-testing-services-bitts-main-office",
-          "seenAt": "2026-07-27T11:02:50.443Z",
+          "seenAt": "2026-07-27T11:49:00.561Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.028Z",
-      "lastSeenAt": "2026-07-27T11:03:18.028Z"
+      "firstSeenAt": "2026-07-27T11:50:53.067Z",
+      "lastSeenAt": "2026-07-27T11:50:53.067Z"
     },
     {
       "id": "bc-3340",
@@ -1380,19 +1382,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-testing-services-bitts-milton-venue-2",
           "url": "https://ielts.org/test-centres/british-council-bitts-testing-services-bitts-milton-venue-2",
-          "seenAt": "2026-07-27T11:02:48.476Z",
+          "seenAt": "2026-07-27T11:48:59.687Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-testing-services-bitts-milton-venue",
           "url": "https://ielts.org/test-centres/british-council-bitts-testing-services-bitts-milton-venue",
-          "seenAt": "2026-07-27T11:02:50.384Z",
+          "seenAt": "2026-07-27T11:49:00.506Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.028Z",
-      "lastSeenAt": "2026-07-27T11:03:18.028Z"
+      "firstSeenAt": "2026-07-27T11:50:53.067Z",
+      "lastSeenAt": "2026-07-27T11:50:53.067Z"
     },
     {
       "id": "bc-12439",
@@ -1468,12 +1470,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-testing-services-bitts-nort-york-steeles-2",
           "url": "https://ielts.org/test-centres/british-council-bitts-testing-services-bitts-nort-york-steeles-2",
-          "seenAt": "2026-07-27T11:02:48.452Z",
+          "seenAt": "2026-07-27T11:48:59.666Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.028Z",
-      "lastSeenAt": "2026-07-27T11:03:18.028Z"
+      "firstSeenAt": "2026-07-27T11:50:53.067Z",
+      "lastSeenAt": "2026-07-27T11:50:53.067Z"
     },
     {
       "id": "bc-13134",
@@ -1551,19 +1553,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-testing-services-bitts-north-york-consumer-2",
           "url": "https://ielts.org/test-centres/british-council-bitts-testing-services-bitts-north-york-consumer-2",
-          "seenAt": "2026-07-27T11:02:48.368Z",
+          "seenAt": "2026-07-27T11:48:59.384Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-testing-services-bitts-north-york-consumer",
           "url": "https://ielts.org/test-centres/british-council-bitts-testing-services-bitts-north-york-consumer",
-          "seenAt": "2026-07-27T11:02:48.691Z",
+          "seenAt": "2026-07-27T11:48:59.718Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.027Z",
-      "lastSeenAt": "2026-07-27T11:03:18.027Z"
+      "firstSeenAt": "2026-07-27T11:50:53.066Z",
+      "lastSeenAt": "2026-07-27T11:50:53.066Z"
     },
     {
       "id": "bc-13135",
@@ -1641,19 +1643,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-testing-services-bitts-ottawa-2",
           "url": "https://ielts.org/test-centres/british-council-bitts-testing-services-bitts-ottawa-2",
-          "seenAt": "2026-07-27T11:02:48.367Z",
+          "seenAt": "2026-07-27T11:48:59.382Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-testing-services-bitts-ottawa",
           "url": "https://ielts.org/test-centres/british-council-bitts-testing-services-bitts-ottawa",
-          "seenAt": "2026-07-27T11:02:48.688Z",
+          "seenAt": "2026-07-27T11:48:59.715Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.027Z",
-      "lastSeenAt": "2026-07-27T11:03:18.027Z"
+      "firstSeenAt": "2026-07-27T11:50:53.066Z",
+      "lastSeenAt": "2026-07-27T11:50:53.066Z"
     },
     {
       "id": "bc-13132",
@@ -1731,19 +1733,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-testing-services-bitts-scarbrough-2",
           "url": "https://ielts.org/test-centres/british-council-bitts-testing-services-bitts-scarbrough-2",
-          "seenAt": "2026-07-27T11:02:48.362Z",
+          "seenAt": "2026-07-27T11:48:59.378Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-testing-services-bitts-scarbrough",
           "url": "https://ielts.org/test-centres/british-council-bitts-testing-services-bitts-scarbrough",
-          "seenAt": "2026-07-27T11:02:48.681Z",
+          "seenAt": "2026-07-27T11:48:59.709Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.027Z",
-      "lastSeenAt": "2026-07-27T11:03:18.027Z"
+      "firstSeenAt": "2026-07-27T11:50:53.066Z",
+      "lastSeenAt": "2026-07-27T11:50:53.066Z"
     },
     {
       "id": "bc-13136",
@@ -1821,19 +1823,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-testing-services-bitts-spadina-2",
           "url": "https://ielts.org/test-centres/british-council-bitts-testing-services-bitts-spadina-2",
-          "seenAt": "2026-07-27T11:02:48.407Z",
+          "seenAt": "2026-07-27T11:48:59.505Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-testing-services-bitts-spadina",
           "url": "https://ielts.org/test-centres/british-council-bitts-testing-services-bitts-spadina",
-          "seenAt": "2026-07-27T11:02:48.698Z",
+          "seenAt": "2026-07-27T11:48:59.723Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.027Z",
-      "lastSeenAt": "2026-07-27T11:03:18.027Z"
+      "firstSeenAt": "2026-07-27T11:50:53.066Z",
+      "lastSeenAt": "2026-07-27T11:50:53.066Z"
     },
     {
       "id": "bc-13137",
@@ -1911,19 +1913,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-testing-services-bitts-st-catharines-2",
           "url": "https://ielts.org/test-centres/british-council-bitts-testing-services-bitts-st-catharines-2",
-          "seenAt": "2026-07-27T11:02:48.366Z",
+          "seenAt": "2026-07-27T11:48:59.381Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-testing-services-bitts-st-catharines",
           "url": "https://ielts.org/test-centres/british-council-bitts-testing-services-bitts-st-catharines",
-          "seenAt": "2026-07-27T11:02:48.687Z",
+          "seenAt": "2026-07-27T11:48:59.714Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.027Z",
-      "lastSeenAt": "2026-07-27T11:03:18.027Z"
+      "firstSeenAt": "2026-07-27T11:50:53.066Z",
+      "lastSeenAt": "2026-07-27T11:50:53.066Z"
     },
     {
       "id": "bc-13143",
@@ -2000,19 +2002,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-testing-services-bitts-windsor-2",
           "url": "https://ielts.org/test-centres/british-council-bitts-testing-services-bitts-windsor-2",
-          "seenAt": "2026-07-27T11:02:48.364Z",
+          "seenAt": "2026-07-27T11:48:59.380Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-testing-services-bitts-windsor",
           "url": "https://ielts.org/test-centres/british-council-bitts-testing-services-bitts-windsor",
-          "seenAt": "2026-07-27T11:02:48.684Z",
+          "seenAt": "2026-07-27T11:48:59.711Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.027Z",
-      "lastSeenAt": "2026-07-27T11:03:18.027Z"
+      "firstSeenAt": "2026-07-27T11:50:53.066Z",
+      "lastSeenAt": "2026-07-27T11:50:53.066Z"
     },
     {
       "id": "bc-13142",
@@ -2089,19 +2091,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-testing-services-bitts-ajax-pickering-2",
           "url": "https://ielts.org/test-centres/british-council-bitts-testing-services-bitts-ajax-pickering-2",
-          "seenAt": "2026-07-27T11:02:48.355Z",
+          "seenAt": "2026-07-27T11:48:59.373Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-testing-services-bitts-ajax-pickering",
           "url": "https://ielts.org/test-centres/british-council-bitts-testing-services-bitts-ajax-pickering",
-          "seenAt": "2026-07-27T11:02:48.458Z",
+          "seenAt": "2026-07-27T11:48:59.671Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.027Z",
-      "lastSeenAt": "2026-07-27T11:03:18.027Z"
+      "firstSeenAt": "2026-07-27T11:50:53.066Z",
+      "lastSeenAt": "2026-07-27T11:50:53.066Z"
     },
     {
       "id": "bc-13133",
@@ -2177,12 +2179,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-testing-services-mcadam",
           "url": "https://ielts.org/test-centres/british-council-bitts-testing-services-mcadam",
-          "seenAt": "2026-07-27T11:02:48.693Z",
+          "seenAt": "2026-07-27T11:48:59.721Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.028Z",
-      "lastSeenAt": "2026-07-27T11:03:18.028Z"
+      "firstSeenAt": "2026-07-27T11:50:53.067Z",
+      "lastSeenAt": "2026-07-27T11:50:53.067Z"
     },
     {
       "id": "bc-13774",
@@ -2205,13 +2207,7 @@
         "country": "CA"
       },
       "phone": null,
-      "geo": {
-        "lat": 46.744955,
-        "lng": -71.255998,
-        "precision": "rooftop",
-        "source": "nominatim",
-        "confidence": 0.85
-      },
+      "geo": null,
       "formats": [
         "computer_delivered",
         "paper_based"
@@ -2250,18 +2246,18 @@
       "currency": "CAD",
       "bookingUrl": "https://ieltsregistration.britishcouncil.org/ors/find-test?country=CA&location=13774&examType=ac&examFormat=cd",
       "isActive": true,
-      "confidence": 1,
+      "confidence": 0.8,
       "sources": [
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-testing-services-oxford-st",
           "url": "https://ielts.org/test-centres/british-council-bitts-testing-services-oxford-st",
-          "seenAt": "2026-07-27T11:02:47.779Z",
+          "seenAt": "2026-07-27T11:48:57.680Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:02.958Z",
-      "lastSeenAt": "2026-07-27T11:03:02.958Z"
+      "firstSeenAt": "2026-07-27T11:50:29.515Z",
+      "lastSeenAt": "2026-07-27T11:50:29.515Z"
     },
     {
       "id": "bc-12477",
@@ -2339,19 +2335,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-west-bitts-abbotsford-2",
           "url": "https://ielts.org/test-centres/british-council-bitts-west-bitts-abbotsford-2",
-          "seenAt": "2026-07-27T11:02:48.445Z",
+          "seenAt": "2026-07-27T11:48:59.659Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-west-bitts-abbotsford",
           "url": "https://ielts.org/test-centres/british-council-bitts-west-bitts-abbotsford",
-          "seenAt": "2026-07-27T11:02:50.249Z",
+          "seenAt": "2026-07-27T11:49:00.395Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.028Z",
-      "lastSeenAt": "2026-07-27T11:03:18.028Z"
+      "firstSeenAt": "2026-07-27T11:50:53.067Z",
+      "lastSeenAt": "2026-07-27T11:50:53.067Z"
     },
     {
       "id": "bc-13667",
@@ -2376,11 +2372,11 @@
       },
       "phone": null,
       "geo": {
-        "lat": 49.2842958,
-        "lng": -122.793281,
-        "precision": "city",
+        "lat": 49.2785713,
+        "lng": -122.7917891,
+        "precision": "rooftop",
         "source": "nominatim",
-        "confidence": 0.55
+        "confidence": 1
       },
       "formats": [
         "computer_delivered",
@@ -2420,18 +2416,18 @@
       "currency": "CAD",
       "bookingUrl": "https://ieltsregistration.britishcouncil.org/ors/find-test?country=CA&location=13667&examType=ac&examFormat=cd",
       "isActive": true,
-      "confidence": 0.8,
+      "confidence": 1,
       "sources": [
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-west-bitts-coquitlam",
           "url": "https://ielts.org/test-centres/british-council-bitts-west-bitts-coquitlam",
-          "seenAt": "2026-07-27T11:02:48.096Z",
+          "seenAt": "2026-07-27T11:48:59.335Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:02.958Z",
-      "lastSeenAt": "2026-07-27T11:03:02.958Z"
+      "firstSeenAt": "2026-07-27T11:50:38.568Z",
+      "lastSeenAt": "2026-07-27T11:50:38.568Z"
     },
     {
       "id": "bc-13659",
@@ -2458,11 +2454,11 @@
       },
       "phone": null,
       "geo": {
-        "lat": 49.2314446,
-        "lng": -123.009257,
-        "precision": "postcode",
+        "lat": 49.231495,
+        "lng": -123.009422,
+        "precision": "rooftop",
         "source": "nominatim",
-        "confidence": 0.85
+        "confidence": 1
       },
       "formats": [
         "computer_delivered",
@@ -2502,25 +2498,25 @@
       "currency": "CAD",
       "bookingUrl": "https://ieltsregistration.britishcouncil.org/ors/find-test?country=CA&location=13659&examType=ac&examFormat=cd",
       "isActive": true,
-      "confidence": 0.95,
+      "confidence": 1,
       "sources": [
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-west-kingsway-2",
           "url": "https://ielts.org/test-centres/british-council-bitts-west-kingsway-2",
-          "seenAt": "2026-07-27T11:02:45.395Z",
+          "seenAt": "2026-07-27T11:48:54.356Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-west-kingsway",
           "url": "https://ielts.org/test-centres/british-council-bitts-west-kingsway",
-          "seenAt": "2026-07-27T11:02:48.100Z",
+          "seenAt": "2026-07-27T11:48:59.339Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:02:52.233Z",
-      "lastSeenAt": "2026-07-27T11:02:52.233Z"
+      "firstSeenAt": "2026-07-27T11:49:16.188Z",
+      "lastSeenAt": "2026-07-27T11:49:16.188Z"
     },
     {
       "id": "bc-13668",
@@ -2545,11 +2541,11 @@
       },
       "phone": null,
       "geo": {
-        "lat": 49.163168,
-        "lng": -123.137414,
-        "precision": "city",
+        "lat": 49.1831513,
+        "lng": -123.1276292,
+        "precision": "rooftop",
         "source": "nominatim",
-        "confidence": 0.55
+        "confidence": 1
       },
       "formats": [
         "computer_delivered",
@@ -2589,18 +2585,18 @@
       "currency": "CAD",
       "bookingUrl": "https://ieltsregistration.britishcouncil.org/ors/find-test?country=CA&location=13668&examType=ac&examFormat=cd",
       "isActive": true,
-      "confidence": 0.8,
+      "confidence": 1,
       "sources": [
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-west-mg-education",
           "url": "https://ielts.org/test-centres/british-council-bitts-west-mg-education",
-          "seenAt": "2026-07-27T11:02:47.794Z",
+          "seenAt": "2026-07-27T11:48:57.696Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:02.958Z",
-      "lastSeenAt": "2026-07-27T11:03:02.958Z"
+      "firstSeenAt": "2026-07-27T11:50:34.740Z",
+      "lastSeenAt": "2026-07-27T11:50:34.740Z"
     },
     {
       "id": "bc-13664",
@@ -2678,19 +2674,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-west-surrey-2",
           "url": "https://ielts.org/test-centres/british-council-bitts-west-surrey-2",
-          "seenAt": "2026-07-27T11:02:45.399Z",
+          "seenAt": "2026-07-27T11:48:54.362Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-west-surrey",
           "url": "https://ielts.org/test-centres/british-council-bitts-west-surrey",
-          "seenAt": "2026-07-27T11:02:48.103Z",
+          "seenAt": "2026-07-27T11:48:59.342Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:02:52.233Z",
-      "lastSeenAt": "2026-07-27T11:02:52.233Z"
+      "firstSeenAt": "2026-07-27T11:49:21.283Z",
+      "lastSeenAt": "2026-07-27T11:49:21.283Z"
     },
     {
       "id": "bc-13669",
@@ -2765,12 +2761,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-west-vgc-international-college",
           "url": "https://ielts.org/test-centres/british-council-bitts-west-vgc-international-college",
-          "seenAt": "2026-07-27T11:02:47.791Z",
+          "seenAt": "2026-07-27T11:48:57.692Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:02.958Z",
-      "lastSeenAt": "2026-07-27T11:03:02.958Z"
+      "firstSeenAt": "2026-07-27T11:50:31.002Z",
+      "lastSeenAt": "2026-07-27T11:50:31.002Z"
     },
     {
       "id": "bc-13661",
@@ -2830,12 +2826,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-bitts-west-winston-college-2",
           "url": "https://ielts.org/test-centres/british-council-bitts-west-winston-college-2",
-          "seenAt": "2026-07-27T11:02:45.460Z",
+          "seenAt": "2026-07-27T11:48:54.423Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:02:57.609Z",
-      "lastSeenAt": "2026-07-27T11:02:57.609Z"
+      "firstSeenAt": "2026-07-27T11:49:28.750Z",
+      "lastSeenAt": "2026-07-27T11:49:28.750Z"
     },
     {
       "id": "bc-13402",
@@ -2895,12 +2891,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-boreal-college",
           "url": "https://ielts.org/test-centres/british-council-boreal-college",
-          "seenAt": "2026-07-27T11:02:45.660Z",
+          "seenAt": "2026-07-27T11:48:54.633Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:02.958Z",
-      "lastSeenAt": "2026-07-27T11:03:02.958Z"
+      "firstSeenAt": "2026-07-27T11:50:09.454Z",
+      "lastSeenAt": "2026-07-27T11:50:09.454Z"
     },
     {
       "id": "bc-13401",
@@ -2977,19 +2973,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-can-esl-inc-canesl-4",
           "url": "https://ielts.org/test-centres/british-council-can-esl-inc-canesl-4",
-          "seenAt": "2026-07-27T11:02:45.662Z",
+          "seenAt": "2026-07-27T11:48:54.635Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-can-esl-inc-canesl-3",
           "url": "https://ielts.org/test-centres/british-council-can-esl-inc-canesl-3",
-          "seenAt": "2026-07-27T11:02:48.345Z",
+          "seenAt": "2026-07-27T11:48:59.365Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:02.958Z",
-      "lastSeenAt": "2026-07-27T11:03:02.958Z"
+      "firstSeenAt": "2026-07-27T11:50:09.454Z",
+      "lastSeenAt": "2026-07-27T11:50:09.454Z"
     },
     {
       "id": "bc-13027",
@@ -3065,19 +3061,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-can-esl-inc-canesl-2",
           "url": "https://ielts.org/test-centres/british-council-can-esl-inc-canesl-2",
-          "seenAt": "2026-07-27T11:02:48.416Z",
+          "seenAt": "2026-07-27T11:48:59.521Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-can-esl-inc-canesl",
           "url": "https://ielts.org/test-centres/british-council-can-esl-inc-canesl",
-          "seenAt": "2026-07-27T11:02:49.645Z",
+          "seenAt": "2026-07-27T11:49:00.139Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.028Z",
-      "lastSeenAt": "2026-07-27T11:03:18.028Z"
+      "firstSeenAt": "2026-07-27T11:50:53.067Z",
+      "lastSeenAt": "2026-07-27T11:50:53.067Z"
     },
     {
       "id": "bc-2279",
@@ -3136,12 +3132,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-concordia-university-language-test-centre-concordia-university-language-test-center",
           "url": "https://ielts.org/test-centres/british-council-concordia-university-language-test-centre-concordia-university-language-test-center",
-          "seenAt": "2026-07-27T11:02:51.090Z",
+          "seenAt": "2026-07-27T11:49:01.126Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.029Z",
-      "lastSeenAt": "2026-07-27T11:03:18.029Z"
+      "firstSeenAt": "2026-07-27T11:50:55.186Z",
+      "lastSeenAt": "2026-07-27T11:50:55.186Z"
     },
     {
       "id": "bc-12482",
@@ -3201,12 +3197,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-concordia-university-of-edmonton",
           "url": "https://ielts.org/test-centres/british-council-concordia-university-of-edmonton",
-          "seenAt": "2026-07-27T11:02:48.435Z",
+          "seenAt": "2026-07-27T11:48:59.655Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.028Z",
-      "lastSeenAt": "2026-07-27T11:03:18.028Z"
+      "firstSeenAt": "2026-07-27T11:50:53.067Z",
+      "lastSeenAt": "2026-07-27T11:50:53.067Z"
     },
     {
       "id": "bc-12534",
@@ -3284,19 +3280,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-elc-college-2",
           "url": "https://ielts.org/test-centres/british-council-elc-college-2",
-          "seenAt": "2026-07-27T11:02:48.432Z",
+          "seenAt": "2026-07-27T11:48:59.652Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-elc-college",
           "url": "https://ielts.org/test-centres/british-council-elc-college",
-          "seenAt": "2026-07-27T11:02:50.173Z",
+          "seenAt": "2026-07-27T11:49:00.328Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.028Z",
-      "lastSeenAt": "2026-07-27T11:03:18.028Z"
+      "firstSeenAt": "2026-07-27T11:50:53.067Z",
+      "lastSeenAt": "2026-07-27T11:50:53.067Z"
     },
     {
       "id": "bc-2257",
@@ -3371,12 +3367,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-etc-central-assiniboine-college",
           "url": "https://ielts.org/test-centres/british-council-etc-central-assiniboine-college",
-          "seenAt": "2026-07-27T11:02:49.056Z",
+          "seenAt": "2026-07-27T11:48:59.822Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.028Z",
-      "lastSeenAt": "2026-07-27T11:03:18.028Z"
+      "firstSeenAt": "2026-07-27T11:50:53.067Z",
+      "lastSeenAt": "2026-07-27T11:50:53.067Z"
     },
     {
       "id": "bc-2274",
@@ -3452,12 +3448,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-etc-central-regent-avenue",
           "url": "https://ielts.org/test-centres/british-council-etc-central-regent-avenue",
-          "seenAt": "2026-07-27T11:02:48.483Z",
+          "seenAt": "2026-07-27T11:48:59.691Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.028Z",
-      "lastSeenAt": "2026-07-27T11:03:18.028Z"
+      "firstSeenAt": "2026-07-27T11:50:53.067Z",
+      "lastSeenAt": "2026-07-27T11:50:53.067Z"
     },
     {
       "id": "bc-2266",
@@ -3533,12 +3529,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-george-brown-college-ielts-test-centre-200-king-assessment-centre",
           "url": "https://ielts.org/test-centres/british-council-george-brown-college-ielts-test-centre-200-king-assessment-centre",
-          "seenAt": "2026-07-27T11:02:49.337Z",
+          "seenAt": "2026-07-27T11:48:59.991Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.028Z",
-      "lastSeenAt": "2026-07-27T11:03:18.028Z"
+      "firstSeenAt": "2026-07-27T11:50:53.067Z",
+      "lastSeenAt": "2026-07-27T11:50:53.067Z"
     },
     {
       "id": "bc-2260",
@@ -3614,12 +3610,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-george-brown-college-ielts-test-centre-sheridan-college-davis",
           "url": "https://ielts.org/test-centres/british-council-george-brown-college-ielts-test-centre-sheridan-college-davis",
-          "seenAt": "2026-07-27T11:02:49.061Z",
+          "seenAt": "2026-07-27T11:48:59.826Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.028Z",
-      "lastSeenAt": "2026-07-27T11:03:18.028Z"
+      "firstSeenAt": "2026-07-27T11:50:53.067Z",
+      "lastSeenAt": "2026-07-27T11:50:53.067Z"
     },
     {
       "id": "bc-12952",
@@ -3695,19 +3691,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-holland-college-2",
           "url": "https://ielts.org/test-centres/british-council-holland-college-2",
-          "seenAt": "2026-07-27T11:02:48.425Z",
+          "seenAt": "2026-07-27T11:48:59.642Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-holland-college",
           "url": "https://ielts.org/test-centres/british-council-holland-college",
-          "seenAt": "2026-07-27T11:02:50.103Z",
+          "seenAt": "2026-07-27T11:49:00.265Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.028Z",
-      "lastSeenAt": "2026-07-27T11:03:18.028Z"
+      "firstSeenAt": "2026-07-27T11:50:53.067Z",
+      "lastSeenAt": "2026-07-27T11:50:53.067Z"
     },
     {
       "id": "bc-13374",
@@ -3782,12 +3778,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-holland-college-summerside-ielts",
           "url": "https://ielts.org/test-centres/british-council-holland-college-summerside-ielts",
-          "seenAt": "2026-07-27T11:02:48.350Z",
+          "seenAt": "2026-07-27T11:48:59.368Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.027Z",
-      "lastSeenAt": "2026-07-27T11:03:18.027Z"
+      "firstSeenAt": "2026-07-27T11:50:53.066Z",
+      "lastSeenAt": "2026-07-27T11:50:53.066Z"
     },
     {
       "id": "bc-2268",
@@ -3862,12 +3858,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-humber-college-ital-cambrian-college",
           "url": "https://ielts.org/test-centres/british-council-humber-college-ital-cambrian-college",
-          "seenAt": "2026-07-27T11:02:51.294Z",
+          "seenAt": "2026-07-27T11:49:01.389Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.029Z",
-      "lastSeenAt": "2026-07-27T11:03:18.029Z"
+      "firstSeenAt": "2026-07-27T11:50:55.186Z",
+      "lastSeenAt": "2026-07-27T11:50:55.186Z"
     },
     {
       "id": "bc-13415",
@@ -3925,12 +3921,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-humber-college-ital-humber-college-downtown-igs",
           "url": "https://ielts.org/test-centres/british-council-humber-college-ital-humber-college-downtown-igs",
-          "seenAt": "2026-07-27T11:02:48.127Z",
+          "seenAt": "2026-07-27T11:48:59.364Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.026Z",
-      "lastSeenAt": "2026-07-27T11:03:18.026Z"
+      "firstSeenAt": "2026-07-27T11:50:51.580Z",
+      "lastSeenAt": "2026-07-27T11:50:51.580Z"
     },
     {
       "id": "bc-3335",
@@ -3991,12 +3987,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-humber-college-ital-lakeshore-campus",
           "url": "https://ielts.org/test-centres/british-council-humber-college-ital-lakeshore-campus",
-          "seenAt": "2026-07-27T11:02:51.063Z",
+          "seenAt": "2026-07-27T11:49:01.099Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.029Z",
-      "lastSeenAt": "2026-07-27T11:03:18.029Z"
+      "firstSeenAt": "2026-07-27T11:50:55.186Z",
+      "lastSeenAt": "2026-07-27T11:50:55.186Z"
     },
     {
       "id": "bc-2269",
@@ -4071,12 +4067,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-humber-college-ital-north-main-campus",
           "url": "https://ielts.org/test-centres/british-council-humber-college-ital-north-main-campus",
-          "seenAt": "2026-07-27T11:02:51.298Z",
+          "seenAt": "2026-07-27T11:49:01.392Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.029Z",
-      "lastSeenAt": "2026-07-27T11:03:18.029Z"
+      "firstSeenAt": "2026-07-27T11:50:55.186Z",
+      "lastSeenAt": "2026-07-27T11:50:55.186Z"
     },
     {
       "id": "bc-5533",
@@ -4154,19 +4150,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-ilsc-montreal-downtown-2",
           "url": "https://ielts.org/test-centres/british-council-ilsc-montreal-downtown-2",
-          "seenAt": "2026-07-27T11:02:48.717Z",
+          "seenAt": "2026-07-27T11:48:59.748Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-ilsc-montreal-downtown",
           "url": "https://ielts.org/test-centres/british-council-ilsc-montreal-downtown",
-          "seenAt": "2026-07-27T11:02:50.602Z",
+          "seenAt": "2026-07-27T11:49:00.707Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.028Z",
-      "lastSeenAt": "2026-07-27T11:03:18.028Z"
+      "firstSeenAt": "2026-07-27T11:50:53.067Z",
+      "lastSeenAt": "2026-07-27T11:50:53.067Z"
     },
     {
       "id": "bc-12525",
@@ -4225,12 +4221,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-ilsc-toronto-a-academy",
           "url": "https://ielts.org/test-centres/british-council-ilsc-toronto-a-academy",
-          "seenAt": "2026-07-27T11:02:50.190Z",
+          "seenAt": "2026-07-27T11:49:00.341Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.029Z",
-      "lastSeenAt": "2026-07-27T11:03:18.029Z"
+      "firstSeenAt": "2026-07-27T11:50:55.185Z",
+      "lastSeenAt": "2026-07-27T11:50:55.185Z"
     },
     {
       "id": "bc-2247",
@@ -4290,12 +4286,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-ilsc-toronto-lakehead-university",
           "url": "https://ielts.org/test-centres/british-council-ilsc-toronto-lakehead-university",
-          "seenAt": "2026-07-27T11:02:51.250Z",
+          "seenAt": "2026-07-27T11:49:01.369Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.029Z",
-      "lastSeenAt": "2026-07-27T11:03:18.029Z"
+      "firstSeenAt": "2026-07-27T11:50:55.186Z",
+      "lastSeenAt": "2026-07-27T11:50:55.186Z"
     },
     {
       "id": "bc-13548",
@@ -4355,12 +4351,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-ilsc-toronto-lambton-college-sarnia",
           "url": "https://ielts.org/test-centres/british-council-ilsc-toronto-lambton-college-sarnia",
-          "seenAt": "2026-07-27T11:02:45.505Z",
+          "seenAt": "2026-07-27T11:48:54.475Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:02:57.609Z",
-      "lastSeenAt": "2026-07-27T11:02:57.609Z"
+      "firstSeenAt": "2026-07-27T11:49:44.389Z",
+      "lastSeenAt": "2026-07-27T11:49:44.389Z"
     },
     {
       "id": "bc-2242",
@@ -4437,19 +4433,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-ilsc-toronto-trios-college-brampton-2",
           "url": "https://ielts.org/test-centres/british-council-ilsc-toronto-trios-college-brampton-2",
-          "seenAt": "2026-07-27T11:02:49.356Z",
+          "seenAt": "2026-07-27T11:49:00.028Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-ilsc-toronto-trios-college-brampton",
           "url": "https://ielts.org/test-centres/british-council-ilsc-toronto-trios-college-brampton",
-          "seenAt": "2026-07-27T11:02:51.308Z",
+          "seenAt": "2026-07-27T11:49:01.403Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.028Z",
-      "lastSeenAt": "2026-07-27T11:03:18.028Z"
+      "firstSeenAt": "2026-07-27T11:50:53.067Z",
+      "lastSeenAt": "2026-07-27T11:50:53.067Z"
     },
     {
       "id": "bc-2243",
@@ -4508,12 +4504,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-ilsc-toronto-trios-college-kitchener",
           "url": "https://ielts.org/test-centres/british-council-ilsc-toronto-trios-college-kitchener",
-          "seenAt": "2026-07-27T11:02:51.218Z",
+          "seenAt": "2026-07-27T11:49:01.137Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.029Z",
-      "lastSeenAt": "2026-07-27T11:03:18.029Z"
+      "firstSeenAt": "2026-07-27T11:50:55.186Z",
+      "lastSeenAt": "2026-07-27T11:50:55.186Z"
     },
     {
       "id": "bc-3330",
@@ -4573,12 +4569,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-ilsc-toronto-trios-college-mississauga",
           "url": "https://ielts.org/test-centres/british-council-ilsc-toronto-trios-college-mississauga",
-          "seenAt": "2026-07-27T11:02:51.070Z",
+          "seenAt": "2026-07-27T11:49:01.106Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.029Z",
-      "lastSeenAt": "2026-07-27T11:03:18.029Z"
+      "firstSeenAt": "2026-07-27T11:50:55.186Z",
+      "lastSeenAt": "2026-07-27T11:50:55.186Z"
     },
     {
       "id": "bc-11936",
@@ -4656,19 +4652,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-ilsc-toronto-downtown-main-campus-2",
           "url": "https://ielts.org/test-centres/british-council-ilsc-toronto-downtown-main-campus-2",
-          "seenAt": "2026-07-27T11:02:50.493Z",
+          "seenAt": "2026-07-27T11:49:00.608Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-ilsc-toronto-downtown-main-campus",
           "url": "https://ielts.org/test-centres/british-council-ilsc-toronto-downtown-main-campus",
-          "seenAt": "2026-07-27T11:02:50.503Z",
+          "seenAt": "2026-07-27T11:49:00.617Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.029Z",
-      "lastSeenAt": "2026-07-27T11:03:18.029Z"
+      "firstSeenAt": "2026-07-27T11:50:55.186Z",
+      "lastSeenAt": "2026-07-27T11:50:55.186Z"
     },
     {
       "id": "bc-5442",
@@ -4745,19 +4741,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-ilsc-vancouver-simon-fraser-university-surrey-2",
           "url": "https://ielts.org/test-centres/british-council-ilsc-vancouver-simon-fraser-university-surrey-2",
-          "seenAt": "2026-07-27T11:02:48.731Z",
+          "seenAt": "2026-07-27T11:48:59.760Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-ilsc-vancouver-simon-fraser-university-surrey",
           "url": "https://ielts.org/test-centres/british-council-ilsc-vancouver-simon-fraser-university-surrey",
-          "seenAt": "2026-07-27T11:02:50.933Z",
+          "seenAt": "2026-07-27T11:49:01.023Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.028Z",
-      "lastSeenAt": "2026-07-27T11:03:18.028Z"
+      "firstSeenAt": "2026-07-27T11:50:53.067Z",
+      "lastSeenAt": "2026-07-27T11:50:53.067Z"
     },
     {
       "id": "bc-2256",
@@ -4833,19 +4829,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-ilsc-vancouver-downtown",
           "url": "https://ielts.org/test-centres/british-council-ilsc-vancouver-downtown",
-          "seenAt": "2026-07-27T11:02:49.053Z",
+          "seenAt": "2026-07-27T11:48:59.819Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-ilsc-vancouver-downtown-vancouver",
           "url": "https://ielts.org/test-centres/british-council-ilsc-vancouver-downtown-vancouver",
-          "seenAt": "2026-07-27T11:02:50.480Z",
+          "seenAt": "2026-07-27T11:49:00.597Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.028Z",
-      "lastSeenAt": "2026-07-27T11:03:18.028Z"
+      "firstSeenAt": "2026-07-27T11:50:53.067Z",
+      "lastSeenAt": "2026-07-27T11:50:53.067Z"
     },
     {
       "id": "bc-13525",
@@ -4871,11 +4867,11 @@
       },
       "phone": null,
       "geo": {
-        "lat": 49.163877,
-        "lng": -123.938122,
-        "precision": "approximate",
+        "lat": 49.1669855,
+        "lng": -123.9384656,
+        "precision": "rooftop",
         "source": "nominatim",
-        "confidence": 0.3
+        "confidence": 1
       },
       "formats": [
         "computer_delivered"
@@ -4893,18 +4889,18 @@
       "currency": "CAD",
       "bookingUrl": "https://ieltsregistration.britishcouncil.org/ors/find-test?country=CA&location=13525&examType=ac&examFormat=cd",
       "isActive": true,
-      "confidence": 0.8,
+      "confidence": 1,
       "sources": [
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-inlingua-victoria-college-of-languages-and-careers-inlingua-nanaimo-test-venue",
           "url": "https://ielts.org/test-centres/british-council-inlingua-victoria-college-of-languages-and-careers-inlingua-nanaimo-test-venue",
-          "seenAt": "2026-07-27T11:02:48.121Z",
+          "seenAt": "2026-07-27T11:48:59.359Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:08.336Z",
-      "lastSeenAt": "2026-07-27T11:03:08.336Z"
+      "firstSeenAt": "2026-07-27T11:50:46.493Z",
+      "lastSeenAt": "2026-07-27T11:50:46.493Z"
     },
     {
       "id": "bc-13606",
@@ -4931,11 +4927,11 @@
       },
       "phone": null,
       "geo": {
-        "lat": 49.1742883,
-        "lng": -123.0727555,
-        "precision": "postcode",
+        "lat": 49.1745088,
+        "lng": -123.0735219,
+        "precision": "rooftop",
         "source": "nominatim",
-        "confidence": 0.85
+        "confidence": 1
       },
       "formats": [
         "computer_delivered",
@@ -4975,25 +4971,25 @@
       "currency": "CAD",
       "bookingUrl": "https://ieltsregistration.britishcouncil.org/ors/find-test?country=CA&location=13606&examType=ac&examFormat=cd",
       "isActive": true,
-      "confidence": 0.95,
+      "confidence": 1,
       "sources": [
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-inlingua-victoria-college-of-languages-and-careers-inlingua-richmond-testing-venue-2",
           "url": "https://ielts.org/test-centres/british-council-inlingua-victoria-college-of-languages-and-careers-inlingua-richmond-testing-venue-2",
-          "seenAt": "2026-07-27T11:02:45.432Z",
+          "seenAt": "2026-07-27T11:48:54.394Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-inlingua-victoria-college-of-languages-and-careers-inlingua-richmond-testing-venue",
           "url": "https://ielts.org/test-centres/british-council-inlingua-victoria-college-of-languages-and-careers-inlingua-richmond-testing-venue",
-          "seenAt": "2026-07-27T11:02:48.110Z",
+          "seenAt": "2026-07-27T11:48:59.347Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:02:57.609Z",
-      "lastSeenAt": "2026-07-27T11:02:57.609Z"
+      "firstSeenAt": "2026-07-27T11:49:24.738Z",
+      "lastSeenAt": "2026-07-27T11:49:24.738Z"
     },
     {
       "id": "bc-11993",
@@ -5071,19 +5067,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-international-language-training-and-testing-services-iltts-cambridge-2",
           "url": "https://ielts.org/test-centres/british-council-international-language-training-and-testing-services-iltts-cambridge-2",
-          "seenAt": "2026-07-27T11:02:48.701Z",
+          "seenAt": "2026-07-27T11:48:59.727Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-international-language-training-and-testing-services-iltts-cambridge",
           "url": "https://ielts.org/test-centres/british-council-international-language-training-and-testing-services-iltts-cambridge",
-          "seenAt": "2026-07-27T11:02:50.480Z",
+          "seenAt": "2026-07-27T11:49:00.594Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.028Z",
-      "lastSeenAt": "2026-07-27T11:03:18.028Z"
+      "firstSeenAt": "2026-07-27T11:50:53.067Z",
+      "lastSeenAt": "2026-07-27T11:50:53.067Z"
     },
     {
       "id": "bc-1256",
@@ -5161,19 +5157,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-international-language-training-and-testing-services-iltts-london-2",
           "url": "https://ielts.org/test-centres/british-council-international-language-training-and-testing-services-iltts-london-2",
-          "seenAt": "2026-07-27T11:02:48.685Z",
+          "seenAt": "2026-07-27T11:48:59.713Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-international-language-training-and-testing-services-iltts-london",
           "url": "https://ielts.org/test-centres/british-council-international-language-training-and-testing-services-iltts-london",
-          "seenAt": "2026-07-27T11:02:50.412Z",
+          "seenAt": "2026-07-27T11:49:00.534Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.028Z",
-      "lastSeenAt": "2026-07-27T11:03:18.028Z"
+      "firstSeenAt": "2026-07-27T11:50:53.067Z",
+      "lastSeenAt": "2026-07-27T11:50:53.067Z"
     },
     {
       "id": "bc-1258",
@@ -5249,19 +5245,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-international-language-training-and-testing-services-iltts-mississauga-2",
           "url": "https://ielts.org/test-centres/british-council-international-language-training-and-testing-services-iltts-mississauga-2",
-          "seenAt": "2026-07-27T11:02:49.639Z",
+          "seenAt": "2026-07-27T11:49:00.131Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-international-language-training-and-testing-services-iltts-mississauga",
           "url": "https://ielts.org/test-centres/british-council-international-language-training-and-testing-services-iltts-mississauga",
-          "seenAt": "2026-07-27T11:02:51.602Z",
+          "seenAt": "2026-07-27T11:49:01.728Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.028Z",
-      "lastSeenAt": "2026-07-27T11:03:18.028Z"
+      "firstSeenAt": "2026-07-27T11:50:53.067Z",
+      "lastSeenAt": "2026-07-27T11:50:53.067Z"
     },
     {
       "id": "bc-1259",
@@ -5322,12 +5318,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-international-language-training-and-testing-services-iltts-scarborough-2",
           "url": "https://ielts.org/test-centres/british-council-international-language-training-and-testing-services-iltts-scarborough-2",
-          "seenAt": "2026-07-27T11:02:48.446Z",
+          "seenAt": "2026-07-27T11:48:59.661Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.028Z",
-      "lastSeenAt": "2026-07-27T11:03:18.028Z"
+      "firstSeenAt": "2026-07-27T11:50:53.067Z",
+      "lastSeenAt": "2026-07-27T11:50:53.067Z"
     },
     {
       "id": "bc-2238",
@@ -5388,12 +5384,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-kaplan-ielts-test-centre-kaplan-toronto",
           "url": "https://ielts.org/test-centres/british-council-kaplan-ielts-test-centre-kaplan-toronto",
-          "seenAt": "2026-07-27T11:02:51.312Z",
+          "seenAt": "2026-07-27T11:49:01.406Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.029Z",
-      "lastSeenAt": "2026-07-27T11:03:18.029Z"
+      "firstSeenAt": "2026-07-27T11:50:55.186Z",
+      "lastSeenAt": "2026-07-27T11:50:55.186Z"
     },
     {
       "id": "bc-2237",
@@ -5469,12 +5465,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-kaplan-ielts-test-centre-kaplan-vancouver",
           "url": "https://ielts.org/test-centres/british-council-kaplan-ielts-test-centre-kaplan-vancouver",
-          "seenAt": "2026-07-27T11:02:51.315Z",
+          "seenAt": "2026-07-27T11:49:01.409Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.029Z",
-      "lastSeenAt": "2026-07-27T11:03:18.029Z"
+      "firstSeenAt": "2026-07-27T11:50:55.186Z",
+      "lastSeenAt": "2026-07-27T11:50:55.186Z"
     },
     {
       "id": "bc-13588",
@@ -5533,12 +5529,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-mississauga-itechskills-academy",
           "url": "https://ielts.org/test-centres/british-council-mississauga-itechskills-academy",
-          "seenAt": "2026-07-27T11:02:45.457Z",
+          "seenAt": "2026-07-27T11:48:54.418Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:02:57.609Z",
-      "lastSeenAt": "2026-07-27T11:02:57.609Z"
+      "firstSeenAt": "2026-07-27T11:49:26.563Z",
+      "lastSeenAt": "2026-07-27T11:49:26.563Z"
     },
     {
       "id": "bc-11957",
@@ -5615,19 +5611,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-mosaic-boundary-road-2",
           "url": "https://ielts.org/test-centres/british-council-mosaic-boundary-road-2",
-          "seenAt": "2026-07-27T11:02:48.706Z",
+          "seenAt": "2026-07-27T11:48:59.730Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-mosaic-boundary-road",
           "url": "https://ielts.org/test-centres/british-council-mosaic-boundary-road",
-          "seenAt": "2026-07-27T11:02:50.492Z",
+          "seenAt": "2026-07-27T11:49:00.606Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.028Z",
-      "lastSeenAt": "2026-07-27T11:03:18.028Z"
+      "firstSeenAt": "2026-07-27T11:50:53.067Z",
+      "lastSeenAt": "2026-07-27T11:50:53.067Z"
     },
     {
       "id": "bc-12441",
@@ -5701,12 +5697,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-mosaic-commercial-drive-2",
           "url": "https://ielts.org/test-centres/british-council-mosaic-commercial-drive-2",
-          "seenAt": "2026-07-27T11:02:48.449Z",
+          "seenAt": "2026-07-27T11:48:59.664Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.028Z",
-      "lastSeenAt": "2026-07-27T11:03:18.028Z"
+      "firstSeenAt": "2026-07-27T11:50:53.067Z",
+      "lastSeenAt": "2026-07-27T11:50:53.067Z"
     },
     {
       "id": "bc-13324",
@@ -5783,19 +5779,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-mosaic-metropolis-at-metrotown-2",
           "url": "https://ielts.org/test-centres/british-council-mosaic-metropolis-at-metrotown-2",
-          "seenAt": "2026-07-27T11:02:47.760Z",
+          "seenAt": "2026-07-27T11:48:57.661Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-mosaic-metropolis-at-metrotown",
           "url": "https://ielts.org/test-centres/british-council-mosaic-metropolis-at-metrotown",
-          "seenAt": "2026-07-27T11:02:48.354Z",
+          "seenAt": "2026-07-27T11:48:59.371Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:02.958Z",
-      "lastSeenAt": "2026-07-27T11:03:02.958Z"
+      "firstSeenAt": "2026-07-27T11:50:19.931Z",
+      "lastSeenAt": "2026-07-27T11:50:19.931Z"
     },
     {
       "id": "bc-3313",
@@ -5872,19 +5868,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-mosaic-newton-surrey-2",
           "url": "https://ielts.org/test-centres/british-council-mosaic-newton-surrey-2",
-          "seenAt": "2026-07-27T11:02:49.049Z",
+          "seenAt": "2026-07-27T11:48:59.816Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-mosaic-newton-surrey",
           "url": "https://ielts.org/test-centres/british-council-mosaic-newton-surrey",
-          "seenAt": "2026-07-27T11:02:51.079Z",
+          "seenAt": "2026-07-27T11:49:01.115Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.028Z",
-      "lastSeenAt": "2026-07-27T11:03:18.028Z"
+      "firstSeenAt": "2026-07-27T11:50:53.067Z",
+      "lastSeenAt": "2026-07-27T11:50:53.067Z"
     },
     {
       "id": "bc-13557",
@@ -5909,11 +5905,11 @@
       },
       "phone": null,
       "geo": {
-        "lat": 49.3206294,
-        "lng": -123.0737925,
-        "precision": "city",
+        "lat": 49.3187726,
+        "lng": -123.1009735,
+        "precision": "rooftop",
         "source": "nominatim",
-        "confidence": 0.55
+        "confidence": 1
       },
       "formats": [
         "computer_delivered",
@@ -5953,18 +5949,18 @@
       "currency": "CAD",
       "bookingUrl": "https://ieltsregistration.britishcouncil.org/ors/find-test?country=CA&location=13557&examType=ac&examFormat=cd",
       "isActive": true,
-      "confidence": 0.8,
+      "confidence": 1,
       "sources": [
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-mosaic-north-van",
           "url": "https://ielts.org/test-centres/british-council-mosaic-north-van",
-          "seenAt": "2026-07-27T11:02:48.119Z",
+          "seenAt": "2026-07-27T11:48:59.358Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:02.958Z",
-      "lastSeenAt": "2026-07-27T11:03:02.958Z"
+      "firstSeenAt": "2026-07-27T11:50:43.288Z",
+      "lastSeenAt": "2026-07-27T11:50:43.288Z"
     },
     {
       "id": "bc-2267",
@@ -6041,19 +6037,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-nait-2",
           "url": "https://ielts.org/test-centres/british-council-nait-2",
-          "seenAt": "2026-07-27T11:02:49.355Z",
+          "seenAt": "2026-07-27T11:49:00.026Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-nait",
           "url": "https://ielts.org/test-centres/british-council-nait",
-          "seenAt": "2026-07-27T11:02:51.306Z",
+          "seenAt": "2026-07-27T11:49:01.401Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.028Z",
-      "lastSeenAt": "2026-07-27T11:03:18.028Z"
+      "firstSeenAt": "2026-07-27T11:50:53.067Z",
+      "lastSeenAt": "2026-07-27T11:50:53.067Z"
     },
     {
       "id": "bc-13486",
@@ -6112,12 +6108,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-north-york-seneca-polytechnic",
           "url": "https://ielts.org/test-centres/british-council-north-york-seneca-polytechnic",
-          "seenAt": "2026-07-27T11:02:45.534Z",
+          "seenAt": "2026-07-27T11:48:54.505Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:02.958Z",
-      "lastSeenAt": "2026-07-27T11:03:02.958Z"
+      "firstSeenAt": "2026-07-27T11:50:01.045Z",
+      "lastSeenAt": "2026-07-27T11:50:01.045Z"
     },
     {
       "id": "bc-1264",
@@ -6191,12 +6187,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-oxford-international-thompson-rivers-university",
           "url": "https://ielts.org/test-centres/british-council-oxford-international-thompson-rivers-university",
-          "seenAt": "2026-07-27T11:02:49.046Z",
+          "seenAt": "2026-07-27T11:48:59.814Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.028Z",
-      "lastSeenAt": "2026-07-27T11:03:18.028Z"
+      "firstSeenAt": "2026-07-27T11:50:53.067Z",
+      "lastSeenAt": "2026-07-27T11:50:53.067Z"
     },
     {
       "id": "bc-2230",
@@ -6271,12 +6267,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-oxford-international-kelowna-ii",
           "url": "https://ielts.org/test-centres/british-council-oxford-international-kelowna-ii",
-          "seenAt": "2026-07-27T11:02:48.465Z",
+          "seenAt": "2026-07-27T11:48:59.678Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.028Z",
-      "lastSeenAt": "2026-07-27T11:03:18.028Z"
+      "firstSeenAt": "2026-07-27T11:50:53.067Z",
+      "lastSeenAt": "2026-07-27T11:50:53.067Z"
     },
     {
       "id": "bc-12257",
@@ -6353,19 +6349,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-oxford-international-north-america-oxford-international-2",
           "url": "https://ielts.org/test-centres/british-council-oxford-international-north-america-oxford-international-2",
-          "seenAt": "2026-07-27T11:02:48.676Z",
+          "seenAt": "2026-07-27T11:48:59.704Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-oxford-international-north-america-oxford-international",
           "url": "https://ielts.org/test-centres/british-council-oxford-international-north-america-oxford-international",
-          "seenAt": "2026-07-27T11:02:50.401Z",
+          "seenAt": "2026-07-27T11:49:00.522Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.028Z",
-      "lastSeenAt": "2026-07-27T11:03:18.028Z"
+      "firstSeenAt": "2026-07-27T11:50:53.067Z",
+      "lastSeenAt": "2026-07-27T11:50:53.067Z"
     },
     {
       "id": "bc-12924",
@@ -6442,19 +6438,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-oxford-international-north-america-oxford-international-halifax-2",
           "url": "https://ielts.org/test-centres/british-council-oxford-international-north-america-oxford-international-halifax-2",
-          "seenAt": "2026-07-27T11:02:48.428Z",
+          "seenAt": "2026-07-27T11:48:59.646Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-oxford-international-north-america-oxford-international-halifax",
           "url": "https://ielts.org/test-centres/british-council-oxford-international-north-america-oxford-international-halifax",
-          "seenAt": "2026-07-27T11:02:50.134Z",
+          "seenAt": "2026-07-27T11:49:00.293Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.028Z",
-      "lastSeenAt": "2026-07-27T11:03:18.028Z"
+      "firstSeenAt": "2026-07-27T11:50:53.067Z",
+      "lastSeenAt": "2026-07-27T11:50:53.067Z"
     },
     {
       "id": "bc-13454",
@@ -6528,12 +6524,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-oxford-international-surrey-king-george",
           "url": "https://ielts.org/test-centres/british-council-oxford-international-surrey-king-george",
-          "seenAt": "2026-07-27T11:02:48.122Z",
+          "seenAt": "2026-07-27T11:48:59.360Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:11.996Z",
-      "lastSeenAt": "2026-07-27T11:03:11.996Z"
+      "firstSeenAt": "2026-07-27T11:50:47.859Z",
+      "lastSeenAt": "2026-07-27T11:50:47.859Z"
     },
     {
       "id": "bc-1268",
@@ -6608,12 +6604,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-oxford-international-vancouver",
           "url": "https://ielts.org/test-centres/british-council-oxford-international-vancouver",
-          "seenAt": "2026-07-27T11:02:49.631Z",
+          "seenAt": "2026-07-27T11:49:00.125Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.028Z",
-      "lastSeenAt": "2026-07-27T11:03:18.028Z"
+      "firstSeenAt": "2026-07-27T11:50:53.067Z",
+      "lastSeenAt": "2026-07-27T11:50:53.067Z"
     },
     {
       "id": "bc-13532",
@@ -6673,12 +6669,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-saint-john-university-of-new-brunswick",
           "url": "https://ielts.org/test-centres/british-council-saint-john-university-of-new-brunswick",
-          "seenAt": "2026-07-27T11:02:45.515Z",
+          "seenAt": "2026-07-27T11:48:54.484Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:02:57.610Z",
-      "lastSeenAt": "2026-07-27T11:02:57.610Z"
+      "firstSeenAt": "2026-07-27T11:49:55.178Z",
+      "lastSeenAt": "2026-07-27T11:49:55.178Z"
     },
     {
       "id": "bc-13746",
@@ -6738,12 +6734,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-seneca-polytechnic-york-campus",
           "url": "https://ielts.org/test-centres/british-council-seneca-polytechnic-york-campus",
-          "seenAt": "2026-07-27T11:02:45.358Z",
+          "seenAt": "2026-07-27T11:48:54.317Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:02:52.233Z",
-      "lastSeenAt": "2026-07-27T11:02:52.233Z"
+      "firstSeenAt": "2026-07-27T11:49:12.350Z",
+      "lastSeenAt": "2026-07-27T11:49:12.350Z"
     },
     {
       "id": "bc-13485",
@@ -6803,12 +6799,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-whitby-durham-college-of-applied-arts-technology",
           "url": "https://ielts.org/test-centres/british-council-whitby-durham-college-of-applied-arts-technology",
-          "seenAt": "2026-07-27T11:02:45.534Z",
+          "seenAt": "2026-07-27T11:48:54.503Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:02.958Z",
-      "lastSeenAt": "2026-07-27T11:03:02.958Z"
+      "firstSeenAt": "2026-07-27T11:50:01.045Z",
+      "lastSeenAt": "2026-07-27T11:50:01.045Z"
     },
     {
       "id": "bc-13559",
@@ -6886,19 +6882,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-xyna-central-calgary-2",
           "url": "https://ielts.org/test-centres/british-council-xyna-central-calgary-2",
-          "seenAt": "2026-07-27T11:02:45.491Z",
+          "seenAt": "2026-07-27T11:48:54.456Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-xyna-central-calgary",
           "url": "https://ielts.org/test-centres/british-council-xyna-central-calgary",
-          "seenAt": "2026-07-27T11:02:48.117Z",
+          "seenAt": "2026-07-27T11:48:59.357Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:02:57.609Z",
-      "lastSeenAt": "2026-07-27T11:02:57.609Z"
+      "firstSeenAt": "2026-07-27T11:49:42.393Z",
+      "lastSeenAt": "2026-07-27T11:49:42.393Z"
     },
     {
       "id": "bc-13560",
@@ -6976,19 +6972,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-xyna-central-edmonton-2",
           "url": "https://ielts.org/test-centres/british-council-xyna-central-edmonton-2",
-          "seenAt": "2026-07-27T11:02:45.489Z",
+          "seenAt": "2026-07-27T11:48:54.455Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-xyna-central-edmonton",
           "url": "https://ielts.org/test-centres/british-council-xyna-central-edmonton",
-          "seenAt": "2026-07-27T11:02:48.118Z",
+          "seenAt": "2026-07-27T11:48:59.354Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:02:57.609Z",
-      "lastSeenAt": "2026-07-27T11:02:57.609Z"
+      "firstSeenAt": "2026-07-27T11:49:37.997Z",
+      "lastSeenAt": "2026-07-27T11:49:37.997Z"
     },
     {
       "id": "bc-1229",
@@ -7066,19 +7062,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-xyna-international-school-2",
           "url": "https://ielts.org/test-centres/british-council-xyna-international-school-2",
-          "seenAt": "2026-07-27T11:02:49.636Z",
+          "seenAt": "2026-07-27T11:49:00.128Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-xyna-international-school",
           "url": "https://ielts.org/test-centres/british-council-xyna-international-school",
-          "seenAt": "2026-07-27T11:02:51.599Z",
+          "seenAt": "2026-07-27T11:49:01.725Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.028Z",
-      "lastSeenAt": "2026-07-27T11:03:18.028Z"
+      "firstSeenAt": "2026-07-27T11:50:53.067Z",
+      "lastSeenAt": "2026-07-27T11:50:53.067Z"
     },
     {
       "id": "bc-13158",
@@ -7156,19 +7152,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-xyna-international-school-xyna-international-barrie-2",
           "url": "https://ielts.org/test-centres/british-council-xyna-international-school-xyna-international-barrie-2",
-          "seenAt": "2026-07-27T11:02:48.360Z",
+          "seenAt": "2026-07-27T11:48:59.377Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-xyna-international-school-xyna-international-barrie",
           "url": "https://ielts.org/test-centres/british-council-xyna-international-school-xyna-international-barrie",
-          "seenAt": "2026-07-27T11:02:48.482Z",
+          "seenAt": "2026-07-27T11:48:59.692Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.027Z",
-      "lastSeenAt": "2026-07-27T11:03:18.027Z"
+      "firstSeenAt": "2026-07-27T11:50:53.066Z",
+      "lastSeenAt": "2026-07-27T11:50:53.066Z"
     },
     {
       "id": "bc-11759",
@@ -7245,19 +7241,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-xyna-international-school-xyna-international-guelph-2",
           "url": "https://ielts.org/test-centres/british-council-xyna-international-school-xyna-international-guelph-2",
-          "seenAt": "2026-07-27T11:02:48.714Z",
+          "seenAt": "2026-07-27T11:48:59.745Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-xyna-international-school-xyna-international-guelph",
           "url": "https://ielts.org/test-centres/british-council-xyna-international-school-xyna-international-guelph",
-          "seenAt": "2026-07-27T11:02:50.539Z",
+          "seenAt": "2026-07-27T11:49:00.650Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.028Z",
-      "lastSeenAt": "2026-07-27T11:03:18.028Z"
+      "firstSeenAt": "2026-07-27T11:50:53.067Z",
+      "lastSeenAt": "2026-07-27T11:50:53.067Z"
     },
     {
       "id": "bc-12252",
@@ -7334,19 +7330,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-xyna-international-school-xyna-international-hamilton-2",
           "url": "https://ielts.org/test-centres/british-council-xyna-international-school-xyna-international-hamilton-2",
-          "seenAt": "2026-07-27T11:02:48.683Z",
+          "seenAt": "2026-07-27T11:48:59.710Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-xyna-international-school-xyna-international-hamilton",
           "url": "https://ielts.org/test-centres/british-council-xyna-international-school-xyna-international-hamilton",
-          "seenAt": "2026-07-27T11:02:50.409Z",
+          "seenAt": "2026-07-27T11:49:00.529Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.028Z",
-      "lastSeenAt": "2026-07-27T11:03:18.028Z"
+      "firstSeenAt": "2026-07-27T11:50:53.067Z",
+      "lastSeenAt": "2026-07-27T11:50:53.067Z"
     },
     {
       "id": "bc-12405",
@@ -7424,19 +7420,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-xyna-international-school-xyna-international-kitchener-2",
           "url": "https://ielts.org/test-centres/british-council-xyna-international-school-xyna-international-kitchener-2",
-          "seenAt": "2026-07-27T11:02:48.457Z",
+          "seenAt": "2026-07-27T11:48:59.672Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-xyna-international-school-xyna-international-kitchener",
           "url": "https://ielts.org/test-centres/british-council-xyna-international-school-xyna-international-kitchener",
-          "seenAt": "2026-07-27T11:02:50.253Z",
+          "seenAt": "2026-07-27T11:49:00.398Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.028Z",
-      "lastSeenAt": "2026-07-27T11:03:18.028Z"
+      "firstSeenAt": "2026-07-27T11:50:53.067Z",
+      "lastSeenAt": "2026-07-27T11:50:53.067Z"
     },
     {
       "id": "bc-12423",
@@ -7512,12 +7508,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-xyna-international-school-xyna-international-markham-2",
           "url": "https://ielts.org/test-centres/british-council-xyna-international-school-xyna-international-markham-2",
-          "seenAt": "2026-07-27T11:02:48.454Z",
+          "seenAt": "2026-07-27T11:48:59.668Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.028Z",
-      "lastSeenAt": "2026-07-27T11:03:18.028Z"
+      "firstSeenAt": "2026-07-27T11:50:53.067Z",
+      "lastSeenAt": "2026-07-27T11:50:53.067Z"
     },
     {
       "id": "bc-12251",
@@ -7595,19 +7591,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-xyna-international-school-xyna-international-oakville-2",
           "url": "https://ielts.org/test-centres/british-council-xyna-international-school-xyna-international-oakville-2",
-          "seenAt": "2026-07-27T11:02:48.680Z",
+          "seenAt": "2026-07-27T11:48:59.707Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-xyna-international-school-xyna-international-oakville",
           "url": "https://ielts.org/test-centres/british-council-xyna-international-school-xyna-international-oakville",
-          "seenAt": "2026-07-27T11:02:50.408Z",
+          "seenAt": "2026-07-27T11:49:00.528Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.028Z",
-      "lastSeenAt": "2026-07-27T11:03:18.028Z"
+      "firstSeenAt": "2026-07-27T11:50:53.067Z",
+      "lastSeenAt": "2026-07-27T11:50:53.067Z"
     },
     {
       "id": "bc-13420",
@@ -7668,12 +7664,12 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-xyna-international-school-xyna-international-waterloo",
           "url": "https://ielts.org/test-centres/british-council-xyna-international-school-xyna-international-waterloo",
-          "seenAt": "2026-07-27T11:02:45.625Z",
+          "seenAt": "2026-07-27T11:48:54.599Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:02.958Z",
-      "lastSeenAt": "2026-07-27T11:03:02.958Z"
+      "firstSeenAt": "2026-07-27T11:50:06.255Z",
+      "lastSeenAt": "2026-07-27T11:50:06.255Z"
     },
     {
       "id": "bc-13129",
@@ -7751,19 +7747,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-xyna-international-school-xyna-international-windsor-2",
           "url": "https://ielts.org/test-centres/british-council-xyna-international-school-xyna-international-windsor-2",
-          "seenAt": "2026-07-27T11:02:48.409Z",
+          "seenAt": "2026-07-27T11:48:59.510Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-xyna-international-school-xyna-international-windsor",
           "url": "https://ielts.org/test-centres/british-council-xyna-international-school-xyna-international-windsor",
-          "seenAt": "2026-07-27T11:02:48.704Z",
+          "seenAt": "2026-07-27T11:48:59.729Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.027Z",
-      "lastSeenAt": "2026-07-27T11:03:18.027Z"
+      "firstSeenAt": "2026-07-27T11:50:53.066Z",
+      "lastSeenAt": "2026-07-27T11:50:53.066Z"
     },
     {
       "id": "bc-3329",
@@ -7841,19 +7837,19 @@
           "source": "IELTS.org",
           "externalSlug": "british-council-xyna-international-school-brampton-2",
           "url": "https://ielts.org/test-centres/british-council-xyna-international-school-brampton-2",
-          "seenAt": "2026-07-27T11:02:48.738Z",
+          "seenAt": "2026-07-27T11:48:59.766Z",
           "stillPresent": true
         },
         {
           "source": "IELTS.org",
           "externalSlug": "british-council-xyna-international-school-brampton",
           "url": "https://ielts.org/test-centres/british-council-xyna-international-school-brampton",
-          "seenAt": "2026-07-27T11:02:51.031Z",
+          "seenAt": "2026-07-27T11:49:01.069Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.028Z",
-      "lastSeenAt": "2026-07-27T11:03:18.028Z"
+      "firstSeenAt": "2026-07-27T11:50:53.067Z",
+      "lastSeenAt": "2026-07-27T11:50:53.067Z"
     },
     {
       "id": "canada-college-mississauga",
@@ -7928,12 +7924,12 @@
           "source": "IELTS.org",
           "externalSlug": "canada-college-mississauga",
           "url": "https://ielts.org/test-centres/canada-college-mississauga",
-          "seenAt": "2026-07-27T11:02:51.704Z",
+          "seenAt": "2026-07-27T11:49:01.827Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.029Z",
-      "lastSeenAt": "2026-07-27T11:03:18.029Z"
+      "firstSeenAt": "2026-07-27T11:50:55.186Z",
+      "lastSeenAt": "2026-07-27T11:50:55.186Z"
     },
     {
       "id": "canada-college-royal-campus",
@@ -8007,12 +8003,12 @@
           "source": "IELTS.org",
           "externalSlug": "canada-college-royal-campus",
           "url": "https://ielts.org/test-centres/canada-college-royal-campus",
-          "seenAt": "2026-07-27T11:02:51.700Z",
+          "seenAt": "2026-07-27T11:49:01.822Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.029Z",
-      "lastSeenAt": "2026-07-27T11:03:18.029Z"
+      "firstSeenAt": "2026-07-27T11:50:55.186Z",
+      "lastSeenAt": "2026-07-27T11:50:55.186Z"
     },
     {
       "id": "centennial-college-ashtonbee-campus",
@@ -8088,12 +8084,12 @@
           "source": "IELTS.org",
           "externalSlug": "centennial-college-ashtonbee-campus",
           "url": "https://ielts.org/test-centres/centennial-college-ashtonbee-campus",
-          "seenAt": "2026-07-27T11:02:51.075Z",
+          "seenAt": "2026-07-27T11:49:01.110Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.029Z",
-      "lastSeenAt": "2026-07-27T11:03:18.029Z"
+      "firstSeenAt": "2026-07-27T11:50:55.186Z",
+      "lastSeenAt": "2026-07-27T11:50:55.186Z"
     },
     {
       "id": "centennial-college-progress-campus",
@@ -8167,12 +8163,12 @@
           "source": "IELTS.org",
           "externalSlug": "centennial-college-progress-campus",
           "url": "https://ielts.org/test-centres/centennial-college-progress-campus",
-          "seenAt": "2026-07-27T11:02:51.068Z",
+          "seenAt": "2026-07-27T11:49:01.105Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.029Z",
-      "lastSeenAt": "2026-07-27T11:03:18.029Z"
+      "firstSeenAt": "2026-07-27T11:50:55.186Z",
+      "lastSeenAt": "2026-07-27T11:50:55.186Z"
     },
     {
       "id": "ces-exams-calgary",
@@ -8246,12 +8242,12 @@
           "source": "IELTS.org",
           "externalSlug": "ces-exams-calgary",
           "url": "https://ielts.org/test-centres/ces-exams-calgary",
-          "seenAt": "2026-07-27T11:02:51.982Z",
+          "seenAt": "2026-07-27T11:49:02.060Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.030Z",
-      "lastSeenAt": "2026-07-27T11:03:18.030Z"
+      "firstSeenAt": "2026-07-27T11:50:55.186Z",
+      "lastSeenAt": "2026-07-27T11:50:55.186Z"
     },
     {
       "id": "ces-toronto-ces-exams",
@@ -8326,12 +8322,12 @@
           "source": "IELTS.org",
           "externalSlug": "ces-toronto-ces-exams",
           "url": "https://ielts.org/test-centres/ces-toronto-ces-exams",
-          "seenAt": "2026-07-27T11:02:50.644Z",
+          "seenAt": "2026-07-27T11:49:00.751Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.029Z",
-      "lastSeenAt": "2026-07-27T11:03:18.029Z"
+      "firstSeenAt": "2026-07-27T11:50:55.186Z",
+      "lastSeenAt": "2026-07-27T11:50:55.186Z"
     },
     {
       "id": "conestoga-college-waterloo",
@@ -8391,12 +8387,12 @@
           "source": "IELTS.org",
           "externalSlug": "conestoga-college-waterloo",
           "url": "https://ielts.org/test-centres/conestoga-college-waterloo",
-          "seenAt": "2026-07-27T11:02:50.445Z",
+          "seenAt": "2026-07-27T11:49:00.564Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.029Z",
-      "lastSeenAt": "2026-07-27T11:03:18.029Z"
+      "firstSeenAt": "2026-07-27T11:50:55.186Z",
+      "lastSeenAt": "2026-07-27T11:50:55.186Z"
     },
     {
       "id": "global-village-calgary",
@@ -8456,12 +8452,12 @@
           "source": "IELTS.org",
           "externalSlug": "global-village-calgary",
           "url": "https://ielts.org/test-centres/global-village-calgary",
-          "seenAt": "2026-07-27T11:02:51.980Z",
+          "seenAt": "2026-07-27T11:49:02.059Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.030Z",
-      "lastSeenAt": "2026-07-27T11:03:18.030Z"
+      "firstSeenAt": "2026-07-27T11:50:55.186Z",
+      "lastSeenAt": "2026-07-27T11:50:55.186Z"
     },
     {
       "id": "global-village-victoria",
@@ -8536,12 +8532,12 @@
           "source": "IELTS.org",
           "externalSlug": "global-village-victoria",
           "url": "https://ielts.org/test-centres/global-village-victoria",
-          "seenAt": "2026-07-27T11:02:50.455Z",
+          "seenAt": "2026-07-27T11:49:00.572Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.029Z",
-      "lastSeenAt": "2026-07-27T11:03:18.029Z"
+      "firstSeenAt": "2026-07-27T11:50:55.186Z",
+      "lastSeenAt": "2026-07-27T11:50:55.186Z"
     },
     {
       "id": "heartland-international-english-school-richmond-hill-lead-academy",
@@ -8601,12 +8597,12 @@
           "source": "IELTS.org",
           "externalSlug": "heartland-international-english-school-richmond-hill-lead-academy",
           "url": "https://ielts.org/test-centres/heartland-international-english-school-richmond-hill-lead-academy",
-          "seenAt": "2026-07-27T11:02:51.291Z",
+          "seenAt": "2026-07-27T11:49:01.384Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.029Z",
-      "lastSeenAt": "2026-07-27T11:03:18.029Z"
+      "firstSeenAt": "2026-07-27T11:50:55.186Z",
+      "lastSeenAt": "2026-07-27T11:50:55.186Z"
     },
     {
       "id": "heartland-international-english-school-winnipeg",
@@ -8680,12 +8676,12 @@
           "source": "IELTS.org",
           "externalSlug": "heartland-international-english-school-winnipeg",
           "url": "https://ielts.org/test-centres/heartland-international-english-school-winnipeg",
-          "seenAt": "2026-07-27T11:02:50.438Z",
+          "seenAt": "2026-07-27T11:49:00.557Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.029Z",
-      "lastSeenAt": "2026-07-27T11:03:18.029Z"
+      "firstSeenAt": "2026-07-27T11:50:55.185Z",
+      "lastSeenAt": "2026-07-27T11:50:55.185Z"
     },
     {
       "id": "homeland-testing-centres-homeland-english-kitchener",
@@ -8745,12 +8741,12 @@
           "source": "IELTS.org",
           "externalSlug": "homeland-testing-centres-homeland-english-kitchener",
           "url": "https://ielts.org/test-centres/homeland-testing-centres-homeland-english-kitchener",
-          "seenAt": "2026-07-27T11:02:51.864Z",
+          "seenAt": "2026-07-27T11:49:01.947Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.029Z",
-      "lastSeenAt": "2026-07-27T11:03:18.029Z"
+      "firstSeenAt": "2026-07-27T11:50:55.186Z",
+      "lastSeenAt": "2026-07-27T11:50:55.186Z"
     },
     {
       "id": "idp-canada-test-centre-vancouver-test-room",
@@ -8840,12 +8836,12 @@
           "source": "IELTS.org",
           "externalSlug": "idp-canada-test-centre-vancouver-test-room",
           "url": "https://ielts.org/test-centres/idp-canada-test-centre-vancouver-test-room",
-          "seenAt": "2026-07-27T11:02:50.623Z",
+          "seenAt": "2026-07-27T11:49:00.729Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.029Z",
-      "lastSeenAt": "2026-07-27T11:03:18.029Z"
+      "firstSeenAt": "2026-07-27T11:50:55.186Z",
+      "lastSeenAt": "2026-07-27T11:50:55.186Z"
     },
     {
       "id": "idp-education-canada-vancouver-life-skills",
@@ -8906,12 +8902,12 @@
           "source": "IELTS.org",
           "externalSlug": "idp-education-canada-vancouver-life-skills",
           "url": "https://ielts.org/test-centres/idp-education-canada-vancouver-life-skills",
-          "seenAt": "2026-07-27T11:02:50.625Z",
+          "seenAt": "2026-07-27T11:49:00.731Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.029Z",
-      "lastSeenAt": "2026-07-27T11:03:18.029Z"
+      "firstSeenAt": "2026-07-27T11:50:55.186Z",
+      "lastSeenAt": "2026-07-27T11:50:55.186Z"
     },
     {
       "id": "idp-education-markham-test-room",
@@ -9001,12 +8997,12 @@
           "source": "IELTS.org",
           "externalSlug": "idp-education-markham-test-room",
           "url": "https://ielts.org/test-centres/idp-education-markham-test-room",
-          "seenAt": "2026-07-27T11:02:51.738Z",
+          "seenAt": "2026-07-27T11:49:01.852Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.029Z",
-      "lastSeenAt": "2026-07-27T11:03:18.029Z"
+      "firstSeenAt": "2026-07-27T11:50:55.186Z",
+      "lastSeenAt": "2026-07-27T11:50:55.186Z"
     },
     {
       "id": "idp-education-markham-ls",
@@ -9067,12 +9063,12 @@
           "source": "IELTS.org",
           "externalSlug": "idp-education-markham-ls",
           "url": "https://ielts.org/test-centres/idp-education-markham-ls",
-          "seenAt": "2026-07-27T11:02:51.739Z",
+          "seenAt": "2026-07-27T11:49:01.854Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.029Z",
-      "lastSeenAt": "2026-07-27T11:03:18.029Z"
+      "firstSeenAt": "2026-07-27T11:50:55.186Z",
+      "lastSeenAt": "2026-07-27T11:50:55.186Z"
     },
     {
       "id": "idp-ielts-canada-anderson-college-brampton",
@@ -9146,12 +9142,12 @@
           "source": "IELTS.org",
           "externalSlug": "idp-ielts-canada-anderson-college-brampton",
           "url": "https://ielts.org/test-centres/idp-ielts-canada-anderson-college-brampton",
-          "seenAt": "2026-07-27T11:02:52.002Z",
+          "seenAt": "2026-07-27T11:49:02.080Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.030Z",
-      "lastSeenAt": "2026-07-27T11:03:18.030Z"
+      "firstSeenAt": "2026-07-27T11:50:55.186Z",
+      "lastSeenAt": "2026-07-27T11:50:55.186Z"
     },
     {
       "id": "idp-ielts-canada-anderson-college-mississauga",
@@ -9226,12 +9222,12 @@
           "source": "IELTS.org",
           "externalSlug": "idp-ielts-canada-anderson-college-mississauga",
           "url": "https://ielts.org/test-centres/idp-ielts-canada-anderson-college-mississauga",
-          "seenAt": "2026-07-27T11:02:51.707Z",
+          "seenAt": "2026-07-27T11:49:01.828Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.029Z",
-      "lastSeenAt": "2026-07-27T11:03:18.029Z"
+      "firstSeenAt": "2026-07-27T11:50:55.186Z",
+      "lastSeenAt": "2026-07-27T11:50:55.186Z"
     },
     {
       "id": "idp-ielts-canada-anderson-college-north-york",
@@ -9305,12 +9301,12 @@
           "source": "IELTS.org",
           "externalSlug": "idp-ielts-canada-anderson-college-north-york",
           "url": "https://ielts.org/test-centres/idp-ielts-canada-anderson-college-north-york",
-          "seenAt": "2026-07-27T11:02:51.432Z",
+          "seenAt": "2026-07-27T11:49:01.462Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.029Z",
-      "lastSeenAt": "2026-07-27T11:03:18.029Z"
+      "firstSeenAt": "2026-07-27T11:50:55.186Z",
+      "lastSeenAt": "2026-07-27T11:50:55.186Z"
     },
     {
       "id": "idp-ielts-canada-brampton",
@@ -9385,12 +9381,12 @@
           "source": "IELTS.org",
           "externalSlug": "idp-ielts-canada-brampton",
           "url": "https://ielts.org/test-centres/idp-ielts-canada-brampton",
-          "seenAt": "2026-07-27T11:02:52.001Z",
+          "seenAt": "2026-07-27T11:49:02.078Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.030Z",
-      "lastSeenAt": "2026-07-27T11:03:18.030Z"
+      "firstSeenAt": "2026-07-27T11:50:55.186Z",
+      "lastSeenAt": "2026-07-27T11:50:55.186Z"
     },
     {
       "id": "idp-ielts-canada-british-oxford-consultants-inc",
@@ -9465,12 +9461,12 @@
           "source": "IELTS.org",
           "externalSlug": "idp-ielts-canada-british-oxford-consultants-inc",
           "url": "https://ielts.org/test-centres/idp-ielts-canada-british-oxford-consultants-inc",
-          "seenAt": "2026-07-27T11:02:52.001Z",
+          "seenAt": "2026-07-27T11:49:02.078Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.030Z",
-      "lastSeenAt": "2026-07-27T11:03:18.030Z"
+      "firstSeenAt": "2026-07-27T11:50:55.186Z",
+      "lastSeenAt": "2026-07-27T11:50:55.186Z"
     },
     {
       "id": "idp-ielts-canada-burnaby",
@@ -9545,12 +9541,12 @@
           "source": "IELTS.org",
           "externalSlug": "idp-ielts-canada-burnaby",
           "url": "https://ielts.org/test-centres/idp-ielts-canada-burnaby",
-          "seenAt": "2026-07-27T11:02:51.992Z",
+          "seenAt": "2026-07-27T11:49:02.068Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.030Z",
-      "lastSeenAt": "2026-07-27T11:03:18.030Z"
+      "firstSeenAt": "2026-07-27T11:50:55.186Z",
+      "lastSeenAt": "2026-07-27T11:50:55.186Z"
     },
     {
       "id": "idp-ielts-canada-canadian-college-for-higher-studies",
@@ -9625,12 +9621,12 @@
           "source": "IELTS.org",
           "externalSlug": "idp-ielts-canada-canadian-college-for-higher-studies",
           "url": "https://ielts.org/test-centres/idp-ielts-canada-canadian-college-for-higher-studies",
-          "seenAt": "2026-07-27T11:02:51.071Z",
+          "seenAt": "2026-07-27T11:49:01.107Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.029Z",
-      "lastSeenAt": "2026-07-27T11:03:18.029Z"
+      "firstSeenAt": "2026-07-27T11:50:55.186Z",
+      "lastSeenAt": "2026-07-27T11:50:55.186Z"
     },
     {
       "id": "idp-ielts-canada-canadian-systems-inc",
@@ -9704,12 +9700,12 @@
           "source": "IELTS.org",
           "externalSlug": "idp-ielts-canada-canadian-systems-inc",
           "url": "https://ielts.org/test-centres/idp-ielts-canada-canadian-systems-inc",
-          "seenAt": "2026-07-27T11:02:51.885Z",
+          "seenAt": "2026-07-27T11:49:01.965Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.029Z",
-      "lastSeenAt": "2026-07-27T11:03:18.029Z"
+      "firstSeenAt": "2026-07-27T11:50:55.186Z",
+      "lastSeenAt": "2026-07-27T11:50:55.186Z"
     },
     {
       "id": "idp-ielts-canada-canlanguage-test-and-training-centre",
@@ -9783,12 +9779,12 @@
           "source": "IELTS.org",
           "externalSlug": "idp-ielts-canada-canlanguage-test-and-training-centre",
           "url": "https://ielts.org/test-centres/idp-ielts-canada-canlanguage-test-and-training-centre",
-          "seenAt": "2026-07-27T11:02:51.980Z",
+          "seenAt": "2026-07-27T11:49:02.058Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.029Z",
-      "lastSeenAt": "2026-07-27T11:03:18.029Z"
+      "firstSeenAt": "2026-07-27T11:50:55.186Z",
+      "lastSeenAt": "2026-07-27T11:50:55.186Z"
     },
     {
       "id": "idp-ielts-canada-cgh-college-edmonton",
@@ -9863,12 +9859,12 @@
           "source": "IELTS.org",
           "externalSlug": "idp-ielts-canada-cgh-college-edmonton",
           "url": "https://ielts.org/test-centres/idp-ielts-canada-cgh-college-edmonton",
-          "seenAt": "2026-07-27T11:02:51.895Z",
+          "seenAt": "2026-07-27T11:49:01.975Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.029Z",
-      "lastSeenAt": "2026-07-27T11:03:18.029Z"
+      "firstSeenAt": "2026-07-27T11:50:55.186Z",
+      "lastSeenAt": "2026-07-27T11:50:55.186Z"
     },
     {
       "id": "idp-ielts-canada-cimt-college",
@@ -9943,12 +9939,12 @@
           "source": "IELTS.org",
           "externalSlug": "idp-ielts-canada-cimt-college",
           "url": "https://ielts.org/test-centres/idp-ielts-canada-cimt-college",
-          "seenAt": "2026-07-27T11:02:51.067Z",
+          "seenAt": "2026-07-27T11:49:01.103Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.029Z",
-      "lastSeenAt": "2026-07-27T11:03:18.029Z"
+      "firstSeenAt": "2026-07-27T11:50:55.186Z",
+      "lastSeenAt": "2026-07-27T11:50:55.186Z"
     },
     {
       "id": "idp-ielts-canada-delca-education",
@@ -10023,12 +10019,12 @@
           "source": "IELTS.org",
           "externalSlug": "idp-ielts-canada-delca-education",
           "url": "https://ielts.org/test-centres/idp-ielts-canada-delca-education",
-          "seenAt": "2026-07-27T11:02:50.945Z",
+          "seenAt": "2026-07-27T11:49:01.039Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.029Z",
-      "lastSeenAt": "2026-07-27T11:03:18.029Z"
+      "firstSeenAt": "2026-07-27T11:50:55.186Z",
+      "lastSeenAt": "2026-07-27T11:50:55.186Z"
     },
     {
       "id": "idp-ielts-canada-edmonton",
@@ -10103,12 +10099,12 @@
           "source": "IELTS.org",
           "externalSlug": "idp-ielts-canada-edmonton",
           "url": "https://ielts.org/test-centres/idp-ielts-canada-edmonton",
-          "seenAt": "2026-07-27T11:02:51.893Z",
+          "seenAt": "2026-07-27T11:49:01.973Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.029Z",
-      "lastSeenAt": "2026-07-27T11:03:18.029Z"
+      "firstSeenAt": "2026-07-27T11:50:55.186Z",
+      "lastSeenAt": "2026-07-27T11:50:55.186Z"
     },
     {
       "id": "idp-ielts-canada-learn-talk-calgary",
@@ -10183,12 +10179,12 @@
           "source": "IELTS.org",
           "externalSlug": "idp-ielts-canada-learn-talk-calgary",
           "url": "https://ielts.org/test-centres/idp-ielts-canada-learn-talk-calgary",
-          "seenAt": "2026-07-27T11:02:51.978Z",
+          "seenAt": "2026-07-27T11:49:02.057Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.029Z",
-      "lastSeenAt": "2026-07-27T11:03:18.029Z"
+      "firstSeenAt": "2026-07-27T11:50:55.186Z",
+      "lastSeenAt": "2026-07-27T11:50:55.186Z"
     },
     {
       "id": "idp-ielts-canada-national-testing-centre-north-york",
@@ -10262,12 +10258,12 @@
           "source": "IELTS.org",
           "externalSlug": "idp-ielts-canada-national-testing-centre-north-york",
           "url": "https://ielts.org/test-centres/idp-ielts-canada-national-testing-centre-north-york",
-          "seenAt": "2026-07-27T11:02:51.434Z",
+          "seenAt": "2026-07-27T11:49:01.464Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.029Z",
-      "lastSeenAt": "2026-07-27T11:03:18.029Z"
+      "firstSeenAt": "2026-07-27T11:50:55.186Z",
+      "lastSeenAt": "2026-07-27T11:50:55.186Z"
     },
     {
       "id": "idp-ielts-canada-netplus-college-of-information-technology",
@@ -10342,12 +10338,12 @@
           "source": "IELTS.org",
           "externalSlug": "idp-ielts-canada-netplus-college-of-information-technology",
           "url": "https://ielts.org/test-centres/idp-ielts-canada-netplus-college-of-information-technology",
-          "seenAt": "2026-07-27T11:02:51.073Z",
+          "seenAt": "2026-07-27T11:49:01.109Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.029Z",
-      "lastSeenAt": "2026-07-27T11:03:18.029Z"
+      "firstSeenAt": "2026-07-27T11:50:55.186Z",
+      "lastSeenAt": "2026-07-27T11:50:55.186Z"
     },
     {
       "id": "idp-ielts-canada-regina-open-door-society-inc",
@@ -10421,12 +10417,12 @@
           "source": "IELTS.org",
           "externalSlug": "idp-ielts-canada-regina-open-door-society-inc",
           "url": "https://ielts.org/test-centres/idp-ielts-canada-regina-open-door-society-inc",
-          "seenAt": "2026-07-27T11:02:51.293Z",
+          "seenAt": "2026-07-27T11:49:01.387Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.029Z",
-      "lastSeenAt": "2026-07-27T11:03:18.029Z"
+      "firstSeenAt": "2026-07-27T11:50:55.186Z",
+      "lastSeenAt": "2026-07-27T11:50:55.186Z"
     },
     {
       "id": "idp-ielts-canada-rupielts-institute-inc",
@@ -10501,12 +10497,12 @@
           "source": "IELTS.org",
           "externalSlug": "idp-ielts-canada-rupielts-institute-inc",
           "url": "https://ielts.org/test-centres/idp-ielts-canada-rupielts-institute-inc",
-          "seenAt": "2026-07-27T11:02:50.948Z",
+          "seenAt": "2026-07-27T11:49:01.041Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.029Z",
-      "lastSeenAt": "2026-07-27T11:03:18.029Z"
+      "firstSeenAt": "2026-07-27T11:50:55.186Z",
+      "lastSeenAt": "2026-07-27T11:50:55.186Z"
     },
     {
       "id": "idp-ielts-canada-rupielts-institute-inc-edmonton",
@@ -10580,12 +10576,12 @@
           "source": "IELTS.org",
           "externalSlug": "idp-ielts-canada-rupielts-institute-inc-edmonton",
           "url": "https://ielts.org/test-centres/idp-ielts-canada-rupielts-institute-inc-edmonton",
-          "seenAt": "2026-07-27T11:02:51.894Z",
+          "seenAt": "2026-07-27T11:49:01.974Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.029Z",
-      "lastSeenAt": "2026-07-27T11:03:18.029Z"
+      "firstSeenAt": "2026-07-27T11:50:55.186Z",
+      "lastSeenAt": "2026-07-27T11:50:55.186Z"
     },
     {
       "id": "idp-ielts-canada-surrey",
@@ -10660,12 +10656,12 @@
           "source": "IELTS.org",
           "externalSlug": "idp-ielts-canada-surrey",
           "url": "https://ielts.org/test-centres/idp-ielts-canada-surrey",
-          "seenAt": "2026-07-27T11:02:50.952Z",
+          "seenAt": "2026-07-27T11:49:01.045Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.029Z",
-      "lastSeenAt": "2026-07-27T11:03:18.029Z"
+      "firstSeenAt": "2026-07-27T11:50:55.186Z",
+      "lastSeenAt": "2026-07-27T11:50:55.186Z"
     },
     {
       "id": "idp-ielts-canada-techomatic-solutions-inc",
@@ -10739,12 +10735,12 @@
           "source": "IELTS.org",
           "externalSlug": "idp-ielts-canada-techomatic-solutions-inc",
           "url": "https://ielts.org/test-centres/idp-ielts-canada-techomatic-solutions-inc",
-          "seenAt": "2026-07-27T11:02:50.950Z",
+          "seenAt": "2026-07-27T11:49:01.043Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.029Z",
-      "lastSeenAt": "2026-07-27T11:03:18.029Z"
+      "firstSeenAt": "2026-07-27T11:50:55.186Z",
+      "lastSeenAt": "2026-07-27T11:50:55.186Z"
     },
     {
       "id": "ilac-toronto-ielts-central",
@@ -10819,12 +10815,12 @@
           "source": "IELTS.org",
           "externalSlug": "ilac-toronto-ielts-central",
           "url": "https://ielts.org/test-centres/ilac-toronto-ielts-central",
-          "seenAt": "2026-07-27T11:02:50.643Z",
+          "seenAt": "2026-07-27T11:49:00.750Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.029Z",
-      "lastSeenAt": "2026-07-27T11:03:18.029Z"
+      "firstSeenAt": "2026-07-27T11:50:55.186Z",
+      "lastSeenAt": "2026-07-27T11:50:55.186Z"
     },
     {
       "id": "ilac-vancouver-downtown",
@@ -10899,12 +10895,12 @@
           "source": "IELTS.org",
           "externalSlug": "ilac-vancouver-downtown",
           "url": "https://ielts.org/test-centres/ilac-vancouver-downtown",
-          "seenAt": "2026-07-27T11:02:50.622Z",
+          "seenAt": "2026-07-27T11:49:00.727Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.029Z",
-      "lastSeenAt": "2026-07-27T11:03:18.029Z"
+      "firstSeenAt": "2026-07-27T11:50:55.186Z",
+      "lastSeenAt": "2026-07-27T11:50:55.186Z"
     },
     {
       "id": "precise-solutions-mississauga",
@@ -10979,12 +10975,12 @@
           "source": "IELTS.org",
           "externalSlug": "precise-solutions-mississauga",
           "url": "https://ielts.org/test-centres/precise-solutions-mississauga",
-          "seenAt": "2026-07-27T11:02:51.707Z",
+          "seenAt": "2026-07-27T11:49:01.826Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.029Z",
-      "lastSeenAt": "2026-07-27T11:03:18.029Z"
+      "firstSeenAt": "2026-07-27T11:50:55.186Z",
+      "lastSeenAt": "2026-07-27T11:50:55.186Z"
     },
     {
       "id": "precise-solutions-toronto",
@@ -11059,12 +11055,12 @@
           "source": "IELTS.org",
           "externalSlug": "precise-solutions-toronto",
           "url": "https://ielts.org/test-centres/precise-solutions-toronto",
-          "seenAt": "2026-07-27T11:02:50.640Z",
+          "seenAt": "2026-07-27T11:49:00.747Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.029Z",
-      "lastSeenAt": "2026-07-27T11:03:18.029Z"
+      "firstSeenAt": "2026-07-27T11:50:55.186Z",
+      "lastSeenAt": "2026-07-27T11:50:55.186Z"
     },
     {
       "id": "saskatchewan-polytechnic-regina",
@@ -11138,12 +11134,12 @@
           "source": "IELTS.org",
           "externalSlug": "saskatchewan-polytechnic-regina",
           "url": "https://ielts.org/test-centres/saskatchewan-polytechnic-regina",
-          "seenAt": "2026-07-27T11:02:51.296Z",
+          "seenAt": "2026-07-27T11:49:01.390Z",
           "stillPresent": true
         }
       ],
-      "firstSeenAt": "2026-07-27T11:03:18.029Z",
-      "lastSeenAt": "2026-07-27T11:03:18.029Z"
+      "firstSeenAt": "2026-07-27T11:50:55.186Z",
+      "lastSeenAt": "2026-07-27T11:50:55.186Z"
     }
   ]
 }
