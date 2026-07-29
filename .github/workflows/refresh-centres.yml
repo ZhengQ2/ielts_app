@@ -198,29 +198,16 @@ jobs:
           fi
           echo "path=$chrome_path" >> "$GITHUB_OUTPUT"
 
-      - name: Inspect IDP Global wizard test-type step
+      - name: Probe broad IDP Global query
         env:
-          M2_7_DISCOVERY_EXPERIMENT: "true"
-          CHROME_PATH: ${{ steps.chrome.outputs.path }}
-          PROVIDER_PROBE_INTERVAL_MS: "15000"
-          PROVIDER_PROBE_TARGETS_JSON: >-
-            [
-              {
-                "id": "idp-global-wizard-test-type",
-                "source": "idp_global",
-                "url": "https://bxsearch.ielts.idp.com/wizard",
-                "interaction": "open_search"
-              }
-            ]
-        run: npm run availability:surface-probe
+          M2_7_LIVE_EXPERIMENT: "true"
+        run: npm run availability:idp-global-api-probe
 
       - name: Upload provider diagnostics
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: provider-wizard-step
-          path: |
-            .artifacts/provider-surface-probe.json
-            .artifacts/provider-surface-probe/*.png
+          path: .artifacts/idp-global-api-probe.json
           if-no-files-found: warn
           retention-days: 14
