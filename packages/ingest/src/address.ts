@@ -93,7 +93,10 @@ const STREET_TYPES =
 
 const STREET_RE = new RegExp(`\\b\\d{1,6}\\s+[\\w'.-]+(?:\\s+[\\w'.-]+)*\\s+${STREET_TYPES}\\b\\.?`, 'i');
 
-export function parseAddress(lines: string[]): CentreAddress {
+export function parseAddress(
+  lines: string[],
+  countryHint: string | null = null,
+): CentreAddress {
   const cleaned = lines.map((l) => l.replace(/\s+/g, ' ').trim()).filter(Boolean);
   const raw = cleaned.join(', ');
 
@@ -185,17 +188,24 @@ export function parseAddress(lines: string[]): CentreAddress {
     found.country = 'US';
   }
 
-  // The city is the last line before the region/postcode tail, so later
-  // candidates beat earlier ones (which are unit/floor/street lines).
-  const city = cityCandidates.length ? cityCandidates[cityCandidates.length - 1]! : null;
+  // The historical "last remaining line is the city" rule works for the
+  // Canadian and US address layouts covered by the dedicated rules above, but
+  // is not a global address grammar. Everywhere else the city is filled from
+  // corroborated structured geocoder components during location resolution.
+  const country = countryHint?.toUpperCase() ?? found.country;
+  const city =
+    ['CA', 'US'].includes(country ?? '') && cityCandidates.length
+      ? cityCandidates[cityCandidates.length - 1]!
+      : null;
 
   return {
     raw,
     lines: cleaned,
     city,
+    citySource: city ? 'address_rule' : null,
     region: found.region,
     postcode: found.postcode,
-    country: found.country,
+    country,
   };
 }
 

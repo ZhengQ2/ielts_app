@@ -24,9 +24,13 @@ export type GeoPrecision =
 export type GeoSource =
   | 'page_embed'
   | 'google'
+  | 'google_places'
+  | 'overture'
+  | 'amap_places'
   | 'mapbox'
   | 'nominatim'
   | 'amap'
+  | 'mappls'
   | 'kakao'
   | 'naver'
   | 'crowd'
@@ -34,16 +38,53 @@ export type GeoSource =
 
 export type TestFormat = 'computer_delivered' | 'paper_based';
 
+/**
+ * Reader-facing delivery choices. IELTS.org models hybrid tests as
+ * `paper_based`, so "Writing on paper" is derived from the source label rather
+ * than persisted as a third source format.
+ */
+export type OfferingDeliveryMode =
+  | 'computer_delivered'
+  | 'paper_based'
+  | 'writing_on_paper';
+
+export type PriceParseStatus = 'verified' | 'unparsed' | 'missing';
+
+/** The content module assessed by a bookable IELTS product. */
+export type TestModule =
+  | 'academic'
+  | 'general_training'
+  | 'life_skills'
+  | 'other';
+
+/** Whether the product uses the standard or UKVI secure testing route. */
+export type TestCategory = 'standard' | 'ukvi_selt';
+
 /** A single bookable product at a centre, as listed on the IELTS.org page. */
 export interface TestOffering {
   /** e.g. "IELTS Academic on computer" */
   label: string;
-  /** 'academic' | 'general_training' | 'ukvi' | 'osr' | 'life_skills' | 'other' */
+  /**
+   * Legacy single-axis classification retained while committed datasets roll
+   * forward. New filtering uses `module` + `category` instead.
+   */
   kind: TestKind;
+  /** Derived from the source label; absent only in pre-migration datasets. */
+  module?: TestModule;
+  /** Derived from the source label; absent only in pre-migration datasets. */
+  category?: TestCategory;
   format: TestFormat;
-  /** ISO 4217, e.g. 'CAD'. Null when the page lists no fee. */
-  currency: string | null;
-  price: number | null;
+  /**
+   * Fee text exactly as rendered by the source page after HTML entity
+   * decoding. This is the authoritative value shown to readers.
+   */
+  priceText: string | null;
+  /** ISO 4217 derived from `priceText`; never used as the display value. */
+  parsedCurrency: string | null;
+  /** Numeric amount derived from `priceText`, for sorting/filtering only. */
+  parsedPrice: number | null;
+  /** Whether the derived fields passed the lossless parser's checks. */
+  priceParseStatus: PriceParseStatus;
 }
 
 export type TestKind =
@@ -59,12 +100,75 @@ export interface CentreAddress {
   /** Address lines exactly as the page listed them, joined with ', '. */
   raw: string;
   lines: string[];
-  /** Derived from the address block — NOT from IELTS.org's broken city field. */
+  /** Derived by a country rule, a verified geocoder, or a reviewed override. */
   city: string | null;
+  citySource?: 'address_rule' | 'geocoder' | 'legacy' | 'admin' | null;
   region: string | null;
   postcode: string | null;
   /** ISO 3166-1 alpha-2, inferred from postcode/region shape. */
   country: string | null;
+}
+
+export type CentreLocalizationLocale = 'zh-CN' | 'hi-IN';
+export type CentreLocalizationSource = 'amap' | 'mappls' | 'admin';
+
+export type CoordinateSystem = 'WGS84' | 'GCJ02' | 'unknown';
+
+export type GeoEvidencePath =
+  | 'page_embed'
+  | 'address'
+  | 'venue_name'
+  | 'plus_code'
+  | 'operator_map'
+  | 'admin';
+
+export type GeoVerification = 'verified' | 'approximate' | 'unverified' | 'conflicted';
+
+/**
+ * The legal/provenance boundary for a coordinate is separate from its
+ * accuracy. A rooftop-quality Google point may still be unusable on Apple
+ * Maps, while a less precise open-data point may be portable.
+ */
+export type GeoOrigin =
+  | 'ielts_org'
+  | 'google_maps_platform'
+  | 'overture_maps'
+  | 'openstreetmap'
+  | 'community_submission'
+  | 'administrator'
+  | 'third_party_provider'
+  | 'unknown';
+
+export type GeoDisplayRights =
+  | 'any_basemap'
+  | 'google_maps_only'
+  | 'provider_review_required';
+
+export interface GeoProvenance {
+  origin: GeoOrigin;
+  displayRights: GeoDisplayRights;
+  /** Dataset/provider licence identifier when the source publishes one. */
+  license: string | null;
+  /** Attribution that must travel with a portable coordinate, if applicable. */
+  attribution: string | null;
+  /** Durable source record identifier, such as an Overture feature ID. */
+  sourceRecordId: string | null;
+}
+
+/**
+ * Local-language display text layered on top of IELTS.org's English record.
+ *
+ * The English name/address remain canonical so a provider lookup can never
+ * silently rewrite the source listing. Name and address provenance are kept
+ * separately because a reviewed name can be combined with a provider-derived
+ * reverse-geocoded address.
+ */
+export interface CentreLocalization {
+  locale: CentreLocalizationLocale;
+  name: string | null;
+  address: string | null;
+  nameSource: CentreLocalizationSource | null;
+  addressSource: CentreLocalizationSource | null;
 }
 
 export interface Geo {
@@ -72,13 +176,33 @@ export interface Geo {
   lng: number;
   precision: GeoPrecision;
   source: GeoSource;
+  /** All persisted coordinates are normalized to WGS-84. */
+  coordinateSystem: 'WGS84';
+  /**
+   * `verified` requires corroboration by two different evidence paths. An
+   * administrator override is the sole single-path exception.
+   */
+  verification: GeoVerification;
+  /** Evidence paths that support the selected point. */
+  evidencePaths: GeoEvidencePath[];
+  /** Distance between the two corroborating paths, when available. */
+  agreementKm: number | null;
   /** 0..1 from the scoring rule in DEV_PLAN §5.3. */
   confidence: number;
+  /**
+   * Explicit on newly acquired coordinates. Older committed rows are handled
+   * by the fail-closed source mapping in geo-policy.ts until they are migrated.
+   */
+  provenance?: GeoProvenance;
   /**
    * Internal: carried out of the scoring step so the caller can lift it onto
    * `Centre.googlePlaceId`. Not persisted here — see that field.
    */
   placeId?: string | null;
+  /** Internal structured components carried out of candidate resolution. */
+  resolvedCity?: string | null;
+  resolvedRegion?: string | null;
+  resolvedPostcode?: string | null;
 }
 
 /** Provenance: which source listed this centre, and when we last saw it. */
@@ -88,6 +212,33 @@ export interface CentreSourceRef {
   url: string;
   seenAt: string;
   stillPresent: boolean;
+}
+
+/** Contact values exactly as published by the source page, deduplicated by identity. */
+export interface CentreContactInformation {
+  phones: string[];
+  emails: string[];
+  websites: string[];
+}
+
+/**
+ * A narrow operator-published registration signal.
+ *
+ * This is deliberately not `isOpen`: a registration link does not guarantee a
+ * particular date or seat, while a future/not-accepting statement is useful
+ * only for as long as the supporting operator page remains fresh.
+ */
+export type CentreAvailabilityStatus =
+  | 'registration_available'
+  | 'not_accepting_registrations'
+  | 'future_location';
+
+export interface CentreAvailability {
+  status: CentreAvailabilityStatus;
+  source: 'ielts_usa_network';
+  sourceUrl: string;
+  sourceLabel: string;
+  checkedAt: string;
 }
 
 /** A fully resolved centre — one row of the directory. */
@@ -104,29 +255,67 @@ export interface Centre {
   /** Slugs merged into this record by dedup (§5.4). */
   mergedSlugs: string[];
   address: CentreAddress;
+  /**
+   * Optional local-language evidence for search and matching. It is never
+   * rendered as centre identity or address because provider text can be stale.
+   */
+  localizations?: CentreLocalization[];
+  /** All contact values found across every IELTS.org page merged into this centre. */
+  contact: CentreContactInformation;
+  /** @deprecated Use `contact.phones`; retained for dataset compatibility. */
   phone: string | null;
   /** Null when no coordinate could be resolved at any precision. */
   geo: Geo | null;
   /**
-   * The only Google-derived value we store durably. Google's terms cap caching
-   * of their Content but exempt Place IDs, and this is the key that later
-   * unlocks live ratings and photos (DEV_PLAN §7) without persisting any of
-   * that content itself.
+   * A durably storable opaque Google identifier. Legacy datasets also contain
+   * restricted Google coordinates during migration; geo-policy.ts prevents
+   * those coordinates and this identifier from leaking into non-Google feeds.
    */
   googlePlaceId: string | null;
   formats: TestFormat[];
   offerings: TestOffering[];
-  /** Lowest listed fee, for list-view sorting. */
-  priceFrom: number | null;
-  currency: string | null;
+  /** Original fee string belonging to the lowest verified parsed amount. */
+  priceFromText: string | null;
+  /** Lowest verified parsed amount, for list-view sorting only. */
+  parsedPriceFrom: number | null;
+  parsedCurrency: string | null;
   bookingUrl: string | null;
-  /** Derived, not manual — see §5.5. */
-  isActive: boolean;
+  /**
+   * Optional operator evidence layered onto the canonical IELTS.org record.
+   * Absence means availability is unknown, not closed.
+   */
+  availability?: CentreAvailability;
+  /**
+   * Listing eligibility, not evidence that a centre is currently open.
+   * Requires at least one offering carrying source-published fee text.
+   */
+  isPublishable: boolean;
   /** Cross-source agreement, 0..1. */
   confidence: number;
   sources: CentreSourceRef[];
   firstSeenAt: string;
   lastSeenAt: string;
+}
+
+export type MapDisplayTarget = 'google' | 'apple' | 'neutral';
+export type GeoExportStatus = 'displayable' | 'suppressed' | 'missing';
+
+export interface CentreGeoPolicy {
+  target: MapDisplayTarget;
+  status: GeoExportStatus;
+  provenance: GeoProvenance | null;
+  reason: string;
+}
+
+/**
+ * A provider-safe client record. Restricted coordinates and provider
+ * identifiers are removed rather than relying on each client to remember the
+ * policy.
+ */
+export interface CentreMapExport
+  extends Omit<Centre, 'geo' | 'googlePlaceId'> {
+  geo: Geo | null;
+  geoPolicy: CentreGeoPolicy;
 }
 
 /**
@@ -141,9 +330,15 @@ export interface ParsedCentre {
   operatorSource: OperatorSource;
   externalId: string | null;
   address: CentreAddress;
+  contact: CentreContactInformation;
+  /** @deprecated Use `contact.phones`; retained for compatibility with overrides. */
   phone: string | null;
-  /** Coordinate lifted from the page's Google static-map URL, if present. */
-  embeddedGeo: { lat: number; lng: number } | null;
+  /** Coordinate lifted from the page's static-map URL, if present. */
+  embeddedGeo: {
+    lat: number;
+    lng: number;
+    coordinateSystem: CoordinateSystem;
+  } | null;
   offerings: TestOffering[];
   bookingUrl: string | null;
   fetchedAt: string;
@@ -166,7 +361,7 @@ export interface DatasetStats {
   pagesParsed: number;
   matchedCountry: number;
   afterDedup: number;
-  active: number;
+  publishable: number;
   byOperator: Record<string, number>;
   byGeoPrecision: Record<string, number>;
   /** Records with no coordinate at all — listed, but not mappable. */

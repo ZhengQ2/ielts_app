@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "overrides": [
+    {
+      "id": "idp-ielts-china-guangzhou-tianhe",
+      "reviewedAt": "2026-07-27",
+      "reason": "IELTS.org publishes an incorrect address and embedded map point for this centre.",
+      "evidence": [
+        "https://www.google.com/maps/search/?api=1&query=IDP%E9%9B%85%E6%80%9D%E5%B9%BF%E5%B7%9E%E5%A4%A9%E6%B2%B3%E5%8C%BA%E8%80%83%E5%9C%BA&query_place_id=ChIJKRrYef7-AjQRif7Es5c-wjc",
+        "https://lx.idp.cn/"
+      ],
+      "patch": {
+        "address": {
+          "raw": "19/F, East Tower, Fortune Plaza, 116 Tiyu East Road, Tianhe District, Guangzhou, Guangdong, 510620",
+          "lines": [
+            "19/F, East Tower, Fortune Plaza",
+            "116 Tiyu East Road",
+            "Tianhe District",
+            "Guangzhou",
+            "Guangdong",
+            "510620"
+          ],
+          "city": "Guangzhou",
+          "citySource": "admin",
+          "region": "Guangdong",
+          "postcode": "510620",
+          "country": "CN"
+        },
+        "localizations": [
+          {
+            "locale": "zh-CN",
+            "name": "IDP雅思广州天河区考场",
+            "address": "广东省广州市天河区体育东路116号财富广场东塔19楼",
+            "nameSource": "admin",
+            "addressSource": "admin"
+          }
+        ],
+        "geo": {
+          "lat": 23.1363553,
+          "lng": 113.3290018,
+          "precision": "rooftop",
+          "source": "admin",
+          "coordinateSystem": "WGS84",
+          "verification": "verified",
+          "evidencePaths": [
+            "admin"
+          ],
+          "agreementKm": null,
+          "confidence": 0.95
+        },
+        "googlePlaceId": "ChIJKRrYef7-AjQRif7Es5c-wjc"
+      }
+    }
+  ]
+}

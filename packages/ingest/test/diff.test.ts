@@ -1,7 +1,11 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import type { Centre, CentreDataset } from '@ielts-map/core';
-import { diffDatasets, summariseDiff } from '../src/diff.ts';
+import {
+  diffDatasets,
+  diffSafetyProblems,
+  summariseDiff,
+} from '../src/diff.ts';
 
 function centre(over: Partial<Centre> & { id: string }): Centre {
   return {
@@ -19,8 +23,19 @@ function centre(over: Partial<Centre> & { id: string }): Centre {
       postcode: 'T2P 0T8',
       country: 'CA',
     },
+    contact: { phones: [], emails: [], websites: [] },
     phone: null,
-    geo: { lat: 51.048, lng: -114.077, precision: 'rooftop', source: 'google', confidence: 1 },
+    geo: {
+      lat: 51.048,
+      lng: -114.077,
+      precision: 'rooftop',
+      source: 'google',
+      coordinateSystem: 'WGS84',
+      verification: 'verified',
+      evidencePaths: ['address', 'venue_name'],
+      agreementKm: 0.05,
+      confidence: 1,
+    },
     googlePlaceId: 'abc',
     formats: ['computer_delivered'],
     offerings: [
@@ -28,14 +43,17 @@ function centre(over: Partial<Centre> & { id: string }): Centre {
         label: 'IELTS Academic on computer',
         kind: 'academic',
         format: 'computer_delivered',
-        currency: 'CAD',
-        price: 359,
+        priceText: 'CAD 359',
+        parsedCurrency: 'CAD',
+        parsedPrice: 359,
+        priceParseStatus: 'verified',
       },
     ],
-    priceFrom: 359,
-    currency: 'CAD',
+    priceFromText: 'CAD 359',
+    parsedPriceFrom: 359,
+    parsedCurrency: 'CAD',
     bookingUrl: 'https://bxsearch.ielts.idp.com/wizard',
-    isActive: true,
+    isPublishable: true,
     confidence: 0.9,
     sources: [
       {
@@ -53,7 +71,7 @@ function centre(over: Partial<Centre> & { id: string }): Centre {
 }
 
 const wrap = (centres: Centre[], generatedAt = '2026-07-01T00:00:00.000Z'): CentreDataset => ({
-  version: 1,
+  version: 2,
   country: 'CA',
   generatedAt,
   stats: {
@@ -61,7 +79,7 @@ const wrap = (centres: Centre[], generatedAt = '2026-07-01T00:00:00.000Z'): Cent
     pagesParsed: 0,
     matchedCountry: 0,
     afterDedup: centres.length,
-    active: centres.length,
+    publishable: centres.length,
     byOperator: {},
     byGeoPrecision: {},
     ungeocoded: 0,
@@ -103,9 +121,12 @@ test('timestamps moving is not a change', () => {
 });
 
 test('a price change is reported, with the field named', () => {
-  const diff = diffDatasets(wrap([centre({ id: 'a' })]), wrap([centre({ id: 'a', priceFrom: 399 })]));
+  const diff = diffDatasets(
+    wrap([centre({ id: 'a' })]),
+    wrap([centre({ id: 'a', priceFromText: 'CAD 399', parsedPriceFrom: 399 })]),
+  );
   assert.equal(diff.meaningful, true);
-  assert.deepEqual(diff.changed[0]?.fields, ['price']);
+  assert.deepEqual(diff.changed[0]?.fields, ['priceText', 'parsedPrice']);
 });
 
 test('a new centre is an addition, a vanished one a removal', () => {
@@ -129,13 +150,64 @@ test('sub-metre coordinate jitter is not a move', () => {
   assert.equal(diffDatasets(wrap([centre({ id: 'a' })]), wrap([jittered])).meaningful, false);
 });
 
-test('a centre going inactive is reported', () => {
-  const diff = diffDatasets(wrap([centre({ id: 'a' })]), wrap([centre({ id: 'a', isActive: false })]));
-  assert.deepEqual(diff.changed[0]?.fields, ['isActive']);
+test('a centre becoming unpublishable is reported', () => {
+  const diff = diffDatasets(
+    wrap([centre({ id: 'a' })]),
+    wrap([centre({ id: 'a', isPublishable: false })]),
+  );
+  assert.deepEqual(diff.changed[0]?.fields, ['isPublishable']);
 });
 
 test('the first run has no previous dataset and is all additions', () => {
   const diff = diffDatasets(null, wrap([centre({ id: 'a' }), centre({ id: 'b' })]));
   assert.equal(diff.added.length, 2);
   assert.equal(diff.meaningful, true);
+});
+
+test('ordinary additions remain automatic while systemic churn is blocked', () => {
+  const ordinary = {
+    added: Array.from({ length: 20 }, (_, index) => ({
+      id: `new-${index}`,
+      name: `New ${index}`,
+      city: null,
+    })),
+    removed: [],
+    changed: [],
+    unchanged: 980,
+    meaningful: true,
+  };
+  assert.deepEqual(diffSafetyProblems(ordinary, 1000), []);
+
+  const suspicious = {
+    ...ordinary,
+    added: Array.from({ length: 101 }, (_, index) => ({
+      id: `new-${index}`,
+      name: `New ${index}`,
+      city: null,
+    })),
+    removed: Array.from({ length: 51 }, (_, index) => ({
+      id: `old-${index}`,
+      name: `Old ${index}`,
+      city: null,
+    })),
+  };
+  assert.deepEqual(diffSafetyProblems(suspicious, 1000), [
+    '51 removals exceed the automatic limit of 50',
+    '101 additions exceed the automatic limit of 100',
+  ]);
+});
+
+test('the first complete import is not mistaken for a change cliff', () => {
+  const initial = {
+    added: Array.from({ length: 1500 }, (_, index) => ({
+      id: `new-${index}`,
+      name: `New ${index}`,
+      city: null,
+    })),
+    removed: [],
+    changed: [],
+    unchanged: 0,
+    meaningful: true,
+  };
+  assert.deepEqual(diffSafetyProblems(initial, 0), []);
 });

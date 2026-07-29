@@ -1,80 +1,104 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-import maplibregl, { type Map as MapLibreMap } from 'maplibre-gl';
-
-const OSM_STYLE = {
-  version: 8 as const,
-  sources: {
-    osm: {
-      type: 'raster' as const,
-      tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],
-      tileSize: 256,
-      attribution: '© OpenStreetMap contributors',
-    },
-  },
-  layers: [{ id: 'osm', type: 'raster' as const, source: 'osm' }],
-};
+import { useEffect, useRef, useState } from 'react';
+import { googleMapId, importGoogleMapLibraries } from '@/lib/google-maps';
 
 interface Props {
   lat: number;
   lng: number;
-  /** False for coarse coordinates — drawn as a radius, not a point. */
+  /** False for coarse or unverified coordinates — drawn as an area. */
   precise: boolean;
   label: string;
-  /** Operator colour, so the pin matches the badge above it. */
+  /** Operator colour, so the marker matches the badge above it. */
   color: string;
 }
 
 export function DetailMap({ lat, lng, precise, label, color }: Props) {
   const container = useRef<HTMLDivElement>(null);
-  const map = useRef<MapLibreMap | null>(null);
+  const [loadError, setLoadError] = useState(false);
 
   useEffect(() => {
-    if (!container.current || map.current) return;
+    if (!container.current) return;
+    let cancelled = false;
+    let marker: google.maps.marker.AdvancedMarkerElement | null = null;
+    let circle: google.maps.Circle | null = null;
 
-    const instance = new maplibregl.Map({
-      container: container.current,
-      style: OSM_STYLE,
-      center: [lng, lat],
-      // Zoom out for a coarse location so the view matches the real precision.
-      zoom: precise ? 15 : 11,
-      attributionControl: false,
-    });
-    instance.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-right');
-    instance.addControl(new maplibregl.AttributionControl({ compact: true }));
-    map.current = instance;
+    importGoogleMapLibraries()
+      .then(({ maps, marker: markerLibrary }) => {
+        if (cancelled || !container.current) return;
+        const position = { lat, lng };
+        const map = new maps.Map(container.current, {
+          center: position,
+          zoom: precise ? 15 : 11,
+          mapId: googleMapId,
+          streetViewControl: false,
+          mapTypeControl: false,
+          fullscreenControl: false,
+          clickableIcons: false,
+        });
 
-    if (precise) {
-      new maplibregl.Marker({ color }).setLngLat([lng, lat]).addTo(instance);
-    } else {
-      // An approximate coordinate gets an area, never a pin that implies a door.
-      instance.on('load', () => {
-        instance.addSource('area', {
-          type: 'geojson',
-          data: { type: 'Feature', geometry: { type: 'Point', coordinates: [lng, lat] }, properties: {} },
-        });
-        instance.addLayer({
-          id: 'area-fill',
-          type: 'circle',
-          source: 'area',
-          paint: {
-            'circle-radius': 48,
-            'circle-color': color,
-            'circle-opacity': 0.15,
-            'circle-stroke-width': 2,
-            'circle-stroke-color': color,
-            'circle-stroke-opacity': 0.5,
-          },
-        });
+        if (precise) {
+          const content = document.createElement('div');
+          content.className = 'google-detail-pin';
+          content.style.setProperty('--pin', color);
+          content.title = label;
+          marker = new markerLibrary.AdvancedMarkerElement({
+            map,
+            position,
+            content,
+            title: label,
+          });
+        } else {
+          // An unverified coordinate gets an area, never a pin implying a door.
+          circle = new google.maps.Circle({
+            map,
+            center: position,
+            radius: 1500,
+            fillColor: color,
+            fillOpacity: 0.15,
+            strokeColor: color,
+            strokeOpacity: 0.55,
+            strokeWeight: 2,
+          });
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setLoadError(true);
       });
-    }
 
     return () => {
-      instance.remove();
-      map.current = null;
+      cancelled = true;
+      if (marker) marker.map = null;
+      circle?.setMap(null);
+      container.current?.replaceChildren();
     };
-  }, [lat, lng, precise, color]);
+  }, [lat, lng, precise, label, color]);
 
-  return <div ref={container} aria-label={`Map showing ${label}`} className="h-full w-full" />;
+  if (loadError) {
+    return (
+      <div className="flex h-full w-full items-center justify-center bg-line px-6 text-center text-sm text-muted">
+        The map could not be loaded. Use the published address above.
+      </div>
+    );
+  }
+
+  return (
+    <>
+      <div
+        ref={container}
+        aria-label={`Map showing ${label}`}
+        className="h-full w-full"
+      />
+      <style>{`
+        .google-detail-pin {
+          width: 20px;
+          height: 20px;
+          border: 3px solid white;
+          border-radius: 9999px;
+          background: var(--pin);
+          box-shadow: 0 1px 5px rgb(0 0 0 / 0.4);
+        }
+      `}</style>
+    </>
+  );
 }

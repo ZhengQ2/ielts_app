@@ -1,4 +1,5 @@
 import type {
+  CentreContactInformation,
   Operator,
   OperatorSource,
   ParsedCentre,
@@ -6,6 +7,7 @@ import type {
   TestKind,
   TestOffering,
 } from '@ielts-map/core';
+import { offeringCategory, offeringModule } from '@ielts-map/core';
 import { CENTRE_URL_PREFIX } from './config.ts';
 import { parseAddress } from './address.ts';
 import { resolveCountry } from './country.ts';
@@ -46,7 +48,8 @@ export function parseCentrePage(slug: string, html: string, fetchedAt: string): 
   if (!name) throw new ParseError(`No centre title found for ${slug}`);
 
   const address = parseAddress(extractAddressLines(html));
-  const phone = extractPhone(html);
+  const contact = extractContactInformation(html, address.lines);
+  const phone = contact.phones[0] ?? null;
   const embeddedGeo = extractEmbeddedGeo(html);
   const { offerings, bookingUrl } = extractOfferings(html);
   const { operator, operatorSource, externalId } = detectOperator(bookingUrl, slug, name);
@@ -64,6 +67,7 @@ export function parseCentrePage(slug: string, html: string, fetchedAt: string): 
     operatorSource,
     externalId,
     address,
+    contact,
     phone,
     embeddedGeo,
     offerings,
@@ -92,14 +96,107 @@ function extractAddressLines(html: string): string[] {
   return paragraphs(end === -1 ? rest : rest.slice(0, end));
 }
 
-function extractPhone(html: string): string | null {
-  const m = /<div[^>]*test-center-header__content-column-contact--phone[^>]*>/i.exec(html);
-  if (!m) return null;
-  const block = sliceElement(html, m.index, 'div');
-  const [first] = paragraphs(block);
-  if (!first) return null;
-  const digits = first.replace(/[^\d+]/g, '');
-  return digits.length >= 6 ? first : null;
+function extractContactInformation(
+  html: string,
+  addressLines: string[],
+): CentreContactInformation {
+  const phones: string[] = [];
+  const emails: string[] = [];
+  const websites: string[] = [];
+  const contactBlock =
+    /<div[^>]*class=["'][^"']*test-center-header__content-column-contact(?:\s|--)[^"']*["'][^>]*>/gi;
+
+  for (const match of html.matchAll(contactBlock)) {
+    const block = sliceElement(html, match.index ?? 0, 'div');
+    const className = match[0];
+    const links = hrefs(block);
+
+    for (const href of links) {
+      if (/^mailto:/i.test(href)) {
+        addEmails(emails, href.replace(/^mailto:/i, '').split('?')[0] ?? '');
+      } else if (/^tel:/i.test(href)) {
+        addPhones(phones, href.replace(/^tel:/i, ''));
+      } else if (/^https?:\/\//i.test(href)) {
+        websites.push(href);
+      }
+    }
+
+    const text = stripTags(block);
+    addEmails(emails, text);
+    if (/contact--phone/i.test(className)) {
+      for (const value of paragraphs(block)) addPhones(phones, value);
+    }
+  }
+
+  // IELTS.org occasionally publishes labelled phone/email data inside the
+  // address column instead of the Contact column. Preserve the address as-is
+  // and also surface those values as contacts.
+  for (const line of addressLines) {
+    addEmails(emails, line);
+    const labelledPhone =
+      /\b(?:phone(?:\s+number)?|tel(?:ephone)?\.?)\s*[:.]?\s*(.+?)(?=\s+(?:e-?mail)\b|$)/i.exec(
+        line,
+      )?.[1];
+    if (labelledPhone) addPhones(phones, labelledPhone);
+    for (const url of line.match(/https?:\/\/[^\s<>"']+|www\.[^\s<>"']+/gi) ?? []) {
+      websites.push(/^https?:\/\//i.test(url) ? url : `https://${url}`);
+    }
+  }
+
+  return {
+    phones: uniqueContactValues(phones, phoneIdentity),
+    emails: uniqueContactValues(emails, (value) => value.toLocaleLowerCase('en')),
+    websites: uniqueContactValues(websites, websiteIdentity),
+  };
+}
+
+function addEmails(target: string[], text: string): void {
+  const values = text.match(/[A-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi) ?? [];
+  target.push(...values);
+}
+
+function addPhones(target: string[], text: string): void {
+  const value = text
+    .trim()
+    .replace(/^(?:phone(?:\s+number)?|tel(?:ephone)?\.?)\s*[:.]?\s*/i, '');
+  const pieces = value.split(/\s*(?:,|;|\/)\s*/);
+  const candidates =
+    pieces.length > 1 && pieces.every((piece) => piece.replace(/\D/g, '').length >= 6)
+      ? pieces
+      : [value];
+  for (const candidate of candidates) {
+    if (candidate.replace(/\D/g, '').length >= 6) target.push(candidate);
+  }
+}
+
+function uniqueContactValues(
+  values: string[],
+  identity: (value: string) => string,
+): string[] {
+  const seen = new Set<string>();
+  return values.filter((value) => {
+    const key = identity(value);
+    if (!key || seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+function phoneIdentity(value: string): string {
+  const digits = value.replace(/\D/g, '');
+  return digits.startsWith('00') ? digits.slice(2) : digits;
+}
+
+function websiteIdentity(value: string): string {
+  try {
+    const url = new URL(value);
+    url.hash = '';
+    url.hostname = url.hostname.toLowerCase();
+    url.pathname = url.pathname.replace(/\/+$/, '') || '/';
+    return url.toString().replace(/\/$/, '');
+  } catch {
+    return value.toLocaleLowerCase('en').replace(/\/+$/, '');
+  }
 }
 
 /**
@@ -107,7 +204,9 @@ function extractPhone(html: string): string | null {
  * coordinate. Present on most Canadian pages regardless of operator; absent on
  * plenty of others, so it is checked per page, never assumed.
  */
-function extractEmbeddedGeo(html: string): { lat: number; lng: number } | null {
+function extractEmbeddedGeo(
+  html: string,
+): { lat: number; lng: number; coordinateSystem: 'unknown' } | null {
   const m = /staticmap\?[^"']*?center=(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/i.exec(
     decodeEntities(html),
   );
@@ -121,10 +220,137 @@ function extractEmbeddedGeo(html: string): { lat: number; lng: number } | null {
   // sentinel, not a real address, for any centre this dataset will ever cover.
   if (Math.abs(lat) < 1 && Math.abs(lng) < 1) return null;
   if (Math.abs(lat) > 90 || Math.abs(lng) > 180) return null;
-  return { lat, lng };
+  return { lat, lng, coordinateSystem: 'unknown' };
 }
 
-const PRICE_RE = /\b([A-Z]{3})\s*([\d,]+(?:\.\d{1,2})?)\b/;
+const CURRENCY_RE = /\b([A-Z]{3})\b/;
+const PRICE_NUMBER_RE = /[\p{Number}][\p{Number}\s.,'’٬٫]*/u;
+
+const DIGIT_ZEROES = [
+  0x0030, // ASCII
+  0x0660, // Arabic-Indic
+  0x06f0, // Eastern Arabic-Indic
+  0x0966, // Devanagari
+  0x09e6, // Bengali
+  0x0a66, // Gurmukhi
+  0x0ae6, // Gujarati
+  0x0b66, // Oriya
+  0x0be6, // Tamil
+  0x0c66, // Telugu
+  0x0ce6, // Kannada
+  0x0d66, // Malayalam
+  0x0e50, // Thai
+  0x0ed0, // Lao
+  0x0f20, // Tibetan
+  0xff10, // Full-width
+];
+
+export interface ParsedPublishedPrice {
+  priceText: string | null;
+  parsedCurrency: string | null;
+  parsedPrice: number | null;
+  priceParseStatus: TestOffering['priceParseStatus'];
+}
+
+/**
+ * Preserve the source text and derive a numeric value separately. The parser
+ * understands the grouping characters observed across IELTS.org, but refuses
+ * ambiguous or malformed amounts instead of silently truncating them.
+ */
+export function parsePublishedPrice(priceText: string | null): ParsedPublishedPrice {
+  if (!priceText?.trim()) {
+    return {
+      priceText: null,
+      parsedCurrency: null,
+      parsedPrice: null,
+      priceParseStatus: 'missing',
+    };
+  }
+
+  const source = priceText.trim();
+  const currencyMatch = CURRENCY_RE.exec(source);
+  if (!currencyMatch) {
+    return {
+      priceText: source,
+      parsedCurrency: null,
+      parsedPrice: null,
+      priceParseStatus: 'unparsed',
+    };
+  }
+
+  const parsedCurrency = currencyMatch[1]!;
+  const afterCurrency = source.slice(currencyMatch.index + currencyMatch[0].length);
+  const numberMatch = PRICE_NUMBER_RE.exec(afterCurrency);
+  const normalized = numberMatch ? normalizePriceNumber(numberMatch[0]) : null;
+  const parsedPrice = normalized === null ? null : Number(normalized);
+
+  return {
+    priceText: source,
+    parsedCurrency: Number.isFinite(parsedPrice) ? parsedCurrency : null,
+    parsedPrice: Number.isFinite(parsedPrice) ? parsedPrice : null,
+    priceParseStatus: Number.isFinite(parsedPrice) ? 'verified' : 'unparsed',
+  };
+}
+
+function normalizePriceNumber(value: string): string | null {
+  let normalizedDigits = '';
+  for (const char of value.trim()) {
+    if (/\p{Number}/u.test(char)) {
+      const digit = unicodeDigit(char);
+      if (digit === null) return null;
+      normalizedDigits += digit;
+    } else {
+      normalizedDigits += char;
+    }
+  }
+
+  const compact = normalizedDigits.replace(/[\s'’]/g, '').replace(/٬/g, ',').replace(/٫/g, '.');
+  if (!/^\d[\d,.]*$/.test(compact)) return null;
+
+  const lastComma = compact.lastIndexOf(',');
+  const lastDot = compact.lastIndexOf('.');
+  let decimalSeparator: ',' | '.' | null = null;
+
+  if (lastComma !== -1 && lastDot !== -1) {
+    decimalSeparator = lastComma > lastDot ? ',' : '.';
+  } else {
+    const separator = lastComma !== -1 ? ',' : lastDot !== -1 ? '.' : null;
+    if (separator) {
+      const pieces = compact.split(separator);
+      const tailLength = pieces.at(-1)?.length ?? 0;
+      const everyGrouped = pieces.length > 1 && pieces.slice(1).every((piece) => piece.length === 3);
+      // One or more groups of exactly three digits are thousands separators.
+      // A one- or two-digit tail is a decimal fraction.
+      if (!everyGrouped && (tailLength === 1 || tailLength === 2)) {
+        decimalSeparator = separator;
+      }
+    }
+  }
+
+  let integerPart = compact;
+  let fractionPart = '';
+  if (decimalSeparator) {
+    const index = compact.lastIndexOf(decimalSeparator);
+    integerPart = compact.slice(0, index);
+    fractionPart = compact.slice(index + 1);
+  }
+
+  integerPart = integerPart.replace(/[,.]/g, '');
+  if (!/^\d+$/.test(integerPart) || (fractionPart && !/^\d{1,2}$/.test(fractionPart))) {
+    return null;
+  }
+  return fractionPart ? `${integerPart}.${fractionPart}` : integerPart;
+}
+
+function unicodeDigit(char: string): string | null {
+  const codePoint = char.codePointAt(0);
+  if (codePoint === undefined) return null;
+  for (const zero of DIGIT_ZEROES) {
+    const value = codePoint - zero;
+    if (value >= 0 && value <= 9) return String(value);
+  }
+  return null;
+}
 
 function extractOfferings(html: string): { offerings: TestOffering[]; bookingUrl: string | null } {
   const offerings: TestOffering[] = [];
@@ -141,33 +367,25 @@ function extractOfferings(html: string): { offerings: TestOffering[]; bookingUrl
     // The right-hand column repeats the word "Fee" as its own title.
     if (!label || /^fee$/i.test(label)) continue;
 
-    const priceMatch = [
+    const priceText = [
       ...row.matchAll(
         /<p[^>]*ielts-tests-available__test-row-price[^>]*>([\s\S]*?)<\/p>/gi,
       ),
     ]
       .map((p) => stripTags(p[1] ?? ''))
-      .find((t) => PRICE_RE.test(t));
-
-    let currency: string | null = null;
-    let price: number | null = null;
-    if (priceMatch) {
-      const parsed = PRICE_RE.exec(priceMatch);
-      if (parsed) {
-        currency = parsed[1]!;
-        const n = Number(parsed[2]!.replace(/,/g, ''));
-        price = Number.isFinite(n) ? n : null;
-      }
-    }
+      .find((text) => Boolean(text)) ?? null;
+    const publishedPrice = parsePublishedPrice(priceText);
 
     for (const href of hrefs(row)) bookingUrls.push(href);
 
+    const kind = classifyKind(label);
     offerings.push({
       label,
-      kind: classifyKind(label),
+      kind,
+      module: offeringModule({ label, kind }),
+      category: offeringCategory({ label, kind }),
       format: classifyFormat(label, row),
-      currency,
-      price,
+      ...publishedPrice,
     });
   }
 
@@ -253,9 +471,9 @@ function extractExternalId(bookingUrl: string, operator: Operator): string | nul
 
 function classifyKind(label: string): TestKind {
   const l = label.toLowerCase();
-  if (l.includes('ukvi')) return 'ukvi';
   if (l.includes('one skill retake') || l.includes('osr')) return 'osr';
   if (l.includes('life skills')) return 'life_skills';
+  if (l.includes('ukvi')) return 'ukvi';
   if (l.includes('general training')) return 'general_training';
   if (l.includes('academic')) return 'academic';
   return 'other';

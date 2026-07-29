@@ -1,5 +1,10 @@
 import type { Metadata } from 'next';
 import { dataset } from '@ielts-map/core/dataset';
+import {
+  countryName,
+  freshAvailability,
+  genericCorrectionReportUrl,
+} from '@ielts-map/core';
 
 export const metadata: Metadata = {
   title: 'About the data',
@@ -10,6 +15,12 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   const { stats, generatedAt, country } = dataset;
   const precision = Object.entries(stats.byGeoPrecision).sort((a, b) => b[1] - a[1]);
+  const operatorStatuses = dataset.centres
+    .map((centre) => freshAvailability(centre.availability))
+    .filter((value) => value !== null);
+  const futureLocations = operatorStatuses.filter(
+    (value) => value.status === 'future_location',
+  ).length;
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-10">
@@ -26,9 +37,23 @@ export default function AboutPage() {
           incomplete or not machine-readable.
         </p>
         <p>
-          We read {stats.sitemapSlugs.toLocaleString()} centre pages worldwide, kept the{' '}
-          {stats.matchedCountry} whose address resolves to {country}, and merged duplicate pages
-          down to {stats.afterDedup} real centres.
+          We read {stats.sitemapSlugs.toLocaleString()} centre pages worldwide
+          {country === 'ALL' ? (
+            <>, attributed {stats.matchedCountry.toLocaleString()} of them to a country</>
+          ) : (
+            <>
+              {' '}
+              and kept the {stats.matchedCountry.toLocaleString()} whose address resolves to{' '}
+              {countryName(country)}
+            </>
+          )}
+          , and merged duplicate pages down to {stats.afterDedup.toLocaleString()} real centres.
+        </p>
+        <p>
+          Country comes from IELTS.org&rsquo;s own{' '}
+          <span className="whitespace-nowrap">/test-centres?country=</span> listing — the
+          operator&rsquo;s own filing, not a guess — with the page&rsquo;s address, booking link and
+          phone number as a fallback for the rare slug that listing omits.
         </p>
       </Section>
 
@@ -42,15 +67,21 @@ export default function AboutPage() {
 
       <Section title="How locations are resolved">
         <p>
-          Where a centre page embeds a map coordinate, we use it. Otherwise we geocode the address
-          and the centre name separately and keep the better result — those two approaches fail in
-          opposite situations. When they disagree badly, or when the result names a different
-          postal region than the address does, we say the location is approximate rather than
-          showing a confident pin in the wrong place.
+          A coordinate is treated as verified only when two different evidence paths agree, such
+          as the page embed and the address, or the address and venue name. An embedded point alone
+          is never described as rooftop truth. When evidence disagrees, the location remains
+          approximate or unverified instead of showing a confident pin in the wrong place.
         </p>
         <p>
-          Geocoding uses the Google Geocoding API where available and OpenStreetMap&rsquo;s
-          Nominatim otherwise. The map you see is drawn from OpenStreetMap data throughout.
+          Geocoding uses the Google Geocoding API where available, with AMap and Mappls as regional
+          evidence for China and India. The interactive map is Google Maps.
+        </p>
+        <p>
+          English remains the source record. For a precise China pin, a Chinese address is shown
+          only as internal matching evidence when a nearby AMap school or IELTS point matches the
+          published street number where one is available. Mappls evidence in India is treated the
+          same way. Localized venue names may be shown when corroborated, but the user-facing
+          address remains IELTS.org&rsquo;s canonical text.
         </p>
         <ul className="mt-3 flex flex-wrap gap-2">
           {precision.map(([key, count]) => (
@@ -61,19 +92,61 @@ export default function AboutPage() {
         </ul>
       </Section>
 
-      <Section title="What this does not tell you">
+      <Section title="How availability is handled">
         <p>
-          There are no live test dates or seat availability here. No operator publishes that data
-          in a usable form, and scraping the booking flow would breach their terms — so we link out
-          to the operator&rsquo;s own booking page instead.
+          A centre appearing on IELTS.org does not prove that it is open. The one automated
+          exception is IELTS USA&rsquo;s public network page, which explicitly separates
+          registration links from potential future locations. The current fresh snapshot matches{' '}
+          {operatorStatuses.length.toLocaleString()} US centres, including{' '}
+          {futureLocations.toLocaleString()} future locations with no scheduled or planned dates.
         </p>
         <p>
-          Prices are what the source page published when we last crawled it. They change, and may
-          exclude local tax. Treat them as a comparison aid, not a quote.
+          A registration link means only that IELTS USA currently publishes that link; it does not
+          confirm a particular date or remaining seat. The status check runs weekly and expires
+          after 15 days, so a stale source automatically falls back to &ldquo;availability not
+          verified.&rdquo; All other operators already use that conservative fallback.
+        </p>
+      </Section>
+
+      <Section title="What this does not tell you">
+        <p>
+          There are no live test dates or seat counts here. The official material we reviewed
+          exposes no documented global feed, and we do not inspect login-gated or undocumented
+          booking endpoints. Use the operator link to confirm a date and complete a booking.
+        </p>
+        <p>
+          Prices are what the source page published when we last crawled it, in whatever currency
+          that centre quotes — we don&rsquo;t convert between currencies, so the price filter only
+          appears once you&rsquo;ve narrowed to one country. Prices change, and may exclude local
+          tax. Treat them as a comparison aid, not a quote.
         </p>
         <p>
           A listing being present does not guarantee the centre is currently operating. We hide
-          entries with no bookable test, but we have no live feed confirming any centre is open.
+          entries with no test type or no published price for any test type. Apart from the narrow
+          IELTS USA signals described above, we have no supported status source confirming a
+          centre is accepting registrations.
+        </p>
+      </Section>
+
+      <Section title="Corrections">
+        <p>
+          Source listings and embedded map pins can be wrong or out of date. To correct a map
+          location, open that centre&rsquo;s detail page and use its exact-location picker. You
+          can{' '}
+          <a
+            href={genericCorrectionReportUrl()}
+            target="_blank"
+            rel="noreferrer nofollow"
+            className="font-medium text-brand underline"
+          >
+            report an opening-status or other listing correction
+          </a>
+          . Reports open as public GitHub issues and require evidence; they are reviewed manually
+          before any change is published.
+        </p>
+        <p>
+          Approved corrections are stored separately from the crawl so a known upstream error does
+          not overwrite the verified information during the next refresh.
         </p>
       </Section>
 

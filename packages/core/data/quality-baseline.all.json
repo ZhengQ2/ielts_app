@@ -1,0 +1,5478 @@
+{
+  "version": 1,
+  "country": "ALL",
+  "centreCount": 1510,
+  "affected": [
+    {
+      "id": "aeo-faisalabad",
+      "country": "PK",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "aeo-lahore-zahra-institute-of-english-language",
+      "country": "PK",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "aeo-multan-office",
+      "country": "PK",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "aeo-peshawar",
+      "country": "PK",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "info:missing_contact_information",
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "angamaly",
+      "country": "IN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "associacao-cultura-inglesa-brasilia",
+      "country": "BR",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "australian-institute-of-language-melbourne-box-hill",
+      "country": "AU",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "barattson-school-of-business-finance",
+      "country": "AZ",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "bc-1011",
+      "country": "LK",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-1031",
+      "country": "VN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-109",
+      "country": "TH",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-1103",
+      "country": "DE",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:missing_city"
+      ]
+    },
+    {
+      "id": "bc-1154",
+      "country": "AR",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-1157",
+      "country": "AR",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-1159",
+      "country": "BR",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "bc-1167",
+      "country": "MX",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-1169",
+      "country": "MX",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-1175",
+      "country": "LT",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-11777",
+      "country": "SE",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:missing_city"
+      ]
+    },
+    {
+      "id": "bc-11784",
+      "country": "GB",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:location_not_verified",
+        "warning:missing_city"
+      ]
+    },
+    {
+      "id": "bc-11854",
+      "country": "IE",
+      "decision": "ready",
+      "pinnable": true,
+      "issues": [
+        "info:missing_contact_information"
+      ]
+    },
+    {
+      "id": "bc-11871",
+      "country": "GB",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:missing_city"
+      ]
+    },
+    {
+      "id": "bc-11912",
+      "country": "ES",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "bc-11917",
+      "country": "ES",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "bc-1193",
+      "country": "GR",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:missing_city"
+      ]
+    },
+    {
+      "id": "bc-1194",
+      "country": "GR",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-11954",
+      "country": "VN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-11959",
+      "country": "AE",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-11966",
+      "country": "AE",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "bc-11967",
+      "country": "AE",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-11969",
+      "country": "AE",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-12132",
+      "country": "MA",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-12133",
+      "country": "MA",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-12135",
+      "country": "TN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-12136",
+      "country": "TN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-12176",
+      "country": "KZ",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-12178",
+      "country": "KZ",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-12183",
+      "country": "KZ",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-12184",
+      "country": "KZ",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-12186",
+      "country": "KZ",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-122",
+      "country": "VN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-12214",
+      "country": "AE",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-12255",
+      "country": "GB",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:location_not_verified",
+        "warning:missing_city"
+      ]
+    },
+    {
+      "id": "bc-12256",
+      "country": "GB",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:location_not_verified",
+        "warning:missing_city"
+      ]
+    },
+    {
+      "id": "bc-12282",
+      "country": "OM",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-12293",
+      "country": "JP",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-12354",
+      "country": "MO",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-12368",
+      "country": "OM",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-12378",
+      "country": "MY",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-12389",
+      "country": "MN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-12396",
+      "country": "OM",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "info:missing_contact_information",
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-12401",
+      "country": "OM",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "info:missing_contact_information",
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-12413",
+      "country": "JP",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-12437",
+      "country": "IL",
+      "decision": "ready",
+      "pinnable": true,
+      "issues": [
+        "info:missing_contact_information"
+      ]
+    },
+    {
+      "id": "bc-12465",
+      "country": "TW",
+      "decision": "ready",
+      "pinnable": true,
+      "issues": [
+        "info:missing_contact_information"
+      ]
+    },
+    {
+      "id": "bc-12473",
+      "country": "XK",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "info:missing_contact_information",
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-12515",
+      "country": "ID",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-12532",
+      "country": "MO",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "bc-12534",
+      "country": "CA",
+      "decision": "ready",
+      "pinnable": true,
+      "issues": [
+        "info:missing_contact_information"
+      ]
+    },
+    {
+      "id": "bc-12542",
+      "country": "NG",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-12545",
+      "country": "EG",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-12546",
+      "country": "LY",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-12888",
+      "country": "LU",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "bc-12913",
+      "country": "AE",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-12916",
+      "country": "AZ",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-12961",
+      "country": "TH",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-12976",
+      "country": "NL",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:location_not_verified",
+        "warning:missing_city"
+      ]
+    },
+    {
+      "id": "bc-12977",
+      "country": "QA",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-12982",
+      "country": "MN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-12995",
+      "country": "TN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-13023",
+      "country": "MK",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "info:missing_contact_information",
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-13030",
+      "country": "OM",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-13066",
+      "country": "OM",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-13068",
+      "country": "OM",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-13070",
+      "country": "OM",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-13074",
+      "country": "RS",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-13077",
+      "country": "OM",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-13080",
+      "country": "SC",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-13098",
+      "country": "NG",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-131",
+      "country": "VN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-13100",
+      "country": "OM",
+      "decision": "ready",
+      "pinnable": true,
+      "issues": [
+        "info:missing_contact_information"
+      ]
+    },
+    {
+      "id": "bc-13152",
+      "country": "MO",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-13155",
+      "country": "OM",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "info:missing_contact_information",
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-13161",
+      "country": "OM",
+      "decision": "ready",
+      "pinnable": true,
+      "issues": [
+        "info:missing_contact_information"
+      ]
+    },
+    {
+      "id": "bc-13165",
+      "country": "UZ",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-13193",
+      "country": "OM",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-13234",
+      "country": "EG",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "bc-13245",
+      "country": "IQ",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-13246",
+      "country": "IQ",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-13303",
+      "country": "NG",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-13320",
+      "country": "MY",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-13336",
+      "country": "LY",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-13359",
+      "country": "IT",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-13400",
+      "country": "NP",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-13433",
+      "country": "TG",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-13438",
+      "country": "CA",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-13442",
+      "country": "GB",
+      "decision": "ready",
+      "pinnable": true,
+      "issues": [
+        "info:missing_contact_information"
+      ]
+    },
+    {
+      "id": "bc-13456",
+      "country": "OM",
+      "decision": "ready",
+      "pinnable": true,
+      "issues": [
+        "info:missing_contact_information"
+      ]
+    },
+    {
+      "id": "bc-13499",
+      "country": "YE",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-13564",
+      "country": "HR",
+      "decision": "ready",
+      "pinnable": true,
+      "issues": [
+        "info:missing_contact_information"
+      ]
+    },
+    {
+      "id": "bc-13565",
+      "country": "HR",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "info:missing_contact_information",
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-13568",
+      "country": "MA",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-13583",
+      "country": "OM",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-13585",
+      "country": "GB",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:location_not_verified",
+        "warning:missing_city"
+      ]
+    },
+    {
+      "id": "bc-13595",
+      "country": "OM",
+      "decision": "ready",
+      "pinnable": true,
+      "issues": [
+        "info:missing_contact_information"
+      ]
+    },
+    {
+      "id": "bc-13607",
+      "country": "BN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-13612",
+      "country": "KR",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:location_not_verified",
+        "warning:missing_city"
+      ]
+    },
+    {
+      "id": "bc-13631",
+      "country": "VN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-13632",
+      "country": "VN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-13633",
+      "country": "VN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-13637",
+      "country": "VN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-13638",
+      "country": "VN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-13643",
+      "country": "VN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-13714",
+      "country": "SA",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-13732",
+      "country": "GB",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:location_not_verified",
+        "warning:missing_city"
+      ]
+    },
+    {
+      "id": "bc-13733",
+      "country": "GB",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:missing_city"
+      ]
+    },
+    {
+      "id": "bc-13779",
+      "country": "SA",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:missing_location"
+      ]
+    },
+    {
+      "id": "bc-138",
+      "country": "BD",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-149",
+      "country": "PK",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-151",
+      "country": "PK",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "bc-158",
+      "country": "PK",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-165",
+      "country": "PK",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "bc-2234",
+      "country": "SK",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:location_not_verified",
+        "warning:missing_city"
+      ]
+    },
+    {
+      "id": "bc-2235",
+      "country": "SK",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:location_not_verified",
+        "warning:missing_city"
+      ]
+    },
+    {
+      "id": "bc-2275",
+      "country": "KG",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-262",
+      "country": "PK",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "bc-292",
+      "country": "AE",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-295",
+      "country": "AE",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "bc-297",
+      "country": "KW",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "bc-300",
+      "country": "JO",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-303",
+      "country": "JO",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-3294",
+      "country": "MA",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-3295",
+      "country": "MA",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-3296",
+      "country": "IQ",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-3308",
+      "country": "GB",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:location_not_verified",
+        "warning:missing_city"
+      ]
+    },
+    {
+      "id": "bc-331",
+      "country": "SA",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-3312",
+      "country": "GB",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:location_not_verified",
+        "warning:missing_city"
+      ]
+    },
+    {
+      "id": "bc-3321",
+      "country": "VN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-3326",
+      "country": "GB",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:missing_city"
+      ]
+    },
+    {
+      "id": "bc-3327",
+      "country": "GB",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:missing_city"
+      ]
+    },
+    {
+      "id": "bc-3356",
+      "country": "IE",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "bc-3361",
+      "country": "BW",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-3389",
+      "country": "SN",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "bc-3396",
+      "country": "TZ",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "bc-3399",
+      "country": "MW",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-340",
+      "country": "SA",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-3410",
+      "country": "NA",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "bc-3418",
+      "country": "CM",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-3420",
+      "country": "CM",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-3422",
+      "country": "UG",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "bc-3430",
+      "country": "GB",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:missing_city"
+      ]
+    },
+    {
+      "id": "bc-403",
+      "country": "EG",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "bc-413",
+      "country": "TR",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "bc-414",
+      "country": "TR",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-467",
+      "country": "UZ",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "bc-525",
+      "country": "GH",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-5436",
+      "country": "GE",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-5447",
+      "country": "EC",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:missing_location"
+      ]
+    },
+    {
+      "id": "bc-5455",
+      "country": "UY",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-5456",
+      "country": "CL",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "bc-5469",
+      "country": "MO",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "bc-5489",
+      "country": "VN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-5495",
+      "country": "AE",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "bc-5536",
+      "country": "KZ",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-5537",
+      "country": "KG",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-5567",
+      "country": "SA",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-5577",
+      "country": "NG",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-57",
+      "country": "CY",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-579",
+      "country": "KE",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "bc-581",
+      "country": "ZW",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "bc-61",
+      "country": "HK",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "bc-63",
+      "country": "ID",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-6604",
+      "country": "AE",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-6615",
+      "country": "GB",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:missing_city"
+      ]
+    },
+    {
+      "id": "bc-6617",
+      "country": "GB",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:missing_city"
+      ]
+    },
+    {
+      "id": "bc-6619",
+      "country": "GB",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:location_not_verified",
+        "warning:missing_city"
+      ]
+    },
+    {
+      "id": "bc-6621",
+      "country": "GB",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:location_not_verified",
+        "warning:missing_city"
+      ]
+    },
+    {
+      "id": "bc-6629",
+      "country": "SA",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-700",
+      "country": "UZ",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-707",
+      "country": "VN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-716",
+      "country": "NP",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-74",
+      "country": "MM",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "bc-7655",
+      "country": "CO",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "bc-7662",
+      "country": "UZ",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "bc-7664",
+      "country": "UZ",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-7665",
+      "country": "UZ",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "bc-810",
+      "country": "MY",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-812",
+      "country": "SA",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-8697",
+      "country": "HK",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "bc-8727",
+      "country": "LY",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-920",
+      "country": "IQ",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-925",
+      "country": "TH",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-951",
+      "country": "FR",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-9731",
+      "country": "SE",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:missing_city"
+      ]
+    },
+    {
+      "id": "bc-9740",
+      "country": "NL",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:missing_city"
+      ]
+    },
+    {
+      "id": "bc-994",
+      "country": "BH",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-995",
+      "country": "LB",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "beijing-foreign-studies-university",
+      "country": "CN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "beijing-institute-of-technology",
+      "country": "CN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "beijing-language-and-culture-university",
+      "country": "CN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bhatinda",
+      "country": "IN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "box-hill-college-in-abu-halifa",
+      "country": "KW",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "british-council-beijing",
+      "country": "CN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "british-council-beijing-cbd-venue",
+      "country": "CN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "british-council-beijing-chivast-education-international-chongwenmen",
+      "country": "CN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "british-council-shanghai",
+      "country": "CN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "cambridge-english-languages-juvecampus-city",
+      "country": "CH",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "capital-normal-university",
+      "country": "CN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "cd-ielts-idp-education-muscat-test-room",
+      "country": "OM",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:missing_city"
+      ]
+    },
+    {
+      "id": "certifeka-new-cairo",
+      "country": "EG",
+      "decision": "ready",
+      "pinnable": true,
+      "issues": [
+        "info:missing_contact_information"
+      ]
+    },
+    {
+      "id": "china-university-of-mining-technology",
+      "country": "CN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "cultura-inglesa-belo-horizonte",
+      "country": "BR",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:location_not_verified",
+        "warning:missing_city"
+      ]
+    },
+    {
+      "id": "dalian-education-university",
+      "country": "CN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "edu-action-andijan",
+      "country": "UZ",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "edu-action-bukhara",
+      "country": "UZ",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "edu-action-fergana-unity-language-academy",
+      "country": "UZ",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "edu-action-namangan",
+      "country": "UZ",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "edu-action-nukus",
+      "country": "UZ",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "edu-action-samarkand-polyglot-language-school",
+      "country": "UZ",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "edu-action-tashkent-ielts-zone",
+      "country": "UZ",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "edu-action-tashkent-tashkent-inter-nation-school",
+      "country": "UZ",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "edu-action-termez",
+      "country": "UZ",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "els-language-centers-st-petersburg-fl",
+      "country": "US",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "english-world-ras-al-khaimah-university-of-wollongong-in-dubai",
+      "country": "AE",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "european-examinations-centre-centrul-educational-quo-vadis",
+      "country": "MD",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "european-examinations-centre-the-first-english-school",
+      "country": "BG",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "fujian-provincial-education-association-for-international-exchange",
+      "country": "CN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "guangdong-industry-polytechnic-university",
+      "country": "CN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "guangdong-university-of-foreign-studies",
+      "country": "CN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "gurdaspur",
+      "country": "IN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "harbin-engineering-university-ielts-on-computer-test-centre-songbei",
+      "country": "CN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "hawthorn-english-language-centre-muscat",
+      "country": "OM",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "hawthorn-english-language-centre-muscat-sohar-institute-for-management-tech",
+      "country": "OM",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "hawthorn-english-language-centre-sur",
+      "country": "OM",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city",
+        "warning:pending_duplicate_candidate"
+      ]
+    },
+    {
+      "id": "hawthorn-muscat-english-language-center-hawthorn-sur",
+      "country": "OM",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:missing_city",
+        "warning:pending_duplicate_candidate"
+      ]
+    },
+    {
+      "id": "hebei-university-of-technology-hongqiao-campus",
+      "country": "CN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "heilongjiang-university",
+      "country": "CN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "heliopolis-life-skills",
+      "country": "EG",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "hubei-education-international-ioc-test-centre",
+      "country": "CN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "ialf-uin-alauddin-makassar",
+      "country": "ID",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "idp-chandigarh-sector-34-speaking",
+      "country": "IN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "idp-education-in-salmiya",
+      "country": "KW",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "idp-education-india-bengaluru-whitefield",
+      "country": "IN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "idp-education-india-bhubaneswar-kharvela-nagar",
+      "country": "IN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "idp-education-india-chandigarh",
+      "country": "IN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "idp-education-india-karnal-shyam-nagar",
+      "country": "IN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "idp-education-india-ludhiana",
+      "country": "IN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "idp-education-india-new-delhi-nehru-place",
+      "country": "IN",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:pending_duplicate_candidate"
+      ]
+    },
+    {
+      "id": "idp-education-india-vadodara",
+      "country": "IN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "idp-education-limited-eg-academy-pampanga",
+      "country": "PH",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "idp-education-limited-ilocos-ielts-review-center-laoag",
+      "country": "PH",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "idp-education-nepal-private-limited-chitwan-test-room",
+      "country": "NP",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "idp-education-riyadh-male-females-tahlia-street-test-room",
+      "country": "SA",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "idp-ielts-abu-dhabi",
+      "country": "AE",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "idp-ielts-abu-dhabi-idp-education",
+      "country": "AE",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "idp-ielts-abu-dhabi-ielts-life-skills",
+      "country": "AE",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:missing_city"
+      ]
+    },
+    {
+      "id": "idp-ielts-abu-dhabi-ienglish-language-institute",
+      "country": "AE",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "idp-ielts-abuja",
+      "country": "NG",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:location_not_verified",
+        "warning:missing_city"
+      ]
+    },
+    {
+      "id": "idp-ielts-al-ain",
+      "country": "AE",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "idp-ielts-al-bayan-international-institute",
+      "country": "AE",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "idp-ielts-ankara-computer-delivered",
+      "country": "TR",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "idp-ielts-antalya-computer-delivered",
+      "country": "TR",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "idp-ielts-australia-wollongong",
+      "country": "AU",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "idp-ielts-bangladesh-asad-gate-dominators",
+      "country": "BD",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "idp-ielts-bangladesh-chattogram-penston-english-institute",
+      "country": "BD",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "idp-ielts-bangladesh-life-skills-at-ielts-hq-amanullah-trade-centre",
+      "country": "BD",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "idp-ielts-bangladesh-life-skills-at-jr-tower-sylhet",
+      "country": "BD",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "idp-ielts-bangladesh-panthapath-patronus-education",
+      "country": "BD",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "idp-ielts-bangladesh-rajshahi-mentors-international-grammar-school",
+      "country": "BD",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "idp-ielts-canada-anderson-college-brampton",
+      "country": "CA",
+      "decision": "ready",
+      "pinnable": true,
+      "issues": [
+        "info:missing_contact_information"
+      ]
+    },
+    {
+      "id": "idp-ielts-canada-canadian-systems-inc",
+      "country": "CA",
+      "decision": "ready",
+      "pinnable": true,
+      "issues": [
+        "info:missing_contact_information"
+      ]
+    },
+    {
+      "id": "idp-ielts-canada-canlanguage-test-and-training-centre",
+      "country": "CA",
+      "decision": "ready",
+      "pinnable": true,
+      "issues": [
+        "info:missing_contact_information"
+      ]
+    },
+    {
+      "id": "idp-ielts-canada-cgh-college-edmonton",
+      "country": "CA",
+      "decision": "ready",
+      "pinnable": true,
+      "issues": [
+        "info:missing_contact_information"
+      ]
+    },
+    {
+      "id": "idp-ielts-canada-cimt-college",
+      "country": "CA",
+      "decision": "ready",
+      "pinnable": true,
+      "issues": [
+        "info:missing_contact_information"
+      ]
+    },
+    {
+      "id": "idp-ielts-canada-national-testing-centre-north-york",
+      "country": "CA",
+      "decision": "ready",
+      "pinnable": true,
+      "issues": [
+        "info:missing_contact_information"
+      ]
+    },
+    {
+      "id": "idp-ielts-canada-netplus-college-of-information-technology",
+      "country": "CA",
+      "decision": "ready",
+      "pinnable": true,
+      "issues": [
+        "info:missing_contact_information"
+      ]
+    },
+    {
+      "id": "idp-ielts-canada-regina-open-door-society-inc",
+      "country": "CA",
+      "decision": "ready",
+      "pinnable": true,
+      "issues": [
+        "info:missing_contact_information"
+      ]
+    },
+    {
+      "id": "idp-ielts-canada-rupielts-institute-inc",
+      "country": "CA",
+      "decision": "ready",
+      "pinnable": true,
+      "issues": [
+        "info:missing_contact_information"
+      ]
+    },
+    {
+      "id": "idp-ielts-canada-rupielts-institute-inc-edmonton",
+      "country": "CA",
+      "decision": "ready",
+      "pinnable": true,
+      "issues": [
+        "info:missing_contact_information"
+      ]
+    },
+    {
+      "id": "idp-ielts-canada-techomatic-solutions-inc",
+      "country": "CA",
+      "decision": "ready",
+      "pinnable": true,
+      "issues": [
+        "info:missing_contact_information"
+      ]
+    },
+    {
+      "id": "idp-ielts-china-beijing-haidian",
+      "country": "CN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "idp-ielts-china-changsha-furong",
+      "country": "CN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "idp-ielts-china-chengdu-wuhou",
+      "country": "CN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "idp-ielts-china-hangzhou-gongshu",
+      "country": "CN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "idp-ielts-china-jinan-lixia",
+      "country": "CN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "idp-ielts-china-nantong-chongchuan",
+      "country": "CN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "idp-ielts-china-shanghai-xuhui",
+      "country": "CN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "idp-ielts-china-wuhan-jianghan",
+      "country": "CN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "idp-ielts-china-wuxi-xinwu",
+      "country": "CN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "idp-ielts-dubai-al-rowwad-language-technology-centre",
+      "country": "AE",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "idp-ielts-dubai-british-training-institute-sharjah",
+      "country": "AE",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "idp-ielts-dubai-ls",
+      "country": "AE",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "idp-ielts-dubai-university-of-sharjah",
+      "country": "AE",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "idp-ielts-egypt-cairo-the-knowledge-hub-universities-at-new-administrative-capital",
+      "country": "EG",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:location_not_verified",
+        "warning:missing_city"
+      ]
+    },
+    {
+      "id": "idp-ielts-egypt-new-horizon-centre-mansura",
+      "country": "EG",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "idp-ielts-egypt-one-kattameya-cairo",
+      "country": "EG",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "idp-ielts-egypt-sheikh-zayed",
+      "country": "EG",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "idp-ielts-egypt-tanta-university",
+      "country": "EG",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "idp-ielts-ghana-accra-osu",
+      "country": "GH",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "idp-ielts-ghana-accra-wesley-towers",
+      "country": "GH",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "idp-ielts-ghana-kumasi",
+      "country": "GH",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "idp-ielts-ghana-kumasi-knust-impact-building",
+      "country": "GH",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "idp-ielts-indonesia-tangerang-gading-serpong",
+      "country": "ID",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "idp-ielts-kazakhstan-aktobe",
+      "country": "KZ",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "idp-ielts-kazakhstan-almaty-test-room",
+      "country": "KZ",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "idp-ielts-kazakhstan-astana",
+      "country": "KZ",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "idp-ielts-kazakhstan-atyrau",
+      "country": "KZ",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "idp-ielts-kazakhstan-kostanay",
+      "country": "KZ",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "idp-ielts-kazakhstan-oskemen",
+      "country": "KZ",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:location_not_verified",
+        "warning:missing_city"
+      ]
+    },
+    {
+      "id": "idp-ielts-kazakhstan-shymkent",
+      "country": "KZ",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:location_not_verified",
+        "warning:missing_city"
+      ]
+    },
+    {
+      "id": "idp-ielts-kazakhstan-uralsk",
+      "country": "KZ",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:location_not_verified",
+        "warning:missing_city"
+      ]
+    },
+    {
+      "id": "idp-ielts-kenya-eldoret-potters-house-academy",
+      "country": "KE",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:pending_duplicate_candidate"
+      ]
+    },
+    {
+      "id": "idp-ielts-kenya-eldoret-potters-house-academy-eldoret-breemic",
+      "country": "KE",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:missing_city",
+        "warning:pending_duplicate_candidate"
+      ]
+    },
+    {
+      "id": "idp-ielts-kenya-nairobi",
+      "country": "KE",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:pending_duplicate_candidate"
+      ]
+    },
+    {
+      "id": "idp-ielts-malaysia-northern-kuala-lumpur-international-college",
+      "country": "MY",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "idp-ielts-malaysia-ptmj-bintulu",
+      "country": "MY",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "idp-ielts-new-zealand-queenstown",
+      "country": "NZ",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "idp-ielts-oman-code-academy",
+      "country": "OM",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "idp-ielts-oman-code-academy-al-khoud",
+      "country": "OM",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "idp-ielts-oman-data-academy",
+      "country": "OM",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "idp-ielts-oman-eles-muscat",
+      "country": "OM",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "idp-ielts-oman-indian-school-al-wadi-al-kabir",
+      "country": "OM",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "idp-ielts-oman-khaleej-oman-institute-muscat",
+      "country": "OM",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "idp-ielts-oman-lingua-institute",
+      "country": "OM",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "idp-ielts-oman-modern-gulf-institute",
+      "country": "OM",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "idp-ielts-oman-national-academy-of-management-and-tech",
+      "country": "OM",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "idp-ielts-oman-oman-dental-college",
+      "country": "OM",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "idp-ielts-oman-pakistan-school-muscat",
+      "country": "OM",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "idp-ielts-oman-united-international-schools",
+      "country": "OM",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "idp-ielts-oman-university-of-technology-and-applied-sciences-muscat",
+      "country": "OM",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "idp-ielts-oman-university-of-technology-and-applied-sciences-shinas",
+      "country": "OM",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "idp-ielts-philippines-besta-bohol",
+      "country": "PH",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "idp-ielts-saudi-arabia-al-khobar-neft-energies",
+      "country": "SA",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "idp-ielts-saudi-arabia-imam-abdulrahman-bin-faisal-university",
+      "country": "SA",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "idp-ielts-saudi-arabia-king-khalid-university",
+      "country": "SA",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "idp-ielts-saudi-arabia-shabaka-training-institute",
+      "country": "SA",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "idp-ielts-south-korea-busan-lexis",
+      "country": "KR",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "idp-ielts-south-korea-daejeon-cnu",
+      "country": "KR",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "idp-ielts-south-korea-seoul-gangnam",
+      "country": "KR",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "idp-ielts-test-centre-mong-kok",
+      "country": "HK",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "idp-ielts-thailand-bangkok-assumption-college",
+      "country": "TH",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "idp-ielts-thailand-chiang-mai-huizhong",
+      "country": "TH",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "idp-ielts-thailand-chiang-mai-i-genius-language-institute",
+      "country": "TH",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "idp-ielts-thailand-korat-well-balanced-english",
+      "country": "TH",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "idp-ielts-turkey-gaziantep-head-english",
+      "country": "TR",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "idp-ielts-victoria-island",
+      "country": "NG",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "idp-ielts-vietnam-fpt-university-campus-quy-nhon",
+      "country": "VN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "idp-ielts-vietnam-hanex-english-academy-ba-ria",
+      "country": "VN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "idp-ielts-vietnam-ielts-champions-thanh-hoa",
+      "country": "VN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "idp-ielts-vietnam-ivy-thai-binh",
+      "country": "VN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "idp-kenya-nairobi",
+      "country": "KE",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:pending_duplicate_candidate"
+      ]
+    },
+    {
+      "id": "idp-lahore-ielts-life-skills-a1-b1-results-in-5-7-days",
+      "country": "PK",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "idp-new-delhi-nehru-place-speaking",
+      "country": "IN",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:pending_duplicate_candidate"
+      ]
+    },
+    {
+      "id": "idp-oman-al-madina-plaza",
+      "country": "OM",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "idp-victoria-island-ielts-on-computer",
+      "country": "NG",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "ielts-arequipa-international-house-lima",
+      "country": "PE",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "ielts-argentina-cordoba-british-school",
+      "country": "AR",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "ielts-chihuahua-international-house-mexico",
+      "country": "MX",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "ielts-mongolia-ulaanbaatar-intellgent-llc",
+      "country": "MN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "ielts-on-computer-idp-education-one-raffles-place",
+      "country": "SG",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "ielts-peru-international-house-san-borja",
+      "country": "PE",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "ielts-usa-davenport-ia",
+      "country": "US",
+      "decision": "quarantined",
+      "pinnable": false,
+      "issues": [
+        "error:no_published_price",
+        "info:missing_contact_information",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "ielts-usa-kansas-city-mo",
+      "country": "US",
+      "decision": "quarantined",
+      "pinnable": false,
+      "issues": [
+        "error:no_published_price",
+        "info:missing_contact_information",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "ielts-usa-lincoln-ne",
+      "country": "US",
+      "decision": "quarantined",
+      "pinnable": false,
+      "issues": [
+        "error:no_published_price",
+        "info:missing_contact_information",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "ielts-usa-new-haven-ct",
+      "country": "US",
+      "decision": "quarantined",
+      "pinnable": false,
+      "issues": [
+        "error:no_published_price",
+        "info:missing_contact_information",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "ielts-usa-new-orleans-la",
+      "country": "US",
+      "decision": "quarantined",
+      "pinnable": false,
+      "issues": [
+        "error:no_published_price",
+        "info:missing_contact_information",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "inner-mongolia-normal-university",
+      "country": "CN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "international-house-bogota-cali",
+      "country": "CO",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "international-house-condesa-test-room",
+      "country": "MX",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "international-house-mexico-hipodromo-condesa",
+      "country": "MX",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:pending_duplicate_candidate"
+      ]
+    },
+    {
+      "id": "international-house-mexico-ukvi-ls-hipodromo-condesa",
+      "country": "MX",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:pending_duplicate_candidate"
+      ]
+    },
+    {
+      "id": "international-school-of-dongguan",
+      "country": "CN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "jiangsu-communication-and-media-school-jsbc-gulou-litchi-plaza",
+      "country": "CN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "jiangsu-university",
+      "country": "CN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "khanna",
+      "country": "IN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "knowledge-park-university-of-wollongong-in-dubai",
+      "country": "AE",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "liaoning-university",
+      "country": "CN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "masterclass-academy-of-language-rotterdam",
+      "country": "NL",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:missing_city"
+      ]
+    },
+    {
+      "id": "mehsana",
+      "country": "IN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "mod-cd-ielts-abuja-test-room",
+      "country": "NG",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "mod-education-nigeria-makurdi",
+      "country": "NG",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "mod-education-nigeria-ogudu",
+      "country": "NG",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "mod-education-nigeria-owerri",
+      "country": "NG",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "mod-ielts-victoria-island",
+      "country": "NG",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "muscat-training-institute-capital-academy",
+      "country": "OM",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "muscat-training-institute-muscat-university-building",
+      "country": "OM",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "nanjing-university-of-aeronautics-and-astronautics",
+      "country": "CN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "nanjing-university-of-information-science-and-technology",
+      "country": "CN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "netcom-systems-test-room",
+      "country": "LB",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "ningbo-huamao-foreign-language-school",
+      "country": "CN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "north-american-school-porto-alegre",
+      "country": "BR",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "northwestern-polytechnical-university",
+      "country": "CN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "oval-international-academy",
+      "country": "JO",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "qatar-aeronautical-academy",
+      "country": "QA",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:missing_city"
+      ]
+    },
+    {
+      "id": "renmin-university-of-china",
+      "country": "CN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "saudi-british-centre-alkhobar",
+      "country": "SA",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "saudi-british-centre-tabuk-paper-based",
+      "country": "SA",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "seoul-gangnam-life-skills-seoul-gangnam-life-skills",
+      "country": "KR",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "shaanxi-normal-university",
+      "country": "CN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "shandong-university",
+      "country": "CN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "shanghai-ocean-university",
+      "country": "CN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "shanghai-university",
+      "country": "CN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "shanghai-university-of-finance-and-economics-jinian-road-campus",
+      "country": "CN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "shenyang-normal-university",
+      "country": "CN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "soochow-university",
+      "country": "CN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "south-china-university-of-technology",
+      "country": "CN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "strive-education-in-sabah-al-salem",
+      "country": "KW",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "taipei-computer-association-b1-no-2-sec-3-bade-rd",
+      "country": "TW",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "taiyuan-university-of-technology",
+      "country": "CN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "the-cambridge-school-salerno",
+      "country": "IT",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "ukvi-paper-based-ielts-idp-ielts-kazakhstan-astana",
+      "country": "KZ",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "uniabroad-kenya-the-eldoret-national-polytechnic",
+      "country": "KE",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "university-of-canterbury-christchurch",
+      "country": "NZ",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:missing_city"
+      ]
+    },
+    {
+      "id": "university-of-electronic-science-and-technology-of-china",
+      "country": "CN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "university-of-mustansiriyah",
+      "country": "IQ",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "vijayawada",
+      "country": "IN",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:pending_duplicate_candidate"
+      ]
+    },
+    {
+      "id": "vijaywada",
+      "country": "IN",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:pending_duplicate_candidate"
+      ]
+    },
+    {
+      "id": "wuhan-new-world-centre",
+      "country": "CN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "wuhan-university-shenzhen-institute",
+      "country": "CN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "wuxi-open-university",
+      "country": "CN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "yangzhou-university",
+      "country": "CN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "zhejiang-education-examinations-authority",
+      "country": "CN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "zhejiang-education-examinations-authority-wenzhou",
+      "country": "CN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "zhejiang-university-of-science-and-technology",
+      "country": "CN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    }
+  ],
+  "unresolvedSourceSlugs": [
+    "british-council-ad-phonetic-reading-centre-inc-ad-tutoring-3",
+    "british-council-american-university-of-sharjah-2",
+    "british-council-bitts-testing-services-mcadam-2",
+    "british-council-bitts-west-bitts-coquitlam-2",
+    "british-council-british-council-lilongwe-2",
+    "british-council-can-esl-inc-regina-canesl",
+    "british-council-etc-central-grace-christian-church",
+    "british-council-global-citizen-panthapath",
+    "british-council-global-citizen-uttara",
+    "british-council-humber-college-ital-cambrian-college-2",
+    "british-council-humber-college-ital-humber-college-downtown-igs-2",
+    "british-council-humber-college-ital-lakeshore-campus-2",
+    "british-council-humber-college-ital-north-main-campus-2",
+    "british-council-ilsc-toronto-downtown-main-campus-3",
+    "british-council-inlingua-victoria-college-of-languages-and-careers-inlingua-victoria-2",
+    "british-council-kaplan-ielts-test-centre-kaplan-vancouver-2",
+    "british-council-london-training-institute-sawary-centre",
+    "british-council-mosaic-203-newton",
+    "british-council-oxford-international-north-america-oxford-international-3",
+    "british-council-paradise-complex-2",
+    "british-council-princess-nourah-bint-abdul-rahman-university-females-only",
+    "british-council-synergi-2",
+    "british-council-university-of-kufa",
+    "homeland-testing-centres-homeland-international-english-school",
+    "idp-ielts-oman-university-of-technology-and-applied-sciences-nizwa",
+    "idp-ielts-oman-university-of-technology-and-applied-sciences-rustaq",
+    "idp-ielts-oman-university-of-technology-and-applied-sciences-salalah",
+    "idp-ielts-oman-university-of-technology-and-applied-sciences-sohar",
+    "idp-ielts-oman-university-of-technology-and-applied-sciences-sur",
+    "idp-ielts-saudi-arabia-fahad-bin-sultan-university-riyadh",
+    "idp-ielts-saudi-arabia-hinti-academy-riyadh",
+    "idp-ielts-saudi-arabia-riyadh-kingdom-schools-female",
+    "idp-ielts-vanuatu-port-vila",
+    "idp-ielts-vietnam-ielts-arena-ninh-binh",
+    "idp-lahore-cantonment-test-center-from-june-2024"
+  ],
+  "byCountry": {
+    "AE": {
+      "centres": 54,
+      "ready": 32,
+      "needsReview": 22,
+      "quarantined": 0,
+      "nonPinnable": 12,
+      "issues": {
+        "legacy_city": 21,
+        "location_not_verified": 12,
+        "missing_city": 1
+      }
+    },
+    "AL": {
+      "centres": 1,
+      "ready": 1,
+      "needsReview": 0,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {}
+    },
+    "AM": {
+      "centres": 3,
+      "ready": 3,
+      "needsReview": 0,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {}
+    },
+    "AR": {
+      "centres": 6,
+      "ready": 3,
+      "needsReview": 3,
+      "quarantined": 0,
+      "nonPinnable": 3,
+      "issues": {
+        "legacy_city": 3,
+        "location_not_verified": 3
+      }
+    },
+    "AT": {
+      "centres": 2,
+      "ready": 2,
+      "needsReview": 0,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {}
+    },
+    "AU": {
+      "centres": 22,
+      "ready": 20,
+      "needsReview": 2,
+      "quarantined": 0,
+      "nonPinnable": 2,
+      "issues": {
+        "legacy_city": 2,
+        "location_not_verified": 2
+      }
+    },
+    "AZ": {
+      "centres": 3,
+      "ready": 1,
+      "needsReview": 2,
+      "quarantined": 0,
+      "nonPinnable": 1,
+      "issues": {
+        "legacy_city": 2,
+        "location_not_verified": 1
+      }
+    },
+    "BA": {
+      "centres": 1,
+      "ready": 1,
+      "needsReview": 0,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {}
+    },
+    "BD": {
+      "centres": 39,
+      "ready": 32,
+      "needsReview": 7,
+      "quarantined": 0,
+      "nonPinnable": 3,
+      "issues": {
+        "legacy_city": 7,
+        "location_not_verified": 3
+      }
+    },
+    "BE": {
+      "centres": 2,
+      "ready": 2,
+      "needsReview": 0,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {}
+    },
+    "BG": {
+      "centres": 5,
+      "ready": 4,
+      "needsReview": 1,
+      "quarantined": 0,
+      "nonPinnable": 1,
+      "issues": {
+        "legacy_city": 1,
+        "location_not_verified": 1
+      }
+    },
+    "BH": {
+      "centres": 2,
+      "ready": 1,
+      "needsReview": 1,
+      "quarantined": 0,
+      "nonPinnable": 1,
+      "issues": {
+        "legacy_city": 1,
+        "location_not_verified": 1
+      }
+    },
+    "BN": {
+      "centres": 2,
+      "ready": 1,
+      "needsReview": 1,
+      "quarantined": 0,
+      "nonPinnable": 1,
+      "issues": {
+        "legacy_city": 1,
+        "location_not_verified": 1
+      }
+    },
+    "BR": {
+      "centres": 17,
+      "ready": 13,
+      "needsReview": 4,
+      "quarantined": 0,
+      "nonPinnable": 1,
+      "issues": {
+        "legacy_city": 3,
+        "location_not_verified": 1,
+        "missing_city": 1
+      }
+    },
+    "BT": {
+      "centres": 2,
+      "ready": 2,
+      "needsReview": 0,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {}
+    },
+    "BW": {
+      "centres": 1,
+      "ready": 0,
+      "needsReview": 1,
+      "quarantined": 0,
+      "nonPinnable": 1,
+      "issues": {
+        "legacy_city": 1,
+        "location_not_verified": 1
+      }
+    },
+    "CA": {
+      "centres": 142,
+      "ready": 141,
+      "needsReview": 1,
+      "quarantined": 0,
+      "nonPinnable": 1,
+      "issues": {
+        "location_not_verified": 1,
+        "missing_contact_information": 12
+      }
+    },
+    "CH": {
+      "centres": 9,
+      "ready": 8,
+      "needsReview": 1,
+      "quarantined": 0,
+      "nonPinnable": 1,
+      "issues": {
+        "legacy_city": 1,
+        "location_not_verified": 1
+      }
+    },
+    "CI": {
+      "centres": 1,
+      "ready": 1,
+      "needsReview": 0,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {}
+    },
+    "CL": {
+      "centres": 3,
+      "ready": 2,
+      "needsReview": 1,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {
+        "legacy_city": 1
+      }
+    },
+    "CM": {
+      "centres": 2,
+      "ready": 0,
+      "needsReview": 2,
+      "quarantined": 0,
+      "nonPinnable": 2,
+      "issues": {
+        "legacy_city": 2,
+        "location_not_verified": 2
+      }
+    },
+    "CN": {
+      "centres": 110,
+      "ready": 57,
+      "needsReview": 53,
+      "quarantined": 0,
+      "nonPinnable": 53,
+      "issues": {
+        "legacy_city": 53,
+        "location_not_verified": 53
+      }
+    },
+    "CO": {
+      "centres": 12,
+      "ready": 10,
+      "needsReview": 2,
+      "quarantined": 0,
+      "nonPinnable": 1,
+      "issues": {
+        "legacy_city": 2,
+        "location_not_verified": 1
+      }
+    },
+    "CY": {
+      "centres": 11,
+      "ready": 10,
+      "needsReview": 1,
+      "quarantined": 0,
+      "nonPinnable": 1,
+      "issues": {
+        "legacy_city": 1,
+        "location_not_verified": 1
+      }
+    },
+    "CZ": {
+      "centres": 2,
+      "ready": 2,
+      "needsReview": 0,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {}
+    },
+    "DE": {
+      "centres": 13,
+      "ready": 12,
+      "needsReview": 1,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {
+        "missing_city": 1
+      }
+    },
+    "DK": {
+      "centres": 1,
+      "ready": 1,
+      "needsReview": 0,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {}
+    },
+    "DZ": {
+      "centres": 4,
+      "ready": 4,
+      "needsReview": 0,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {}
+    },
+    "EC": {
+      "centres": 3,
+      "ready": 2,
+      "needsReview": 1,
+      "quarantined": 0,
+      "nonPinnable": 1,
+      "issues": {
+        "legacy_city": 1,
+        "missing_location": 1
+      }
+    },
+    "EE": {
+      "centres": 1,
+      "ready": 1,
+      "needsReview": 0,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {}
+    },
+    "EG": {
+      "centres": 17,
+      "ready": 8,
+      "needsReview": 9,
+      "quarantined": 0,
+      "nonPinnable": 5,
+      "issues": {
+        "legacy_city": 8,
+        "location_not_verified": 5,
+        "missing_city": 1,
+        "missing_contact_information": 1
+      }
+    },
+    "ES": {
+      "centres": 17,
+      "ready": 15,
+      "needsReview": 2,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {
+        "legacy_city": 2
+      }
+    },
+    "ET": {
+      "centres": 1,
+      "ready": 1,
+      "needsReview": 0,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {}
+    },
+    "FI": {
+      "centres": 1,
+      "ready": 1,
+      "needsReview": 0,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {}
+    },
+    "FJ": {
+      "centres": 1,
+      "ready": 1,
+      "needsReview": 0,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {}
+    },
+    "FR": {
+      "centres": 10,
+      "ready": 9,
+      "needsReview": 1,
+      "quarantined": 0,
+      "nonPinnable": 1,
+      "issues": {
+        "legacy_city": 1,
+        "location_not_verified": 1
+      }
+    },
+    "GB": {
+      "centres": 56,
+      "ready": 40,
+      "needsReview": 16,
+      "quarantined": 0,
+      "nonPinnable": 9,
+      "issues": {
+        "location_not_verified": 9,
+        "missing_city": 16,
+        "missing_contact_information": 1
+      }
+    },
+    "GE": {
+      "centres": 2,
+      "ready": 1,
+      "needsReview": 1,
+      "quarantined": 0,
+      "nonPinnable": 1,
+      "issues": {
+        "legacy_city": 1,
+        "location_not_verified": 1
+      }
+    },
+    "GG": {
+      "centres": 1,
+      "ready": 1,
+      "needsReview": 0,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {}
+    },
+    "GH": {
+      "centres": 9,
+      "ready": 4,
+      "needsReview": 5,
+      "quarantined": 0,
+      "nonPinnable": 1,
+      "issues": {
+        "legacy_city": 5,
+        "location_not_verified": 1
+      }
+    },
+    "GM": {
+      "centres": 1,
+      "ready": 1,
+      "needsReview": 0,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {}
+    },
+    "GR": {
+      "centres": 6,
+      "ready": 4,
+      "needsReview": 2,
+      "quarantined": 0,
+      "nonPinnable": 1,
+      "issues": {
+        "legacy_city": 1,
+        "location_not_verified": 1,
+        "missing_city": 1
+      }
+    },
+    "HK": {
+      "centres": 3,
+      "ready": 0,
+      "needsReview": 3,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {
+        "legacy_city": 3
+      }
+    },
+    "HR": {
+      "centres": 2,
+      "ready": 1,
+      "needsReview": 1,
+      "quarantined": 0,
+      "nonPinnable": 1,
+      "issues": {
+        "legacy_city": 1,
+        "location_not_verified": 1,
+        "missing_contact_information": 2
+      }
+    },
+    "HU": {
+      "centres": 1,
+      "ready": 1,
+      "needsReview": 0,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {}
+    },
+    "ID": {
+      "centres": 53,
+      "ready": 49,
+      "needsReview": 4,
+      "quarantined": 0,
+      "nonPinnable": 3,
+      "issues": {
+        "legacy_city": 4,
+        "location_not_verified": 3
+      }
+    },
+    "IE": {
+      "centres": 7,
+      "ready": 6,
+      "needsReview": 1,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {
+        "legacy_city": 1,
+        "missing_contact_information": 1
+      }
+    },
+    "IL": {
+      "centres": 2,
+      "ready": 2,
+      "needsReview": 0,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {
+        "missing_contact_information": 1
+      }
+    },
+    "IN": {
+      "centres": 121,
+      "ready": 105,
+      "needsReview": 16,
+      "quarantined": 0,
+      "nonPinnable": 12,
+      "issues": {
+        "legacy_city": 12,
+        "location_not_verified": 12,
+        "pending_duplicate_candidate": 4
+      }
+    },
+    "IQ": {
+      "centres": 8,
+      "ready": 3,
+      "needsReview": 5,
+      "quarantined": 0,
+      "nonPinnable": 4,
+      "issues": {
+        "legacy_city": 5,
+        "location_not_verified": 4
+      }
+    },
+    "IT": {
+      "centres": 41,
+      "ready": 39,
+      "needsReview": 2,
+      "quarantined": 0,
+      "nonPinnable": 1,
+      "issues": {
+        "legacy_city": 2,
+        "location_not_verified": 1
+      }
+    },
+    "JE": {
+      "centres": 1,
+      "ready": 1,
+      "needsReview": 0,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {}
+    },
+    "JO": {
+      "centres": 4,
+      "ready": 1,
+      "needsReview": 3,
+      "quarantined": 0,
+      "nonPinnable": 3,
+      "issues": {
+        "legacy_city": 3,
+        "location_not_verified": 3
+      }
+    },
+    "JP": {
+      "centres": 15,
+      "ready": 13,
+      "needsReview": 2,
+      "quarantined": 0,
+      "nonPinnable": 2,
+      "issues": {
+        "legacy_city": 2,
+        "location_not_verified": 2
+      }
+    },
+    "KE": {
+      "centres": 12,
+      "ready": 6,
+      "needsReview": 6,
+      "quarantined": 0,
+      "nonPinnable": 1,
+      "issues": {
+        "legacy_city": 2,
+        "location_not_verified": 1,
+        "missing_city": 1,
+        "pending_duplicate_candidate": 4
+      }
+    },
+    "KG": {
+      "centres": 2,
+      "ready": 0,
+      "needsReview": 2,
+      "quarantined": 0,
+      "nonPinnable": 2,
+      "issues": {
+        "legacy_city": 2,
+        "location_not_verified": 2
+      }
+    },
+    "KH": {
+      "centres": 4,
+      "ready": 4,
+      "needsReview": 0,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {}
+    },
+    "KR": {
+      "centres": 20,
+      "ready": 15,
+      "needsReview": 5,
+      "quarantined": 0,
+      "nonPinnable": 2,
+      "issues": {
+        "legacy_city": 4,
+        "location_not_verified": 2,
+        "missing_city": 1
+      }
+    },
+    "KW": {
+      "centres": 6,
+      "ready": 2,
+      "needsReview": 4,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {
+        "legacy_city": 4
+      }
+    },
+    "KZ": {
+      "centres": 26,
+      "ready": 11,
+      "needsReview": 15,
+      "quarantined": 0,
+      "nonPinnable": 15,
+      "issues": {
+        "legacy_city": 12,
+        "location_not_verified": 15,
+        "missing_city": 3
+      }
+    },
+    "LA": {
+      "centres": 3,
+      "ready": 3,
+      "needsReview": 0,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {}
+    },
+    "LB": {
+      "centres": 4,
+      "ready": 2,
+      "needsReview": 2,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {
+        "legacy_city": 2
+      }
+    },
+    "LK": {
+      "centres": 13,
+      "ready": 12,
+      "needsReview": 1,
+      "quarantined": 0,
+      "nonPinnable": 1,
+      "issues": {
+        "legacy_city": 1,
+        "location_not_verified": 1
+      }
+    },
+    "LT": {
+      "centres": 1,
+      "ready": 0,
+      "needsReview": 1,
+      "quarantined": 0,
+      "nonPinnable": 1,
+      "issues": {
+        "legacy_city": 1,
+        "location_not_verified": 1
+      }
+    },
+    "LU": {
+      "centres": 2,
+      "ready": 1,
+      "needsReview": 1,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {
+        "legacy_city": 1
+      }
+    },
+    "LV": {
+      "centres": 1,
+      "ready": 1,
+      "needsReview": 0,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {}
+    },
+    "LY": {
+      "centres": 3,
+      "ready": 0,
+      "needsReview": 3,
+      "quarantined": 0,
+      "nonPinnable": 3,
+      "issues": {
+        "legacy_city": 3,
+        "location_not_verified": 3
+      }
+    },
+    "MA": {
+      "centres": 8,
+      "ready": 3,
+      "needsReview": 5,
+      "quarantined": 0,
+      "nonPinnable": 5,
+      "issues": {
+        "legacy_city": 5,
+        "location_not_verified": 5
+      }
+    },
+    "MD": {
+      "centres": 2,
+      "ready": 1,
+      "needsReview": 1,
+      "quarantined": 0,
+      "nonPinnable": 1,
+      "issues": {
+        "legacy_city": 1,
+        "location_not_verified": 1
+      }
+    },
+    "ME": {
+      "centres": 1,
+      "ready": 1,
+      "needsReview": 0,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {}
+    },
+    "MG": {
+      "centres": 1,
+      "ready": 1,
+      "needsReview": 0,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {}
+    },
+    "MK": {
+      "centres": 1,
+      "ready": 0,
+      "needsReview": 1,
+      "quarantined": 0,
+      "nonPinnable": 1,
+      "issues": {
+        "legacy_city": 1,
+        "location_not_verified": 1,
+        "missing_contact_information": 1
+      }
+    },
+    "MM": {
+      "centres": 2,
+      "ready": 1,
+      "needsReview": 1,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {
+        "legacy_city": 1
+      }
+    },
+    "MN": {
+      "centres": 6,
+      "ready": 3,
+      "needsReview": 3,
+      "quarantined": 0,
+      "nonPinnable": 3,
+      "issues": {
+        "legacy_city": 3,
+        "location_not_verified": 3
+      }
+    },
+    "MO": {
+      "centres": 4,
+      "ready": 0,
+      "needsReview": 4,
+      "quarantined": 0,
+      "nonPinnable": 2,
+      "issues": {
+        "legacy_city": 4,
+        "location_not_verified": 2
+      }
+    },
+    "MT": {
+      "centres": 1,
+      "ready": 1,
+      "needsReview": 0,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {}
+    },
+    "MU": {
+      "centres": 3,
+      "ready": 3,
+      "needsReview": 0,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {}
+    },
+    "MV": {
+      "centres": 1,
+      "ready": 1,
+      "needsReview": 0,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {}
+    },
+    "MW": {
+      "centres": 2,
+      "ready": 1,
+      "needsReview": 1,
+      "quarantined": 0,
+      "nonPinnable": 1,
+      "issues": {
+        "legacy_city": 1,
+        "location_not_verified": 1
+      }
+    },
+    "MX": {
+      "centres": 24,
+      "ready": 18,
+      "needsReview": 6,
+      "quarantined": 0,
+      "nonPinnable": 4,
+      "issues": {
+        "legacy_city": 4,
+        "location_not_verified": 4,
+        "pending_duplicate_candidate": 2
+      }
+    },
+    "MY": {
+      "centres": 30,
+      "ready": 25,
+      "needsReview": 5,
+      "quarantined": 0,
+      "nonPinnable": 4,
+      "issues": {
+        "legacy_city": 5,
+        "location_not_verified": 4
+      }
+    },
+    "MZ": {
+      "centres": 1,
+      "ready": 1,
+      "needsReview": 0,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {}
+    },
+    "NA": {
+      "centres": 1,
+      "ready": 0,
+      "needsReview": 1,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {
+        "legacy_city": 1
+      }
+    },
+    "NC": {
+      "centres": 1,
+      "ready": 1,
+      "needsReview": 0,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {}
+    },
+    "NG": {
+      "centres": 45,
+      "ready": 33,
+      "needsReview": 12,
+      "quarantined": 0,
+      "nonPinnable": 12,
+      "issues": {
+        "legacy_city": 11,
+        "location_not_verified": 12,
+        "missing_city": 1
+      }
+    },
+    "NL": {
+      "centres": 12,
+      "ready": 9,
+      "needsReview": 3,
+      "quarantined": 0,
+      "nonPinnable": 1,
+      "issues": {
+        "location_not_verified": 1,
+        "missing_city": 3
+      }
+    },
+    "NO": {
+      "centres": 3,
+      "ready": 3,
+      "needsReview": 0,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {}
+    },
+    "NP": {
+      "centres": 11,
+      "ready": 8,
+      "needsReview": 3,
+      "quarantined": 0,
+      "nonPinnable": 3,
+      "issues": {
+        "legacy_city": 3,
+        "location_not_verified": 3
+      }
+    },
+    "NZ": {
+      "centres": 7,
+      "ready": 5,
+      "needsReview": 2,
+      "quarantined": 0,
+      "nonPinnable": 1,
+      "issues": {
+        "legacy_city": 1,
+        "location_not_verified": 1,
+        "missing_city": 1
+      }
+    },
+    "OM": {
+      "centres": 40,
+      "ready": 6,
+      "needsReview": 34,
+      "quarantined": 0,
+      "nonPinnable": 21,
+      "issues": {
+        "legacy_city": 32,
+        "location_not_verified": 21,
+        "missing_city": 2,
+        "missing_contact_information": 7,
+        "pending_duplicate_candidate": 2
+      }
+    },
+    "PE": {
+      "centres": 6,
+      "ready": 4,
+      "needsReview": 2,
+      "quarantined": 0,
+      "nonPinnable": 2,
+      "issues": {
+        "legacy_city": 2,
+        "location_not_verified": 2
+      }
+    },
+    "PF": {
+      "centres": 1,
+      "ready": 1,
+      "needsReview": 0,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {}
+    },
+    "PG": {
+      "centres": 1,
+      "ready": 1,
+      "needsReview": 0,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {}
+    },
+    "PH": {
+      "centres": 39,
+      "ready": 36,
+      "needsReview": 3,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {
+        "legacy_city": 3
+      }
+    },
+    "PK": {
+      "centres": 32,
+      "ready": 22,
+      "needsReview": 10,
+      "quarantined": 0,
+      "nonPinnable": 6,
+      "issues": {
+        "legacy_city": 10,
+        "location_not_verified": 6,
+        "missing_contact_information": 1
+      }
+    },
+    "PL": {
+      "centres": 8,
+      "ready": 8,
+      "needsReview": 0,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {}
+    },
+    "PS": {
+      "centres": 1,
+      "ready": 1,
+      "needsReview": 0,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {}
+    },
+    "PT": {
+      "centres": 8,
+      "ready": 8,
+      "needsReview": 0,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {}
+    },
+    "QA": {
+      "centres": 8,
+      "ready": 6,
+      "needsReview": 2,
+      "quarantined": 0,
+      "nonPinnable": 1,
+      "issues": {
+        "legacy_city": 1,
+        "location_not_verified": 1,
+        "missing_city": 1
+      }
+    },
+    "RO": {
+      "centres": 8,
+      "ready": 8,
+      "needsReview": 0,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {}
+    },
+    "RS": {
+      "centres": 3,
+      "ready": 2,
+      "needsReview": 1,
+      "quarantined": 0,
+      "nonPinnable": 1,
+      "issues": {
+        "legacy_city": 1,
+        "location_not_verified": 1
+      }
+    },
+    "RW": {
+      "centres": 1,
+      "ready": 1,
+      "needsReview": 0,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {}
+    },
+    "SA": {
+      "centres": 26,
+      "ready": 12,
+      "needsReview": 14,
+      "quarantined": 0,
+      "nonPinnable": 12,
+      "issues": {
+        "legacy_city": 14,
+        "location_not_verified": 11,
+        "missing_location": 1
+      }
+    },
+    "SC": {
+      "centres": 1,
+      "ready": 0,
+      "needsReview": 1,
+      "quarantined": 0,
+      "nonPinnable": 1,
+      "issues": {
+        "legacy_city": 1,
+        "location_not_verified": 1
+      }
+    },
+    "SE": {
+      "centres": 3,
+      "ready": 1,
+      "needsReview": 2,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {
+        "missing_city": 2
+      }
+    },
+    "SG": {
+      "centres": 4,
+      "ready": 3,
+      "needsReview": 1,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {
+        "legacy_city": 1
+      }
+    },
+    "SK": {
+      "centres": 3,
+      "ready": 1,
+      "needsReview": 2,
+      "quarantined": 0,
+      "nonPinnable": 2,
+      "issues": {
+        "location_not_verified": 2,
+        "missing_city": 2
+      }
+    },
+    "SL": {
+      "centres": 1,
+      "ready": 1,
+      "needsReview": 0,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {}
+    },
+    "SN": {
+      "centres": 1,
+      "ready": 0,
+      "needsReview": 1,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {
+        "legacy_city": 1
+      }
+    },
+    "SY": {
+      "centres": 1,
+      "ready": 1,
+      "needsReview": 0,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {}
+    },
+    "TG": {
+      "centres": 1,
+      "ready": 0,
+      "needsReview": 1,
+      "quarantined": 0,
+      "nonPinnable": 1,
+      "issues": {
+        "legacy_city": 1,
+        "location_not_verified": 1
+      }
+    },
+    "TH": {
+      "centres": 40,
+      "ready": 33,
+      "needsReview": 7,
+      "quarantined": 0,
+      "nonPinnable": 7,
+      "issues": {
+        "legacy_city": 7,
+        "location_not_verified": 7
+      }
+    },
+    "TJ": {
+      "centres": 1,
+      "ready": 1,
+      "needsReview": 0,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {}
+    },
+    "TL": {
+      "centres": 1,
+      "ready": 1,
+      "needsReview": 0,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {}
+    },
+    "TN": {
+      "centres": 4,
+      "ready": 1,
+      "needsReview": 3,
+      "quarantined": 0,
+      "nonPinnable": 3,
+      "issues": {
+        "legacy_city": 3,
+        "location_not_verified": 3
+      }
+    },
+    "TO": {
+      "centres": 1,
+      "ready": 1,
+      "needsReview": 0,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {}
+    },
+    "TR": {
+      "centres": 16,
+      "ready": 11,
+      "needsReview": 5,
+      "quarantined": 0,
+      "nonPinnable": 4,
+      "issues": {
+        "legacy_city": 5,
+        "location_not_verified": 4
+      }
+    },
+    "TT": {
+      "centres": 1,
+      "ready": 1,
+      "needsReview": 0,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {}
+    },
+    "TW": {
+      "centres": 13,
+      "ready": 12,
+      "needsReview": 1,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {
+        "legacy_city": 1,
+        "missing_contact_information": 1
+      }
+    },
+    "TZ": {
+      "centres": 1,
+      "ready": 0,
+      "needsReview": 1,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {
+        "legacy_city": 1
+      }
+    },
+    "UG": {
+      "centres": 1,
+      "ready": 0,
+      "needsReview": 1,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {
+        "legacy_city": 1
+      }
+    },
+    "US": {
+      "centres": 28,
+      "ready": 22,
+      "needsReview": 1,
+      "quarantined": 5,
+      "nonPinnable": 6,
+      "issues": {
+        "location_not_verified": 6,
+        "missing_contact_information": 5,
+        "no_published_price": 5
+      }
+    },
+    "UY": {
+      "centres": 2,
+      "ready": 1,
+      "needsReview": 1,
+      "quarantined": 0,
+      "nonPinnable": 1,
+      "issues": {
+        "legacy_city": 1,
+        "location_not_verified": 1
+      }
+    },
+    "UZ": {
+      "centres": 29,
+      "ready": 14,
+      "needsReview": 15,
+      "quarantined": 0,
+      "nonPinnable": 10,
+      "issues": {
+        "legacy_city": 15,
+        "location_not_verified": 10
+      }
+    },
+    "VE": {
+      "centres": 1,
+      "ready": 1,
+      "needsReview": 0,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {}
+    },
+    "VN": {
+      "centres": 41,
+      "ready": 24,
+      "needsReview": 17,
+      "quarantined": 0,
+      "nonPinnable": 17,
+      "issues": {
+        "legacy_city": 17,
+        "location_not_verified": 17
+      }
+    },
+    "XK": {
+      "centres": 1,
+      "ready": 0,
+      "needsReview": 1,
+      "quarantined": 0,
+      "nonPinnable": 1,
+      "issues": {
+        "legacy_city": 1,
+        "location_not_verified": 1,
+        "missing_contact_information": 1
+      }
+    },
+    "YE": {
+      "centres": 1,
+      "ready": 0,
+      "needsReview": 1,
+      "quarantined": 0,
+      "nonPinnable": 1,
+      "issues": {
+        "legacy_city": 1,
+        "location_not_verified": 1
+      }
+    },
+    "ZA": {
+      "centres": 7,
+      "ready": 7,
+      "needsReview": 0,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {}
+    },
+    "ZM": {
+      "centres": 2,
+      "ready": 2,
+      "needsReview": 0,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {}
+    },
+    "ZW": {
+      "centres": 2,
+      "ready": 1,
+      "needsReview": 1,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {
+        "legacy_city": 1
+      }
+    }
+  }
+}

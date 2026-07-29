@@ -1,203 +1,5133 @@
 {
-  "generatedAt": "2026-07-27T16:14:31.457Z",
-  "fuzzyMerges": [
+  "generatedAt": "2026-07-28T04:39:51.270Z",
+  "pendingMerges": [
     {
       "a": "idp-education-india-new-delhi-nehru-place",
       "b": "idp-new-delhi-nehru-place-speaking",
       "reason": "name_postcode",
-      "strength": 0.8
-    },
-    {
-      "a": "mod-education-nigeria-ogudu",
-      "b": "mod-education-nigeria-ojota",
-      "reason": "name_proximity",
-      "strength": 0.765
+      "strength": 0.8,
+      "decision": "pending"
     },
     {
       "a": "vijayawada",
       "b": "vijaywada",
       "reason": "name_postcode",
-      "strength": 0.9
+      "strength": 0.9,
+      "decision": "pending"
     },
     {
-      "a": "japan-study-abroad-foundation-hosei-university-ichigaya-campus-jsaf-ielts",
-      "b": "japan-study-abroad-foundation-hosei-university-ichigaya-campus",
-      "reason": "name_proximity",
-      "strength": 0.917
-    },
-    {
-      "a": "hawthorn-muscat-english-language-center-hawthorn-sur",
-      "b": "hawthorn-english-language-centre-sur",
+      "a": "hawthorn-english-language-centre-sur",
+      "b": "hawthorn-muscat-english-language-center-hawthorn-sur",
       "reason": "name_postcode",
-      "strength": 0.8
+      "strength": 0.8,
+      "decision": "pending"
     },
     {
       "a": "idp-kenya-nairobi",
       "b": "idp-ielts-kenya-nairobi",
       "reason": "name_postcode",
-      "strength": 1
+      "strength": 1,
+      "decision": "pending"
     },
     {
       "a": "international-house-mexico-hipodromo-condesa",
       "b": "international-house-mexico-ukvi-ls-hipodromo-condesa",
       "reason": "name_postcode",
-      "strength": 0.846
-    },
-    {
-      "a": "cultura-inglesa-curitiba",
-      "b": "associacao-cultura-inglesa-curitiba",
-      "reason": "name_proximity",
-      "strength": 0.75
+      "strength": 0.846,
+      "decision": "pending"
     },
     {
       "a": "idp-ielts-kenya-eldoret-potters-house-academy",
       "b": "idp-ielts-kenya-eldoret-potters-house-academy-eldoret-breemic",
       "reason": "name_postcode",
-      "strength": 0.833
+      "strength": 0.833,
+      "decision": "pending"
     }
   ],
   "parseFailures": [
     {
-      "slug": "british-council-global-citizen-uttara",
-      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-global-citizen-uttara"
-    },
-    {
-      "slug": "british-council-humber-college-ital-humber-college-downtown-igs-2",
-      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-humber-college-ital-humber-college-downtown-igs-2"
-    },
-    {
       "slug": "british-council-ad-phonetic-reading-centre-inc-ad-tutoring-3",
-      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-ad-phonetic-reading-centre-inc-ad-tutoring-3"
+      "error": "fetch failed"
     },
     {
       "slug": "british-council-global-citizen-panthapath",
-      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-global-citizen-panthapath"
+      "error": "fetch failed"
     },
     {
-      "slug": "british-council-bitts-west-bitts-coquitlam-2",
-      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-bitts-west-bitts-coquitlam-2"
+      "slug": "british-council-global-citizen-uttara",
+      "error": "fetch failed"
+    },
+    {
+      "slug": "british-council-humber-college-ital-humber-college-downtown-igs-2",
+      "error": "fetch failed"
     },
     {
       "slug": "british-council-synergi-2",
-      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-synergi-2"
+      "error": "fetch failed"
     },
     {
-      "slug": "british-council-university-of-kufa",
-      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-university-of-kufa"
+      "slug": "british-council-bitts-west-bitts-coquitlam-2",
+      "error": "fetch failed"
     },
     {
       "slug": "british-council-can-esl-inc-regina-canesl",
-      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-can-esl-inc-regina-canesl"
+      "error": "fetch failed"
+    },
+    {
+      "slug": "british-council-university-of-kufa",
+      "error": "fetch failed"
     },
     {
       "slug": "british-council-mosaic-203-newton",
-      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-mosaic-203-newton"
-    },
-    {
-      "slug": "british-council-etc-central-grace-christian-church",
-      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-etc-central-grace-christian-church"
-    },
-    {
-      "slug": "british-council-paradise-complex-2",
-      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-paradise-complex-2"
+      "error": "fetch failed"
     },
     {
       "slug": "british-council-bitts-testing-services-mcadam-2",
-      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-bitts-testing-services-mcadam-2"
+      "error": "fetch failed"
+    },
+    {
+      "slug": "british-council-etc-central-grace-christian-church",
+      "error": "fetch failed"
+    },
+    {
+      "slug": "british-council-paradise-complex-2",
+      "error": "fetch failed"
     },
     {
       "slug": "british-council-inlingua-victoria-college-of-languages-and-careers-inlingua-victoria-2",
-      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-inlingua-victoria-college-of-languages-and-careers-inlingua-victoria-2"
-    },
-    {
-      "slug": "british-council-oxford-international-north-america-oxford-international-3",
-      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-oxford-international-north-america-oxford-international-3"
+      "error": "fetch failed"
     },
     {
       "slug": "british-council-humber-college-ital-lakeshore-campus-2",
-      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-humber-college-ital-lakeshore-campus-2"
-    },
-    {
-      "slug": "british-council-humber-college-ital-cambrian-college-2",
-      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-humber-college-ital-cambrian-college-2"
+      "error": "fetch failed"
     },
     {
       "slug": "british-council-ilsc-toronto-downtown-main-campus-3",
-      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-ilsc-toronto-downtown-main-campus-3"
+      "error": "fetch failed"
     },
     {
-      "slug": "british-council-humber-college-ital-north-main-campus-2",
-      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-humber-college-ital-north-main-campus-2"
+      "slug": "british-council-oxford-international-north-america-oxford-international-3",
+      "error": "fetch failed"
     },
     {
-      "slug": "british-council-kaplan-ielts-test-centre-kaplan-vancouver-2",
-      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-kaplan-ielts-test-centre-kaplan-vancouver-2"
+      "slug": "british-council-humber-college-ital-cambrian-college-2",
+      "error": "fetch failed"
     },
     {
       "slug": "british-council-american-university-of-sharjah-2",
-      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-american-university-of-sharjah-2"
+      "error": "fetch failed"
+    },
+    {
+      "slug": "british-council-kaplan-ielts-test-centre-kaplan-vancouver-2",
+      "error": "fetch failed"
+    },
+    {
+      "slug": "british-council-humber-college-ital-north-main-campus-2",
+      "error": "fetch failed"
     },
     {
       "slug": "british-council-london-training-institute-sawary-centre",
-      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-london-training-institute-sawary-centre"
-    },
-    {
-      "slug": "idp-ielts-saudi-arabia-hinti-academy-riyadh",
-      "error": "HTTP 404 for https://ielts.org/test-centres/idp-ielts-saudi-arabia-hinti-academy-riyadh"
-    },
-    {
-      "slug": "british-council-british-council-lilongwe-2",
-      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-british-council-lilongwe-2"
+      "error": "fetch failed"
     },
     {
       "slug": "british-council-princess-nourah-bint-abdul-rahman-university-females-only",
-      "error": "HTTP 404 for https://ielts.org/test-centres/british-council-princess-nourah-bint-abdul-rahman-university-females-only"
+      "error": "fetch failed"
+    },
+    {
+      "slug": "idp-ielts-saudi-arabia-hinti-academy-riyadh",
+      "error": "fetch failed"
+    },
+    {
+      "slug": "british-council-british-council-lilongwe-2",
+      "error": "fetch failed"
     },
     {
       "slug": "idp-ielts-saudi-arabia-fahad-bin-sultan-university-riyadh",
-      "error": "HTTP 404 for https://ielts.org/test-centres/idp-ielts-saudi-arabia-fahad-bin-sultan-university-riyadh"
-    },
-    {
-      "slug": "idp-ielts-oman-university-of-technology-and-applied-sciences-sohar",
-      "error": "HTTP 404 for https://ielts.org/test-centres/idp-ielts-oman-university-of-technology-and-applied-sciences-sohar"
-    },
-    {
-      "slug": "idp-ielts-oman-university-of-technology-and-applied-sciences-sur",
-      "error": "HTTP 404 for https://ielts.org/test-centres/idp-ielts-oman-university-of-technology-and-applied-sciences-sur"
+      "error": "fetch failed"
     },
     {
       "slug": "idp-ielts-oman-university-of-technology-and-applied-sciences-salalah",
-      "error": "HTTP 404 for https://ielts.org/test-centres/idp-ielts-oman-university-of-technology-and-applied-sciences-salalah"
+      "error": "fetch failed"
+    },
+    {
+      "slug": "idp-ielts-oman-university-of-technology-and-applied-sciences-sohar",
+      "error": "fetch failed"
+    },
+    {
+      "slug": "idp-ielts-oman-university-of-technology-and-applied-sciences-sur",
+      "error": "fetch failed"
     },
     {
       "slug": "idp-ielts-oman-university-of-technology-and-applied-sciences-rustaq",
-      "error": "HTTP 404 for https://ielts.org/test-centres/idp-ielts-oman-university-of-technology-and-applied-sciences-rustaq"
-    },
-    {
-      "slug": "idp-ielts-saudi-arabia-riyadh-kingdom-schools-female",
-      "error": "HTTP 404 for https://ielts.org/test-centres/idp-ielts-saudi-arabia-riyadh-kingdom-schools-female"
-    },
-    {
-      "slug": "idp-ielts-vanuatu-port-vila",
-      "error": "HTTP 404 for https://ielts.org/test-centres/idp-ielts-vanuatu-port-vila"
+      "error": "fetch failed"
     },
     {
       "slug": "idp-ielts-oman-university-of-technology-and-applied-sciences-nizwa",
-      "error": "HTTP 404 for https://ielts.org/test-centres/idp-ielts-oman-university-of-technology-and-applied-sciences-nizwa"
+      "error": "fetch failed"
+    },
+    {
+      "slug": "idp-ielts-vanuatu-port-vila",
+      "error": "fetch failed"
+    },
+    {
+      "slug": "idp-ielts-saudi-arabia-riyadh-kingdom-schools-female",
+      "error": "fetch failed"
     },
     {
       "slug": "idp-ielts-vietnam-ielts-arena-ninh-binh",
-      "error": "HTTP 404 for https://ielts.org/test-centres/idp-ielts-vietnam-ielts-arena-ninh-binh"
-    },
-    {
-      "slug": "homeland-testing-centres-homeland-international-english-school",
-      "error": "HTTP 404 for https://ielts.org/test-centres/homeland-testing-centres-homeland-international-english-school"
+      "error": "fetch failed"
     },
     {
       "slug": "idp-lahore-cantonment-test-center-from-june-2024",
-      "error": "HTTP 404 for https://ielts.org/test-centres/idp-lahore-cantonment-test-center-from-june-2024"
+      "error": "fetch failed"
+    },
+    {
+      "slug": "homeland-testing-centres-homeland-international-english-school",
+      "error": "fetch failed"
     }
   ],
-  "ungeocoded": [],
-  "lowConfidence": []
+  "ungeocoded": [
+    {
+      "id": "bc-13779",
+      "name": "British Council, Ednex Academy"
+    },
+    {
+      "id": "bc-5447",
+      "name": "British Council, International House Quito - International House Edificio Rafermartz"
+    }
+  ],
+  "unverifiedLocations": [
+    {
+      "id": "aeo-faisalabad",
+      "name": "AEO Faisalabad",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "page_embed"
+      ],
+      "agreementKm": 19.358
+    },
+    {
+      "id": "aeo-lahore-zahra-institute-of-english-language",
+      "name": "AEO Lahore - Zahra Institute of English Language",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "page_embed"
+      ],
+      "agreementKm": 2.59
+    },
+    {
+      "id": "aeo-peshawar",
+      "name": "AEO Peshawar",
+      "verification": "unverified",
+      "evidencePaths": [
+        "page_embed"
+      ],
+      "agreementKm": null
+    },
+    {
+      "id": "angamaly",
+      "name": "Angamaly",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 0.853
+    },
+    {
+      "id": "australian-institute-of-language-melbourne-box-hill",
+      "name": "Australian Institute of Language - Melbourne Box Hill",
+      "verification": "unverified",
+      "evidencePaths": [
+        "page_embed"
+      ],
+      "agreementKm": null
+    },
+    {
+      "id": "beijing-foreign-studies-university",
+      "name": "Beijing Foreign Studies University",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 1.361
+    },
+    {
+      "id": "beijing-institute-of-technology",
+      "name": "Beijing Institute of Technology",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 5.106
+    },
+    {
+      "id": "beijing-language-and-culture-university",
+      "name": "Beijing Language and Culture University",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 1.031
+    },
+    {
+      "id": "bhatinda",
+      "name": "Bhatinda",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 3.518
+    },
+    {
+      "id": "bc-994",
+      "name": "British Council Bahrain",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "page_embed"
+      ],
+      "agreementKm": 2.316
+    },
+    {
+      "id": "british-council-beijing",
+      "name": "British Council Beijing",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 137.596
+    },
+    {
+      "id": "british-council-beijing-chivast-education-international-chongwenmen",
+      "name": "British Council Beijing Chivast Education International (Chongwenmen)",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 6.492
+    },
+    {
+      "id": "british-council-beijing-cbd-venue",
+      "name": "British Council Beijing-CBD Venue",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 1.094
+    },
+    {
+      "id": "bc-6621",
+      "name": "British Council Cardiff",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 211.878
+    },
+    {
+      "id": "bc-63",
+      "name": "British Council Jakarta",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "page_embed"
+      ],
+      "agreementKm": 4.333
+    },
+    {
+      "id": "bc-13030",
+      "name": "British Council Muscat",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 0.364
+    },
+    {
+      "id": "british-council-shanghai",
+      "name": "British Council Shanghai",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 1257.964
+    },
+    {
+      "id": "bc-6604",
+      "name": "British Council Test Venue - Mohammed Bin Zayed Al Ain University",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 0.359
+    },
+    {
+      "id": "bc-13632",
+      "name": "British Council, Abis Ba Ria",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 627.945
+    },
+    {
+      "id": "bc-12214",
+      "name": "British Council, Abu Dhabi University, Knowledge Group - Abu Dhabi University - Al Ain Campus",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 11.925
+    },
+    {
+      "id": "bc-2275",
+      "name": "British Council, Academia Education Center",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 2.946
+    },
+    {
+      "id": "bc-5537",
+      "name": "British Council, Academia Education Center - Kurmanzhan Datka Osh Lyceum",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 181.03
+    },
+    {
+      "id": "bc-13568",
+      "name": "British Council, Academie Internationale Benset",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 0.353
+    },
+    {
+      "id": "bc-1011",
+      "name": "British Council, ACBT Kandy - CD IELTS",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 1.484
+    },
+    {
+      "id": "bc-3295",
+      "name": "British Council, Agharass Campus Tanger",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 1.101
+    },
+    {
+      "id": "bc-12545",
+      "name": "British Council, Ain Shams University",
+      "verification": "approximate",
+      "evidencePaths": [
+        "page_embed",
+        "venue_name"
+      ],
+      "agreementKm": 0.483
+    },
+    {
+      "id": "bc-292",
+      "name": "British Council, Ajman - The International School of Choueifat",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 0.82
+    },
+    {
+      "id": "bc-13246",
+      "name": "British Council, Al Furat Al Awsat Technical University",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 4.304
+    },
+    {
+      "id": "bc-925",
+      "name": "British Council, Alisttest Korat branch",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 3.977
+    },
+    {
+      "id": "bc-13165",
+      "name": "British Council, Alpha School in Kokand",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 1.687
+    },
+    {
+      "id": "bc-707",
+      "name": "British Council, AM Da Nang",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 754.228
+    },
+    {
+      "id": "bc-57",
+      "name": "British Council, American Academy Larnaca",
+      "verification": "unverified",
+      "evidencePaths": [
+        "page_embed"
+      ],
+      "agreementKm": null
+    },
+    {
+      "id": "bc-11959",
+      "name": "British Council, American University of Sharjah",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 10.42
+    },
+    {
+      "id": "bc-1175",
+      "name": "British Council, AMES Education",
+      "verification": "unverified",
+      "evidencePaths": [
+        "venue_name"
+      ],
+      "agreementKm": null
+    },
+    {
+      "id": "bc-158",
+      "name": "British Council, Army Burn College For Boys",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 1.29
+    },
+    {
+      "id": "bc-414",
+      "name": "British Council, Ataturk Universitesi",
+      "verification": "approximate",
+      "evidencePaths": [
+        "page_embed",
+        "venue_name"
+      ],
+      "agreementKm": 0.451
+    },
+    {
+      "id": "bc-5436",
+      "name": "British Council, Avicenna Batumi Medical University",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 143.647
+    },
+    {
+      "id": "bc-2235",
+      "name": "British Council, b&c language school",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 114.808
+    },
+    {
+      "id": "bc-3312",
+      "name": "British Council, Bath - International House Trust Assessment IHTA",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 155.942
+    },
+    {
+      "id": "bc-12546",
+      "name": "British Council, Benghazi University Language Centre",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 4.176
+    },
+    {
+      "id": "bc-12293",
+      "name": "British Council, Berkeley House Nagoya",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 266.169
+    },
+    {
+      "id": "bc-12413",
+      "name": "British Council, Berkeley House Tokyo",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 961.151
+    },
+    {
+      "id": "bc-12186",
+      "name": "British Council, Best Education Centre",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "page_embed",
+        "venue_name"
+      ],
+      "agreementKm": 862.439
+    },
+    {
+      "id": "bc-13303",
+      "name": "British Council, Beulah International School - Uyo",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 1.805
+    },
+    {
+      "id": "bc-6619",
+      "name": "British Council, Birmingham Vitspro",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 157.138
+    },
+    {
+      "id": "bc-3294",
+      "name": "British Council, British Academy",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 0.379
+    },
+    {
+      "id": "bc-3399",
+      "name": "British Council, British Council Lilongwe",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 4.055
+    },
+    {
+      "id": "bc-12976",
+      "name": "British Council, British Language Training Centre - The Den",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 80.873
+    },
+    {
+      "id": "bc-11969",
+      "name": "British Council, British University in Dubai, Academic City",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 1.462
+    },
+    {
+      "id": "bc-13438",
+      "name": "British Council, Brown Academy",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 1.722
+    },
+    {
+      "id": "bc-1154",
+      "name": "British Council, Buenos Aires Open Centre",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 2.907
+    },
+    {
+      "id": "bc-12184",
+      "name": "British Council, Cambridge Line Taraz",
+      "verification": "unverified",
+      "evidencePaths": [
+        "address"
+      ],
+      "agreementKm": null
+    },
+    {
+      "id": "bc-12256",
+      "name": "British Council, Cardiff IOC - International House Trust Assessment IHTA",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 279.985
+    },
+    {
+      "id": "bc-13023",
+      "name": "British Council, Centre for Foreign Languages",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 2.136
+    },
+    {
+      "id": "bc-13607",
+      "name": "British Council, CfBT Education Services Sdn Bhd - CfBT KB Brunei",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 1.052
+    },
+    {
+      "id": "bc-12961",
+      "name": "British Council, Chiang Rai Rajabhat University",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 5.665
+    },
+    {
+      "id": "bc-12977",
+      "name": "British Council, CUQ Ulster University",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 18.064
+    },
+    {
+      "id": "bc-13077",
+      "name": "British Council, Dhofar University",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 17.99
+    },
+    {
+      "id": "bc-5489",
+      "name": "British Council, Dolphin Phu Tho",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 5.706
+    },
+    {
+      "id": "bc-1031",
+      "name": "British Council, Dong A Gia Lai",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 3.994
+    },
+    {
+      "id": "bc-13638",
+      "name": "British Council, Dong A Nghe An (Vinh)",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 2.466
+    },
+    {
+      "id": "bc-13633",
+      "name": "British Council, Dong A Nha Trang",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 2.284
+    },
+    {
+      "id": "bc-13637",
+      "name": "British Council, Duy Tan High School",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 347.308
+    },
+    {
+      "id": "bc-122",
+      "name": "British Council, EDUTIMES CAN THO",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 447.509
+    },
+    {
+      "id": "bc-3296",
+      "name": "British Council, Edwina Academy",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 4.43
+    },
+    {
+      "id": "bc-12132",
+      "name": "British Council, Ehei - Ecole des Hautes Etudes d Ingenierie",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 0.74
+    },
+    {
+      "id": "bc-12982",
+      "name": "British Council, English Academy of MUST",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 17.986
+    },
+    {
+      "id": "bc-12136",
+      "name": "British Council, English Cultural Center",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 4.382
+    },
+    {
+      "id": "bc-12133",
+      "name": "British Council, English Language Institute of Tetouan",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 2.591
+    },
+    {
+      "id": "bc-12135",
+      "name": "British Council, EPI",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 1.231
+    },
+    {
+      "id": "bc-13643",
+      "name": "British Council, EPIVN",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 1.943
+    },
+    {
+      "id": "bc-12389",
+      "name": "British Council, ESP Foundation",
+      "verification": "unverified",
+      "evidencePaths": [
+        "address"
+      ],
+      "agreementKm": null
+    },
+    {
+      "id": "bc-13074",
+      "name": "British Council, Fakultet dr Lazar Vrkatic (FLV)",
+      "verification": "unverified",
+      "evidencePaths": [
+        "address"
+      ],
+      "agreementKm": null
+    },
+    {
+      "id": "bc-5536",
+      "name": "British Council, Foundation",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 943.033
+    },
+    {
+      "id": "bc-12354",
+      "name": "British Council, Gallant Computer Company",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 1.377
+    },
+    {
+      "id": "bc-13612",
+      "name": "British Council, Gasan - Team Sky Education",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 13.145
+    },
+    {
+      "id": "bc-303",
+      "name": "British Council, German Jordanian University",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 6.056
+    },
+    {
+      "id": "bc-3418",
+      "name": "British Council, Global Language Centre",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 0.534
+    },
+    {
+      "id": "bc-3321",
+      "name": "British Council, Global Thanh Hoa",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 1.823
+    },
+    {
+      "id": "bc-6629",
+      "name": "British Council, Gulf Colleges - Hafar Al Batin (Males Only)",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 4.976
+    },
+    {
+      "id": "bc-149",
+      "name": "British Council, IBA Sukkur",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 0.364
+    },
+    {
+      "id": "bc-1194",
+      "name": "British Council, IESOEL HERAKLION",
+      "verification": "unverified",
+      "evidencePaths": [
+        "address"
+      ],
+      "agreementKm": null
+    },
+    {
+      "id": "bc-920",
+      "name": "British Council, Imam Ja'afar Al Sadiq University",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 7.367
+    },
+    {
+      "id": "bc-12995",
+      "name": "British Council, InfoPlus",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 1.028
+    },
+    {
+      "id": "bc-12183",
+      "name": "British Council, Innoverse High School",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 228.012
+    },
+    {
+      "id": "bc-3361",
+      "name": "British Council, Institute of Development Management",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 0.72
+    },
+    {
+      "id": "bc-5455",
+      "name": "British Council, Instituto Cultural Anglo-Uruguayo - Instituto Cultural Anglo Uruguayo",
+      "verification": "unverified",
+      "evidencePaths": [
+        "page_embed"
+      ],
+      "agreementKm": null
+    },
+    {
+      "id": "bc-525",
+      "name": "British Council, IPMC Takoradi",
+      "verification": "approximate",
+      "evidencePaths": [
+        "page_embed",
+        "venue_name"
+      ],
+      "agreementKm": 1.255
+    },
+    {
+      "id": "bc-13433",
+      "name": "British Council, Isla School of Language Centre and Business School",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 272.156
+    },
+    {
+      "id": "bc-13320",
+      "name": "British Council, Iverson Kuala Lumpur Branch 2",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 126.057
+    },
+    {
+      "id": "bc-300",
+      "name": "British Council, Jadara University",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 17.684
+    },
+    {
+      "id": "bc-13565",
+      "name": "British Council, Jantar - International House Split - Jantar Zagreb",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 4.071
+    },
+    {
+      "id": "bc-331",
+      "name": "British Council, Jazan Higher Training Institute",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 815.631
+    },
+    {
+      "id": "bc-12176",
+      "name": "British Council, Karaganda Upgrade School",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 1.829
+    },
+    {
+      "id": "bc-13400",
+      "name": "British Council, Kasturi Academy",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 1.328
+    },
+    {
+      "id": "bc-12178",
+      "name": "British Council, Kostanay KazGUU School (QS)",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 0.545
+    },
+    {
+      "id": "bc-13631",
+      "name": "British Council, Ky Nguyen International Language School",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 427.353
+    },
+    {
+      "id": "bc-2234",
+      "name": "British Council, Language & Partner",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 109.863
+    },
+    {
+      "id": "bc-8727",
+      "name": "British Council, Libyan Academy for postgraduate studies",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 6.902
+    },
+    {
+      "id": "bc-951",
+      "name": "British Council, Lil'Langues",
+      "verification": "approximate",
+      "evidencePaths": [
+        "page_embed",
+        "venue_name"
+      ],
+      "agreementKm": 0.301
+    },
+    {
+      "id": "bc-12515",
+      "name": "British Council, London School of Accountancy and Finance",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 1.297
+    },
+    {
+      "id": "bc-12396",
+      "name": "British Council, London Training Institute",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 3.528
+    },
+    {
+      "id": "bc-13155",
+      "name": "British Council, London Training Institute - Gulf College",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 6.129
+    },
+    {
+      "id": "bc-12401",
+      "name": "British Council, London Training Institute - Talento Training Institute",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 157.339
+    },
+    {
+      "id": "bc-13152",
+      "name": "British Council, Macau Productivity and Technology Transfer Center",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 0.836
+    },
+    {
+      "id": "bc-13583",
+      "name": "British Council, Majan Education Academy",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 3.606
+    },
+    {
+      "id": "bc-3420",
+      "name": "British Council, Make it for Africa",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 1.183
+    },
+    {
+      "id": "bc-13193",
+      "name": "British Council, Middle East College",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 4.045
+    },
+    {
+      "id": "bc-13336",
+      "name": "British Council, Misurata University",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 5.641
+    },
+    {
+      "id": "bc-13732",
+      "name": "British Council, Murray House",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 10.075
+    },
+    {
+      "id": "bc-5577",
+      "name": "British Council, Myadmissionlink Educational Consult Ltd",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 0.405
+    },
+    {
+      "id": "bc-12916",
+      "name": "British Council, Nakhchivan Public University",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 2.746
+    },
+    {
+      "id": "bc-13359",
+      "name": "British Council, Naples - UniParthenope",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 0.446
+    },
+    {
+      "id": "bc-716",
+      "name": "British Council, Nepathya College of Management and Technology",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 1.072
+    },
+    {
+      "id": "bc-13499",
+      "name": "British Council, New Horizons Yemen",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 6.829
+    },
+    {
+      "id": "bc-13714",
+      "name": "British Council, Nuwabugh AlShabab Training Center",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 1188.428
+    },
+    {
+      "id": "bc-13585",
+      "name": "British Council, Open Doors International Language School Plymouth - Odils Learning Foundation",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 294.828
+    },
+    {
+      "id": "bc-12255",
+      "name": "British Council, Oxford IOC - International House Trust Assessment IHTA",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 83.001
+    },
+    {
+      "id": "bc-109",
+      "name": "British Council, Phuket English Examination Center (PEEC)",
+      "verification": "unverified",
+      "evidencePaths": [
+        "address"
+      ],
+      "agreementKm": null
+    },
+    {
+      "id": "bc-13066",
+      "name": "British Council, Polyglot- Al Khoud",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 329.361
+    },
+    {
+      "id": "bc-13070",
+      "name": "British Council, Polyglot- Salalah",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 0.493
+    },
+    {
+      "id": "bc-13068",
+      "name": "British Council, Polyglot- Sohar",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 4.222
+    },
+    {
+      "id": "bc-138",
+      "name": "British Council, Project Headway",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 2.211
+    },
+    {
+      "id": "bc-11967",
+      "name": "British Council, Regent Middle East",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 1.276
+    },
+    {
+      "id": "bc-12473",
+      "name": "British Council, RIT Kosovo (A.U.K)",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 1.636
+    },
+    {
+      "id": "bc-12542",
+      "name": "British Council, ROYAL MIRA ALL SAINTS INTERNATIONAL SCH",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 1.039
+    },
+    {
+      "id": "bc-340",
+      "name": "British Council, Saudi Institute for Training - (Males Only)",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 3.996
+    },
+    {
+      "id": "bc-5567",
+      "name": "British Council, Saudi Mining Polytechnic Arar - (Males Only)",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 4.322
+    },
+    {
+      "id": "bc-12368",
+      "name": "British Council, SOHAR UNIVERSITY - Rustaq Building 3",
+      "verification": "unverified",
+      "evidencePaths": [
+        "address"
+      ],
+      "agreementKm": null
+    },
+    {
+      "id": "bc-7664",
+      "name": "British Council, STARS University Nukus",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 0.945
+    },
+    {
+      "id": "bc-3308",
+      "name": "British Council, Stratford IOC - International House Trust Assessment IHTA",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 0.94
+    },
+    {
+      "id": "bc-13098",
+      "name": "British Council, Swintec Computer Institute",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 3.401
+    },
+    {
+      "id": "bc-12378",
+      "name": "British Council, Taylor's University",
+      "verification": "approximate",
+      "evidencePaths": [
+        "page_embed",
+        "venue_name"
+      ],
+      "agreementKm": 0.731
+    },
+    {
+      "id": "bc-1167",
+      "name": "British Council, Tecnologico de Monterrey - Guadalajara",
+      "verification": "unverified",
+      "evidencePaths": [
+        "page_embed"
+      ],
+      "agreementKm": null
+    },
+    {
+      "id": "bc-1169",
+      "name": "British Council, Tecnologico de Monterrey - Puebla",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 1.665
+    },
+    {
+      "id": "bc-13080",
+      "name": "British Council, The Guy Morel Institute",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 1.904
+    },
+    {
+      "id": "bc-810",
+      "name": "British Council, The Meeting Place Kuching",
+      "verification": "unverified",
+      "evidencePaths": [
+        "page_embed"
+      ],
+      "agreementKm": null
+    },
+    {
+      "id": "bc-12913",
+      "name": "British Council, Time Training Center",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 31.41
+    },
+    {
+      "id": "bc-11784",
+      "name": "British Council, Trafalgar House",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 23.167
+    },
+    {
+      "id": "bc-1157",
+      "name": "British Council, Universidad Blas Pascal",
+      "verification": "unverified",
+      "evidencePaths": [
+        "page_embed"
+      ],
+      "agreementKm": null
+    },
+    {
+      "id": "bc-13245",
+      "name": "British Council, University of Mosul",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 4.15
+    },
+    {
+      "id": "bc-12282",
+      "name": "British Council, University of Nizwa",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 0.561
+    },
+    {
+      "id": "bc-812",
+      "name": "British Council, University Of Tabuk",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 1.157
+    },
+    {
+      "id": "bc-700",
+      "name": "British Council, Urgench CD - Data Union Learning Center",
+      "verification": "approximate",
+      "evidencePaths": [
+        "page_embed",
+        "venue_name"
+      ],
+      "agreementKm": 0.377
+    },
+    {
+      "id": "bc-131",
+      "name": "British Council, VTED HUE",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 636.535
+    },
+    {
+      "id": "bc-11954",
+      "name": "British Council, VTED Quang Ninh",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 0.276
+    },
+    {
+      "id": "cambridge-english-languages-juvecampus-city",
+      "name": "Cambridge English Languages - JuveCampus City",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 2.42
+    },
+    {
+      "id": "capital-normal-university",
+      "name": "Capital Normal University",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 0.419
+    },
+    {
+      "id": "china-university-of-mining-technology",
+      "name": "China University of Mining Technology",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 482.443
+    },
+    {
+      "id": "cultura-inglesa-belo-horizonte",
+      "name": "Cultura Inglesa Belo Horizonte",
+      "verification": "approximate",
+      "evidencePaths": [
+        "page_embed",
+        "venue_name"
+      ],
+      "agreementKm": 1.217
+    },
+    {
+      "id": "dalian-education-university",
+      "name": "Dalian Education University",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 1574.3
+    },
+    {
+      "id": "edu-action-andijan",
+      "name": "Edu Action Andijan",
+      "verification": "approximate",
+      "evidencePaths": [
+        "page_embed",
+        "venue_name"
+      ],
+      "agreementKm": 1.088
+    },
+    {
+      "id": "edu-action-bukhara",
+      "name": "Edu Action Bukhara",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "page_embed",
+        "venue_name"
+      ],
+      "agreementKm": 2.012
+    },
+    {
+      "id": "edu-action-fergana-unity-language-academy",
+      "name": "Edu Action Fergana - Unity Language Academy",
+      "verification": "approximate",
+      "evidencePaths": [
+        "page_embed",
+        "venue_name"
+      ],
+      "agreementKm": 1.226
+    },
+    {
+      "id": "edu-action-nukus",
+      "name": "Edu Action Nukus",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 2.962
+    },
+    {
+      "id": "edu-action-tashkent-ielts-zone",
+      "name": "Edu Action Tashkent - IELTS Zone",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "page_embed",
+        "venue_name"
+      ],
+      "agreementKm": 2.233
+    },
+    {
+      "id": "edu-action-tashkent-tashkent-inter-nation-school",
+      "name": "Edu Action Tashkent - Tashkent Inter Nation School",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "page_embed",
+        "venue_name"
+      ],
+      "agreementKm": 2.046
+    },
+    {
+      "id": "edu-action-termez",
+      "name": "Edu Action Termez",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "page_embed"
+      ],
+      "agreementKm": 515.828
+    },
+    {
+      "id": "els-language-centers-st-petersburg-fl",
+      "name": "ELS Language Centers St Petersburg, FL",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "page_embed"
+      ],
+      "agreementKm": 0.541
+    },
+    {
+      "id": "european-examinations-centre-centrul-educational-quo-vadis",
+      "name": "European Examinations Centre - Centrul Educational Quo Vadis",
+      "verification": "approximate",
+      "evidencePaths": [
+        "page_embed",
+        "venue_name"
+      ],
+      "agreementKm": 0.35
+    },
+    {
+      "id": "european-examinations-centre-the-first-english-school",
+      "name": "European Examinations Centre - The First English School",
+      "verification": "unverified",
+      "evidencePaths": [
+        "page_embed"
+      ],
+      "agreementKm": null
+    },
+    {
+      "id": "fujian-provincial-education-association-for-international-exchange",
+      "name": "Fujian Provincial Education Association for International Exchange",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 2.313
+    },
+    {
+      "id": "guangdong-industry-polytechnic-university",
+      "name": "Guangdong Industry Polytechnic University",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 4.989
+    },
+    {
+      "id": "guangdong-university-of-foreign-studies",
+      "name": "Guangdong University of Foreign Studies",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 20.131
+    },
+    {
+      "id": "gurdaspur",
+      "name": "Gurdaspur",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 2.353
+    },
+    {
+      "id": "harbin-engineering-university-ielts-on-computer-test-centre-songbei",
+      "name": "Harbin Engineering University IELTS On Computer Test Centre-Songbei",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 2174.095
+    },
+    {
+      "id": "hawthorn-english-language-centre-muscat-sohar-institute-for-management-tech",
+      "name": "Hawthorn English Language Centre Muscat - Sohar Institute for Management & Tech",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "page_embed",
+        "venue_name"
+      ],
+      "agreementKm": 198.079
+    },
+    {
+      "id": "hebei-university-of-technology-hongqiao-campus",
+      "name": "Hebei University of Technology (Hongqiao Campus)",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 1.287
+    },
+    {
+      "id": "heilongjiang-university",
+      "name": "Heilongjiang University",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 0.401
+    },
+    {
+      "id": "heliopolis-life-skills",
+      "name": "Heliopolis (Life Skills)",
+      "verification": "approximate",
+      "evidencePaths": [
+        "page_embed",
+        "venue_name"
+      ],
+      "agreementKm": 1.076
+    },
+    {
+      "id": "hubei-education-international-ioc-test-centre",
+      "name": "Hubei Education International IOC Test Centre",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 1.831
+    },
+    {
+      "id": "idp-chandigarh-sector-34-speaking",
+      "name": "IDP Chandigarh - Sector 34 Speaking",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 3.54
+    },
+    {
+      "id": "idp-education-india-bengaluru-whitefield",
+      "name": "IDP Education India - Bengaluru - Whitefield",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 1.039
+    },
+    {
+      "id": "idp-education-india-bhubaneswar-kharvela-nagar",
+      "name": "IDP Education India - Bhubaneswar - Kharvela Nagar",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 1.246
+    },
+    {
+      "id": "idp-education-india-chandigarh",
+      "name": "IDP Education India - Chandigarh",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 0.443
+    },
+    {
+      "id": "idp-education-india-karnal-shyam-nagar",
+      "name": "IDP Education India - Karnal - Shyam Nagar",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 4.069
+    },
+    {
+      "id": "idp-education-india-ludhiana",
+      "name": "IDP Education India - Ludhiana",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 2.744
+    },
+    {
+      "id": "idp-education-india-vadodara",
+      "name": "IDP Education India - Vadodara",
+      "verification": "unverified",
+      "evidencePaths": [
+        "venue_name"
+      ],
+      "agreementKm": null
+    },
+    {
+      "id": "idp-education-nepal-private-limited-chitwan-test-room",
+      "name": "IDP Education Nepal Private Limited, Chitwan (Test Room)",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 1.958
+    },
+    {
+      "id": "idp-education-riyadh-male-females-tahlia-street-test-room",
+      "name": "IDP Education Riyadh (Male & females) Tahlia Street (Test Room)",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "page_embed"
+      ],
+      "agreementKm": 0.912
+    },
+    {
+      "id": "idp-ielts-ankara-computer-delivered",
+      "name": "IDP IELTS - Ankara - Computer Delivered",
+      "verification": "unverified",
+      "evidencePaths": [
+        "page_embed"
+      ],
+      "agreementKm": null
+    },
+    {
+      "id": "idp-ielts-antalya-computer-delivered",
+      "name": "IDP IELTS - Antalya - Computer Delivered",
+      "verification": "unverified",
+      "evidencePaths": [
+        "page_embed"
+      ],
+      "agreementKm": null
+    },
+    {
+      "id": "idp-ielts-abu-dhabi",
+      "name": "IDP IELTS Abu Dhabi",
+      "verification": "approximate",
+      "evidencePaths": [
+        "page_embed",
+        "venue_name"
+      ],
+      "agreementKm": 0.266
+    },
+    {
+      "id": "idp-ielts-abu-dhabi-idp-education",
+      "name": "IDP IELTS Abu Dhabi - IDP Education",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "page_embed",
+        "venue_name"
+      ],
+      "agreementKm": 3.401
+    },
+    {
+      "id": "idp-ielts-abu-dhabi-ienglish-language-institute",
+      "name": "IDP IELTS Abu Dhabi - iEnglish Language Institute",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "page_embed",
+        "venue_name"
+      ],
+      "agreementKm": 2.621
+    },
+    {
+      "id": "idp-ielts-abuja",
+      "name": "IDP IELTS Abuja",
+      "verification": "unverified",
+      "evidencePaths": [
+        "page_embed"
+      ],
+      "agreementKm": null
+    },
+    {
+      "id": "idp-ielts-australia-wollongong",
+      "name": "IDP IELTS Australia - Wollongong",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "page_embed"
+      ],
+      "agreementKm": 2.695
+    },
+    {
+      "id": "idp-ielts-bangladesh-chattogram-penston-english-institute",
+      "name": "IDP IELTS Bangladesh Chattogram - Penston English Institute",
+      "verification": "unverified",
+      "evidencePaths": [
+        "page_embed"
+      ],
+      "agreementKm": null
+    },
+    {
+      "id": "idp-ielts-bangladesh-rajshahi-mentors-international-grammar-school",
+      "name": "IDP IELTS Bangladesh Rajshahi - Mentors International Grammar School",
+      "verification": "approximate",
+      "evidencePaths": [
+        "page_embed",
+        "venue_name"
+      ],
+      "agreementKm": 0.669
+    },
+    {
+      "id": "idp-ielts-china-beijing-haidian",
+      "name": "IDP IELTS China Beijing Haidian",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "page_embed"
+      ],
+      "agreementKm": 1.234
+    },
+    {
+      "id": "idp-ielts-china-changsha-furong",
+      "name": "IDP IELTS China Changsha Furong",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "page_embed"
+      ],
+      "agreementKm": 5.287
+    },
+    {
+      "id": "idp-ielts-china-chengdu-wuhou",
+      "name": "IDP IELTS China Chengdu Wuhou",
+      "verification": "unverified",
+      "evidencePaths": [
+        "page_embed"
+      ],
+      "agreementKm": null
+    },
+    {
+      "id": "idp-ielts-china-hangzhou-gongshu",
+      "name": "IDP IELTS China Hangzhou Gongshu",
+      "verification": "unverified",
+      "evidencePaths": [
+        "page_embed"
+      ],
+      "agreementKm": null
+    },
+    {
+      "id": "idp-ielts-china-jinan-lixia",
+      "name": "IDP IELTS China Jinan Lixia",
+      "verification": "unverified",
+      "evidencePaths": [
+        "page_embed"
+      ],
+      "agreementKm": null
+    },
+    {
+      "id": "idp-ielts-china-nantong-chongchuan",
+      "name": "IDP IELTS China Nantong Chongchuan",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "page_embed"
+      ],
+      "agreementKm": 6.306
+    },
+    {
+      "id": "idp-ielts-china-shanghai-xuhui",
+      "name": "IDP IELTS China Shanghai Xuhui",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "page_embed"
+      ],
+      "agreementKm": 14.105
+    },
+    {
+      "id": "idp-ielts-china-wuhan-jianghan",
+      "name": "IDP IELTS China Wuhan Jianghan",
+      "verification": "unverified",
+      "evidencePaths": [
+        "page_embed"
+      ],
+      "agreementKm": null
+    },
+    {
+      "id": "idp-ielts-china-wuxi-xinwu",
+      "name": "IDP IELTS China Wuxi Xinwu",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "page_embed"
+      ],
+      "agreementKm": 2.72
+    },
+    {
+      "id": "idp-ielts-dubai-al-rowwad-language-technology-centre",
+      "name": "IDP IELTS Dubai - Al Rowwad Language & Technology Centre",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 38.091
+    },
+    {
+      "id": "idp-ielts-dubai-british-training-institute-sharjah",
+      "name": "IDP IELTS Dubai - British Training Institute Sharjah",
+      "verification": "approximate",
+      "evidencePaths": [
+        "page_embed",
+        "venue_name"
+      ],
+      "agreementKm": 0.257
+    },
+    {
+      "id": "idp-ielts-egypt-new-horizon-centre-mansura",
+      "name": "IDP IELTS Egypt - New Horizon Centre Mansura",
+      "verification": "approximate",
+      "evidencePaths": [
+        "page_embed",
+        "venue_name"
+      ],
+      "agreementKm": 1.169
+    },
+    {
+      "id": "idp-ielts-egypt-tanta-university",
+      "name": "IDP IELTS Egypt - Tanta University",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "page_embed"
+      ],
+      "agreementKm": 1.382
+    },
+    {
+      "id": "idp-ielts-egypt-cairo-the-knowledge-hub-universities-at-new-administrative-capital",
+      "name": "IDP IELTS Egypt Cairo - The Knowledge Hub universities at New Administrative Capital",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "page_embed"
+      ],
+      "agreementKm": 3.807
+    },
+    {
+      "id": "idp-ielts-indonesia-tangerang-gading-serpong",
+      "name": "IDP IELTS Indonesia Tangerang (Gading Serpong)",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 10.143
+    },
+    {
+      "id": "idp-ielts-kazakhstan-aktobe",
+      "name": "IDP IELTS Kazakhstan Aktobe",
+      "verification": "approximate",
+      "evidencePaths": [
+        "page_embed",
+        "venue_name"
+      ],
+      "agreementKm": 1.873
+    },
+    {
+      "id": "idp-ielts-kazakhstan-atyrau",
+      "name": "IDP IELTS Kazakhstan Atyrau",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "page_embed"
+      ],
+      "agreementKm": 1991.729
+    },
+    {
+      "id": "idp-ielts-kazakhstan-kostanay",
+      "name": "IDP IELTS Kazakhstan Kostanay",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "page_embed",
+        "venue_name"
+      ],
+      "agreementKm": 2.811
+    },
+    {
+      "id": "idp-ielts-kazakhstan-oskemen",
+      "name": "IDP IELTS Kazakhstan Oskemen",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "page_embed"
+      ],
+      "agreementKm": 859.516
+    },
+    {
+      "id": "idp-ielts-kazakhstan-shymkent",
+      "name": "IDP IELTS Kazakhstan Shymkent",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "page_embed",
+        "venue_name"
+      ],
+      "agreementKm": 2.248
+    },
+    {
+      "id": "idp-ielts-kazakhstan-uralsk",
+      "name": "IDP IELTS Kazakhstan Uralsk",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 4.965
+    },
+    {
+      "id": "idp-ielts-kazakhstan-almaty-test-room",
+      "name": "IDP IELTS Kazakhstan, Almaty (Test Room)",
+      "verification": "unverified",
+      "evidencePaths": [
+        "page_embed"
+      ],
+      "agreementKm": null
+    },
+    {
+      "id": "idp-ielts-kazakhstan-astana",
+      "name": "IDP IELTS Kazakhstan, Astana",
+      "verification": "unverified",
+      "evidencePaths": [
+        "page_embed"
+      ],
+      "agreementKm": null
+    },
+    {
+      "id": "idp-ielts-malaysia-northern-kuala-lumpur-international-college",
+      "name": "IDP IELTS Malaysia - Northern Kuala Lumpur International College",
+      "verification": "unverified",
+      "evidencePaths": [
+        "page_embed"
+      ],
+      "agreementKm": null
+    },
+    {
+      "id": "idp-ielts-new-zealand-queenstown",
+      "name": "IDP IELTS New Zealand - Queenstown",
+      "verification": "unverified",
+      "evidencePaths": [
+        "page_embed"
+      ],
+      "agreementKm": null
+    },
+    {
+      "id": "idp-ielts-oman-code-academy",
+      "name": "IDP IELTS Oman - Code Academy",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "page_embed",
+        "venue_name"
+      ],
+      "agreementKm": 29.559
+    },
+    {
+      "id": "idp-ielts-oman-eles-muscat",
+      "name": "IDP IELTS Oman - ELES Muscat",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "page_embed"
+      ],
+      "agreementKm": 3.017
+    },
+    {
+      "id": "idp-ielts-oman-khaleej-oman-institute-muscat",
+      "name": "IDP IELTS Oman - Khaleej Oman Institute Muscat",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "page_embed",
+        "venue_name"
+      ],
+      "agreementKm": 2.463
+    },
+    {
+      "id": "idp-ielts-oman-national-academy-of-management-and-tech",
+      "name": "IDP IELTS Oman - National Academy of Management and Tech",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 21.47
+    },
+    {
+      "id": "idp-ielts-oman-united-international-schools",
+      "name": "IDP IELTS Oman – United International Schools",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "page_embed",
+        "venue_name"
+      ],
+      "agreementKm": 7.478
+    },
+    {
+      "id": "idp-ielts-saudi-arabia-imam-abdulrahman-bin-faisal-university",
+      "name": "IDP IELTS Saudi Arabia - Imam Abdulrahman Bin Faisal University",
+      "verification": "unverified",
+      "evidencePaths": [
+        "page_embed"
+      ],
+      "agreementKm": null
+    },
+    {
+      "id": "idp-ielts-saudi-arabia-king-khalid-university",
+      "name": "IDP IELTS Saudi Arabia - King Khalid University",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "page_embed"
+      ],
+      "agreementKm": 3.213
+    },
+    {
+      "id": "idp-ielts-saudi-arabia-shabaka-training-institute",
+      "name": "IDP IELTS Saudi Arabia - Shabaka Training Institute",
+      "verification": "unverified",
+      "evidencePaths": [
+        "page_embed"
+      ],
+      "agreementKm": null
+    },
+    {
+      "id": "idp-ielts-saudi-arabia-al-khobar-neft-energies",
+      "name": "IDP IELTS Saudi Arabia Al Khobar - NEFT Energies",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "page_embed"
+      ],
+      "agreementKm": 5.777
+    },
+    {
+      "id": "idp-ielts-south-korea-daejeon-cnu",
+      "name": "IDP IELTS South Korea - Daejeon CNU",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "page_embed"
+      ],
+      "agreementKm": 0.493
+    },
+    {
+      "id": "idp-ielts-thailand-bangkok-assumption-college",
+      "name": "IDP IELTS Thailand Bangkok - Assumption College",
+      "verification": "approximate",
+      "evidencePaths": [
+        "page_embed",
+        "venue_name"
+      ],
+      "agreementKm": 1.854
+    },
+    {
+      "id": "idp-ielts-thailand-chiang-mai-huizhong",
+      "name": "IDP IELTS Thailand Chiang Mai - Huizhong",
+      "verification": "unverified",
+      "evidencePaths": [
+        "page_embed"
+      ],
+      "agreementKm": null
+    },
+    {
+      "id": "idp-ielts-thailand-chiang-mai-i-genius-language-institute",
+      "name": "IDP IELTS Thailand Chiang Mai - i-Genius Language Institute",
+      "verification": "unverified",
+      "evidencePaths": [
+        "page_embed"
+      ],
+      "agreementKm": null
+    },
+    {
+      "id": "idp-ielts-thailand-korat-well-balanced-english",
+      "name": "IDP IELTS Thailand Korat - Well-Balanced English",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 4.366
+    },
+    {
+      "id": "idp-ielts-turkey-gaziantep-head-english",
+      "name": "IDP IELTS Turkey Gaziantep - Head English",
+      "verification": "approximate",
+      "evidencePaths": [
+        "page_embed",
+        "venue_name"
+      ],
+      "agreementKm": 0.687
+    },
+    {
+      "id": "idp-ielts-victoria-island",
+      "name": "IDP IELTS Victoria Island",
+      "verification": "unverified",
+      "evidencePaths": [
+        "page_embed"
+      ],
+      "agreementKm": null
+    },
+    {
+      "id": "idp-ielts-vietnam-fpt-university-campus-quy-nhon",
+      "name": "IDP IELTS Vietnam - FPT University Campus Quy Nhon",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 0.544
+    },
+    {
+      "id": "idp-ielts-vietnam-hanex-english-academy-ba-ria",
+      "name": "IDP IELTS Vietnam - Hanex English Academy Ba Ria",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "page_embed",
+        "venue_name"
+      ],
+      "agreementKm": 19.191
+    },
+    {
+      "id": "idp-ielts-vietnam-ielts-champions-thanh-hoa",
+      "name": "IDP IELTS Vietnam - IELTS Champions Thanh Hoa",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "page_embed"
+      ],
+      "agreementKm": 22.136
+    },
+    {
+      "id": "idp-ielts-vietnam-ivy-thai-binh",
+      "name": "IDP IELTS Vietnam - IVY Thai Binh",
+      "verification": "approximate",
+      "evidencePaths": [
+        "page_embed",
+        "venue_name"
+      ],
+      "agreementKm": 0.345
+    },
+    {
+      "id": "idp-lahore-ielts-life-skills-a1-b1-results-in-5-7-days",
+      "name": "IDP LAHORE - IELTS LIFE SKILLS - A1 & B1 (RESULTS IN 5-7 DAYS)",
+      "verification": "unverified",
+      "evidencePaths": [
+        "page_embed"
+      ],
+      "agreementKm": null
+    },
+    {
+      "id": "idp-oman-al-madina-plaza",
+      "name": "IDP Oman - Al Madina Plaza",
+      "verification": "approximate",
+      "evidencePaths": [
+        "page_embed",
+        "venue_name"
+      ],
+      "agreementKm": 0.372
+    },
+    {
+      "id": "idp-victoria-island-ielts-on-computer",
+      "name": "IDP Victoria Island IELTS on Computer",
+      "verification": "unverified",
+      "evidencePaths": [
+        "page_embed"
+      ],
+      "agreementKm": null
+    },
+    {
+      "id": "ielts-arequipa-international-house-lima",
+      "name": "IELTS Arequipa - International House Lima",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 1.79
+    },
+    {
+      "id": "ielts-argentina-cordoba-british-school",
+      "name": "IELTS Argentina Cordoba - British School",
+      "verification": "unverified",
+      "evidencePaths": [
+        "page_embed"
+      ],
+      "agreementKm": null
+    },
+    {
+      "id": "ielts-chihuahua-international-house-mexico",
+      "name": "IELTS Chihuahua - International House Mexico",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 1.598
+    },
+    {
+      "id": "ielts-mongolia-ulaanbaatar-intellgent-llc",
+      "name": "IELTS Mongolia Ulaanbaatar - Intellgent LLC",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "page_embed"
+      ],
+      "agreementKm": 0.416
+    },
+    {
+      "id": "ielts-peru-international-house-san-borja",
+      "name": "IELTS Peru - International House San Borja",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "page_embed"
+      ],
+      "agreementKm": 1.328
+    },
+    {
+      "id": "ielts-usa-davenport-ia",
+      "name": "IELTS USA Davenport, IA",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 4.696
+    },
+    {
+      "id": "ielts-usa-kansas-city-mo",
+      "name": "IELTS USA Kansas City, MO",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 7.391
+    },
+    {
+      "id": "ielts-usa-lincoln-ne",
+      "name": "IELTS USA Lincoln, NE",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 7.011
+    },
+    {
+      "id": "ielts-usa-new-haven-ct",
+      "name": "IELTS USA New Haven, CT",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 3.387
+    },
+    {
+      "id": "ielts-usa-new-orleans-la",
+      "name": "IELTS USA New Orleans, LA",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 8.66
+    },
+    {
+      "id": "inner-mongolia-normal-university",
+      "name": "Inner Mongolia Normal University",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 0.661
+    },
+    {
+      "id": "international-house-bogota-cali",
+      "name": "International House Bogota - Cali",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "page_embed"
+      ],
+      "agreementKm": 0.563
+    },
+    {
+      "id": "international-house-condesa-test-room",
+      "name": "International House Condesa (Test Room)",
+      "verification": "unverified",
+      "evidencePaths": [
+        "page_embed"
+      ],
+      "agreementKm": null
+    },
+    {
+      "id": "international-school-of-dongguan",
+      "name": "International School of Dongguan",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 360.993
+    },
+    {
+      "id": "jiangsu-communication-and-media-school-jsbc-gulou-litchi-plaza",
+      "name": "Jiangsu Communication and Media School (JSBC Gulou Litchi Plaza)",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 51.075
+    },
+    {
+      "id": "jiangsu-university",
+      "name": "Jiangsu University",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 1617.229
+    },
+    {
+      "id": "khanna",
+      "name": "Khanna",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 0.701
+    },
+    {
+      "id": "liaoning-university",
+      "name": "Liaoning University",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 7.576
+    },
+    {
+      "id": "mehsana",
+      "name": "Mehsana",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 1.247
+    },
+    {
+      "id": "mod-cd-ielts-abuja-test-room",
+      "name": "MOD CD IELTS Abuja (Test Room)",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "page_embed",
+        "venue_name"
+      ],
+      "agreementKm": 7.838
+    },
+    {
+      "id": "mod-education-nigeria-makurdi",
+      "name": "MOD Education Nigeria Makurdi",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "page_embed"
+      ],
+      "agreementKm": 1.207
+    },
+    {
+      "id": "mod-education-nigeria-ogudu",
+      "name": "MOD Education Nigeria Ogudu",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "page_embed",
+        "venue_name"
+      ],
+      "agreementKm": 4.686
+    },
+    {
+      "id": "mod-education-nigeria-owerri",
+      "name": "MOD Education Nigeria Owerri",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 6.368
+    },
+    {
+      "id": "mod-ielts-victoria-island",
+      "name": "MOD IELTS VICTORIA ISLAND",
+      "verification": "unverified",
+      "evidencePaths": [
+        "page_embed"
+      ],
+      "agreementKm": null
+    },
+    {
+      "id": "muscat-training-institute-capital-academy",
+      "name": "Muscat Training Institute - Capital Academy",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "page_embed",
+        "venue_name"
+      ],
+      "agreementKm": 25.466
+    },
+    {
+      "id": "muscat-training-institute-muscat-university-building",
+      "name": "Muscat Training Institute - Muscat University Building",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "page_embed"
+      ],
+      "agreementKm": 0.725
+    },
+    {
+      "id": "nanjing-university-of-aeronautics-and-astronautics",
+      "name": "Nanjing University of Aeronautics and Astronautics",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 294.819
+    },
+    {
+      "id": "nanjing-university-of-information-science-and-technology",
+      "name": "Nanjing University of Information Science and Technology",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 25
+    },
+    {
+      "id": "ningbo-huamao-foreign-language-school",
+      "name": "Ningbo Huamao Foreign Language School",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 2.431
+    },
+    {
+      "id": "northwestern-polytechnical-university",
+      "name": "Northwestern Polytechnical University",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 1110.379
+    },
+    {
+      "id": "oval-international-academy",
+      "name": "Oval International Academy",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 3.239
+    },
+    {
+      "id": "renmin-university-of-china",
+      "name": "Renmin University of China",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 3.316
+    },
+    {
+      "id": "shaanxi-normal-university",
+      "name": "Shaanxi Normal University",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 13.264
+    },
+    {
+      "id": "shandong-university",
+      "name": "Shandong University",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 0.729
+    },
+    {
+      "id": "shanghai-ocean-university",
+      "name": "Shanghai Ocean University",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 0.934
+    },
+    {
+      "id": "shanghai-university",
+      "name": "Shanghai University",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 1.653
+    },
+    {
+      "id": "shanghai-university-of-finance-and-economics-jinian-road-campus",
+      "name": "Shanghai University of Finance and Economics (Jinian Road Campus)",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 0.779
+    },
+    {
+      "id": "shenyang-normal-university",
+      "name": "Shenyang Normal University",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 9.03
+    },
+    {
+      "id": "soochow-university",
+      "name": "Soochow University",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 0.374
+    },
+    {
+      "id": "south-china-university-of-technology",
+      "name": "South China University of Technology",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 0.354
+    },
+    {
+      "id": "taiyuan-university-of-technology",
+      "name": "Taiyuan University of Technology",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 2.172
+    },
+    {
+      "id": "ukvi-paper-based-ielts-idp-ielts-kazakhstan-astana",
+      "name": "UKVI Paper Based IELTS IDP IELTS Kazakhstan Astana",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "page_embed"
+      ],
+      "agreementKm": 7.107
+    },
+    {
+      "id": "uniabroad-kenya-the-eldoret-national-polytechnic",
+      "name": "Uniabroad Kenya - The Eldoret National Polytechnic",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "page_embed",
+        "venue_name"
+      ],
+      "agreementKm": 3.66
+    },
+    {
+      "id": "university-of-electronic-science-and-technology-of-china",
+      "name": "University of Electronic Science and Technology of China",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 0.504
+    },
+    {
+      "id": "wuhan-new-world-centre",
+      "name": "Wuhan New World Centre",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 558.108
+    },
+    {
+      "id": "wuhan-university-shenzhen-institute",
+      "name": "Wuhan University Shenzhen Institute",
+      "verification": "unverified",
+      "evidencePaths": [
+        "address"
+      ],
+      "agreementKm": null
+    },
+    {
+      "id": "wuxi-open-university",
+      "name": "Wuxi Open University",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 8.428
+    },
+    {
+      "id": "yangzhou-university",
+      "name": "Yangzhou University",
+      "verification": "conflicted",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 1497.135
+    },
+    {
+      "id": "zhejiang-education-examinations-authority",
+      "name": "Zhejiang Education Examinations Authority",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 0.523
+    },
+    {
+      "id": "zhejiang-education-examinations-authority-wenzhou",
+      "name": "Zhejiang Education Examinations Authority (Wenzhou)",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 1.306
+    },
+    {
+      "id": "zhejiang-university-of-science-and-technology",
+      "name": "Zhejiang University of Science and Technology",
+      "verification": "approximate",
+      "evidencePaths": [
+        "address",
+        "venue_name"
+      ],
+      "agreementKm": 0.375
+    }
+  ],
+  "unparsedPrices": [],
+  "legacyCities": [
+    {
+      "id": "aeo-faisalabad",
+      "name": "AEO Faisalabad",
+      "city": "Punjab",
+      "country": "PK"
+    },
+    {
+      "id": "aeo-lahore-zahra-institute-of-english-language",
+      "name": "AEO Lahore - Zahra Institute of English Language",
+      "city": "Punjab",
+      "country": "PK"
+    },
+    {
+      "id": "aeo-multan-office",
+      "name": "AEO Multan Office",
+      "city": "Punjab",
+      "country": "PK"
+    },
+    {
+      "id": "aeo-peshawar",
+      "name": "AEO Peshawar",
+      "city": "Khyber Pakhtunkhwa",
+      "country": "PK"
+    },
+    {
+      "id": "angamaly",
+      "name": "Angamaly",
+      "city": "Kerala",
+      "country": "IN"
+    },
+    {
+      "id": "associacao-cultura-inglesa-brasilia",
+      "name": "Associacao Cultura Inglesa Brasilia",
+      "city": "Federal District",
+      "country": "BR"
+    },
+    {
+      "id": "australian-institute-of-language-melbourne-box-hill",
+      "name": "Australian Institute of Language - Melbourne Box Hill",
+      "city": "Victoria",
+      "country": "AU"
+    },
+    {
+      "id": "barattson-school-of-business-finance",
+      "name": "Barattson School of Business & Finance",
+      "city": "Abseron",
+      "country": "AZ"
+    },
+    {
+      "id": "beijing-foreign-studies-university",
+      "name": "Beijing Foreign Studies University",
+      "city": "Beijing",
+      "country": "CN"
+    },
+    {
+      "id": "beijing-institute-of-technology",
+      "name": "Beijing Institute of Technology",
+      "city": "Beijing",
+      "country": "CN"
+    },
+    {
+      "id": "beijing-language-and-culture-university",
+      "name": "Beijing Language and Culture University",
+      "city": "Beijing",
+      "country": "CN"
+    },
+    {
+      "id": "bhatinda",
+      "name": "Bhatinda",
+      "city": "Punjab",
+      "country": "IN"
+    },
+    {
+      "id": "box-hill-college-in-abu-halifa",
+      "name": "Box Hill College in Abu Halifa",
+      "city": "Kuwait",
+      "country": "KW"
+    },
+    {
+      "id": "bc-297",
+      "name": "British Council - Computer Lab",
+      "city": "Mansouriya",
+      "country": "KW"
+    },
+    {
+      "id": "bc-61",
+      "name": "British Council Admiralty Hong Kong",
+      "city": "Hong Kong",
+      "country": "HK"
+    },
+    {
+      "id": "bc-403",
+      "name": "British Council Alexandria",
+      "city": "Alexandria",
+      "country": "EG"
+    },
+    {
+      "id": "bc-994",
+      "name": "British Council Bahrain",
+      "city": "Manama",
+      "country": "BH"
+    },
+    {
+      "id": "british-council-beijing",
+      "name": "British Council Beijing",
+      "city": "Beijing",
+      "country": "CN"
+    },
+    {
+      "id": "british-council-beijing-chivast-education-international-chongwenmen",
+      "name": "British Council Beijing Chivast Education International (Chongwenmen)",
+      "city": "Beijing",
+      "country": "CN"
+    },
+    {
+      "id": "british-council-beijing-cbd-venue",
+      "name": "British Council Beijing-CBD Venue",
+      "city": "Beijing",
+      "country": "CN"
+    },
+    {
+      "id": "bc-3389",
+      "name": "British Council Dakar",
+      "city": "Dakar",
+      "country": "SN"
+    },
+    {
+      "id": "bc-3396",
+      "name": "British Council Dar es Salaam",
+      "city": "Dar es Salaam",
+      "country": "TZ"
+    },
+    {
+      "id": "bc-581",
+      "name": "British Council Harare",
+      "city": "Harare",
+      "country": "ZW"
+    },
+    {
+      "id": "bc-63",
+      "name": "British Council Jakarta",
+      "city": "Jakarta",
+      "country": "ID"
+    },
+    {
+      "id": "bc-74",
+      "name": "British Council Junction City",
+      "city": "Yangon",
+      "country": "MM"
+    },
+    {
+      "id": "bc-13030",
+      "name": "British Council Muscat",
+      "city": "Muscat",
+      "country": "OM"
+    },
+    {
+      "id": "bc-1159",
+      "name": "British Council Office",
+      "city": "Sao Paulo",
+      "country": "BR"
+    },
+    {
+      "id": "british-council-shanghai",
+      "name": "British Council Shanghai",
+      "city": "Shanghai",
+      "country": "CN"
+    },
+    {
+      "id": "bc-5495",
+      "name": "British Council Sharjah",
+      "city": "Sharjah",
+      "country": "AE"
+    },
+    {
+      "id": "bc-6604",
+      "name": "British Council Test Venue - Mohammed Bin Zayed Al Ain University",
+      "city": "Abu Dhabi",
+      "country": "AE"
+    },
+    {
+      "id": "bc-13632",
+      "name": "British Council, Abis Ba Ria",
+      "city": "Ho Chi Minh City",
+      "country": "VN"
+    },
+    {
+      "id": "bc-12214",
+      "name": "British Council, Abu Dhabi University, Knowledge Group - Abu Dhabi University - Al Ain Campus",
+      "city": "Al Ain",
+      "country": "AE"
+    },
+    {
+      "id": "bc-2275",
+      "name": "British Council, Academia Education Center",
+      "city": "Bishkek",
+      "country": "KG"
+    },
+    {
+      "id": "bc-5537",
+      "name": "British Council, Academia Education Center - Kurmanzhan Datka Osh Lyceum",
+      "city": "Osh",
+      "country": "KG"
+    },
+    {
+      "id": "bc-13568",
+      "name": "British Council, Academie Internationale Benset",
+      "city": "Safi",
+      "country": "MA"
+    },
+    {
+      "id": "bc-1011",
+      "name": "British Council, ACBT Kandy - CD IELTS",
+      "city": "Kandy",
+      "country": "LK"
+    },
+    {
+      "id": "bc-413",
+      "name": "British Council, Address Education Centre Cankaya",
+      "city": "Izmir",
+      "country": "TR"
+    },
+    {
+      "id": "bc-3295",
+      "name": "British Council, Agharass Campus Tanger",
+      "city": "Tanger",
+      "country": "MA"
+    },
+    {
+      "id": "bc-12545",
+      "name": "British Council, Ain Shams University",
+      "city": "Cairo",
+      "country": "EG"
+    },
+    {
+      "id": "bc-292",
+      "name": "British Council, Ajman - The International School of Choueifat",
+      "city": "Ajman",
+      "country": "AE"
+    },
+    {
+      "id": "bc-295",
+      "name": "British Council, Al Ain University Al Ain Campus",
+      "city": "Al Ain",
+      "country": "AE"
+    },
+    {
+      "id": "bc-13246",
+      "name": "British Council, Al Furat Al Awsat Technical University",
+      "city": "Najaf",
+      "country": "IQ"
+    },
+    {
+      "id": "bc-925",
+      "name": "British Council, Alisttest Korat branch",
+      "city": "Nakhon Ratchasima",
+      "country": "TH"
+    },
+    {
+      "id": "bc-995",
+      "name": "British Council, ALLC International House Beirut",
+      "city": "Sin El Fil",
+      "country": "LB"
+    },
+    {
+      "id": "bc-13165",
+      "name": "British Council, Alpha School in Kokand",
+      "city": "Kokand",
+      "country": "UZ"
+    },
+    {
+      "id": "bc-707",
+      "name": "British Council, AM Da Nang",
+      "city": "Da Nang",
+      "country": "VN"
+    },
+    {
+      "id": "bc-57",
+      "name": "British Council, American Academy Larnaca",
+      "city": "Larnaca",
+      "country": "CY"
+    },
+    {
+      "id": "bc-11959",
+      "name": "British Council, American University of Sharjah",
+      "city": "Sharjah",
+      "country": "AE"
+    },
+    {
+      "id": "bc-1175",
+      "name": "British Council, AMES Education",
+      "city": "Vilnius",
+      "country": "LT"
+    },
+    {
+      "id": "bc-158",
+      "name": "British Council, Army Burn College For Boys",
+      "city": "Abbottabad",
+      "country": "PK"
+    },
+    {
+      "id": "bc-414",
+      "name": "British Council, Ataturk Universitesi",
+      "city": "Erzurum",
+      "country": "TR"
+    },
+    {
+      "id": "bc-5436",
+      "name": "British Council, Avicenna Batumi Medical University",
+      "city": "Batumi",
+      "country": "GE"
+    },
+    {
+      "id": "bc-12546",
+      "name": "British Council, Benghazi University Language Centre",
+      "city": "Benghazi",
+      "country": "LY"
+    },
+    {
+      "id": "bc-12293",
+      "name": "British Council, Berkeley House Nagoya",
+      "city": "Nagoya",
+      "country": "JP"
+    },
+    {
+      "id": "bc-12413",
+      "name": "British Council, Berkeley House Tokyo",
+      "city": "Tokyo",
+      "country": "JP"
+    },
+    {
+      "id": "bc-12186",
+      "name": "British Council, Best Education Centre",
+      "city": "Oskemen",
+      "country": "KZ"
+    },
+    {
+      "id": "bc-13303",
+      "name": "British Council, Beulah International School - Uyo",
+      "city": "Uyo",
+      "country": "NG"
+    },
+    {
+      "id": "bc-3294",
+      "name": "British Council, British Academy",
+      "city": "Marrakesh",
+      "country": "MA"
+    },
+    {
+      "id": "bc-3399",
+      "name": "British Council, British Council Lilongwe",
+      "city": "Lilongwe",
+      "country": "MW"
+    },
+    {
+      "id": "bc-11969",
+      "name": "British Council, British University in Dubai, Academic City",
+      "city": "Dubai",
+      "country": "AE"
+    },
+    {
+      "id": "bc-1154",
+      "name": "British Council, Buenos Aires Open Centre",
+      "city": "Buenos Aires",
+      "country": "AR"
+    },
+    {
+      "id": "bc-12184",
+      "name": "British Council, Cambridge Line Taraz",
+      "city": "Taraz",
+      "country": "KZ"
+    },
+    {
+      "id": "bc-13023",
+      "name": "British Council, Centre for Foreign Languages",
+      "city": "Skopje",
+      "country": "MK"
+    },
+    {
+      "id": "bc-13607",
+      "name": "British Council, CfBT Education Services Sdn Bhd - CfBT KB Brunei",
+      "city": "Kuala Belait",
+      "country": "BN"
+    },
+    {
+      "id": "bc-12961",
+      "name": "British Council, Chiang Rai Rajabhat University",
+      "city": "Chiang Rai",
+      "country": "TH"
+    },
+    {
+      "id": "bc-3356",
+      "name": "British Council, Cork English College",
+      "city": "Cork",
+      "country": "IE"
+    },
+    {
+      "id": "bc-12977",
+      "name": "British Council, CUQ Ulster University",
+      "city": "Doha",
+      "country": "QA"
+    },
+    {
+      "id": "bc-13234",
+      "name": "British Council, Deraya University",
+      "city": "Upper Egypt",
+      "country": "EG"
+    },
+    {
+      "id": "bc-13077",
+      "name": "British Council, Dhofar University",
+      "city": "Salalah",
+      "country": "OM"
+    },
+    {
+      "id": "bc-5489",
+      "name": "British Council, Dolphin Phu Tho",
+      "city": "Viet Tri",
+      "country": "VN"
+    },
+    {
+      "id": "bc-1031",
+      "name": "British Council, Dong A Gia Lai",
+      "city": "Pleiku",
+      "country": "VN"
+    },
+    {
+      "id": "bc-13638",
+      "name": "British Council, Dong A Nghe An (Vinh)",
+      "city": "Nghe An",
+      "country": "VN"
+    },
+    {
+      "id": "bc-13633",
+      "name": "British Council, Dong A Nha Trang",
+      "city": "Khanh Hoa",
+      "country": "VN"
+    },
+    {
+      "id": "bc-13637",
+      "name": "British Council, Duy Tan High School",
+      "city": "Dak Lak",
+      "country": "VN"
+    },
+    {
+      "id": "bc-13779",
+      "name": "British Council, Ednex Academy",
+      "city": "Najran",
+      "country": "SA"
+    },
+    {
+      "id": "bc-122",
+      "name": "British Council, EDUTIMES CAN THO",
+      "city": "Can Tho",
+      "country": "VN"
+    },
+    {
+      "id": "bc-3296",
+      "name": "British Council, Edwina Academy",
+      "city": "Erbil",
+      "country": "IQ"
+    },
+    {
+      "id": "bc-12132",
+      "name": "British Council, Ehei - Ecole des Hautes Etudes d Ingenierie",
+      "city": "Oujda",
+      "country": "MA"
+    },
+    {
+      "id": "bc-12982",
+      "name": "British Council, English Academy of MUST",
+      "city": "Ulaanbaatar",
+      "country": "MN"
+    },
+    {
+      "id": "bc-12136",
+      "name": "British Council, English Cultural Center",
+      "city": "Sfax",
+      "country": "TN"
+    },
+    {
+      "id": "bc-12133",
+      "name": "British Council, English Language Institute of Tetouan",
+      "city": "Tetouan",
+      "country": "MA"
+    },
+    {
+      "id": "bc-5456",
+      "name": "British Council, English UC - Campus Oriente",
+      "city": "Santiago",
+      "country": "CL"
+    },
+    {
+      "id": "bc-12135",
+      "name": "British Council, EPI",
+      "city": "Sousse",
+      "country": "TN"
+    },
+    {
+      "id": "bc-13643",
+      "name": "British Council, EPIVN",
+      "city": "Hung Yen (Thai Binh)",
+      "country": "VN"
+    },
+    {
+      "id": "bc-12389",
+      "name": "British Council, ESP Foundation",
+      "city": "Ulaanbaatar",
+      "country": "MN"
+    },
+    {
+      "id": "bc-13074",
+      "name": "British Council, Fakultet dr Lazar Vrkatic (FLV)",
+      "city": "Novi Sad",
+      "country": "RS"
+    },
+    {
+      "id": "bc-7662",
+      "name": "British Council, Ferghana Presidential school",
+      "city": "Fergana",
+      "country": "UZ"
+    },
+    {
+      "id": "bc-5536",
+      "name": "British Council, Foundation",
+      "city": "Shymkent",
+      "country": "KZ"
+    },
+    {
+      "id": "bc-11966",
+      "name": "British Council, Future Target Institute",
+      "city": "Dubai",
+      "country": "AE"
+    },
+    {
+      "id": "bc-12354",
+      "name": "British Council, Gallant Computer Company",
+      "city": "Macau",
+      "country": "MO"
+    },
+    {
+      "id": "bc-303",
+      "name": "British Council, German Jordanian University",
+      "city": "Madaba",
+      "country": "JO"
+    },
+    {
+      "id": "bc-151",
+      "name": "British Council, Gerrys Visas",
+      "city": "Islamabad",
+      "country": "PK"
+    },
+    {
+      "id": "bc-3418",
+      "name": "British Council, Global Language Centre",
+      "city": "Douala",
+      "country": "CM"
+    },
+    {
+      "id": "bc-3321",
+      "name": "British Council, Global Thanh Hoa",
+      "city": "Thanh Hoa",
+      "country": "VN"
+    },
+    {
+      "id": "bc-6629",
+      "name": "British Council, Gulf Colleges - Hafar Al Batin (Males Only)",
+      "city": "Hafr Al Baten",
+      "country": "SA"
+    },
+    {
+      "id": "bc-149",
+      "name": "British Council, IBA Sukkur",
+      "city": "Sukkur",
+      "country": "PK"
+    },
+    {
+      "id": "bc-1194",
+      "name": "British Council, IESOEL HERAKLION",
+      "city": "Irakleio Crete",
+      "country": "GR"
+    },
+    {
+      "id": "bc-920",
+      "name": "British Council, Imam Ja'afar Al Sadiq University",
+      "city": "Baghdad",
+      "country": "IQ"
+    },
+    {
+      "id": "bc-8697",
+      "name": "British Council, Infocan",
+      "city": "Kowloon",
+      "country": "HK"
+    },
+    {
+      "id": "bc-12995",
+      "name": "British Council, InfoPlus",
+      "city": "Bizerte",
+      "country": "TN"
+    },
+    {
+      "id": "bc-12183",
+      "name": "British Council, Innoverse High School",
+      "city": "Taldykorgan",
+      "country": "KZ"
+    },
+    {
+      "id": "bc-12888",
+      "name": "British Council, Institut National Des Langues Luxembourg",
+      "city": "Luxembourg",
+      "country": "LU"
+    },
+    {
+      "id": "bc-3361",
+      "name": "British Council, Institute of Development Management",
+      "city": "Gaborone",
+      "country": "BW"
+    },
+    {
+      "id": "bc-5455",
+      "name": "British Council, Instituto Cultural Anglo-Uruguayo - Instituto Cultural Anglo Uruguayo",
+      "city": "Montevideo",
+      "country": "UY"
+    },
+    {
+      "id": "bc-5447",
+      "name": "British Council, International House Quito - International House Edificio Rafermartz",
+      "city": "GUAYAS",
+      "country": "EC"
+    },
+    {
+      "id": "bc-525",
+      "name": "British Council, IPMC Takoradi",
+      "city": "Takoradi",
+      "country": "GH"
+    },
+    {
+      "id": "bc-13433",
+      "name": "British Council, Isla School of Language Centre and Business School",
+      "city": "Lomé",
+      "country": "TG"
+    },
+    {
+      "id": "bc-13320",
+      "name": "British Council, Iverson Kuala Lumpur Branch 2",
+      "city": "Mid Valley City",
+      "country": "MY"
+    },
+    {
+      "id": "bc-300",
+      "name": "British Council, Jadara University",
+      "city": "Irbid",
+      "country": "JO"
+    },
+    {
+      "id": "bc-13565",
+      "name": "British Council, Jantar - International House Split - Jantar Zagreb",
+      "city": "Zagreb",
+      "country": "HR"
+    },
+    {
+      "id": "bc-331",
+      "name": "British Council, Jazan Higher Training Institute",
+      "city": "Jazan",
+      "country": "SA"
+    },
+    {
+      "id": "bc-12176",
+      "name": "British Council, Karaganda Upgrade School",
+      "city": "Karagandy",
+      "country": "KZ"
+    },
+    {
+      "id": "bc-13400",
+      "name": "British Council, Kasturi Academy",
+      "city": "Itahari",
+      "country": "NP"
+    },
+    {
+      "id": "bc-579",
+      "name": "British Council, Kenya College of Accountancy University - Western Campus",
+      "city": "Kisumu",
+      "country": "KE"
+    },
+    {
+      "id": "bc-12178",
+      "name": "British Council, Kostanay KazGUU School (QS)",
+      "city": "Kostanay",
+      "country": "KZ"
+    },
+    {
+      "id": "bc-13631",
+      "name": "British Council, Ky Nguyen International Language School",
+      "city": "Ho Chi Minh City",
+      "country": "VN"
+    },
+    {
+      "id": "bc-8727",
+      "name": "British Council, Libyan Academy for postgraduate studies",
+      "city": "Tripoli",
+      "country": "LY"
+    },
+    {
+      "id": "bc-951",
+      "name": "British Council, Lil'Langues",
+      "city": "Lille",
+      "country": "FR"
+    },
+    {
+      "id": "bc-12515",
+      "name": "British Council, London School of Accountancy and Finance",
+      "city": "Jakarta",
+      "country": "ID"
+    },
+    {
+      "id": "bc-12396",
+      "name": "British Council, London Training Institute",
+      "city": "Muscat",
+      "country": "OM"
+    },
+    {
+      "id": "bc-13155",
+      "name": "British Council, London Training Institute - Gulf College",
+      "city": "Muscat",
+      "country": "OM"
+    },
+    {
+      "id": "bc-12401",
+      "name": "British Council, London Training Institute - Talento Training Institute",
+      "city": "Sohar",
+      "country": "OM"
+    },
+    {
+      "id": "bc-12532",
+      "name": "British Council, Macao Polytechnic University",
+      "city": "Macau",
+      "country": "MO"
+    },
+    {
+      "id": "bc-13152",
+      "name": "British Council, Macau Productivity and Technology Transfer Center",
+      "city": "Macau",
+      "country": "MO"
+    },
+    {
+      "id": "bc-13583",
+      "name": "British Council, Majan Education Academy",
+      "city": "Muscat",
+      "country": "OM"
+    },
+    {
+      "id": "bc-3420",
+      "name": "British Council, Make it for Africa",
+      "city": "Bamenda",
+      "country": "CM"
+    },
+    {
+      "id": "bc-3422",
+      "name": "British Council, MAT ABACUS Business School",
+      "city": "Kampala",
+      "country": "UG"
+    },
+    {
+      "id": "bc-13193",
+      "name": "British Council, Middle East College",
+      "city": "Muscat",
+      "country": "OM"
+    },
+    {
+      "id": "bc-13336",
+      "name": "British Council, Misurata University",
+      "city": "Misurata",
+      "country": "LY"
+    },
+    {
+      "id": "bc-5577",
+      "name": "British Council, Myadmissionlink Educational Consult Ltd",
+      "city": "Ilorin",
+      "country": "NG"
+    },
+    {
+      "id": "bc-12916",
+      "name": "British Council, Nakhchivan Public University",
+      "city": "Nakhchivan",
+      "country": "AZ"
+    },
+    {
+      "id": "bc-3410",
+      "name": "British Council, Namibia Institute of Public Administration",
+      "city": "Windhoek",
+      "country": "NA"
+    },
+    {
+      "id": "bc-13359",
+      "name": "British Council, Naples - UniParthenope",
+      "city": "Naples",
+      "country": "IT"
+    },
+    {
+      "id": "bc-716",
+      "name": "British Council, Nepathya College of Management and Technology",
+      "city": "Butwal",
+      "country": "NP"
+    },
+    {
+      "id": "bc-13499",
+      "name": "British Council, New Horizons Yemen",
+      "city": "Aden",
+      "country": "YE"
+    },
+    {
+      "id": "bc-13714",
+      "name": "British Council, Nuwabugh AlShabab Training Center",
+      "city": "Qatif",
+      "country": "SA"
+    },
+    {
+      "id": "bc-109",
+      "name": "British Council, Phuket English Examination Center (PEEC)",
+      "city": "Phuket",
+      "country": "TH"
+    },
+    {
+      "id": "bc-13066",
+      "name": "British Council, Polyglot- Al Khoud",
+      "city": "Muscat",
+      "country": "OM"
+    },
+    {
+      "id": "bc-13070",
+      "name": "British Council, Polyglot- Salalah",
+      "city": "Salalah",
+      "country": "OM"
+    },
+    {
+      "id": "bc-13068",
+      "name": "British Council, Polyglot- Sohar",
+      "city": "Sohar",
+      "country": "OM"
+    },
+    {
+      "id": "bc-138",
+      "name": "British Council, Project Headway",
+      "city": "Rajshahi",
+      "country": "BD"
+    },
+    {
+      "id": "bc-11967",
+      "name": "British Council, Regent Middle East",
+      "city": "Dubai",
+      "country": "AE"
+    },
+    {
+      "id": "bc-12473",
+      "name": "British Council, RIT Kosovo (A.U.K)",
+      "city": "Kosovo",
+      "country": "XK"
+    },
+    {
+      "id": "bc-5469",
+      "name": "British Council, Royal Centre City University of Macao",
+      "city": "Macau",
+      "country": "MO"
+    },
+    {
+      "id": "bc-12542",
+      "name": "British Council, ROYAL MIRA ALL SAINTS INTERNATIONAL SCH",
+      "city": "Asaba",
+      "country": "NG"
+    },
+    {
+      "id": "bc-340",
+      "name": "British Council, Saudi Institute for Training - (Males Only)",
+      "city": "Buraydah",
+      "country": "SA"
+    },
+    {
+      "id": "bc-5567",
+      "name": "British Council, Saudi Mining Polytechnic Arar - (Males Only)",
+      "city": "ARAR",
+      "country": "SA"
+    },
+    {
+      "id": "bc-262",
+      "name": "British Council, SKANS College Gujranwala",
+      "city": "Gujranwala",
+      "country": "PK"
+    },
+    {
+      "id": "bc-12368",
+      "name": "British Council, SOHAR UNIVERSITY - Rustaq Building 3",
+      "city": "Sohar",
+      "country": "OM"
+    },
+    {
+      "id": "bc-7664",
+      "name": "British Council, STARS University Nukus",
+      "city": "Nukus",
+      "country": "UZ"
+    },
+    {
+      "id": "bc-13098",
+      "name": "British Council, Swintec Computer Institute",
+      "city": "Owerri",
+      "country": "NG"
+    },
+    {
+      "id": "bc-467",
+      "name": "British Council, Tashkent Institute of Irrigation and Agricultural Mechanization Engineers",
+      "city": "Tashkent",
+      "country": "UZ"
+    },
+    {
+      "id": "bc-12378",
+      "name": "British Council, Taylor's University",
+      "city": "Subang Jaya",
+      "country": "MY"
+    },
+    {
+      "id": "bc-1167",
+      "name": "British Council, Tecnologico de Monterrey - Guadalajara",
+      "city": "Guadalajara",
+      "country": "MX"
+    },
+    {
+      "id": "bc-1169",
+      "name": "British Council, Tecnologico de Monterrey - Puebla",
+      "city": "Puebla",
+      "country": "MX"
+    },
+    {
+      "id": "bc-7665",
+      "name": "British Council, Termez University of Economics and Service",
+      "city": "Termez",
+      "country": "UZ"
+    },
+    {
+      "id": "bc-165",
+      "name": "British Council, The City School Sargodha",
+      "city": "Sargodha",
+      "country": "PK"
+    },
+    {
+      "id": "bc-13080",
+      "name": "British Council, The Guy Morel Institute",
+      "city": "Victoria",
+      "country": "SC"
+    },
+    {
+      "id": "bc-810",
+      "name": "British Council, The Meeting Place Kuching",
+      "city": "Kuching",
+      "country": "MY"
+    },
+    {
+      "id": "bc-12913",
+      "name": "British Council, Time Training Center",
+      "city": "Abu Dhabi",
+      "country": "AE"
+    },
+    {
+      "id": "bc-1157",
+      "name": "British Council, Universidad Blas Pascal",
+      "city": "Cordoba",
+      "country": "AR"
+    },
+    {
+      "id": "bc-11917",
+      "name": "British Council, Universidad de Burgos",
+      "city": "Burgos",
+      "country": "ES"
+    },
+    {
+      "id": "bc-11912",
+      "name": "British Council, Universidad de Cordoba",
+      "city": "Córdoba",
+      "country": "ES"
+    },
+    {
+      "id": "bc-7655",
+      "name": "British Council, Universidad del Norte",
+      "city": "Barranquilla",
+      "country": "CO"
+    },
+    {
+      "id": "bc-13245",
+      "name": "British Council, University of Mosul",
+      "city": "Mosul",
+      "country": "IQ"
+    },
+    {
+      "id": "bc-12282",
+      "name": "British Council, University of Nizwa",
+      "city": "Nizwa",
+      "country": "OM"
+    },
+    {
+      "id": "bc-812",
+      "name": "British Council, University Of Tabuk",
+      "city": "Tabuk",
+      "country": "SA"
+    },
+    {
+      "id": "bc-700",
+      "name": "British Council, Urgench CD - Data Union Learning Center",
+      "city": "Urgench",
+      "country": "UZ"
+    },
+    {
+      "id": "bc-131",
+      "name": "British Council, VTED HUE",
+      "city": "Hue",
+      "country": "VN"
+    },
+    {
+      "id": "bc-11954",
+      "name": "British Council, VTED Quang Ninh",
+      "city": "Ha Long",
+      "country": "VN"
+    },
+    {
+      "id": "cambridge-english-languages-juvecampus-city",
+      "name": "Cambridge English Languages - JuveCampus City",
+      "city": "Zürich",
+      "country": "CH"
+    },
+    {
+      "id": "capital-normal-university",
+      "name": "Capital Normal University",
+      "city": "Beijing",
+      "country": "CN"
+    },
+    {
+      "id": "china-university-of-mining-technology",
+      "name": "China University of Mining Technology",
+      "city": "Jiangsu Province",
+      "country": "CN"
+    },
+    {
+      "id": "dalian-education-university",
+      "name": "Dalian Education University",
+      "city": "Liaoning Province",
+      "country": "CN"
+    },
+    {
+      "id": "edu-action-andijan",
+      "name": "Edu Action Andijan",
+      "city": "Andijon",
+      "country": "UZ"
+    },
+    {
+      "id": "edu-action-bukhara",
+      "name": "Edu Action Bukhara",
+      "city": "Bukhara",
+      "country": "UZ"
+    },
+    {
+      "id": "edu-action-fergana-unity-language-academy",
+      "name": "Edu Action Fergana - Unity Language Academy",
+      "city": "Farg'ona",
+      "country": "UZ"
+    },
+    {
+      "id": "edu-action-namangan",
+      "name": "Edu Action Namangan",
+      "city": "Namangan",
+      "country": "UZ"
+    },
+    {
+      "id": "edu-action-nukus",
+      "name": "Edu Action Nukus",
+      "city": "Nukus",
+      "country": "UZ"
+    },
+    {
+      "id": "edu-action-samarkand-polyglot-language-school",
+      "name": "Edu Action Samarkand - Polyglot Language School",
+      "city": "Samarqand",
+      "country": "UZ"
+    },
+    {
+      "id": "edu-action-tashkent-ielts-zone",
+      "name": "Edu Action Tashkent - IELTS Zone",
+      "city": "Toshkent",
+      "country": "UZ"
+    },
+    {
+      "id": "edu-action-tashkent-tashkent-inter-nation-school",
+      "name": "Edu Action Tashkent - Tashkent Inter Nation School",
+      "city": "Toshkent",
+      "country": "UZ"
+    },
+    {
+      "id": "edu-action-termez",
+      "name": "Edu Action Termez",
+      "city": "Surxondaryo",
+      "country": "UZ"
+    },
+    {
+      "id": "english-world-ras-al-khaimah-university-of-wollongong-in-dubai",
+      "name": "English World Ras Al Khaimah - University of Wollongong in Dubai",
+      "city": "Ras Al Khaimah",
+      "country": "AE"
+    },
+    {
+      "id": "european-examinations-centre-centrul-educational-quo-vadis",
+      "name": "European Examinations Centre - Centrul Educational Quo Vadis",
+      "city": "Chi?inau",
+      "country": "MD"
+    },
+    {
+      "id": "european-examinations-centre-the-first-english-school",
+      "name": "European Examinations Centre - The First English School",
+      "city": "Sofia",
+      "country": "BG"
+    },
+    {
+      "id": "fujian-provincial-education-association-for-international-exchange",
+      "name": "Fujian Provincial Education Association for International Exchange",
+      "city": "Fujian Province",
+      "country": "CN"
+    },
+    {
+      "id": "guangdong-industry-polytechnic-university",
+      "name": "Guangdong Industry Polytechnic University",
+      "city": "Guangzhou",
+      "country": "CN"
+    },
+    {
+      "id": "guangdong-university-of-foreign-studies",
+      "name": "Guangdong University of Foreign Studies",
+      "city": "Guangzhou",
+      "country": "CN"
+    },
+    {
+      "id": "gurdaspur",
+      "name": "Gurdaspur",
+      "city": "Gurdaspur",
+      "country": "IN"
+    },
+    {
+      "id": "harbin-engineering-university-ielts-on-computer-test-centre-songbei",
+      "name": "Harbin Engineering University IELTS On Computer Test Centre-Songbei",
+      "city": "Haerbin",
+      "country": "CN"
+    },
+    {
+      "id": "hawthorn-english-language-centre-muscat",
+      "name": "Hawthorn English Language Centre Muscat",
+      "city": "Muscat",
+      "country": "OM"
+    },
+    {
+      "id": "hawthorn-english-language-centre-muscat-sohar-institute-for-management-tech",
+      "name": "Hawthorn English Language Centre Muscat - Sohar Institute for Management & Tech",
+      "city": "Al Batinah North",
+      "country": "OM"
+    },
+    {
+      "id": "hawthorn-english-language-centre-sur",
+      "name": "Hawthorn English Language Centre Sur",
+      "city": "Ash Sharqiyah South",
+      "country": "OM"
+    },
+    {
+      "id": "hebei-university-of-technology-hongqiao-campus",
+      "name": "Hebei University of Technology (Hongqiao Campus)",
+      "city": "Tianjin",
+      "country": "CN"
+    },
+    {
+      "id": "heilongjiang-university",
+      "name": "Heilongjiang University",
+      "city": "Haerbin",
+      "country": "CN"
+    },
+    {
+      "id": "heliopolis-life-skills",
+      "name": "Heliopolis (Life Skills)",
+      "city": "Cairo",
+      "country": "EG"
+    },
+    {
+      "id": "hubei-education-international-ioc-test-centre",
+      "name": "Hubei Education International IOC Test Centre",
+      "city": "Hubei",
+      "country": "CN"
+    },
+    {
+      "id": "ialf-uin-alauddin-makassar",
+      "name": "IALF - UIN Alauddin Makassar",
+      "city": "Sulawesi Selatan",
+      "country": "ID"
+    },
+    {
+      "id": "idp-chandigarh-sector-34-speaking",
+      "name": "IDP Chandigarh - Sector 34 Speaking",
+      "city": "Chandigarh",
+      "country": "IN"
+    },
+    {
+      "id": "idp-education-in-salmiya",
+      "name": "IDP Education in Salmiya",
+      "city": "Kuwait",
+      "country": "KW"
+    },
+    {
+      "id": "idp-education-india-bengaluru-whitefield",
+      "name": "IDP Education India - Bengaluru - Whitefield",
+      "city": "Karnataka",
+      "country": "IN"
+    },
+    {
+      "id": "idp-education-india-bhubaneswar-kharvela-nagar",
+      "name": "IDP Education India - Bhubaneswar - Kharvela Nagar",
+      "city": "Odisha",
+      "country": "IN"
+    },
+    {
+      "id": "idp-education-india-chandigarh",
+      "name": "IDP Education India - Chandigarh",
+      "city": "Punjab",
+      "country": "IN"
+    },
+    {
+      "id": "idp-education-india-karnal-shyam-nagar",
+      "name": "IDP Education India - Karnal - Shyam Nagar",
+      "city": "Haryana",
+      "country": "IN"
+    },
+    {
+      "id": "idp-education-india-ludhiana",
+      "name": "IDP Education India - Ludhiana",
+      "city": "Punjab",
+      "country": "IN"
+    },
+    {
+      "id": "idp-education-india-vadodara",
+      "name": "IDP Education India - Vadodara",
+      "city": "Gujarat",
+      "country": "IN"
+    },
+    {
+      "id": "idp-education-limited-eg-academy-pampanga",
+      "name": "IDP Education Limited - EG Academy, Pampanga",
+      "city": "Pampanga",
+      "country": "PH"
+    },
+    {
+      "id": "idp-education-limited-ilocos-ielts-review-center-laoag",
+      "name": "IDP Education Limited - Ilocos IELTS Review Center, Laoag",
+      "city": "Ilocos Norte",
+      "country": "PH"
+    },
+    {
+      "id": "idp-education-nepal-private-limited-chitwan-test-room",
+      "name": "IDP Education Nepal Private Limited, Chitwan (Test Room)",
+      "city": "Bagmati",
+      "country": "NP"
+    },
+    {
+      "id": "idp-education-riyadh-male-females-tahlia-street-test-room",
+      "name": "IDP Education Riyadh (Male & females) Tahlia Street (Test Room)",
+      "city": "Riyadh",
+      "country": "SA"
+    },
+    {
+      "id": "idp-ielts-al-ain",
+      "name": "IDP IELTS - Al Ain",
+      "city": "Abu ?aby [Abu Dhabi]",
+      "country": "AE"
+    },
+    {
+      "id": "idp-ielts-al-bayan-international-institute",
+      "name": "IDP IELTS - Al Bayan International Institute",
+      "city": "Abu Dhabi",
+      "country": "AE"
+    },
+    {
+      "id": "idp-ielts-ankara-computer-delivered",
+      "name": "IDP IELTS - Ankara - Computer Delivered",
+      "city": "Ankara",
+      "country": "TR"
+    },
+    {
+      "id": "idp-ielts-antalya-computer-delivered",
+      "name": "IDP IELTS - Antalya - Computer Delivered",
+      "city": "Antalya",
+      "country": "TR"
+    },
+    {
+      "id": "idp-ielts-abu-dhabi",
+      "name": "IDP IELTS Abu Dhabi",
+      "city": "Abu Dhabi",
+      "country": "AE"
+    },
+    {
+      "id": "idp-ielts-abu-dhabi-idp-education",
+      "name": "IDP IELTS Abu Dhabi - IDP Education",
+      "city": "Abu Dhabi",
+      "country": "AE"
+    },
+    {
+      "id": "idp-ielts-abu-dhabi-ienglish-language-institute",
+      "name": "IDP IELTS Abu Dhabi - iEnglish Language Institute",
+      "city": "Al Ain",
+      "country": "AE"
+    },
+    {
+      "id": "idp-ielts-australia-wollongong",
+      "name": "IDP IELTS Australia - Wollongong",
+      "city": "New South Wales",
+      "country": "AU"
+    },
+    {
+      "id": "idp-ielts-bangladesh-life-skills-at-ielts-hq-amanullah-trade-centre",
+      "name": "IDP IELTS Bangladesh - Life Skills at IELTS HQ Amanullah Trade Centre",
+      "city": "Dhaka",
+      "country": "BD"
+    },
+    {
+      "id": "idp-ielts-bangladesh-life-skills-at-jr-tower-sylhet",
+      "name": "IDP IELTS Bangladesh - Life Skills at JR Tower Sylhet",
+      "city": "Sadar",
+      "country": "BD"
+    },
+    {
+      "id": "idp-ielts-bangladesh-asad-gate-dominators",
+      "name": "IDP IELTS Bangladesh Asad Gate - Dominators",
+      "city": "Dhaka",
+      "country": "BD"
+    },
+    {
+      "id": "idp-ielts-bangladesh-chattogram-penston-english-institute",
+      "name": "IDP IELTS Bangladesh Chattogram - Penston English Institute",
+      "city": "Chittagong",
+      "country": "BD"
+    },
+    {
+      "id": "idp-ielts-bangladesh-panthapath-patronus-education",
+      "name": "IDP IELTS Bangladesh Panthapath - Patronus Education",
+      "city": "Dhaka",
+      "country": "BD"
+    },
+    {
+      "id": "idp-ielts-bangladesh-rajshahi-mentors-international-grammar-school",
+      "name": "IDP IELTS Bangladesh Rajshahi - Mentors International Grammar School",
+      "city": "Rajshahi",
+      "country": "BD"
+    },
+    {
+      "id": "idp-ielts-china-beijing-haidian",
+      "name": "IDP IELTS China Beijing Haidian",
+      "city": "Haidian District",
+      "country": "CN"
+    },
+    {
+      "id": "idp-ielts-china-changsha-furong",
+      "name": "IDP IELTS China Changsha Furong",
+      "city": "Hunan",
+      "country": "CN"
+    },
+    {
+      "id": "idp-ielts-china-chengdu-wuhou",
+      "name": "IDP IELTS China Chengdu Wuhou",
+      "city": "Sichuan",
+      "country": "CN"
+    },
+    {
+      "id": "idp-ielts-china-hangzhou-gongshu",
+      "name": "IDP IELTS China Hangzhou Gongshu",
+      "city": "Zhejiang",
+      "country": "CN"
+    },
+    {
+      "id": "idp-ielts-china-jinan-lixia",
+      "name": "IDP IELTS China Jinan Lixia",
+      "city": "Shandong",
+      "country": "CN"
+    },
+    {
+      "id": "idp-ielts-china-nantong-chongchuan",
+      "name": "IDP IELTS China Nantong Chongchuan",
+      "city": "Jiangsu",
+      "country": "CN"
+    },
+    {
+      "id": "idp-ielts-china-shanghai-xuhui",
+      "name": "IDP IELTS China Shanghai Xuhui",
+      "city": "Shanghai",
+      "country": "CN"
+    },
+    {
+      "id": "idp-ielts-china-wuhan-jianghan",
+      "name": "IDP IELTS China Wuhan Jianghan",
+      "city": "Hubei",
+      "country": "CN"
+    },
+    {
+      "id": "idp-ielts-china-wuxi-xinwu",
+      "name": "IDP IELTS China Wuxi Xinwu",
+      "city": "Jiangsu",
+      "country": "CN"
+    },
+    {
+      "id": "idp-ielts-dubai-al-rowwad-language-technology-centre",
+      "name": "IDP IELTS Dubai - Al Rowwad Language & Technology Centre",
+      "city": "Sharjah",
+      "country": "AE"
+    },
+    {
+      "id": "idp-ielts-dubai-british-training-institute-sharjah",
+      "name": "IDP IELTS Dubai - British Training Institute Sharjah",
+      "city": "Ash Shariqah",
+      "country": "AE"
+    },
+    {
+      "id": "idp-ielts-dubai-ls",
+      "name": "IDP IELTS Dubai - LS",
+      "city": "Dubai",
+      "country": "AE"
+    },
+    {
+      "id": "idp-ielts-dubai-university-of-sharjah",
+      "name": "IDP IELTS Dubai - University of Sharjah",
+      "city": "Sharjah",
+      "country": "AE"
+    },
+    {
+      "id": "idp-ielts-egypt-new-horizon-centre-mansura",
+      "name": "IDP IELTS Egypt - New Horizon Centre Mansura",
+      "city": "Mansoura",
+      "country": "EG"
+    },
+    {
+      "id": "idp-ielts-egypt-one-kattameya-cairo",
+      "name": "IDP IELTS Egypt - One Kattameya Cairo",
+      "city": "El Mokattam",
+      "country": "EG"
+    },
+    {
+      "id": "idp-ielts-egypt-sheikh-zayed",
+      "name": "IDP IELTS Egypt - Sheikh Zayed",
+      "city": "Giza CAI",
+      "country": "EG"
+    },
+    {
+      "id": "idp-ielts-egypt-tanta-university",
+      "name": "IDP IELTS Egypt - Tanta University",
+      "city": "TNT",
+      "country": "EG"
+    },
+    {
+      "id": "idp-ielts-ghana-accra-osu",
+      "name": "IDP IELTS Ghana Accra - Osu",
+      "city": "Greater Accra",
+      "country": "GH"
+    },
+    {
+      "id": "idp-ielts-ghana-accra-wesley-towers",
+      "name": "IDP IELTS Ghana Accra - Wesley Towers",
+      "city": "Greater Accra",
+      "country": "GH"
+    },
+    {
+      "id": "idp-ielts-ghana-kumasi",
+      "name": "IDP IELTS Ghana Kumasi",
+      "city": "Ashanti",
+      "country": "GH"
+    },
+    {
+      "id": "idp-ielts-ghana-kumasi-knust-impact-building",
+      "name": "IDP IELTS Ghana Kumasi - KNUST Impact Building",
+      "city": "Ashanti Region",
+      "country": "GH"
+    },
+    {
+      "id": "idp-ielts-indonesia-tangerang-gading-serpong",
+      "name": "IDP IELTS Indonesia Tangerang (Gading Serpong)",
+      "city": "Banten",
+      "country": "ID"
+    },
+    {
+      "id": "idp-ielts-kazakhstan-aktobe",
+      "name": "IDP IELTS Kazakhstan Aktobe",
+      "city": "Aktobe",
+      "country": "KZ"
+    },
+    {
+      "id": "idp-ielts-kazakhstan-atyrau",
+      "name": "IDP IELTS Kazakhstan Atyrau",
+      "city": "Atyrau",
+      "country": "KZ"
+    },
+    {
+      "id": "idp-ielts-kazakhstan-kostanay",
+      "name": "IDP IELTS Kazakhstan Kostanay",
+      "city": "Kostanay",
+      "country": "KZ"
+    },
+    {
+      "id": "idp-ielts-kazakhstan-almaty-test-room",
+      "name": "IDP IELTS Kazakhstan, Almaty (Test Room)",
+      "city": "Almaty",
+      "country": "KZ"
+    },
+    {
+      "id": "idp-ielts-kazakhstan-astana",
+      "name": "IDP IELTS Kazakhstan, Astana",
+      "city": "Astana",
+      "country": "KZ"
+    },
+    {
+      "id": "idp-ielts-malaysia-northern-kuala-lumpur-international-college",
+      "name": "IDP IELTS Malaysia - Northern Kuala Lumpur International College",
+      "city": "Wilayah Persekutuan Kuala Lumpur",
+      "country": "MY"
+    },
+    {
+      "id": "idp-ielts-malaysia-ptmj-bintulu",
+      "name": "IDP IELTS Malaysia - PTMJ Bintulu",
+      "city": "Sarawak",
+      "country": "MY"
+    },
+    {
+      "id": "idp-ielts-new-zealand-queenstown",
+      "name": "IDP IELTS New Zealand - Queenstown",
+      "city": "Otago",
+      "country": "NZ"
+    },
+    {
+      "id": "idp-ielts-oman-code-academy",
+      "name": "IDP IELTS Oman - Code Academy",
+      "city": "Al Khoudh",
+      "country": "OM"
+    },
+    {
+      "id": "idp-ielts-oman-code-academy-al-khoud",
+      "name": "IDP IELTS Oman - Code Academy Al Khoud",
+      "city": "Muscat",
+      "country": "OM"
+    },
+    {
+      "id": "idp-ielts-oman-data-academy",
+      "name": "IDP IELTS Oman - Data Academy",
+      "city": "Al Khoudh",
+      "country": "OM"
+    },
+    {
+      "id": "idp-ielts-oman-eles-muscat",
+      "name": "IDP IELTS Oman - ELES Muscat",
+      "city": "Muscat",
+      "country": "OM"
+    },
+    {
+      "id": "idp-ielts-oman-indian-school-al-wadi-al-kabir",
+      "name": "IDP IELTS Oman - Indian School Al Wadi Al Kabir",
+      "city": "Muscat",
+      "country": "OM"
+    },
+    {
+      "id": "idp-ielts-oman-khaleej-oman-institute-muscat",
+      "name": "IDP IELTS Oman - Khaleej Oman Institute Muscat",
+      "city": "Barka",
+      "country": "OM"
+    },
+    {
+      "id": "idp-ielts-oman-lingua-institute",
+      "name": "IDP IELTS Oman - Lingua Institute",
+      "city": "Muscat",
+      "country": "OM"
+    },
+    {
+      "id": "idp-ielts-oman-modern-gulf-institute",
+      "name": "IDP IELTS Oman - Modern Gulf Institute",
+      "city": "Muscat",
+      "country": "OM"
+    },
+    {
+      "id": "idp-ielts-oman-national-academy-of-management-and-tech",
+      "name": "IDP IELTS Oman - National Academy of Management and Tech",
+      "city": "Mawaleh",
+      "country": "OM"
+    },
+    {
+      "id": "idp-ielts-oman-oman-dental-college",
+      "name": "IDP IELTS Oman - Oman Dental College (#1)",
+      "city": "Muscat",
+      "country": "OM"
+    },
+    {
+      "id": "idp-ielts-oman-pakistan-school-muscat",
+      "name": "IDP IELTS Oman - Pakistan School Muscat",
+      "city": "Muscat",
+      "country": "OM"
+    },
+    {
+      "id": "idp-ielts-oman-university-of-technology-and-applied-sciences-muscat",
+      "name": "IDP IELTS Oman - University of Technology and Applied Sciences Muscat",
+      "city": "Muscat",
+      "country": "OM"
+    },
+    {
+      "id": "idp-ielts-oman-university-of-technology-and-applied-sciences-shinas",
+      "name": "IDP IELTS Oman - University of Technology and Applied Sciences Shinas",
+      "city": "Shinas",
+      "country": "OM"
+    },
+    {
+      "id": "idp-ielts-oman-united-international-schools",
+      "name": "IDP IELTS Oman – United International Schools",
+      "city": "Muscat",
+      "country": "OM"
+    },
+    {
+      "id": "idp-ielts-philippines-besta-bohol",
+      "name": "IDP IELTS Philippines - BESTA Bohol",
+      "city": "Bohol",
+      "country": "PH"
+    },
+    {
+      "id": "idp-ielts-saudi-arabia-imam-abdulrahman-bin-faisal-university",
+      "name": "IDP IELTS Saudi Arabia - Imam Abdulrahman Bin Faisal University",
+      "city": "Ash Sharqiyah",
+      "country": "SA"
+    },
+    {
+      "id": "idp-ielts-saudi-arabia-king-khalid-university",
+      "name": "IDP IELTS Saudi Arabia - King Khalid University",
+      "city": "`Asir",
+      "country": "SA"
+    },
+    {
+      "id": "idp-ielts-saudi-arabia-shabaka-training-institute",
+      "name": "IDP IELTS Saudi Arabia - Shabaka Training Institute",
+      "city": "Ash Sharqiyah",
+      "country": "SA"
+    },
+    {
+      "id": "idp-ielts-saudi-arabia-al-khobar-neft-energies",
+      "name": "IDP IELTS Saudi Arabia Al Khobar - NEFT Energies",
+      "city": "Ash Sharqiyah",
+      "country": "SA"
+    },
+    {
+      "id": "idp-ielts-south-korea-busan-lexis",
+      "name": "IDP IELTS South Korea - Busan Lexis",
+      "city": "Busan",
+      "country": "KR"
+    },
+    {
+      "id": "idp-ielts-south-korea-daejeon-cnu",
+      "name": "IDP IELTS South Korea - Daejeon CNU",
+      "city": "Daehak-ro",
+      "country": "KR"
+    },
+    {
+      "id": "idp-ielts-south-korea-seoul-gangnam",
+      "name": "IDP IELTS South Korea - Seoul Gangnam",
+      "city": "Seocho-gu",
+      "country": "KR"
+    },
+    {
+      "id": "idp-ielts-test-centre-mong-kok",
+      "name": "IDP IELTS Test Centre (Mong Kok)",
+      "city": "Hong Kong",
+      "country": "HK"
+    },
+    {
+      "id": "idp-ielts-thailand-bangkok-assumption-college",
+      "name": "IDP IELTS Thailand Bangkok - Assumption College",
+      "city": "Khwaeng Bang Rak",
+      "country": "TH"
+    },
+    {
+      "id": "idp-ielts-thailand-chiang-mai-huizhong",
+      "name": "IDP IELTS Thailand Chiang Mai - Huizhong",
+      "city": "Chiang Mai",
+      "country": "TH"
+    },
+    {
+      "id": "idp-ielts-thailand-chiang-mai-i-genius-language-institute",
+      "name": "IDP IELTS Thailand Chiang Mai - i-Genius Language Institute",
+      "city": "Chiang Mai",
+      "country": "TH"
+    },
+    {
+      "id": "idp-ielts-thailand-korat-well-balanced-english",
+      "name": "IDP IELTS Thailand Korat - Well-Balanced English",
+      "city": "Nakhon Ratchasima",
+      "country": "TH"
+    },
+    {
+      "id": "idp-ielts-turkey-gaziantep-head-english",
+      "name": "IDP IELTS Turkey Gaziantep - Head English",
+      "city": "Gaziantep",
+      "country": "TR"
+    },
+    {
+      "id": "idp-ielts-victoria-island",
+      "name": "IDP IELTS Victoria Island",
+      "city": "Lagos",
+      "country": "NG"
+    },
+    {
+      "id": "idp-ielts-vietnam-fpt-university-campus-quy-nhon",
+      "name": "IDP IELTS Vietnam - FPT University Campus Quy Nhon",
+      "city": "Gia Lai",
+      "country": "VN"
+    },
+    {
+      "id": "idp-ielts-vietnam-hanex-english-academy-ba-ria",
+      "name": "IDP IELTS Vietnam - Hanex English Academy Ba Ria",
+      "city": "H? Chí Minh [Sài Gòn]",
+      "country": "VN"
+    },
+    {
+      "id": "idp-ielts-vietnam-ielts-champions-thanh-hoa",
+      "name": "IDP IELTS Vietnam - IELTS Champions Thanh Hoa",
+      "city": "Thanh Hoa",
+      "country": "VN"
+    },
+    {
+      "id": "idp-ielts-vietnam-ivy-thai-binh",
+      "name": "IDP IELTS Vietnam - IVY Thai Binh",
+      "city": "Thái Bình",
+      "country": "VN"
+    },
+    {
+      "id": "idp-lahore-ielts-life-skills-a1-b1-results-in-5-7-days",
+      "name": "IDP LAHORE - IELTS LIFE SKILLS - A1 & B1 (RESULTS IN 5-7 DAYS)",
+      "city": "Punjab",
+      "country": "PK"
+    },
+    {
+      "id": "idp-oman-al-madina-plaza",
+      "name": "IDP Oman - Al Madina Plaza",
+      "city": "Muscat",
+      "country": "OM"
+    },
+    {
+      "id": "idp-victoria-island-ielts-on-computer",
+      "name": "IDP Victoria Island IELTS on Computer",
+      "city": "Lagos",
+      "country": "NG"
+    },
+    {
+      "id": "ielts-arequipa-international-house-lima",
+      "name": "IELTS Arequipa - International House Lima",
+      "city": "Arequipa",
+      "country": "PE"
+    },
+    {
+      "id": "ielts-argentina-cordoba-british-school",
+      "name": "IELTS Argentina Cordoba - British School",
+      "city": "Cordoba",
+      "country": "AR"
+    },
+    {
+      "id": "ielts-chihuahua-international-house-mexico",
+      "name": "IELTS Chihuahua - International House Mexico",
+      "city": "Chihuahua",
+      "country": "MX"
+    },
+    {
+      "id": "ielts-mongolia-ulaanbaatar-intellgent-llc",
+      "name": "IELTS Mongolia Ulaanbaatar - Intellgent LLC",
+      "city": "Ulanbaatar",
+      "country": "MN"
+    },
+    {
+      "id": "ielts-on-computer-idp-education-one-raffles-place",
+      "name": "IELTS on Computer - IDP Education - One Raffles Place",
+      "city": "Singapore",
+      "country": "SG"
+    },
+    {
+      "id": "ielts-peru-international-house-san-borja",
+      "name": "IELTS Peru - International House San Borja",
+      "city": "Lima",
+      "country": "PE"
+    },
+    {
+      "id": "inner-mongolia-normal-university",
+      "name": "Inner Mongolia Normal University",
+      "city": "Huhehaote",
+      "country": "CN"
+    },
+    {
+      "id": "international-house-bogota-cali",
+      "name": "International House Bogota - Cali",
+      "city": "Valle del Cauca",
+      "country": "CO"
+    },
+    {
+      "id": "international-house-condesa-test-room",
+      "name": "International House Condesa (Test Room)",
+      "city": "Mexico",
+      "country": "MX"
+    },
+    {
+      "id": "international-school-of-dongguan",
+      "name": "International School of Dongguan",
+      "city": "Guangdong",
+      "country": "CN"
+    },
+    {
+      "id": "jiangsu-communication-and-media-school-jsbc-gulou-litchi-plaza",
+      "name": "Jiangsu Communication and Media School (JSBC Gulou Litchi Plaza)",
+      "city": "Jiangsu",
+      "country": "CN"
+    },
+    {
+      "id": "jiangsu-university",
+      "name": "Jiangsu University",
+      "city": "Jiangsu",
+      "country": "CN"
+    },
+    {
+      "id": "khanna",
+      "name": "Khanna",
+      "city": "Punjab",
+      "country": "IN"
+    },
+    {
+      "id": "knowledge-park-university-of-wollongong-in-dubai",
+      "name": "Knowledge Park - University of Wollongong in Dubai",
+      "city": "Dubai",
+      "country": "AE"
+    },
+    {
+      "id": "liaoning-university",
+      "name": "Liaoning University",
+      "city": "Shenyang",
+      "country": "CN"
+    },
+    {
+      "id": "mehsana",
+      "name": "Mehsana",
+      "city": "Gujarat",
+      "country": "IN"
+    },
+    {
+      "id": "mod-cd-ielts-abuja-test-room",
+      "name": "MOD CD IELTS Abuja (Test Room)",
+      "city": "Abuja Capital Territory",
+      "country": "NG"
+    },
+    {
+      "id": "mod-education-nigeria-makurdi",
+      "name": "MOD Education Nigeria Makurdi",
+      "city": "Benue",
+      "country": "NG"
+    },
+    {
+      "id": "mod-education-nigeria-ogudu",
+      "name": "MOD Education Nigeria Ogudu",
+      "city": "Lagos",
+      "country": "NG"
+    },
+    {
+      "id": "mod-education-nigeria-owerri",
+      "name": "MOD Education Nigeria Owerri",
+      "city": "Imo",
+      "country": "NG"
+    },
+    {
+      "id": "mod-ielts-victoria-island",
+      "name": "MOD IELTS VICTORIA ISLAND",
+      "city": "Lagos",
+      "country": "NG"
+    },
+    {
+      "id": "muscat-training-institute-capital-academy",
+      "name": "Muscat Training Institute - Capital Academy",
+      "city": "Muscat",
+      "country": "OM"
+    },
+    {
+      "id": "muscat-training-institute-muscat-university-building",
+      "name": "Muscat Training Institute - Muscat University Building",
+      "city": "Muscat",
+      "country": "OM"
+    },
+    {
+      "id": "nanjing-university-of-aeronautics-and-astronautics",
+      "name": "Nanjing University of Aeronautics and Astronautics",
+      "city": "Jiangsu Province",
+      "country": "CN"
+    },
+    {
+      "id": "nanjing-university-of-information-science-and-technology",
+      "name": "Nanjing University of Information Science and Technology",
+      "city": "Nanjing",
+      "country": "CN"
+    },
+    {
+      "id": "netcom-systems-test-room",
+      "name": "Netcom Systems (Test Room)",
+      "city": "Beirut",
+      "country": "LB"
+    },
+    {
+      "id": "ningbo-huamao-foreign-language-school",
+      "name": "Ningbo Huamao Foreign Language School",
+      "city": "Zhejiang",
+      "country": "CN"
+    },
+    {
+      "id": "north-american-school-porto-alegre",
+      "name": "North American School Porto Alegre",
+      "city": "Rio Grande do Sul",
+      "country": "BR"
+    },
+    {
+      "id": "northwestern-polytechnical-university",
+      "name": "Northwestern Polytechnical University",
+      "city": "Shaanxi",
+      "country": "CN"
+    },
+    {
+      "id": "oval-international-academy",
+      "name": "Oval International Academy",
+      "city": "Amman",
+      "country": "JO"
+    },
+    {
+      "id": "renmin-university-of-china",
+      "name": "Renmin University of China",
+      "city": "Beijing",
+      "country": "CN"
+    },
+    {
+      "id": "saudi-british-centre-alkhobar",
+      "name": "Saudi British Centre Alkhobar",
+      "city": "Ash Sharqiyah",
+      "country": "SA"
+    },
+    {
+      "id": "saudi-british-centre-tabuk-paper-based",
+      "name": "Saudi British Centre Tabuk (Paper-based)",
+      "city": "Tabuk",
+      "country": "SA"
+    },
+    {
+      "id": "shaanxi-normal-university",
+      "name": "Shaanxi Normal University",
+      "city": "Xian",
+      "country": "CN"
+    },
+    {
+      "id": "shandong-university",
+      "name": "Shandong University",
+      "city": "Shandong Province",
+      "country": "CN"
+    },
+    {
+      "id": "shanghai-ocean-university",
+      "name": "Shanghai Ocean University",
+      "city": "Shanghai",
+      "country": "CN"
+    },
+    {
+      "id": "shanghai-university",
+      "name": "Shanghai University",
+      "city": "Shanghai",
+      "country": "CN"
+    },
+    {
+      "id": "shanghai-university-of-finance-and-economics-jinian-road-campus",
+      "name": "Shanghai University of Finance and Economics (Jinian Road Campus)",
+      "city": "Shanghai",
+      "country": "CN"
+    },
+    {
+      "id": "shenyang-normal-university",
+      "name": "Shenyang Normal University",
+      "city": "Shenyang",
+      "country": "CN"
+    },
+    {
+      "id": "soochow-university",
+      "name": "Soochow University",
+      "city": "Jiangsu",
+      "country": "CN"
+    },
+    {
+      "id": "south-china-university-of-technology",
+      "name": "South China University of Technology",
+      "city": "Guangzhou",
+      "country": "CN"
+    },
+    {
+      "id": "strive-education-in-sabah-al-salem",
+      "name": "Strive Education in Sabah Al Salem",
+      "city": "Mubarak al Kabir",
+      "country": "KW"
+    },
+    {
+      "id": "taipei-computer-association-b1-no-2-sec-3-bade-rd",
+      "name": "Taipei Computer Association (B1 No 2 Sec. 3 Bade Rd)",
+      "city": "Taiwan",
+      "country": "TW"
+    },
+    {
+      "id": "taiyuan-university-of-technology",
+      "name": "Taiyuan University of Technology",
+      "city": "Taiyuan",
+      "country": "CN"
+    },
+    {
+      "id": "the-cambridge-school-salerno",
+      "name": "The Cambridge School Salerno",
+      "city": "Salerno",
+      "country": "IT"
+    },
+    {
+      "id": "ukvi-paper-based-ielts-idp-ielts-kazakhstan-astana",
+      "name": "UKVI Paper Based IELTS IDP IELTS Kazakhstan Astana",
+      "city": "Astana",
+      "country": "KZ"
+    },
+    {
+      "id": "uniabroad-kenya-the-eldoret-national-polytechnic",
+      "name": "Uniabroad Kenya - The Eldoret National Polytechnic",
+      "city": "ELDORET",
+      "country": "KE"
+    },
+    {
+      "id": "university-of-electronic-science-and-technology-of-china",
+      "name": "University of Electronic Science and Technology of China",
+      "city": "Chengdu",
+      "country": "CN"
+    },
+    {
+      "id": "university-of-mustansiriyah",
+      "name": "University of Mustansiriyah",
+      "city": "Baghdad",
+      "country": "IQ"
+    },
+    {
+      "id": "wuhan-new-world-centre",
+      "name": "Wuhan New World Centre",
+      "city": "Wuhan",
+      "country": "CN"
+    },
+    {
+      "id": "wuhan-university-shenzhen-institute",
+      "name": "Wuhan University Shenzhen Institute",
+      "city": "Wuhan",
+      "country": "CN"
+    },
+    {
+      "id": "wuxi-open-university",
+      "name": "Wuxi Open University",
+      "city": "Wuxi",
+      "country": "CN"
+    },
+    {
+      "id": "yangzhou-university",
+      "name": "Yangzhou University",
+      "city": "Jiangsu",
+      "country": "CN"
+    },
+    {
+      "id": "zhejiang-education-examinations-authority",
+      "name": "Zhejiang Education Examinations Authority",
+      "city": "Zhejiang Province",
+      "country": "CN"
+    },
+    {
+      "id": "zhejiang-education-examinations-authority-wenzhou",
+      "name": "Zhejiang Education Examinations Authority (Wenzhou)",
+      "city": "Zhejiang Province",
+      "country": "CN"
+    },
+    {
+      "id": "zhejiang-university-of-science-and-technology",
+      "name": "Zhejiang University of Science and Technology",
+      "city": "Zhejiang Province",
+      "country": "CN"
+    },
+    {
+      "id": "seoul-gangnam-life-skills-seoul-gangnam-life-skills",
+      "name": "서울-강남 Life Skills (Seoul-Gangnam Life Skills)",
+      "city": "Seoul",
+      "country": "KR"
+    }
+  ]
 }

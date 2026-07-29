@@ -30,7 +30,10 @@ export function normaliseText(s: string): string {
     .toLowerCase()
     .normalize('NFKD')
     .replace(/[̀-ͯ]/g, '')
-    .replace(/[^a-z0-9]+/g, ' ')
+    // Preserve letters, combining marks and numbers from every script. The
+    // previous ASCII-only rule turned a Chinese or Hindi query into an empty
+    // string, which silently disabled filtering.
+    .replace(/[^\p{L}\p{M}\p{N}]+/gu, ' ')
     .trim();
 }
 

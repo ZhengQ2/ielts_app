@@ -1,22 +1,37 @@
 import Link from 'next/link';
 import {
+  availabilityGuidance,
+  deliveryModesIn,
   formatDistance,
-  formatFormat,
-  formatPrice,
-  isPinnable,
+  formatDeliveryMode,
+  formatPublishedPrice,
   type CentreWithDistance,
 } from '@ielts-map/core';
 import { OperatorBadge } from './OperatorBadge';
+import { centreDetailHref } from '@/lib/offering-filter';
+import { CentreAvailabilityNotice } from './CentreAvailabilityNotice';
 
 interface Props {
   centre: CentreWithDistance;
   selected?: boolean;
+  detailFilterSearch: string;
   onHover?: () => void;
   onSelect?: () => void;
 }
 
-export function CentreCard({ centre, selected, onHover, onSelect }: Props) {
+export function CentreCard({
+  centre,
+  selected,
+  detailFilterSearch,
+  onHover,
+  onSelect,
+}: Props) {
   const distance = formatDistance(centre.distanceKm);
+  const detailHref = centreDetailHref(
+    centre.ieltsOrgSlug,
+    detailFilterSearch,
+  );
+  const availability = availabilityGuidance(centre);
 
   return (
     <li
@@ -29,7 +44,7 @@ export function CentreCard({ centre, selected, onHover, onSelect }: Props) {
     >
       <div className="flex items-start justify-between gap-3">
         <h3 className="text-base font-medium leading-snug">
-          <Link href={`/centres/${centre.ieltsOrgSlug}`} className="hover:underline">
+          <Link href={detailHref} className="hover:underline">
             {centre.name}
           </Link>
         </h3>
@@ -43,15 +58,20 @@ export function CentreCard({ centre, selected, onHover, onSelect }: Props) {
 
       <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm">
         <span className="font-medium">
-          {centre.priceFrom !== null
-            ? `from ${formatPrice(centre.priceFrom, centre.currency)}`
+          {centre.priceFromText !== null
+            ? `from ${formatPublishedPrice(centre.priceFromText)}`
             : 'Price not published'}
         </span>
-        <span className="text-muted">{centre.formats.map(formatFormat).join(' · ')}</span>
-        {!isPinnable(centre.geo) && (
-          <span className="text-xs italic text-muted">approximate location</span>
-        )}
+        <span className="text-muted">
+          {deliveryModesIn(centre.offerings).map(formatDeliveryMode).join(' · ')}
+        </span>
       </div>
+      {(availability.status === 'future_location' ||
+        availability.status === 'not_accepting_registrations') && (
+        <div className="mt-3">
+          <CentreAvailabilityNotice centre={centre} compact />
+        </div>
+      )}
     </li>
   );
 }

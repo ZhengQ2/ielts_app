@@ -1,5 +1,4 @@
 @import 'tailwindcss';
-@import 'maplibre-gl/dist/maplibre-gl.css';
 
 @theme {
   --color-ink: oklch(0.24 0.02 250);
@@ -18,10 +17,4 @@
     background: var(--color-surface);
     color: var(--color-ink);
   }
-}
-
-/* MapLibre's controls default to a heavier chrome than the rest of the page. */
-.maplibregl-ctrl-group {
-  border-radius: 0.5rem;
-  box-shadow: 0 1px 3px rgb(0 0 0 / 0.12);
 }

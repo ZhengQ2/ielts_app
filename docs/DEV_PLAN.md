@@ -1,37 +1,52 @@
 # Dev Plan — IELTS Test Centre Finder ("Yelp for IELTS")
 
-**Scope:** Canada-first, single-metro MVP · Solo / side-project build
-**Target first city:** Toronto or Vancouver (pick one, curate deeply)
-**Core sequencing:** Build the *centre directory* first, layer *ratings* on top.
+**Scope:** Worldwide static directory · Solo / side-project build
+**Current production:** `https://ielts.zhengqiu.net`
+**Core sequencing:** Reliable directory → automated data maintenance → availability feasibility →
+optional ratings/reviews.
+
+> **Implementation status (July 2026):** the early sections retain some design history, but the
+> execution plan in §6 is authoritative. The shipped product uses a committed JSON dataset,
+> Google Maps, and S3/CloudFront rather than requiring a database-backed runtime.
 
 ---
 
 ## 1. Product goal
 
-Let a test-taker compare IELTS centres in one city by **operator, format, price, location, and a trustworthy rating**, then decide where to book. The directory is useful on day one; ratings are the differentiator added incrementally.
+Let a test-taker search worldwide, focus on a country or city, and compare IELTS centres by
+**operator, offering, delivery mode, source price, and location**, then continue to the correct
+operator booking or after-test service.
 
-**Explicit non-goals for MVP:** in-app booking/payments, multi-city, CELPIP/PTE, mobile-native app, accounts beyond what reviews require. *(Note: a simple outbound "Book on operator site" link is easy and can come in a later stage — see §9. We redirect, we don't process payments.)*
+**Current non-goals:** in-app booking/payments, unsupported claims about opening status or test
+availability, CELPIP/PTE, a native mobile app, and accounts/databases before a transactional
+feature actually requires them. Booking remains an outbound operator redirect.
 
 ---
 
 ## 2. Architecture & stack
 
-Recommended, solo-friendly, swappable:
+Current, deliberately low-cost implementation:
 
 | Layer | Choice | Notes |
 |---|---|---|
-| Framework | **Next.js (App Router) + TypeScript** | One codebase, SSR for SEO, strong portfolio signal |
-| DB + Auth + Storage | **Supabase (Postgres)** | Auth, row-level security, file storage out of the box |
-| Maps | **Mapbox GL** | Cheaper than Google; avoids entangling maps with Google's review terms |
-| Ratings (external) | **Google Places API, live-fetched** | See §7 compliance guardrail — store `place_id` only |
-| Hosting | **Vercel** (app) + Supabase (data) | Free tiers cover an MVP comfortably |
+| Framework | **Next.js static export + TypeScript** | Centre detail pages are generated at build time |
+| Data | **Versioned JSON in `@ielts-map/core`** | 1,510 centres do not justify an always-on database or SQLite download |
+| Maps | **Google Maps JavaScript API** | Markers are viewport-driven and non-pinnable records remain listable |
+| Ingest geocoding | **Google + AMap + Mappls** | Google supplies independent address/name evidence; local providers refine China/India |
+| Automation | **GitHub Actions** | Weekly full crawl, quality analysis, diff gates, build verification and conditional commit |
+| Hosting | **Private S3 + CloudFront + Route 53** | Static, inexpensive, no application server |
 | Styling | Tailwind CSS | Fast, consistent |
 
-**Guiding principle:** the app owns its facts and its first-party reviews; Google data is rendered live and attributed, never stored.
+**Guiding principle:** IELTS.org text remains the canonical source record; derived and geocoded
+values carry explicit provenance and confidence, and unsafe precision is never presented as fact.
 
 ---
 
-## 3. Data model (Postgres / Supabase)
+## 3. Data model
+
+The current application uses the versioned `CentreDataset` JSON schema in `packages/core`.
+The Postgres model below is retained as the future migration target only if accounts, first-party
+reviews, moderation, or other transactional features make a database worthwhile.
 
 ```
 operators            -- lookup table so new providers are a row, not a migration
@@ -82,9 +97,9 @@ centre_sources      -- which sources currently list a centre + freshness (the fr
   still_present     bool          -- set false when a re-crawl no longer finds it
   raw               jsonb         -- last parsed payload, for audit/diffing
 
--- NOTE: no test_dates / live-availability table. There is no public API for dates or
--- seat availability, so this feature is dropped from MVP (see §5). We capture only a
--- coarse test_frequency per centre, which is stable and hand-curatable.
+-- NOTE: no test_dates / live-seat table. No documented global operator feed was found.
+-- A separate expiring snapshot carries the narrow public IELTS USA registration/future
+-- status evidence without pretending that a registration link guarantees a seat.
 
 assessments         -- paid student "field assessment" (structured, labelled)
   id, centre_id fk, reviewer_id
@@ -214,27 +229,49 @@ For the **Canada MVP** this is largely a non-issue — addresses are clean and G
 IELTS.org (the master) carries the `…-ns` vs `…-ns-2` duplication, so dedup is central, not optional. **But the identity key differs by operator (verified):**
 
 1. **BC centres — key on `location=`** from the booking link. Same id ⇒ same centre. Catches the verified Sydney BITTS dupe (both `location=13776`).
-2. **IDP centres — no operator id available** (booking link is generic). Key on the IELTS.org **page slug**, then **fuzzy match** on normalised name + postcode + geo-proximity (coords are usually present for IDP pages).
-3. **Fallback for all** — fuzzy name + postcode (+ geo) when the above is insufficient.
-4. **Merge/reconcile** — union of formats, freshest price, keep all source rows in `centre_sources`.
+2. **IDP centres — no operator id available** (booking link is generic). Start with the IELTS.org
+   **slug base**; only exact same-operator identity evidence such as a normalized address/postcode
+   can merge automatically.
+3. **Fallback for all** — fuzzy name/postcode/proximity is a proposal, never identity proof.
+   Ambiguous candidates remain separate in the quality artifact.
+4. **Merge/reconcile** — union offering variants, source price strings, contacts and source rows.
+   Equivalent phone formatting may collapse, but useful conflicting information is preserved.
 
-> Honest risk: without a stable IDP id, IDP-centre dedup and IDP-finder cross-matching rely on fuzzy matching, which is error-prone (name variants, suite numbers). This is the single most fragile part of ingestion — budget real effort for it, and expect to hand-review ambiguous matches.
+> Honest risk: without a stable IDP id, some genuine duplicates cannot be merged automatically.
+> Keeping uncertain records separate is safer than silently combining two physical centres.
 
-### 5.5 Deriving `is_active` and `confidence` (solves the paper-shutdown delta)
+### 5.5 Publication eligibility is not opening status
 
-Recomputed each crawl, after dedup:
+The current pipeline derives `isPublishable`, not `is_active`. A record is unpublishable when it
+lacks a usable source/address/country, has no test offering, or has no authoritative price string
+for any offering. Location problems suppress a precise map pin but do not remove an otherwise
+useful listing.
 
-- IDP-operated + present in the **live IDP finder** and not Google-"closed" → `is_active = true`, high confidence.
-- BC/other (no live-finder corroboration available) → rely on IELTS.org presence + Google not-"closed"; paper-only or broken-field records → suspect → `is_active = false` (hidden), flagged. Lower confidence than IDP-corroborated records — surface that in the UI.
-- Google **"permanently closed"** → hard `is_active = false`.
+Presence on IELTS.org means “currently listed by the master,” not “open and accepting bookings.”
+Google business status is supporting evidence, not an IELTS availability oracle. The one supported
+exception is the public IELTS USA network: explicit future/not-accepting statements are shown, and
+a registration link is described only as a registration link—not proof of a date or seat. All
+other centres remain unknown. User corrections and reviewed overrides remain the safe interim
+mechanism.
 
-Honest limitation: for BC/other centres we have **no live liveness oracle** (BC's site is unfetchable), so their activeness leans on IELTS.org freshness + Google + crowd reports — weaker than the IDP subset. Don't pretend otherwise in the data.
+### 5.6 Ongoing freshness and self-analysis
 
-### 5.6 Ongoing freshness (scales *with* usage)
-
-- **Scheduled re-crawl** (e.g. weekly) diffs the source lists → auto-adds new centres, auto-hides vanished ones.
-- **Crowd signal**: a "report closed / no dates" button + review recency. A centre with recent reviews is provably alive; user reports plus a vanished listing auto-flag it. More users → fresher data, zero marginal effort.
-- **End-state**: an operator partnership / affiliate feed (unlocked by the booking-referral traffic you send them) replaces crawling for true availability.
+- **Weekly full re-crawl:** re-reads the master, compares source slugs and physical-centre ids, and
+  ignores timestamp-only churn.
+- **Per-centre quality analysis:** checks provenance, raw/derived price integrity, city extraction,
+  offerings, contacts, duplicate candidates, coordinate plausibility, evidence independence, and
+  publication eligibility before writing.
+- **Safe outcomes:** accept, publish with warnings, quarantine, or suppress only the map pin.
+- **Persistent discovery memory:** an unparseable new page remains tracked across later runs even
+  though it never produced a centre row.
+- **Write gates:** a previously known source-page failure or systemic addition/removal cliff blocks
+  the dataset update; GitHub receives a JSON artifact and targeted warnings.
+- **Crowd signal:** correction reports capture exact user-selected coordinates and feed reviewed
+  overrides that survive later crawls.
+- **US operator signal:** a separate weekly IELTS USA snapshot records registration/future status,
+  self-diagnoses parse/match cliffs and expires after 15 days without a successful check.
+- **End-state:** an operator partnership or supported feed is still required for global opening
+  status, centre-specific dates and true seat availability.
 
 ### 5.7 The two human-seeded layers (unchanged)
 
@@ -242,27 +279,82 @@ Honest limitation: for BC/other centres we have **no live liveness oracle** (BC'
 
 **Organic reviews.** Seed a handful per centre from Reddit / Facebook IELTS groups, then let them accumulate. Fully owned data.
 
-> **Still dropped: live test dates & seat availability.** No public API; scraping the booking flow breaches ToS; paper is retiring. Needs a partnership, not a scraper.
+> **Still deferred: live test dates and seat availability.** M2.6 found no documented global feed.
+> A login-gated or undocumented booking endpoint is not an acceptable substitute.
 
 ---
 
-## 6. Phased milestones (~6–10 weekends)
+## 6. Execution milestones
 
-**M0 — Setup (½ weekend).** Repo, Next.js + Tailwind, Supabase project, schema migration, Vercel deploy of a hello-world.
+**M0 — Static foundation and AWS deployment — DONE.** Next.js/TypeScript/Tailwind monorepo,
+static export, private S3 origin, CloudFront, Route 53 and production domain.
 
-**M1 — Master ingestion + directory (2–3 weekends).** Read the IELTS.org XML sitemap `testCentres` pages → fetch each SSR centre page → parse operator/address/price/booking link → filter to Canada → dedup (§5.4) → `centres` + `centre_sources`. Geocode where coordinates are missing (§5.3). Derive `is_active`. Build list view + Mapbox map + centre detail page. *Milestone: a neutral, all-operator Canada directory (IDP + BC), duplicates merged, dead entries hidden.*
+**M1 — Worldwide master ingestion and directory — DONE.** Full IELTS.org sitemap ingestion,
+country attribution, raw price preservation, operator detection, contact extraction, offering-aware
+deduplication, geocoding, list/map/detail views and static JSON feed.
 
-**M1.5 — IDP overlay + scheduled re-crawl (1 weekend).** For IDP-operated centres, match the IDP finder by slug to pull coordinates + cleaner fields (optional quality boost). Add a weekly cron that re-reads the sitemap, diffs `centre_sources`, auto-adds/hides — self-maintaining.
+**M1.5 — Self-maintaining refresh and quality analysis — DONE.** Weekly full crawl; per-centre
+machine-readable diagnostics; independent-coordinate-evidence enforcement; quarantine and pin
+suppression; persistent unresolved-discovery state; systemic-diff safety gates; CI artifact,
+warnings, build verification and conditional commits.
 
-**M6 — Expand coverage (later, incremental).** More countries fall out of the IELTS.org master automatically — just widen the country filter. India and China are already in the master (verified). Only **IELTS USA** would need a separate adapter, and only if you target the US.
+**M2 — Search and comparison experience — DONE.** Viewport-driven map loading, country/city focus,
+distance ordering, separated map/list behavior, operator/contact information, after-test links,
+correction reports, and offering filters covering module, UKVI/SELT, Life Skills, delivery mode and
+writing-on-paper. The selected filter also controls the displayed source price.
 
-**M2 — Filters & search (1 weekend).** Filter/sort by price, operator, test frequency, distance; postal-code / city search; empty & loading states.
+**M2.5 — Automated remediation and quality trend gates — DONE.** Detection now feeds bounded repair
+attempts while keeping the crawler unattended:
 
-**M3 — Objective score + Google ratings (1–2 weekends).** Compute baseline score; render live Google rating on detail pages with attribution + link back. Show score breakdown.
+Current baseline (2026-07-28): 1,510 centres analysed; 1,108 ready, 397 publishable with warnings,
+5 quarantined, and 290 without a safe map pin. These counts describe existing debt, not new
+failures.
 
-**M4 — Assessments + reviews (2–3 weekends).** Auth (Supabase). Assessment entry (admin/reviewer role) + rubric UI. Organic review submission, photo upload, basic moderation queue. Composite score wired in.
+1. A compact committed per-country baseline records affected centre ids, issue codes, decisions,
+   pin eligibility and unresolved source slugs.
+2. Repairable location/city issue codes receive a bounded second resolution pass. Published Plus
+   Codes are an independent coordinate path; legacy/missing cities can be replaced only by
+   structured non-legacy evidence.
+3. The same analyser runs after remediation. A repair is accepted only when it removes a targeted
+   issue, improves the weighted issue score and introduces no new warning/error. Reviewed
+   administrator evidence is immutable.
+4. Existing-centre regressions, new-centre debt and improvements are separated. CI blocks systemic
+   global or country-level cliffs while ordinary changes remain automatic.
+5. Previously unresolved pages are reprocessed by the full crawl. Pending duplicate pairs receive
+   structured contact/postcode/distance evidence but fuzzy similarity never merges identities.
+6. Country issue rate weighted by cohort size determines bounded repair priority; provider calls,
+   cache hits, budget skips and accepted/rejected attempts are included in the artifact.
 
-**M5 — Polish & launch (1 weekend).** SEO (per-centre pages), OG images, analytics, ToS + review/privacy policy, accessibility pass, deploy.
+*Definition met:* a scheduled run can discover, diagnose, attempt safe repair, re-validate and
+publish/quarantine a centre without human intervention; unchanged unresolved cases create no
+repeated alert, and country-level quality cannot regress silently.
+
+**M2.6 — Opening-status and test-date feasibility — DONE.** Official-source review found no
+documented global centre/date/seat feed. IELTS USA does publish one usable public status source, so
+the product now:
+
+1. fetches that operator page once per weekly run and distinguishes registration links, explicit
+   not-accepting statements and future locations;
+2. matches by exact interest/organisation links, resolving reused link ids by centre-name evidence;
+3. blocks systemic parser/match cliffs and reports unmatched records without recurring alert noise;
+4. expires evidence after 15 days and falls back to unknown;
+5. labels registration links without implying any date or seat is available.
+
+British Council's public affiliate programme is a legitimate next commercial contact, but does not
+publicly promise an availability feed. Full evidence and acceptance criteria are in
+`docs/AVAILABILITY_FEASIBILITY.md`.
+
+**M3 — Objective score and compliant Google enrichment — PLANNED.** Reassess whether ratings add
+enough user value to justify live API cost and compliance work before implementing them.
+
+**M4 — First-party assessments and reviews — DEFERRED.** Add a transactional datastore and auth
+only when this phase begins; the current directory does not need them.
+
+**M5 — Product hardening — PLANNED.** Accessibility, analytics/privacy choices, policy pages,
+structured SEO validation and performance budgets.
+
+**M6 — Adjacent exams/native clients — LATER.** CELPIP/PTE coverage or a mobile wrapper only after
+the IELTS data-maintenance loop is demonstrably stable.
 
 ---
 
@@ -278,18 +370,28 @@ Honest limitation: for BC/other centres we have **no live liveness oracle** (BC'
 
 ## 8. Testing & verification
 
-- Unit-test the composite-score function (edge cases: zero reviews, one review, conflicting sources).
-- Validate the Google integration renders attribution and never persists review text.
-- Seed-data sanity check: every centre has operator, format, price, `place_id`, hero image before launch.
-- Lighthouse / accessibility pass before M5 sign-off.
+- Keep parser fixtures for every observed page shape and price-numbering system.
+- Test healthy, warning, quarantined, unresolved, recurring-unresolved and later-resolved discovery
+  lifecycles.
+- Test dedup identity separately from offering union; fuzzy similarity alone must not merge.
+- Test country plausibility, independent evidence paths, datum conversion and pin suppression.
+- Run type checks, the complete unit suite and a production static export before an automated
+  dataset commit.
+- During M2.5, add a before/after quality-baseline test so remediation cannot trade one issue for
+  another invisibly.
+- Lighthouse/accessibility and policy checks remain required before M5 sign-off.
 
 ---
 
-## 9. Post-MVP (deliberately deferred)
+## 9. Post-directory sequencing
 
-**Booking redirect (natural first add-on).** A per-centre "Book on operator site" button that deep-links to the correct IDP / British Council booking page (store a `booking_url` per centre). Pure outbound redirect — no payment handling, no PCI scope, low effort. This is also the affiliate/referral hook: track click-throughs and swap in referral links if operators or prep providers offer them.
+Outbound booking, results links, raw-score inquiries and correction reports are already shipped.
+The next work must improve unattended data quality before adding a new data domain.
 
-Other later stages: second metro → other Ontario/BC cities · CELPIP & PTE centres (bigger addressable market) · native mobile wrapper. *(Live test dates / availability alerts remain out of scope unless an operator partnership or affiliate data feed becomes available — not viable via scraping.)*
+M2.6 is complete. M3 should first reassess whether objective scoring and live, compliant Google
+enrichment add enough value to justify their API cost and policy surface. Ratings/reviews,
+CELPIP/PTE coverage and a native client remain independent product decisions; none should force a
+database or recurring server into the current static directory prematurely.
 
 ---
 
@@ -299,6 +401,9 @@ Other later stages: second metro → other Ontario/BC cities · CELPIP & PTE cen
 |---|---|
 | Can't store external review data | Live-fetch + attribute; invest in first-party reviews |
 | Cold-start (no ratings at launch) | Objective baseline score + seeded assessments |
-| Thin market per city | Depth over breadth; one metro first |
+| Uneven evidence quality by country | Measure quality per country and target provider/remediation work from the observed tail |
 | Paid-review credibility | Label as verified field assessments; fixed rubric; disclose |
-| Google API cost creep | Mapbox for maps; lazy-load ratings; cache `place_id` |
+| Google/API cost creep | Persist caches, cap per-run calls, use local providers only for targeted tails |
+| Silent source/parser regression | Known-source and systemic-diff write gates; retain the last good dataset |
+| False coordinate precision | Require independent evidence agreement; suppress unsafe pins |
+| Recurring manual audit burden | Alert only on new/worsening deltas; keep unchanged debt in machine-readable artifacts |

@@ -1,6 +1,11 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { dedupe, mergeOfferings, pickCanonical } from '../src/dedup.ts';
+import {
+  dedupe,
+  mergeContactInformation,
+  mergeOfferings,
+  pickCanonical,
+} from '../src/dedup.ts';
 import type { ParsedCentre } from '../src/types.ts';
 
 function address(street: string, city: string, region: string, postcode: string) {
@@ -29,6 +34,7 @@ function centre(over: Partial<ParsedCentre> & { slug: string }): ParsedCentre {
       postcode: 'T2P 0T8',
       country: 'CA',
     },
+    contact: { phones: [], emails: [], websites: [] },
     phone: null,
     embeddedGeo: null,
     offerings: [],
@@ -80,7 +86,7 @@ test('merges IDP pages by name and postcode when no id exists', () => {
     }),
   ]);
   assert.equal(clusters.length, 1);
-  assert.equal(links[0]?.reason, 'name_postcode');
+  assert.equal(links[0]?.reason, 'operator_address');
 });
 
 test('keeps unrelated centres at the same postcode apart', () => {
@@ -144,28 +150,121 @@ test('canonical record is the most complete page', () => {
   const sparse = centre({ slug: 'a-2' });
   const rich = centre({
     slug: 'a',
-    embeddedGeo: { lat: 51, lng: -114 },
+    embeddedGeo: { lat: 51, lng: -114, coordinateSystem: 'unknown' },
     phone: '4034414375',
     bookingUrl: 'https://ieltsregistration.britishcouncil.org/ors/find-test?location=1',
   });
   assert.equal(pickCanonical([sparse, rich]).slug, 'a');
 });
 
-test('offerings union across a cluster and keep the lower price', () => {
+test('offering variants union under one centre without choosing a cheaper conflicting fee', () => {
   const a = centre({
     slug: 'a',
     offerings: [
-      { label: 'Academic Test', kind: 'academic', format: 'computer_delivered', currency: 'CAD', price: 380 },
+      {
+        label: 'Academic Test',
+        kind: 'academic',
+        format: 'computer_delivered',
+        priceText: 'CAD 380',
+        parsedCurrency: 'CAD',
+        parsedPrice: 380,
+        priceParseStatus: 'verified',
+      },
     ],
   });
   const b = centre({
     slug: 'a-2',
     offerings: [
-      { label: 'Academic Test', kind: 'academic', format: 'computer_delivered', currency: 'CAD', price: 359 },
-      { label: 'General Training Test', kind: 'general_training', format: 'computer_delivered', currency: 'CAD', price: 359 },
+      {
+        label: 'Academic Test',
+        kind: 'academic',
+        format: 'computer_delivered',
+        priceText: 'CAD 359',
+        parsedCurrency: 'CAD',
+        parsedPrice: 359,
+        priceParseStatus: 'verified',
+      },
+      {
+        label: 'General Training Test',
+        kind: 'general_training',
+        format: 'computer_delivered',
+        priceText: 'CAD 359',
+        parsedCurrency: 'CAD',
+        parsedPrice: 359,
+        priceParseStatus: 'verified',
+      },
     ],
   });
   const merged = mergeOfferings([a, b]);
-  assert.equal(merged.length, 2);
-  assert.equal(merged.find((o) => o.label === 'Academic Test')?.price, 359);
+  assert.equal(merged.length, 3);
+  assert.deepEqual(
+    merged
+      .filter((offering) => offering.kind === 'academic')
+      .map((offering) => offering.priceText)
+      .sort(),
+    ['CAD 359', 'CAD 380'],
+  );
+});
+
+test('explicit UKVI and source-labelled SELT offerings remain distinct', () => {
+  const a = centre({
+    slug: 'a',
+    offerings: [
+      {
+        label: 'IELTS UKVI Academic on computer',
+        kind: 'ukvi',
+        format: 'computer_delivered',
+        priceText: 'PKR 60500',
+        parsedCurrency: 'PKR',
+        parsedPrice: 60500,
+        priceParseStatus: 'verified',
+      },
+    ],
+  });
+  const b = centre({
+    slug: 'a-2',
+    offerings: [
+      {
+        label: 'IELTS SELT Online AC',
+        kind: 'other',
+        format: 'computer_delivered',
+        priceText: 'PKR 60500',
+        parsedCurrency: 'PKR',
+        parsedPrice: 60500,
+        priceParseStatus: 'verified',
+      },
+    ],
+  });
+
+  assert.deepEqual(
+    mergeOfferings([a, b]).map((offering) => offering.label),
+    ['IELTS SELT Online AC', 'IELTS UKVI Academic on computer'],
+  );
+});
+
+test('merged contacts preserve distinct values and collapse equivalent phone formatting', () => {
+  const a = centre({
+    slug: 'a',
+    contact: {
+      phones: ['+1 (403) 441-4375'],
+      emails: ['Info@Example.com'],
+      websites: ['https://example.com/centre/'],
+    },
+    phone: '+1 (403) 441-4375',
+  });
+  const b = centre({
+    slug: 'a-2',
+    contact: {
+      phones: ['+1 403 441 4375', '+1 403 555 0100'],
+      emails: ['info@example.com', 'support@example.com'],
+      websites: ['https://example.com/centre', 'https://example.com/results'],
+    },
+    phone: '+1 403 441 4375',
+  });
+
+  assert.deepEqual(mergeContactInformation([a, b]), {
+    phones: ['+1 (403) 441-4375', '+1 403 555 0100'],
+    emails: ['Info@Example.com', 'support@example.com'],
+    websites: ['https://example.com/centre/', 'https://example.com/results'],
+  });
 });

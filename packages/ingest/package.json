@@ -9,6 +9,9 @@
   },
   "scripts": {
     "ingest": "node --experimental-strip-types src/cli.ts",
+    "availability": "node --experimental-strip-types src/availability-cli.ts",
+    "localize": "node --experimental-strip-types src/localize-cli.ts",
+    "neutral-pilot": "node --experimental-strip-types src/neutral-pilot-cli.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

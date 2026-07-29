@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { parseCentrePage } from '../src/parse.ts';
+import { parseCentrePage, parsePublishedPrice } from '../src/parse.ts';
 
 /**
  * Fixtures are trimmed from real pages, keeping the markup the parser depends
@@ -131,12 +131,61 @@ const NO_BOOKING_LINK_PAGE = page(`
     </div>
   </div>`);
 
+const MULTI_CONTACT_PAGE = page(`
+  <h1 class="test-center-header__title font-main-h2">Contact-rich Centre</h1>
+  <div class="col-lg-4 col-12 test-center-header__content-column">
+    <h5 class="test-center-header__content-column-heading font-main">Address</h5>
+    <p>1 Test St</p>
+    <p>Phone number +1 (403) 441-4375 Email. help@example.com</p>
+    <p>Calgary</p><p>AB</p><p>T2P 0T8</p>
+  </div>
+  <div class="col-lg-4 col-12 test-center-header__content-column">
+    <h5 class="test-center-header__content-column-heading font-main">Contact</h5>
+    <div class="test-center-header__content-column-contact test-center-header__content-column-contact--website">
+      <a target="_blank" href="https://example.com/ielts">Go to the website</a>
+    </div>
+    <div class="test-center-header__content-column-contact test-center-header__content-column-contact--email">
+      <a href="mailto:help@example.com">Email us</a>
+    </div>
+    <div class="test-center-header__content-column-contact test-center-header__content-column-contact--phone">
+      <p>+1 403 441 4375</p><p>+1 403 555 0100</p>
+    </div>
+  </div>`);
+
 const NOW = '2026-07-27T00:00:00.000Z';
 
 test('a /book/UKVI path on bare ielts.idp.com is recognised as IDP', () => {
   const c = parseCentrePage('aeo-lahore-life-skills', IDP_LIFE_SKILLS_PAGE, NOW);
   assert.equal(c.operator, 'IDP');
   assert.equal(c.operatorSource, 'booking_domain');
+});
+
+test('a future Life Skills for UKVI label remains Life Skills', () => {
+  const c = parseCentrePage(
+    'aeo-lahore-life-skills',
+    IDP_LIFE_SKILLS_PAGE.replace(
+      'IELTS Life Skills A1',
+      'IELTS Life Skills for UKVI A1',
+    ),
+    NOW,
+  );
+  assert.equal(c.offerings[0]?.kind, 'life_skills');
+  assert.equal(c.offerings[0]?.module, 'life_skills');
+  assert.equal(c.offerings[0]?.category, 'ukvi_selt');
+});
+
+test('a SELT Online AC source label becomes UKVI/SELT Academic', () => {
+  const c = parseCentrePage(
+    'global-village-calgary',
+    IDP_PAGE.replace(
+      'IELTS Academic on computer',
+      'IELTS SELT Online AC',
+    ),
+    NOW,
+  );
+  assert.equal(c.offerings[0]?.kind, 'other');
+  assert.equal(c.offerings[0]?.module, 'academic');
+  assert.equal(c.offerings[0]?.category, 'ukvi_selt');
 });
 
 test("IDP's separate India booking site is recognised as IDP", () => {
@@ -167,7 +216,25 @@ test('IDP page: operator from booking domain, no external id', () => {
   // IDP booking links are generic — there is no per-centre id to capture.
   assert.equal(c.externalId, null);
   assert.equal(c.phone, '4034414375');
-  assert.deepEqual(c.embeddedGeo, { lat: 51.04804604507514, lng: -114.07684357116459 });
+  assert.deepEqual(c.contact, {
+    phones: ['4034414375'],
+    emails: [],
+    websites: [],
+  });
+  assert.deepEqual(c.embeddedGeo, {
+    lat: 51.04804604507514,
+    lng: -114.07684357116459,
+    coordinateSystem: 'unknown',
+  });
+});
+
+test('contact extraction keeps website, email and distinct phones without formatting duplicates', () => {
+  const c = parseCentrePage('contact-rich-centre', MULTI_CONTACT_PAGE, NOW);
+  assert.deepEqual(c.contact, {
+    phones: ['+1 403 441 4375', '+1 403 555 0100'],
+    emails: ['help@example.com'],
+    websites: ['https://example.com/ielts'],
+  });
 });
 
 test('British Council page: location= captured as the external id', () => {
@@ -187,8 +254,10 @@ test('the "Fee" column is not mistaken for a test offering', () => {
   const c = parseCentrePage('global-village-calgary', IDP_PAGE, NOW);
   assert.equal(c.offerings.length, 1);
   assert.equal(c.offerings[0]?.label, 'IELTS Academic on computer');
-  assert.equal(c.offerings[0]?.price, 359);
-  assert.equal(c.offerings[0]?.currency, 'CAD');
+  assert.equal(c.offerings[0]?.priceText, 'CAD 359');
+  assert.equal(c.offerings[0]?.parsedPrice, 359);
+  assert.equal(c.offerings[0]?.parsedCurrency, 'CAD');
+  assert.equal(c.offerings[0]?.priceParseStatus, 'verified');
 });
 
 test('format comes from the icon label when the title omits it', () => {
@@ -205,5 +274,37 @@ test('a page with no operator prefix still resolves its operator', () => {
 
 test('decimal prices survive parsing', () => {
   const c = parseCentrePage('bc', BC_PAGE, NOW);
-  assert.equal(c.offerings[0]?.price, 346.5);
+  assert.equal(c.offerings[0]?.priceText, 'CAD 346.5');
+  assert.equal(c.offerings[0]?.parsedPrice, 346.5);
+});
+
+test('the source fee string is preserved while locale grouping is parsed separately', () => {
+  assert.deepEqual(parsePublishedPrice('AED 1٬470'), {
+    priceText: 'AED 1٬470',
+    parsedCurrency: 'AED',
+    parsedPrice: 1470,
+    priceParseStatus: 'verified',
+  });
+  assert.equal(parsePublishedPrice('TRY 12.210').parsedPrice, 12210);
+  assert.equal(parsePublishedPrice('INR 19,000.00').parsedPrice, 19000);
+  assert.equal(parsePublishedPrice('CAD 346.5').parsedPrice, 346.5);
+});
+
+test('Arabic-Indic and Devanagari digits are parsed without rewriting the display text', () => {
+  assert.deepEqual(parsePublishedPrice('AED ١٬٤٧٠'), {
+    priceText: 'AED ١٬٤٧٠',
+    parsedCurrency: 'AED',
+    parsedPrice: 1470,
+    priceParseStatus: 'verified',
+  });
+  assert.equal(parsePublishedPrice('INR १९,०००').parsedPrice, 19000);
+});
+
+test('unrecognized fee text remains visible but is excluded from numeric comparison', () => {
+  assert.deepEqual(parsePublishedPrice('Contact centre for fee'), {
+    priceText: 'Contact centre for fee',
+    parsedCurrency: null,
+    parsedPrice: null,
+    priceParseStatus: 'unparsed',
+  });
 });

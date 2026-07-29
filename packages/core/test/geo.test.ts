@@ -11,8 +11,11 @@ function candidate(over: Partial<GeoCandidate>): GeoCandidate {
     lng: YYC.lng,
     precision: 'rooftop',
     source: 'nominatim',
+    evidencePath: 'address',
+    coordinateSystem: 'WGS84',
     echoedPostcode: null,
     echoedCity: null,
+    echoedRegion: null,
     echoedCountry: 'CA',
     ...over,
   };
@@ -92,10 +95,55 @@ test('a postcode hit in the right country beats a rooftop hit in the wrong one',
 test('agreeing lookups raise confidence', () => {
   const apart = resolveGeo([candidate({})], { country: 'CA' })!;
   const together = resolveGeo(
-    [candidate({}), candidate({ lat: YYC.lat + 0.0005, precision: 'street' })],
+    [
+      candidate({ evidencePath: 'address' }),
+      candidate({
+        lat: YYC.lat + 0.0005,
+        precision: 'street',
+        evidencePath: 'venue_name',
+      }),
+    ],
     { country: 'CA' },
   )!;
   assert.ok(together.confidence > apart.confidence);
+  assert.equal(together.verification, 'verified');
+});
+
+test('same-postcode venue and address points may use different campus entrances', () => {
+  const geo = resolveGeo(
+    [
+      candidate({
+        evidencePath: 'address',
+        echoedPostcode: 'M5V 2T6',
+      }),
+      candidate({
+        lat: YYC.lat + 0.005,
+        evidencePath: 'venue_name',
+        echoedPostcode: 'M5V 2T6',
+      }),
+    ],
+    { country: 'CA', postcode: 'M5V 2T6' },
+  )!;
+  assert.equal(geo.verification, 'verified');
+  assert.ok((geo.agreementKm ?? 0) > 0.25);
+});
+
+test('a wider campus gap is not accepted when postcodes disagree', () => {
+  const geo = resolveGeo(
+    [
+      candidate({
+        evidencePath: 'address',
+        echoedPostcode: 'M5V 2T6',
+      }),
+      candidate({
+        lat: YYC.lat + 0.005,
+        evidencePath: 'venue_name',
+        echoedPostcode: 'M5V 3A8',
+      }),
+    ],
+    { country: 'CA' },
+  )!;
+  assert.equal(geo.verification, 'approximate');
 });
 
 test('diverging lookups are capped at approximate', () => {
@@ -103,13 +151,36 @@ test('diverging lookups are capped at approximate', () => {
     [
       candidate({ precision: 'rooftop' }),
       // ~350 km away — the disagreement is itself the signal.
-      candidate({ precision: 'rooftop', lat: 53.5461, lng: -113.4938 }),
+      candidate({
+        precision: 'rooftop',
+        lat: 53.5461,
+        lng: -113.4938,
+        evidencePath: 'venue_name',
+      }),
     ],
     { country: 'CA' },
   )!;
   assert.equal(geo.precision, 'approximate');
   assert.ok(geo.confidence <= 0.3);
   assert.equal(isPinnable(geo), false);
+});
+
+test('two results from the same evidence path never manufacture verification', () => {
+  const geo = resolveGeo(
+    [candidate({ source: 'google' }), candidate({ source: 'nominatim' })],
+    { country: 'CA' },
+  )!;
+  assert.equal(geo.verification, 'unverified');
+  assert.equal(isPinnable(geo), false);
+});
+
+test('an administrator-reviewed coordinate is verified without a second path', () => {
+  const geo = resolveGeo(
+    [candidate({ source: 'admin', evidencePath: 'admin' })],
+    { country: 'CA' },
+  )!;
+  assert.equal(geo.verification, 'verified');
+  assert.equal(isPinnable(geo), true);
 });
 
 test('no candidates yields no location rather than a fabricated one', () => {

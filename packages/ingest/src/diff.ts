@@ -42,19 +42,25 @@ function facets(c: Centre): Record<string, unknown> {
     name: c.name,
     operator: c.operator,
     address: c.address.raw,
+    localizations: c.localizations ?? [],
     city: c.address.city,
     postcode: c.address.postcode,
-    phone: c.phone,
-    price: c.priceFrom,
-    currency: c.currency,
+    contact: c.contact,
+    priceText: c.priceFromText,
+    parsedPrice: c.parsedPriceFrom,
+    parsedCurrency: c.parsedCurrency,
     formats: [...c.formats].sort(),
     offerings: c.offerings
-      .map((o) => `${o.label}|${o.format}|${o.currency ?? ''}${o.price ?? ''}`)
+      .map(
+        (o) =>
+          `${o.label}|${o.format}|${o.priceText ?? ''}|` +
+          `${o.parsedCurrency ?? ''}${o.parsedPrice ?? ''}|${o.priceParseStatus}`,
+      )
       .sort(),
     bookingUrl: c.bookingUrl,
     location: c.geo ? `${round(c.geo.lat)},${round(c.geo.lng)}|${c.geo.precision}` : null,
     googlePlaceId: c.googlePlaceId,
-    isActive: c.isActive,
+    isPublishable: c.isPublishable,
     // Which source pages back this centre — but not when they were seen.
     sources: c.sources.map((s) => s.externalSlug).sort(),
   };
@@ -103,6 +109,36 @@ export function summariseDiff(diff: DatasetDiff): string {
   if (diff.removed.length) parts.push(`${diff.removed.length} removed`);
   if (diff.changed.length) parts.push(`${diff.changed.length} updated`);
   return parts.join(', ');
+}
+
+/**
+ * Refuse a source/identity cliff without an explicit operator decision.
+ *
+ * Ordinary discovery remains fully automatic. These thresholds are aimed at
+ * systemic failures: a truncated sitemap, changed parser markup, or a dedup id
+ * regression can otherwise look like hundreds of legitimate additions and
+ * removals and overwrite the committed dataset.
+ */
+export function diffSafetyProblems(
+  diff: DatasetDiff,
+  previousCentreCount: number,
+): string[] {
+  if (previousCentreCount === 0) return [];
+  const problems: string[] = [];
+  const removalLimit = Math.max(25, Math.ceil(previousCentreCount * 0.05));
+  const additionLimit = Math.max(100, Math.ceil(previousCentreCount * 0.1));
+
+  if (diff.removed.length > removalLimit) {
+    problems.push(
+      `${diff.removed.length} removals exceed the automatic limit of ${removalLimit}`,
+    );
+  }
+  if (diff.added.length > additionLimit) {
+    problems.push(
+      `${diff.added.length} additions exceed the automatic limit of ${additionLimit}`,
+    );
+  }
+  return problems;
 }
 
 /** Markdown detail for a CI job summary or a commit body. */

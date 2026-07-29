@@ -9,9 +9,9 @@ on:
   workflow_dispatch:
     inputs:
       country:
-        description: "ISO country code to build"
+        description: "ISO country code to build, or ALL"
         required: false
-        default: "CA"
+        default: "ALL"
 
 permissions:
   contents: write
@@ -52,22 +52,84 @@ jobs:
       - name: Crawl, geocode and diff
         id: ingest
         env:
-          # Optional. Without it the ingester falls back to Nominatim and the
-          # job still succeeds — it just resolves fewer addresses precisely.
+          # Google is the production address + venue evidence provider. The
+          # key is restricted to Geocoding and Places API (New). Without it the
+          # job still runs with the slow no-key development fallback.
           GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
+          # Country-specific tail providers. They are consulted only when a
+          # China/India result remains below street-level precision. Local text
+          # may support matching, but localized addresses are not displayed.
+          AMAP_API_KEY: ${{ secrets.AMAP_API_KEY }}
+          MAPPLS_API_KEY: ${{ secrets.MAPPLS_API_KEY }}
         run: |
           cd packages/ingest
           node --experimental-strip-types src/cli.ts \
-            --country "${{ inputs.country || 'CA' }}" \
+            --country "${{ inputs.country || 'ALL' }}" \
             --force
+
+      - name: Refresh operator-supported availability
+        id: availability
+        continue-on-error: true
+        run: npm run availability
+
+      - name: Flag availability refresh failure
+        if: always() && steps.availability.outcome == 'failure'
+        run: |
+          echo "::warning::The IELTS USA status snapshot could not be refreshed. The last good snapshot remains in place and expires to unknown after 15 days."
+
+      - name: Flag newly unmatched directory centres
+        if: always() && steps.availability.outputs.new_unmatched_centres != '' && steps.availability.outputs.new_unmatched_centres != '0'
+        run: |
+          echo "::warning::${{ steps.availability.outputs.new_unmatched_centres }} IELTS USA directory centre(s) lost a safe operator-status match. They now display availability as unknown; see the operator-availability artifact."
+
+      - name: Upload automated centre-quality analysis
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: centre-quality-${{ inputs.country || 'ALL' }}
+          path: .artifacts/centre-quality.*.json
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Upload operator-availability analysis
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: operator-availability
+          path: .artifacts/operator-availability.*.json
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Flag quarantined discoveries
+        if: always() && steps.ingest.outputs.quarantined_new_centres != '' && steps.ingest.outputs.quarantined_new_centres != '0'
+        run: |
+          echo "::warning::${{ steps.ingest.outputs.quarantined_new_centres }} newly discovered centre source(s) were quarantined or could not be parsed. See the job summary and centre-quality artifact."
+
+      - name: Flag publishable discoveries needing review
+        if: always() && steps.ingest.outputs.new_centres_needing_review != '' && steps.ingest.outputs.new_centres_needing_review != '0'
+        run: |
+          echo "::warning::${{ steps.ingest.outputs.new_centres_needing_review }} newly discovered centre(s) are publishable but have quality warnings. See the job summary and centre-quality artifact."
+
+      - name: Flag existing-centre quality regressions
+        if: always() && steps.ingest.outputs.quality_regressions != '' && steps.ingest.outputs.quality_regressions != '0'
+        run: |
+          echo "::warning::${{ steps.ingest.outputs.quality_regressions }} new quality issue(s) appeared on existing centres. See the quality trend in the job summary."
+
+      - name: Report accepted automatic repairs
+        if: always() && steps.ingest.outputs.remediations_accepted != '' && steps.ingest.outputs.remediations_accepted != '0'
+        run: |
+          echo "::notice::${{ steps.ingest.outputs.remediations_accepted }} evidence-backed centre repair(s) were accepted and re-validated."
 
       - name: Verify the site still builds against the new data
         # The dataset is bundled at build time, so a shape change that breaks
         # the app must not be committed.
+        env:
+          NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: ${{ secrets.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY }}
+          NEXT_PUBLIC_GOOGLE_MAP_ID: ${{ secrets.NEXT_PUBLIC_GOOGLE_MAP_ID }}
         run: npm run build
 
       - name: Commit the refreshed dataset
-        if: steps.ingest.outputs.changed == 'true'
+        if: steps.ingest.outputs.changed == 'true' || steps.availability.outputs.refreshed == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -86,7 +148,7 @@ jobs:
       # New geocode results are worth keeping even when no centre changed —
       # they are what stops the next run re-billing Google for the same address.
       - name: Commit geocode cache only
-        if: steps.ingest.outputs.changed != 'true'
+        if: steps.ingest.outputs.changed != 'true' && steps.availability.outputs.refreshed != 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"

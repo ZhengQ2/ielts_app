@@ -42,11 +42,11 @@ test('explicit country line is consumed, not treated as a city', () => {
   assert.equal(a.country, 'CA');
 });
 
-test('unpostcoded foreign address degrades without inventing a country', () => {
+test('unpostcoded foreign address degrades without inventing a country or city', () => {
   const a = parseAddress(['KFUPM square', 'Alkhobar/Dammam']);
   assert.equal(a.country, null);
   assert.equal(a.postcode, null);
-  assert.equal(a.city, 'Alkhobar/Dammam');
+  assert.equal(a.city, null);
 });
 
 test('an Australian NT address is not mistaken for Northwest Territories', () => {
@@ -58,7 +58,16 @@ test('an Australian NT address is not mistaken for Northwest Territories', () =>
     '0800',
   ]);
   assert.notEqual(a.country, 'CA');
-  assert.equal(a.city, 'Darwin');
+  assert.equal(a.city, null);
+});
+
+test('an authoritative country hint never enables the global last-line heuristic', () => {
+  const a = parseAddress(
+    ['Australian City International College, 25 Cavenagh St', 'Darwin', 'NT', '0800'],
+    'AU',
+  );
+  assert.equal(a.country, 'AU');
+  assert.equal(a.city, null);
 });
 
 test('the full province name is unambiguous even without a postcode', () => {

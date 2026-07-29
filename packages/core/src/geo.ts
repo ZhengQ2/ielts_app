@@ -1,4 +1,9 @@
-import type { Geo, GeoPrecision } from './types.ts';
+import type {
+  CoordinateSystem,
+  Geo,
+  GeoEvidencePath,
+  GeoPrecision,
+} from './types.ts';
 
 /** Precision tier used by the candidate-scoring rule (DEV_PLAN §5.3). */
 const PRECISION_TIER: Record<GeoPrecision, number> = {
@@ -17,7 +22,11 @@ export function precisionTier(p: GeoPrecision): number {
 /** Precision good enough to draw a confident pin rather than an area. */
 export function isPinnable(geo: Geo | null): boolean {
   if (!geo) return false;
-  return precisionTier(geo.precision) >= 3 && geo.confidence >= 0.5;
+  return (
+    geo.verification === 'verified' &&
+    precisionTier(geo.precision) >= 3 &&
+    geo.confidence >= 0.5
+  );
 }
 
 const EARTH_RADIUS_KM = 6371;
@@ -43,11 +52,14 @@ export interface GeoCandidate {
   lng: number;
   precision: GeoPrecision;
   source: Geo['source'];
+  evidencePath: GeoEvidencePath;
+  coordinateSystem: CoordinateSystem;
   /** Google Place ID, when the candidate came from Google. */
   placeId?: string | null;
   /** What the geocoder echoed back, used to corroborate the parsed record. */
   echoedPostcode?: string | null;
   echoedCity?: string | null;
+  echoedRegion?: string | null;
   echoedCountry?: string | null;
 }
 
@@ -108,8 +120,37 @@ export function scoreCandidate(
 
 /** Candidates within this distance are treated as agreeing. */
 const AGREE_KM = 0.25;
+/**
+ * Large campuses and complexes can publish a building entrance while a venue
+ * POI uses the main gate. Permit a wider gap only when both independent paths
+ * resolve at street level or better and echo the same postcode (also matching
+ * the source postcode when it has one).
+ */
+const SAME_POSTCODE_AGREE_KM = 0.75;
 /** Beyond this, the two lookups contradict each other — cap both. */
 const DIVERGE_KM = 2;
+
+function agreementLimitKm(
+  left: GeoCandidate,
+  right: GeoCandidate,
+  expect: GeoExpectation,
+): number {
+  const leftPostcode = norm(left.echoedPostcode);
+  const rightPostcode = norm(right.echoedPostcode);
+  const expectedPostcode = norm(expect.postcode);
+  const postcodeCorroborates =
+    leftPostcode &&
+    leftPostcode === rightPostcode &&
+    (!expectedPostcode || leftPostcode === expectedPostcode);
+  if (
+    postcodeCorroborates &&
+    precisionTier(left.precision) >= precisionTier('street') &&
+    precisionTier(right.precision) >= precisionTier('street')
+  ) {
+    return SAME_POSTCODE_AGREE_KM;
+  }
+  return AGREE_KM;
+}
 
 /**
  * Pick between the address-derived and name-derived geocodes and assign a
@@ -128,28 +169,88 @@ export function resolveGeo(
   const best = scored[0];
   if (!best) return null;
 
-  // Base confidence from precision, then adjusted by corroboration.
-  let confidence = Math.min(1, 0.25 + best.score * 0.15);
-  let precision = best.c.precision;
+  // Alternate results from one query/provider are not corroboration. Search
+  // for the strongest pair produced through two genuinely different evidence
+  // paths (for example page embed + address, or address + venue name).
+  const pairs = scored
+    .flatMap((left, index) =>
+      scored.slice(index + 1).flatMap((right) => {
+        if (left.c.evidencePath === right.c.evidencePath) return [];
+        const gap = haversineKm(left.c, right.c);
+        return [{ left, right, gap, strength: left.score + right.score }];
+      }),
+    )
+    .sort((a, b) => b.strength - a.strength || a.gap - b.gap);
 
-  const second = scored[1];
-  if (second) {
-    const gap = haversineKm(best.c, second.c);
-    if (gap <= AGREE_KM) {
-      confidence = Math.min(1, confidence + 0.2);
-    } else if (gap > DIVERGE_KM) {
-      // The two lookups disagree materially — don't pretend to a precise pin.
-      precision = 'approximate';
-      confidence = Math.min(confidence, 0.3);
-    }
+  const agreeing = pairs.find(
+    (pair) =>
+      pair.gap <= agreementLimitKm(pair.left.c, pair.right.c, expect),
+  );
+  const selected = agreeing
+    ? [agreeing.left, agreeing.right].sort((a, b) => b.score - a.score)[0]!
+    : best;
+  const nearestDifferentPath = pairs
+    .filter((pair) => pair.left === best || pair.right === best)
+    .sort((a, b) => a.gap - b.gap)[0];
+
+  let verification: Geo['verification'];
+  let confidence: number;
+  let precision = selected.c.precision;
+  let agreementKm: number | null = null;
+  let evidencePaths: GeoEvidencePath[] = [selected.c.evidencePath];
+
+  if (selected.c.evidencePath === 'admin') {
+    verification = 'verified';
+    confidence = 0.98;
+  } else if (agreeing) {
+    verification = 'verified';
+    agreementKm = Number(agreeing.gap.toFixed(3));
+    evidencePaths = [agreeing.left.c.evidencePath, agreeing.right.c.evidencePath].sort();
+    confidence = Math.min(1, 0.55 + selected.score * 0.08);
+  } else if (nearestDifferentPath && nearestDifferentPath.gap > DIVERGE_KM) {
+    verification = 'conflicted';
+    precision = 'approximate';
+    evidencePaths = [
+      nearestDifferentPath.left.c.evidencePath,
+      nearestDifferentPath.right.c.evidencePath,
+    ].sort();
+    agreementKm = Number(nearestDifferentPath.gap.toFixed(3));
+    confidence = 0.2;
+  } else if (nearestDifferentPath) {
+    verification = 'approximate';
+    precision = 'approximate';
+    evidencePaths = [
+      nearestDifferentPath.left.c.evidencePath,
+      nearestDifferentPath.right.c.evidencePath,
+    ].sort();
+    agreementKm = Number(nearestDifferentPath.gap.toFixed(3));
+    confidence = 0.35;
+  } else {
+    verification = 'unverified';
+    confidence = Math.min(0.45, 0.2 + selected.score * 0.05);
   }
 
+  const selectedPairCandidates = agreeing
+    ? [agreeing.left.c, agreeing.right.c]
+    : [selected.c];
+  const placeId =
+    selectedPairCandidates.find((candidate) => candidate.placeId)?.placeId ??
+    selected.c.placeId ??
+    null;
+
   return {
-    lat: best.c.lat,
-    lng: best.c.lng,
+    lat: selected.c.lat,
+    lng: selected.c.lng,
     precision,
-    source: best.c.source,
+    source: selected.c.source,
+    coordinateSystem: 'WGS84',
+    verification,
+    evidencePaths: [...new Set(evidencePaths)],
+    agreementKm,
     confidence: Number(confidence.toFixed(2)),
-    placeId: best.c.placeId ?? null,
+    placeId,
+    resolvedCity: selected.c.echoedCity ?? null,
+    resolvedRegion: selected.c.echoedRegion ?? null,
+    resolvedPostcode: selected.c.echoedPostcode ?? null,
   };
 }

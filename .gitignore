@@ -12,6 +12,8 @@ out/
 
 # ingestion cache — raw fetched HTML, regenerable, large
 .cache/
+# CI/local self-analysis reports — uploaded as workflow artifacts
+.artifacts/
 
 # env
 .env

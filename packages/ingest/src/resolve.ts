@@ -8,6 +8,8 @@ import type {
 } from '@ielts-map/core';
 import {
   isPlausibleForCountry,
+  hasPricedOffering,
+  mergeContactInformation,
   mergeFormats,
   mergeOfferings,
   pickCanonical,
@@ -17,7 +19,11 @@ import {
   slugBase,
 } from '@ielts-map/core';
 import {
+  amapPlaces,
   GeocodeCache,
+  gcj02ToWgs84,
+  googlePlaces,
+  localProviderFor,
   nominatim,
   providerChain,
   toCandidates,
@@ -32,8 +38,17 @@ export interface ResolveOptions {
   previous?: Centre | undefined;
   /** Re-resolve locations even when the address is unchanged. Costs money. */
   regeocode?: boolean;
-  /** Try Google before Nominatim. See providerChain's doc for when this is right. */
+  /** Retained CLI compatibility; configured production runs use Google. */
   preferGoogle?: boolean;
+  /** One-time schema migration: retain an old pin, but mark it unverified. */
+  reuseLegacyPrior?: boolean;
+}
+
+/** Maximum movement allowed when refining an unchanged coarse coordinate. */
+export function localRefinementRadiusKm(precision: Geo['precision']): number {
+  if (precision === 'rooftop') return 25;
+  if (precision === 'street') return 5;
+  return 100;
 }
 
 /** Turn one dedup cluster into the single Centre record we publish. */
@@ -43,15 +58,30 @@ export async function resolveCluster(
   options: ResolveOptions = {},
 ): Promise<Centre> {
   const canonical = pickCanonical(cluster);
+  const contact = mergeContactInformation([
+    canonical,
+    ...cluster.filter((centre) => centre !== canonical),
+  ]);
   const offerings = mergeOfferings(cluster);
   const formats = mergeFormats(offerings);
 
-  const priced = offerings.filter((o) => o.price !== null);
-  const priceFrom = priced.length ? Math.min(...priced.map((o) => o.price!)) : null;
-  const currency = priced[0]?.currency ?? null;
+  const priceSummary = summarizePrices(offerings);
 
   const located = await resolveLocation(canonical, cluster, cache, options);
   const geo = located.geo;
+  const address = {
+    ...canonical.address,
+    city: canonical.address.city ?? located.city,
+    citySource: canonical.address.city
+      ? canonical.address.citySource ?? 'address_rule'
+      : located.citySource,
+    region:
+      canonical.address.region ??
+      (geo?.verification === 'verified' ? located.region : null),
+    postcode:
+      canonical.address.postcode ??
+      (geo?.verification === 'verified' ? located.postcode : null),
+  };
 
   const now = new Date().toISOString();
   const sources: CentreSourceRef[] = cluster.map((c) => ({
@@ -62,8 +92,13 @@ export async function resolveCluster(
     stillPresent: true,
   }));
 
-  const isActive = offerings.length > 0;
+  const isPublishable = hasPricedOffering(offerings);
   const confidence = scoreConfidence(canonical, cluster, offerings.length, geo);
+  const localizations =
+    options.previous?.address.raw === canonical.address.raw &&
+    sameCoordinate(options.previous.geo, geo)
+      ? options.previous.localizations
+      : undefined;
 
   return {
     id: centreId(canonical),
@@ -73,21 +108,64 @@ export async function resolveCluster(
     externalId: cluster.find((c) => c.externalId)?.externalId ?? null,
     ieltsOrgSlug: canonical.slug,
     mergedSlugs: cluster.map((c) => c.slug).filter((s) => s !== canonical.slug).sort(),
-    address: canonical.address,
-    phone: cluster.find((c) => c.phone)?.phone ?? null,
+    address,
+    ...(localizations?.length ? { localizations } : {}),
+    contact,
+    phone: contact.phones[0] ?? null,
     geo,
     googlePlaceId: located.placeId,
     formats,
     offerings,
-    priceFrom,
-    currency,
+    priceFromText: priceSummary.priceFromText,
+    parsedPriceFrom: priceSummary.parsedPriceFrom,
+    parsedCurrency: priceSummary.parsedCurrency,
     bookingUrl: cluster.find((c) => c.bookingUrl)?.bookingUrl ?? null,
-    isActive,
+    isPublishable,
     confidence,
     sources,
     firstSeenAt: now,
     lastSeenAt: now,
   };
+}
+
+function summarizePrices(offerings: ParsedCentre['offerings']): {
+  priceFromText: string | null;
+  parsedPriceFrom: number | null;
+  parsedCurrency: string | null;
+} {
+  const published = offerings.filter((offering) => Boolean(offering.priceText));
+  if (!published.length) {
+    return { priceFromText: null, parsedPriceFrom: null, parsedCurrency: null };
+  }
+
+  const parsed = published.filter(
+    (offering) =>
+      offering.priceParseStatus === 'verified' &&
+      offering.parsedPrice !== null &&
+      offering.parsedCurrency !== null,
+  );
+  const currencies = new Set(parsed.map((offering) => offering.parsedCurrency!));
+  if (parsed.length && currencies.size === 1) {
+    const cheapest = [...parsed].sort((a, b) => a.parsedPrice! - b.parsedPrice!)[0]!;
+    return {
+      priceFromText: cheapest.priceText,
+      parsedPriceFrom: cheapest.parsedPrice,
+      parsedCurrency: cheapest.parsedCurrency,
+    };
+  }
+
+  // Preserve the source fee even when numeric comparison is unavailable.
+  return {
+    priceFromText: published[0]!.priceText,
+    parsedPriceFrom: null,
+    parsedCurrency: null,
+  };
+}
+
+/** A localization remains valid only while both its source address and pin do. */
+function sameCoordinate(a: Geo | null, b: Geo | null): boolean {
+  if (!a || !b) return a === b;
+  return Math.abs(a.lat - b.lat) < 1e-6 && Math.abs(a.lng - b.lng) < 1e-6;
 }
 
 /**
@@ -112,100 +190,121 @@ function centreId(canonical: ParsedCentre): string {
 }
 
 /**
- * Location cascade (§5.3): an embedded page coordinate wins outright; otherwise
- * geocode the address *and* the name and let the scoring rule pick, because
- * those two fail in opposite situations.
+ * Resolve a location from multiple evidence paths. A page embed is one
+ * candidate, never proof: precise publication requires another path to agree.
  */
 async function resolveLocation(
   canonical: ParsedCentre,
   cluster: ParsedCentre[],
   cache: GeocodeCache,
   options: ResolveOptions,
-): Promise<{ geo: Geo | null; placeId: string | null }> {
+): Promise<{
+  geo: Geo | null;
+  placeId: string | null;
+  city: string | null;
+  citySource: 'geocoder' | 'legacy' | 'address_rule' | 'admin' | null;
+  region: string | null;
+  postcode: string | null;
+}> {
   const { address, name } = canonical;
-
-  // A page-embedded coordinate is normally trusted outright, but two real
-  // pages have shown it can't be trusted blindly: a Manchester, UK centre
-  // embedded `53.48098,2.23259` — a sign error putting the pin over the North
-  // Sea instead of at -2.23259°W — and a Hai Phong, Vietnam one embedded the
-  // literal placeholder `1,1` (Gulf of Guinea). Neither looks malformed on its
-  // own, so implausibility relative to the centre's known country is the only
-  // signal that catches them; where the country is unknown or uncovered by
-  // country-bounds.ts, this stays permissive and keeps trusting the embed
-  // exactly as before.
-  const embedded = cluster
-    .map((c) => c.embeddedGeo)
-    .find((g): g is { lat: number; lng: number } => {
-      if (!g) return false;
-      if (isPlausibleForCountry(g.lat, g.lng, address.country)) return true;
-      console.warn(
-        `    ⚠ discarding implausible embedded coordinate for "${canonical.name}": ` +
-          `${g.lat},${g.lng} is not in ${address.country} — falling back to geocoding`,
-      );
-      return false;
-    });
-
-  // Cheapest path of all: this centre is already resolved and its address has
-  // not moved, so there is nothing to look up. This is what keeps a scheduled
-  // run from re-billing every address every week — the query cache alone would
-  // not, since any change to address parsing rewrites the cache keys.
-  //
-  // The committed geo is re-checked against the same plausibility gate as a
-  // fresh embed, not just trusted because it's already there: the committed
-  // dataset can itself hold a coordinate carried forward from before this gate
-  // existed (Manchester, Hai Phong — see above). Without this, fixing the
-  // fresh-embed case above would still leave the bad value in place forever,
-  // since address-unchanged would keep re-approving it every run.
+  const localProvider = localProviderFor(address.country);
   const prior = options.previous;
   if (
+    options.reuseLegacyPrior &&
+    prior?.geo &&
+    prior.address.raw === canonical.address.raw &&
+    isPlausibleForCountry(prior.geo.lat, prior.geo.lng, canonical.address.country)
+  ) {
+    const sourcePath =
+      prior.geo.source === 'page_embed' ? 'page_embed' : 'address';
+    return {
+      geo: {
+        lat: prior.geo.lat,
+        lng: prior.geo.lng,
+        precision:
+          prior.geo.precision === 'rooftop' ? 'street' : prior.geo.precision,
+        source: prior.geo.source,
+        coordinateSystem: 'WGS84',
+        verification: 'unverified',
+        evidencePaths: [sourcePath],
+        agreementKm: null,
+        confidence: Math.min(prior.geo.confidence, 0.4),
+      },
+      placeId: prior.googlePlaceId,
+      city: safeLegacyCity(prior.address.city),
+      citySource: safeLegacyCity(prior.address.city) ? 'legacy' : null,
+      region: null,
+      postcode: null,
+    };
+  }
+  const reusablePrior =
     !options.regeocode &&
     prior?.geo &&
     prior.address.raw === canonical.address.raw &&
-    isPlausibleForCountry(prior.geo.lat, prior.geo.lng, canonical.address.country) &&
-    // A (plausible) page-embedded coordinate always wins, so let it take over
-    // if the page has gained one since.
-    !embedded
-  ) {
-    return { geo: prior.geo, placeId: prior.googlePlaceId };
-  }
-
-  if (embedded) {
-    return {
-      geo: {
-        lat: embedded.lat,
-        lng: embedded.lng,
-        precision: 'rooftop',
-        source: 'page_embed',
-        confidence: 0.9,
-      },
-      placeId: null,
-    };
+    prior.geo.verification === 'verified' &&
+    prior.geo.coordinateSystem === 'WGS84' &&
+    isPlausibleForCountry(prior.geo.lat, prior.geo.lng, canonical.address.country)
+      ? {
+          geo: prior.geo,
+          placeId: prior.googlePlaceId,
+          city: prior.address.city,
+          citySource: prior.address.citySource ?? (prior.address.city ? 'legacy' : null),
+          region: prior.address.region,
+          postcode: prior.address.postcode,
+        }
+      : null;
+  if (reusablePrior) {
+    return reusablePrior;
   }
 
   const country = address.country;
   const candidates: GeoCandidate[] = [];
   const chain = providerChain(country, options.preferGoogle);
   const expect = { postcode: address.postcode, city: address.city, country };
-
   const street = streetLine(address.lines);
+  const plusCode = extractPlusCode(address.raw);
 
-  // Below this, a query is worth trying; at or above, the chain already has
-  // enough to stop. Applied before *every* query, not just the last one —
-  // structured, raw-address and name all cost a real billed call on Google,
-  // and running the other two after structured alone already lands a rooftop
-  // hit would spend calls for no improvement. This is what "only when
-  // necessary" means in practice, not just which provider goes first.
-  const goodEnough = () => bestTier(candidates, expect) >= precisionTier('street');
+  // Preserve plausible embedded points as candidates. Mainland-China embeds
+  // have historically mixed WGS-84 and GCJ-02 semantics, so test both
+  // interpretations; only one can corroborate an independent path.
+  for (const embedded of cluster.flatMap((centre) =>
+    centre.embeddedGeo ? [centre.embeddedGeo] : [],
+  )) {
+    const interpretations = [
+      { lat: embedded.lat, lng: embedded.lng },
+      ...(country === 'CN'
+        ? [gcj02ToWgs84(embedded.lat, embedded.lng)]
+        : []),
+    ];
+    for (const point of interpretations) {
+      if (!isPlausibleForCountry(point.lat, point.lng, country)) continue;
+      candidates.push({
+        ...point,
+        precision: 'street',
+        source: 'page_embed',
+        evidencePath: 'page_embed',
+        coordinateSystem: 'WGS84',
+        echoedPostcode: null,
+        echoedCity: null,
+        echoedRegion: null,
+        echoedCountry: country,
+      });
+    }
+  }
 
-  const runProvider = async (provider: GeocodeProvider): Promise<void> => {
-    const add = async (q: Parameters<GeocodeProvider['lookup']>[0]) => {
-      candidates.push(...toCandidates(await cache.lookup(provider, q), provider.name));
+  const runProvider = async (
+    provider: GeocodeProvider,
+    target: GeoCandidate[] = candidates,
+  ): Promise<void> => {
+    const add = async (
+      q: Parameters<GeocodeProvider['lookup']>[0],
+      evidencePath: GeoCandidate['evidencePath'],
+    ) => {
+      target.push(
+        ...toCandidates(await cache.lookup(provider, q), provider.name, evidencePath),
+      );
     };
 
-    // Structured first. Free-text geocoding trips over the unit, suite and
-    // floor designators these addresses are full of — "Unit 210, Bentinck St
-    // Level, 500 George St" resolved only to the city — whereas naming the
-    // street, city and postcode as separate fields resolves the building.
     if (street) {
       await add({
         structured: {
@@ -215,34 +314,143 @@ async function resolveLocation(
           postalcode: address.postcode,
         },
         country,
-      });
+      }, 'address');
     }
 
-    // The address query and the name query fail in opposite situations, so
-    // either can be needed: a centre whose name is just a city geocodes from
-    // its address, and one with a vague address geocodes from its (precise
-    // institutional) name. Neither runs once something street-level or better
-    // has already been found.
-    if (!goodEnough() && address.raw) await add({ text: address.raw, country });
+    if (
+      address.raw &&
+      !target.some(
+        (candidate) =>
+          candidate.source === provider.name &&
+          candidate.evidencePath === 'address',
+      )
+    ) {
+      await add({ text: address.raw, country }, 'address');
+    }
 
-    if (!goodEnough()) {
+    if (
+      provider.name !== 'amap' &&
+      provider.name !== 'google' &&
+      resolveGeo(target, expect)?.verification !== 'verified'
+    ) {
       const named = [name, address.city, address.region].filter(Boolean).join(', ');
-      if (named) await add({ text: named, country });
+      if (named) await add({ text: named, country }, 'venue_name');
     }
   };
 
-  // Walk the chain in order, stopping as soon as a provider lands a
-  // street-level-or-better hit. With a Google key configured that is almost
-  // always the first provider, so Nominatim is only consulted for the tail.
   for (const provider of chain) {
     await runProvider(provider);
-    if (bestTier(candidates, expect) >= precisionTier('street')) break;
+    if (resolveGeo(candidates, expect)?.verification === 'verified') break;
+  }
+
+  // A Plus Code is an encoded coordinate published by the source, not a
+  // second interpretation of its prose address. Treat it as an independent
+  // evidence path and use locality context only to expand short codes.
+  if (
+    plusCode &&
+    process.env.GOOGLE_MAPS_API_KEY &&
+    resolveGeo(candidates, expect)?.verification !== 'verified'
+  ) {
+    candidates.push(
+      ...toCandidates(
+        await cache.lookup(providerChain(country, true)[0]!, {
+          text: [
+            plusCode,
+            address.city ?? safeLegacyCity(prior?.address.city ?? null),
+            address.region,
+            country,
+          ]
+            .filter(Boolean)
+            .join(', '),
+          country,
+        }),
+        'google',
+        'plus_code',
+      ),
+    );
+  }
+
+  // A venue search is a distinct evidence path from address geocoding. Keep
+  // the query independent by combining the name only with coarse locality
+  // context retained from the source/previous dataset—not the street address.
+  if (
+    process.env.GOOGLE_MAPS_API_KEY &&
+    resolveGeo(candidates, expect)?.verification !== 'verified'
+  ) {
+    const locality =
+      address.city ??
+      safeLegacyCity(prior?.address.city ?? null) ??
+      address.region;
+    const venueQueries = [
+      [name, locality, address.postcode, country].filter(Boolean).join(', '),
+      // A second Places query may disambiguate a branch/campus whose name is
+      // generic at country/city level. It remains one venue-name evidence path
+      // and can never corroborate another Places result by itself.
+      [name, address.raw].filter(Boolean).join(', '),
+    ].filter((query, index, all) => query && all.indexOf(query) === index);
+
+    for (const venueQuery of venueQueries) {
+      candidates.push(
+        ...toCandidates(
+          await cache.lookup(
+            googlePlaces,
+            { text: venueQuery, country },
+          ),
+          'google_places',
+          'venue_name',
+        ),
+      );
+      if (resolveGeo(candidates, expect)?.verification === 'verified') break;
+    }
+  }
+
+  // Mainland-China POIs are commonly indexed under Chinese names only.
+  // Reuse the durable Place IDs from the venue search to obtain a transient
+  // localized name, then ask AMap for the domestic POI coordinate. The Google
+  // name is never cached or published; only AMap's result is retained.
+  if (
+    country === 'CN' &&
+    process.env.AMAP_API_KEY &&
+    process.env.GOOGLE_MAPS_API_KEY &&
+    resolveGeo(candidates, expect)?.verification !== 'verified'
+  ) {
+    const placeIds = [
+      ...new Set(
+        candidates
+          .filter(
+            (candidate) =>
+              candidate.source === 'google_places' &&
+              candidate.evidencePath === 'venue_name' &&
+              candidate.placeId,
+          )
+          .map((candidate) => candidate.placeId!),
+      ),
+    ].slice(0, 3);
+
+    for (const placeId of placeIds) {
+      candidates.push(
+        ...toCandidates(
+          await cache.lookup(amapPlaces, {
+            text: [name, address.city, country].filter(Boolean).join(', '),
+            country,
+            placeId,
+          }),
+          'amap_places',
+          'venue_name',
+        ),
+      );
+      if (resolveGeo(candidates, expect)?.verification === 'verified') break;
+    }
   }
 
   const tryQuery = async (text: string | null): Promise<void> => {
     if (!text) return;
     candidates.push(
-      ...toCandidates(await cache.lookup(nominatim, { text, country }), 'nominatim'),
+      ...toCandidates(
+        await cache.lookup(nominatim, { text, country }),
+        'nominatim',
+        'address',
+      ),
     );
   };
 
@@ -253,24 +461,86 @@ async function resolveLocation(
   // would have placed it within a few blocks.
   const needsBetter = () => bestTier(candidates, expect) < precisionTier('postcode');
 
-  if (needsBetter() && street) {
-    await tryQuery([street, address.city, address.region, address.postcode].filter(Boolean).join(', '));
-  }
-  if (needsBetter() && address.postcode) {
-    await tryQuery([address.postcode, address.city].filter(Boolean).join(', '));
-    if (needsBetter()) await tryQuery(address.postcode);
-  }
-  if (candidates.length === 0) {
-    await tryQuery([address.city, address.region].filter(Boolean).join(', ') || null);
+  // Public Nominatim is a no-key development fallback, not a recurring bulk
+  // production provider. A configured Google crawler never reaches it.
+  if (!process.env.GOOGLE_MAPS_API_KEY) {
+    if (needsBetter() && street) {
+      await tryQuery(
+        [street, address.city, address.region, address.postcode]
+          .filter(Boolean)
+          .join(', '),
+      );
+    }
+    if (needsBetter() && address.postcode) {
+      await tryQuery([address.postcode, address.city].filter(Boolean).join(', '));
+      if (needsBetter()) await tryQuery(address.postcode);
+    }
+    if (candidates.length === 0) {
+      await tryQuery([address.city, address.region].filter(Boolean).join(', ') || null);
+    }
   }
 
-  const resolved = resolveGeo(candidates, expect);
-  if (!resolved) return { geo: null, placeId: null };
+  let resolved = resolveGeo(candidates, expect);
+  if (localProvider && resolved?.verification !== 'verified') {
+    await runProvider(localProvider);
+    resolved = resolveGeo(candidates, expect);
+  }
 
-  // The Place ID moves onto the centre; the stored coordinate keeps only the
-  // fields the dataset schema defines.
-  const { placeId, ...geo } = resolved;
-  return { geo, placeId: placeId ?? null };
+  if (!resolved) {
+    const legacyCity = safeLegacyCity(prior?.address.city ?? null);
+    return {
+      geo: null,
+      placeId: null,
+      city: legacyCity,
+      citySource: legacyCity ? 'legacy' : null,
+      region: null,
+      postcode: null,
+    };
+  }
+
+  const {
+    placeId,
+    resolvedCity,
+    resolvedRegion,
+    resolvedPostcode,
+    ...geo
+  } = resolved;
+  const legacyCity = safeLegacyCity(prior?.address.city ?? null);
+  const verifiedCity =
+    geo.verification === 'verified' ? resolvedCity ?? null : null;
+  return {
+    geo,
+    placeId: placeId ?? null,
+    city: verifiedCity ?? legacyCity,
+    citySource:
+      verifiedCity ? 'geocoder' : legacyCity ? 'legacy' : null,
+    region: resolvedRegion ?? null,
+    postcode: resolvedPostcode ?? null,
+  };
+}
+
+function safeLegacyCity(city: string | null): string | null {
+  if (!city) return null;
+  const value = city.trim();
+  if (
+    !value ||
+    value.length > 60 ||
+    /\d/.test(value) ||
+    /^(?:other|unknown|n\/a)$/i.test(value) ||
+    /https?:|www\.|@/.test(value)
+  ) {
+    return null;
+  }
+  return value;
+}
+
+/** Extract the first Open Location Code without rewriting the source address. */
+export function extractPlusCode(address: string): string | null {
+  const match =
+    /\b([23456789CFGHJMPQRVWX]{4,8}\+[23456789CFGHJMPQRVWX]{2,3})\b/iu.exec(
+      address,
+    );
+  return match?.[1]?.toUpperCase() ?? null;
 }
 
 /** Best precision tier among candidates that survive the country check. */
@@ -303,8 +573,8 @@ function scoreConfidence(
   if (offeringCount > 0) score += 0.1;
   if (geo) {
     const tier = precisionTier(geo.precision);
-    if (tier >= 3) score += 0.2;
-    else if (tier === 2) score += 0.1;
+    if (geo.verification === 'verified' && tier >= 3) score += 0.2;
+    else if (geo.verification === 'verified' || tier === 2) score += 0.1;
   }
   // Two pages describing the same centre corroborate each other.
   if (cluster.length > 1) score += 0.05;

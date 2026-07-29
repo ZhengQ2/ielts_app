@@ -1,12 +1,16 @@
 import Link from 'next/link';
 import {
-  confidenceLabel,
-  formatFormat,
-  formatPrice,
-  geoCaveat,
+  availabilityGuidance,
+  deliveryModesIn,
+  formatDeliveryMode,
+  formatPublishedPrice,
   type Centre,
 } from '@ielts-map/core';
 import { OperatorBadge } from './OperatorBadge';
+import { CentreContactDetails } from './CentreContactDetails';
+import { centreDetailHref } from '@/lib/offering-filter';
+import { isHttpUrl } from '@/lib/url-safety';
+import { CentreAvailabilityNotice } from './CentreAvailabilityNotice';
 
 /**
  * The centre picked on the map, summarised at the top of the list column.
@@ -18,12 +22,18 @@ import { OperatorBadge } from './OperatorBadge';
  */
 export function SelectedCentrePanel({
   centre,
+  detailFilterSearch,
   onClose,
 }: {
   centre: Centre;
+  detailFilterSearch: string;
   onClose: () => void;
 }) {
-  const caveat = geoCaveat(centre);
+  const detailHref = centreDetailHref(
+    centre.ieltsOrgSlug,
+    detailFilterSearch,
+  );
+  const availability = availabilityGuidance(centre);
 
   return (
     <section
@@ -33,11 +43,13 @@ export function SelectedCentrePanel({
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <h2 className="text-base font-medium leading-snug">
-            <Link href={`/centres/${centre.ieltsOrgSlug}`} className="hover:underline">
+            <Link href={detailHref} className="hover:underline">
               {centre.name}
             </Link>
           </h2>
-          <p className="mt-1 text-sm text-muted">{centre.address.raw}</p>
+          <p className="mt-1 text-sm text-muted">
+            {centre.address.raw}
+          </p>
         </div>
         <div className="flex shrink-0 items-center gap-2">
           <OperatorBadge operator={centre.operator} />
@@ -53,41 +65,41 @@ export function SelectedCentrePanel({
       </div>
 
       <dl className="mt-3 grid gap-x-6 gap-y-2 border-t border-line pt-3 text-sm sm:grid-cols-3">
-        <Detail label="From">{formatPrice(centre.priceFrom, centre.currency)}</Detail>
-        <Detail label="Formats">{centre.formats.map(formatFormat).join(' · ') || '—'}</Detail>
-        <Detail label="Phone">
-          {centre.phone ? (
-            <a href={`tel:${centre.phone.replace(/[^\d+]/g, '')}`} className="hover:underline">
-              {centre.phone}
-            </a>
-          ) : (
-            '—'
-          )}
+        <Detail label="From">{formatPublishedPrice(centre.priceFromText)}</Detail>
+        <Detail label="Formats">
+          {deliveryModesIn(centre.offerings).map(formatDeliveryMode).join(' · ') || '—'}
+        </Detail>
+        <Detail label="Contact information">
+          <CentreContactDetails centre={centre} />
         </Detail>
         <Detail label="City">{centre.address.city ?? '—'}</Detail>
         <Detail label="Tests offered">
           {centre.offerings.length} {centre.offerings.length === 1 ? 'option' : 'options'}
         </Detail>
-        <Detail label="Listing confidence">{confidenceLabel(centre)}</Detail>
       </dl>
 
-      {caveat && <p className="mt-3 text-xs text-muted">{caveat}</p>}
+      {(availability.status === 'future_location' ||
+        availability.status === 'not_accepting_registrations') && (
+        <div className="mt-3">
+          <CentreAvailabilityNotice centre={centre} compact />
+        </div>
+      )}
 
       <div className="mt-3 flex flex-wrap items-center gap-4 text-sm">
         <Link
-          href={`/centres/${centre.ieltsOrgSlug}`}
+          href={detailHref}
           className="font-medium text-brand hover:underline"
         >
           View full details →
         </Link>
-        {centre.bookingUrl && (
+        {isHttpUrl(availability.actionUrl) && availability.actionLabel && (
           <a
-            href={centre.bookingUrl}
+            href={availability.actionUrl!}
             target="_blank"
             rel="noreferrer nofollow"
             className="text-muted hover:text-ink hover:underline"
           >
-            Book on the {centre.operator} site ↗
+            {availability.actionLabel} ↗
           </a>
         )}
       </div>
