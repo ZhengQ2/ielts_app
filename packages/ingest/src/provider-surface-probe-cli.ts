@@ -9,7 +9,11 @@ interface ProbeTarget {
   id: string;
   source: 'idp_global' | 'idp_india' | 'idp_china' | 'bc_global';
   url: string;
-  interaction?: 'open_search' | 'open_academic' | 'open_academic_computer';
+  interaction?:
+    | 'open_search'
+    | 'open_academic'
+    | 'open_academic_computer'
+    | 'open_academic_computer_writing';
 }
 
 interface ControlSummary {
@@ -170,7 +174,8 @@ async function probeTarget(
     if (
       target.interaction === 'open_search' ||
       target.interaction === 'open_academic' ||
-      target.interaction === 'open_academic_computer'
+      target.interaction === 'open_academic_computer' ||
+      target.interaction === 'open_academic_computer_writing'
     ) {
       await page
         .getByRole('button', { name: 'Accept and Proceed', exact: true })
@@ -180,13 +185,21 @@ async function probeTarget(
       await page.waitForTimeout(5_000);
       if (
         target.interaction === 'open_academic' ||
-        target.interaction === 'open_academic_computer'
+        target.interaction === 'open_academic_computer' ||
+        target.interaction === 'open_academic_computer_writing'
       ) {
         await clickVisibleText(page, 'IELTS Academic');
         await page.waitForTimeout(5_000);
-        if (target.interaction === 'open_academic_computer') {
+        if (
+          target.interaction === 'open_academic_computer' ||
+          target.interaction === 'open_academic_computer_writing'
+        ) {
           await clickVisibleText(page, 'IELTS on Computer');
           await page.waitForTimeout(5_000);
+          if (target.interaction === 'open_academic_computer_writing') {
+            await clickVisibleText(page, 'Writing on Computer');
+            await page.waitForTimeout(5_000);
+          }
         }
       }
     }
@@ -330,7 +343,8 @@ function parseTargets(value: string): ProbeTarget[] {
       interaction !== undefined &&
       interaction !== 'open_search' &&
       interaction !== 'open_academic' &&
-      interaction !== 'open_academic_computer'
+      interaction !== 'open_academic_computer' &&
+      interaction !== 'open_academic_computer_writing'
     ) {
       throw new Error(`Probe target ${id} has an unsupported interaction`);
     }
