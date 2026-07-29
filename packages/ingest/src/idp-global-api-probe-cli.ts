@@ -6,7 +6,10 @@ import { REPORT_DIR, REPO_ROOT } from './config.ts';
 const SESSION_SEARCH_URL =
   'https://api.session-search.prod.ielts.com/v2/sessions/search';
 const COUNTRY_CITY_URL =
-  'https://api.session-search.prod.ielts.com/v1/sessions/countryCity?page=0&pageSize=0';
+  'https://api.session-search.prod.ielts.com/v1/sessions/countryCity' +
+  '?languageSkills=LISTENING&languageSkills=READING&languageSkills=WRITING' +
+  '&page=0&pageSize=0&testDeliveryFormat=CD&testModules=ACADEMIC' +
+  '&testCategory=IELTS';
 
 interface ProbeResponse {
   requestLabel: string;
@@ -33,7 +36,10 @@ async function main(): Promise<void> {
     countryCode: process.env.IDP_GLOBAL_COUNTRY_CODE?.trim() || 'AUS',
     city: process.env.IDP_GLOBAL_CITY?.trim() || 'Melbourne',
   };
-  const countryCity = await requestJson('country-city-unfiltered', COUNTRY_CITY_URL);
+  const countryCity = await requestJson(
+    'country-city-academic-computer',
+    COUNTRY_CITY_URL,
+  );
   assertHealthy(countryCity);
   await delay(2_000);
   const broad = await requestJson('broad-search', SESSION_SEARCH_URL, requestBody);
