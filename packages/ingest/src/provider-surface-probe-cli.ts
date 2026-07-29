@@ -459,7 +459,8 @@ function isApprovedResponseBody(
     return (
       (host === 'ielts.idp.com' &&
         url.pathname.startsWith('/book/Json/')) ||
-      host === 'api.bxsearch.prod.ielts.com'
+      host === 'api.bxsearch.prod.ielts.com' ||
+      host === 'api.session-search.prod.ielts.com'
     );
   } catch {
     return false;
