@@ -13,7 +13,8 @@ interface ProbeTarget {
     | 'open_search'
     | 'open_academic'
     | 'open_academic_computer'
-    | 'open_academic_computer_writing';
+    | 'open_academic_computer_writing'
+    | 'open_academic_computer_writing_melbourne';
 }
 
 interface ControlSummary {
@@ -175,7 +176,8 @@ async function probeTarget(
       target.interaction === 'open_search' ||
       target.interaction === 'open_academic' ||
       target.interaction === 'open_academic_computer' ||
-      target.interaction === 'open_academic_computer_writing'
+      target.interaction === 'open_academic_computer_writing' ||
+      target.interaction === 'open_academic_computer_writing_melbourne'
     ) {
       await page
         .getByRole('button', { name: 'Accept and Proceed', exact: true })
@@ -186,19 +188,36 @@ async function probeTarget(
       if (
         target.interaction === 'open_academic' ||
         target.interaction === 'open_academic_computer' ||
-        target.interaction === 'open_academic_computer_writing'
+        target.interaction === 'open_academic_computer_writing' ||
+        target.interaction === 'open_academic_computer_writing_melbourne'
       ) {
         await clickVisibleText(page, 'IELTS Academic');
         await page.waitForTimeout(5_000);
         if (
           target.interaction === 'open_academic_computer' ||
-          target.interaction === 'open_academic_computer_writing'
+          target.interaction === 'open_academic_computer_writing' ||
+          target.interaction === 'open_academic_computer_writing_melbourne'
         ) {
           await clickVisibleText(page, 'IELTS on Computer');
           await page.waitForTimeout(5_000);
-          if (target.interaction === 'open_academic_computer_writing') {
+          if (
+            target.interaction === 'open_academic_computer_writing' ||
+            target.interaction ===
+              'open_academic_computer_writing_melbourne'
+          ) {
             await clickVisibleText(page, 'Writing on Computer');
             await page.waitForTimeout(5_000);
+            if (
+              target.interaction ===
+              'open_academic_computer_writing_melbourne'
+            ) {
+              await clickVisibleText(page, 'Select Country');
+              await clickVisibleText(page, 'Australia');
+              await clickVisibleText(page, 'Select City');
+              await clickVisibleText(page, 'Melbourne');
+              await clickVisibleText(page, 'Select test date');
+              await page.waitForTimeout(8_000);
+            }
           }
         }
       }
@@ -344,7 +363,8 @@ function parseTargets(value: string): ProbeTarget[] {
       interaction !== 'open_search' &&
       interaction !== 'open_academic' &&
       interaction !== 'open_academic_computer' &&
-      interaction !== 'open_academic_computer_writing'
+      interaction !== 'open_academic_computer_writing' &&
+      interaction !== 'open_academic_computer_writing_melbourne'
     ) {
       throw new Error(`Probe target ${id} has an unsupported interaction`);
     }
