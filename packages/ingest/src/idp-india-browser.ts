@@ -266,22 +266,52 @@ async function collectFirstSessionFromPage(
   const testSelect = selects.nth(0);
   const moduleSelect = selects.nth(1);
   const citySelect = selects.nth(2);
-  await testSelect.selectOption(target.testId);
-  await waitForSelectOption(page, 1, null, target.moduleId);
-  await moduleSelect.selectOption(target.moduleId);
-  await waitForSelectOption(page, 2, null, target.cityId);
-  await citySelect.selectOption(target.cityId);
+  await atStage('select test', () => testSelect.selectOption(target.testId));
+  await atStage('wait for module', () =>
+    waitForSelectOption(page, 1, null, target.moduleId),
+  );
+  await atStage('select module', () =>
+    moduleSelect.selectOption(target.moduleId),
+  );
+  await atStage('wait for city', () =>
+    waitForSelectOption(page, 2, null, target.cityId),
+  );
+  await atStage('select city', () => citySelect.selectOption(target.cityId));
   const bookNow = page
     .getByRole('button', { name: 'Book Now', exact: true })
     .filter({ visible: true })
     .first();
-  await bookNow.waitFor({ state: 'visible' });
-  await waitUntilEnabled(bookNow);
-  await bookNow.click();
-  await page
-    .getByText('Select your preferred test date below', { exact: true })
-    .waitFor({ state: 'visible' });
+  await atStage('wait for Book Now', () =>
+    bookNow.waitFor({ state: 'visible' }),
+  );
+  await atStage('wait for Book Now enabled', () => waitUntilEnabled(bookNow));
+  await atStage('open date selection', () => bookNow.click());
+  const dateHeading = page.getByText('Select your preferred test date below', {
+    exact: true,
+  });
+  const dateSelectionOpened = await dateHeading
+    .waitFor({ state: 'visible', timeout: 8_000 })
+    .then(() => true)
+    .catch(() => false);
   await assertNoProviderChallenge(page);
+
+  const sourceUrl = new URL(IDP_INDIA_REGISTRATION_URL);
+  sourceUrl.searchParams.set(
+    'ID',
+    `${target.testId}^${target.moduleId}^${target.cityId}`,
+  );
+  if (!dateSelectionOpened) {
+    return {
+      sourceUrl: sourceUrl.toString(),
+      testId: target.testId,
+      testLabel: target.testLabel,
+      moduleId: target.moduleId,
+      moduleLabel: target.moduleLabel,
+      cityId: target.cityId,
+      cityLabel: target.cityLabel,
+      sessions: [],
+    };
+  }
 
   const dateLabels = await accessibleDateLabels(page);
   let selected:
@@ -307,11 +337,6 @@ async function collectFirstSessionFromPage(
     }
   }
 
-  const sourceUrl = new URL(IDP_INDIA_REGISTRATION_URL);
-  sourceUrl.searchParams.set(
-    'ID',
-    `${target.testId}^${target.moduleId}^${target.cityId}`,
-  );
   return {
     sourceUrl: sourceUrl.toString(),
     testId: target.testId,
@@ -548,4 +573,16 @@ async function assertNoProviderChallenge(page: Page): Promise<void> {
 
 function delay(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function atStage<T>(
+  stage: string,
+  task: () => Promise<T>,
+): Promise<T> {
+  try {
+    return await task();
+  } catch (cause) {
+    const message = cause instanceof Error ? cause.message : String(cause);
+    throw new Error(`IDP India ${stage}: ${message}`, { cause });
+  }
 }
