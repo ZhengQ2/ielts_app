@@ -10,6 +10,7 @@
   "scripts": {
     "ingest": "node --experimental-strip-types src/cli.ts",
     "availability": "node --experimental-strip-types src/availability-cli.ts",
+    "availability:idp-india-pilot": "node --experimental-strip-types src/idp-india-pilot-cli.ts",
     "localize": "node --experimental-strip-types src/localize-cli.ts",
     "neutral-pilot": "node --experimental-strip-types src/neutral-pilot-cli.ts",
     "apple-map-pilot": "node --experimental-strip-types src/apple-map-pilot-cli.ts",
@@ -17,5 +18,8 @@
   },
   "dependencies": {
     "@ielts-map/core": "*"
+  },
+  "devDependencies": {
+    "playwright-core": "^1.54.1"
   }
 }

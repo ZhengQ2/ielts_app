@@ -1,0 +1,75 @@
+name: IDP India availability pilot
+
+on:
+  workflow_dispatch:
+    inputs:
+      test_id:
+        description: "IDP test id (4 = IELTS on Computer)"
+        required: true
+        default: "4"
+      module_label:
+        description: "Visible module label"
+        required: true
+        default: "Academic"
+      city_id:
+        description: "IDP city id"
+        required: true
+        default: "60"
+      test_date:
+        description: "One future date to inspect (YYYY-MM-DD)"
+        required: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: idp-india-availability-pilot
+  cancel-in-progress: false
+
+jobs:
+  collect-one-public-session:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Locate Chrome
+        id: chrome
+        shell: bash
+        run: |
+          chrome_path="$(command -v google-chrome || command -v google-chrome-stable || true)"
+          if [[ -z "$chrome_path" ]]; then
+            echo "::error::Chrome is not installed on this isolated runner."
+            exit 1
+          fi
+          echo "path=$chrome_path" >> "$GITHUB_OUTPUT"
+
+      - name: Collect one public pre-login session
+        env:
+          M2_7_LIVE_EXPERIMENT: "true"
+          CHROME_PATH: ${{ steps.chrome.outputs.path }}
+          IDP_INDIA_TEST_ID: ${{ inputs.test_id }}
+          IDP_INDIA_MODULE_LABEL: ${{ inputs.module_label }}
+          IDP_INDIA_CITY_ID: ${{ inputs.city_id }}
+          IDP_INDIA_TEST_DATE: ${{ inputs.test_date }}
+        run: npm run availability:idp-india-pilot
+
+      - name: Upload diagnostic only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: idp-india-availability-pilot
+          path: .artifacts/provider-availability.idp-india.json
+          if-no-files-found: warn
+          retention-days: 14

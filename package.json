@@ -19,6 +19,7 @@
     "test": "node --test --experimental-strip-types \"packages/*/test/*.test.ts\"",
     "ingest": "npm run ingest --workspace @ielts-map/ingest --",
     "availability": "npm run availability --workspace @ielts-map/ingest --",
+    "availability:idp-india-pilot": "npm run availability:idp-india-pilot --workspace @ielts-map/ingest --",
     "localize": "npm run localize --workspace @ielts-map/ingest --",
     "neutral-pilot": "npm run neutral-pilot --workspace @ielts-map/ingest --",
     "apple-map-pilot": "npm run apple-map-pilot --workspace @ielts-map/ingest --",
