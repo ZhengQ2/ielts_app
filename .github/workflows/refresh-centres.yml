@@ -267,7 +267,7 @@ jobs:
           M2_7_LIVE_EXPERIMENT: "true"
           CHROME_PATH: ${{ steps.chrome.outputs.path }}
           IDP_INDIA_MIN_INTERVAL_MS: "3000"
-          IDP_INDIA_MAX_TARGETS: ${{ inputs.country == 'M2_7_IDP_INDIA_SMOKE' && '1' || '' }}
+          IDP_INDIA_MAX_TARGETS: ${{ inputs.country == 'M2_7_IDP_INDIA_SMOKE' && '10' || '' }}
         run: npm run availability:idp-india-full-scale
 
       - name: Upload IDP India diagnostic

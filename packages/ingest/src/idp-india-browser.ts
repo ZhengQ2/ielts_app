@@ -536,6 +536,7 @@ function cssEscape(value: string): string {
 async function accessibleDateLabels(
   page: Page,
 ): Promise<{ label: string; isoDate: string }[]> {
+  const today = new Date().toISOString().slice(0, 10);
   const labels = await page
     .locator('[aria-label]')
     .evaluateAll((elements) =>
@@ -556,6 +557,7 @@ async function accessibleDateLabels(
   }
   return [...parsed.entries()]
     .map(([label, isoDate]) => ({ label, isoDate }))
+    .filter(({ isoDate }) => isoDate >= today)
     .sort((a, b) => a.isoDate.localeCompare(b.isoDate));
 }
 
