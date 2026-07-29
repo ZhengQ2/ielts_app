@@ -9,7 +9,7 @@ interface ProbeTarget {
   id: string;
   source: 'idp_global' | 'idp_india' | 'idp_china' | 'bc_global';
   url: string;
-  interaction?: 'open_search' | 'open_academic';
+  interaction?: 'open_search' | 'open_academic' | 'open_academic_computer';
 }
 
 interface ControlSummary {
@@ -169,7 +169,8 @@ async function probeTarget(
     await page.waitForTimeout(5_000);
     if (
       target.interaction === 'open_search' ||
-      target.interaction === 'open_academic'
+      target.interaction === 'open_academic' ||
+      target.interaction === 'open_academic_computer'
     ) {
       await page
         .getByRole('button', { name: 'Accept and Proceed', exact: true })
@@ -177,9 +178,16 @@ async function probeTarget(
         .catch(() => undefined);
       await clickVisibleText(page, 'Find an IELTS test session');
       await page.waitForTimeout(5_000);
-      if (target.interaction === 'open_academic') {
+      if (
+        target.interaction === 'open_academic' ||
+        target.interaction === 'open_academic_computer'
+      ) {
         await clickVisibleText(page, 'IELTS Academic');
         await page.waitForTimeout(5_000);
+        if (target.interaction === 'open_academic_computer') {
+          await clickVisibleText(page, 'IELTS on Computer');
+          await page.waitForTimeout(5_000);
+        }
       }
     }
   } catch (cause) {
@@ -321,7 +329,8 @@ function parseTargets(value: string): ProbeTarget[] {
     if (
       interaction !== undefined &&
       interaction !== 'open_search' &&
-      interaction !== 'open_academic'
+      interaction !== 'open_academic' &&
+      interaction !== 'open_academic_computer'
     ) {
       throw new Error(`Probe target ${id} has an unsupported interaction`);
     }
