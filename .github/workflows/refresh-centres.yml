@@ -206,15 +206,9 @@ jobs:
           PROVIDER_PROBE_TARGETS_JSON: >-
             [
               {
-                "id": "idp-global-direct",
+                "id": "idp-global-wizard-test-type",
                 "source": "idp_global",
-                "url": "https://ielts.idp.com/book/IELTS?countryId=11&testCentreId=101&testCentreLocationId=46&testVenueId=102&testModuleId=1&isSELT=false&lang=en"
-              },
-              {
-                "id": "idp-global-wizard-search",
-                "source": "idp_global",
-                "url": "https://bxsearch.ielts.idp.com/wizard",
-                "interaction": "open_search"
+                "url": "https://bxsearch.ielts.idp.com/wizard/test-type"
               }
             ]
         run: npm run availability:surface-probe
