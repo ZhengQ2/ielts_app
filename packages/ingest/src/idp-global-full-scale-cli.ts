@@ -90,6 +90,10 @@ async function main(): Promise<void> {
         toTestStartDateLocal: isoDate(through),
         countryCode: target.countryCode,
         city: target.city,
+        languageSkills: ['L', 'R', 'W'],
+        testDeliveryFormats: ['CD'],
+        testCategories: ['IELTS'],
+        testModules: ['ACADEMIC'],
       };
       const broadRaw = await request.postJson(
         `city:${target.countryCode}:${target.city}`,
@@ -149,8 +153,8 @@ async function main(): Promise<void> {
       publicationEnabled: false,
       coverage: {
         discovery:
-          'All country/city values exposed for IELTS Academic on computer; ' +
-          'each city search is unfiltered so all returned categories and formats are included.',
+          'All country/city values exposed for standard IELTS Academic on ' +
+          'computer; city and venue searches retain that exact offering scope.',
         discoveredCountries: new Set(
           countryCities.map((target) => target.countryCode),
         ).size,
