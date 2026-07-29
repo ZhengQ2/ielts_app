@@ -224,9 +224,14 @@ async function discoverTargets(
 
   for (const test of tests) {
     await testSelect.selectOption(test.value);
+    // These are legacy AJAX-bound selects. Their old options remain in the
+    // DOM briefly after a parent changes, so a mere "is populated" check can
+    // pair stale module/city ids with the new test type.
+    await delay(1_000);
     await waitForPopulatedSelect(page, 1);
     for (const module of await nonPlaceholderOptions(moduleSelect)) {
       await moduleSelect.selectOption(module.value);
+      await delay(1_000);
       await waitForPopulatedSelect(page, 2);
       for (const city of await nonPlaceholderOptions(citySelect)) {
         targets.push({
