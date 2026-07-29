@@ -14,7 +14,8 @@ async function main(): Promise<void> {
   const requestBody = {
     order: 'A',
     page: 1,
-    pageSize: 1_000,
+    // The provider enforces a maximum of 25.
+    pageSize: 25,
     sortBy: 'TEST_START_DATE',
     fromTestStartDateLocal: isoDate(today),
     toTestStartDateLocal: isoDate(through),

@@ -102,3 +102,31 @@ Matching therefore requires both the exact offering dimensions and a uniquely st
 match. In an offline audit of the 43 computer-test locations observed in the public selector, 41
 matched uniquely; the generic Chandigarh and Chennai entries remained ambiguous. Ambiguous and
 unmatched sessions stay in diagnostics with `centreId: null`.
+
+## M2.7 provider validation outcome
+
+All live checks in this phase ran from manually dispatched GitHub Actions jobs. Provider-facing
+tests were not run from a developer machine.
+
+IDP Global exposes a public first-party session-search API. Its responses contain stable venue ids,
+venue names and addresses, coordinates, test category/module/format, local date/time, fee metadata,
+and `seatAvailability.remaining`. The directory keeps IELTS.org's original fee string authoritative;
+provider fee fields are diagnostic evidence only. A venue is called `available` only when the
+operator response explicitly reports more than zero remaining seats.
+
+The full-scale validator uses the exact confirmed standard Academic-on-computer request shape,
+scans every country/city returned for that offering, scopes a second request by the confirmed
+`testLocationIds` filter, deduplicates overlapping venue ids, and looks 45 days ahead. It has a
+1.5-second minimum interval, no concurrency, no retry, and immediate stop behavior for timeouts,
+403, 429, CAPTCHA/challenge text, non-JSON responses, or location-filter leakage. Publication
+remains disabled; results are uploaded as a 30-day diagnostic artifact.
+
+The other surfaces remain quarantined:
+
+- IDP India bulk discovery found 406 public test/module/city combinations and no CAPTCHA during the
+  bounded checks, but automatic calendar traversal could not yet produce defensible future
+  date/time evidence. The manual one-session workflow remains available; no bulk result is
+  published.
+- IDP China redirects to login and is excluded.
+- NEEA is British Council's China partner, not an IDP partner, and requires login plus reCAPTCHA.
+- British Council Global returned CDN HTTP 403 in the bounded Actions probe. No bypass was attempted.

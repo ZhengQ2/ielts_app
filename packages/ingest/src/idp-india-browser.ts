@@ -18,21 +18,6 @@ export interface IdpIndiaBrowserOptions {
   navigationTimeoutMs?: number;
 }
 
-export interface IdpIndiaDiscoveredTarget {
-  testId: string;
-  testLabel: string;
-  moduleId: string;
-  moduleLabel: string;
-  cityId: string;
-  cityLabel: string;
-}
-
-export interface IdpIndiaFullScaleResult {
-  discoveredTargets: IdpIndiaDiscoveredTarget[];
-  captures: IdpIndiaBrowserCapture[];
-  targetsWithoutSessions: IdpIndiaDiscoveredTarget[];
-}
-
 /**
  * Collect exactly one public, pre-login IDP India test/date result.
  *
@@ -58,72 +43,6 @@ export async function collectIdpIndiaCapture(
     });
     page.setDefaultTimeout(options.navigationTimeoutMs ?? 30_000);
     return await collectFromPage(page, target);
-  } finally {
-    await browser.close();
-  }
-}
-
-/**
- * Exercise every public test/module/city combination exposed by IDP India.
- *
- * The scan remains on the anonymous date-selection step. It stops on the first
- * challenge signal and never retries, logs in, or proceeds toward candidate
- * details.
- */
-export async function collectIdpIndiaFullScale(
-  options: IdpIndiaBrowserOptions & {
-    minimumIntervalMs?: number;
-    maximumTargets?: number | null;
-    onProgress?: (completed: number, total: number, label: string) => void;
-  } = {},
-): Promise<IdpIndiaFullScaleResult> {
-  const executablePath =
-    options.executablePath ?? findChromeExecutable(process.platform);
-  const minimumIntervalMs = Math.max(options.minimumIntervalMs ?? 3_000, 3_000);
-  const browser = await chromium.launch({
-    executablePath,
-    headless: true,
-  });
-  try {
-    const page = await browser.newPage({
-      locale: 'en-IN',
-      userAgent:
-        'ielts-map/0.1 full-scale availability validation ' +
-        '(+https://github.com/ZhengQ2/ielts_app)',
-    });
-    page.setDefaultTimeout(options.navigationTimeoutMs ?? 30_000);
-    const discovered = await discoverTargets(page);
-    const targets =
-      options.maximumTargets === null ||
-      options.maximumTargets === undefined
-        ? discovered
-        : discovered.slice(0, options.maximumTargets);
-    const captures: IdpIndiaBrowserCapture[] = [];
-    const targetsWithoutSessions: IdpIndiaDiscoveredTarget[] = [];
-    let lastStartedAt = 0;
-
-    for (const [index, target] of targets.entries()) {
-      const waitMs = Math.max(
-        0,
-        lastStartedAt + minimumIntervalMs - Date.now(),
-      );
-      if (waitMs > 0) await delay(waitMs);
-      lastStartedAt = Date.now();
-      options.onProgress?.(
-        index + 1,
-        targets.length,
-        `${target.testLabel} / ${target.moduleLabel} / ${target.cityLabel}`,
-      );
-      const capture = await collectFirstSessionFromPage(page, target);
-      if (capture.sessions.length) captures.push(capture);
-      else targetsWithoutSessions.push(target);
-    }
-
-    return {
-      discoveredTargets: discovered,
-      captures,
-      targetsWithoutSessions,
-    };
   } finally {
     await browser.close();
   }
@@ -205,125 +124,6 @@ async function collectFromPage(
   };
 }
 
-async function discoverTargets(
-  page: Page,
-): Promise<IdpIndiaDiscoveredTarget[]> {
-  await page.goto(IDP_INDIA_REGISTRATION_URL, {
-    waitUntil: 'domcontentloaded',
-  });
-  await assertNoProviderChallenge(page);
-  const selects = page.locator('select');
-  if ((await selects.count()) < 3) {
-    throw new Error('IDP India registration selects were not found');
-  }
-  const testSelect = selects.nth(0);
-  const moduleSelect = selects.nth(1);
-  const citySelect = selects.nth(2);
-  const tests = await nonPlaceholderOptions(testSelect);
-  const targets: IdpIndiaDiscoveredTarget[] = [];
-
-  for (const test of tests) {
-    await testSelect.selectOption(test.value);
-    await waitForPopulatedSelect(page, 1);
-    for (const module of await nonPlaceholderOptions(moduleSelect)) {
-      await moduleSelect.selectOption(module.value);
-      await waitForPopulatedSelect(page, 2);
-      for (const city of await nonPlaceholderOptions(citySelect)) {
-        targets.push({
-          testId: test.value,
-          testLabel: test.label,
-          moduleId: module.value,
-          moduleLabel: module.label,
-          cityId: city.value,
-          cityLabel: city.label,
-        });
-      }
-    }
-  }
-  if (!targets.length) {
-    throw new Error('IDP India selector discovery returned no targets');
-  }
-  return targets.sort(
-    (a, b) =>
-      a.testId.localeCompare(b.testId) ||
-      a.moduleId.localeCompare(b.moduleId) ||
-      a.cityLabel.localeCompare(b.cityLabel),
-  );
-}
-
-async function collectFirstSessionFromPage(
-  page: Page,
-  target: IdpIndiaDiscoveredTarget,
-): Promise<IdpIndiaBrowserCapture> {
-  await page.goto(IDP_INDIA_REGISTRATION_URL, {
-    waitUntil: 'domcontentloaded',
-  });
-  await assertNoProviderChallenge(page);
-  const selects = page.locator('select');
-  if ((await selects.count()) < 3) {
-    throw new Error('IDP India registration selects were not found');
-  }
-  const testSelect = selects.nth(0);
-  const moduleSelect = selects.nth(1);
-  const citySelect = selects.nth(2);
-  await testSelect.selectOption(target.testId);
-  await waitForSelectOption(page, 1, null, target.moduleId);
-  await moduleSelect.selectOption(target.moduleId);
-  await waitForSelectOption(page, 2, null, target.cityId);
-  await citySelect.selectOption(target.cityId);
-  const bookNow = page
-    .getByRole('button', { name: 'Book Now', exact: true })
-    .filter({ visible: true })
-    .first();
-  await bookNow.waitFor({ state: 'visible' });
-  await waitUntilEnabled(bookNow);
-  await bookNow.click();
-  await page
-    .getByText('Select your preferred test date below', { exact: true })
-    .waitFor({ state: 'visible' });
-  await assertNoProviderChallenge(page);
-
-  const dateLabels = await accessibleDateLabels(page);
-  let selected:
-    | { testDate: string; timeText: string | null; explicitlyAvailable: boolean }
-    | null = null;
-  for (const candidate of dateLabels) {
-    const locator = page
-      .locator(`[aria-label="${cssEscape(candidate.label)}"]`)
-      .filter({ visible: true })
-      .first();
-    if (!(await locator.count())) continue;
-    const ariaDisabled = await locator.getAttribute('aria-disabled');
-    if (ariaDisabled === 'true') continue;
-    await locator.click().catch(() => undefined);
-    const session = await readSelectedSession(page);
-    if (session) {
-      selected = {
-        testDate: candidate.isoDate,
-        timeText: session.timeText,
-        explicitlyAvailable: session.explicitlyAvailable,
-      };
-      break;
-    }
-  }
-
-  const sourceUrl = new URL(IDP_INDIA_REGISTRATION_URL);
-  sourceUrl.searchParams.set(
-    'ID',
-    `${target.testId}^${target.moduleId}^${target.cityId}`,
-  );
-  return {
-    sourceUrl: sourceUrl.toString(),
-    testId: target.testId,
-    testLabel: target.testLabel,
-    moduleId: target.moduleId,
-    moduleLabel: target.moduleLabel,
-    cityId: target.cityId,
-    cityLabel: target.cityLabel,
-    sessions: selected ? [selected] : [],
-  };
-}
-
 async function readSelectedSession(
   page: Page,
 ): Promise<{ timeText: string | null; explicitlyAvailable: boolean } | null> {
@@ -373,44 +173,6 @@ async function selectedOption(
           .trim() ?? '',
     };
   });
-}
-
-async function nonPlaceholderOptions(
-  locator: Locator,
-): Promise<{ value: string; label: string }[]> {
-  return await locator.evaluate((element) => {
-    if (!(element instanceof HTMLSelectElement)) {
-      throw new Error('Expected an HTML select element');
-    }
-    return Array.from(element.options)
-      .map((option) => ({
-        value: option.value.trim(),
-        label: (option.textContent ?? '').replace(/\s+/g, ' ').trim(),
-      }))
-      .filter(
-        (option) =>
-          option.value !== '' &&
-          option.value !== '0' &&
-          !/^select\b/i.test(option.label) &&
-          !/^test (?:module|city)$/i.test(option.label),
-      );
-  });
-}
-
-async function waitForPopulatedSelect(
-  page: Page,
-  selectIndex: number,
-): Promise<void> {
-  await page.waitForFunction((index) => {
-    const select = document.querySelectorAll('select').item(index);
-    if (!(select instanceof HTMLSelectElement)) return false;
-    return Array.from(select.options).some(
-      (option) =>
-        option.value.trim() !== '' &&
-        option.value.trim() !== '0' &&
-        !/^select\b/i.test(option.textContent?.trim() ?? ''),
-    );
-  }, selectIndex);
 }
 
 async function waitForSelectOption(
@@ -501,51 +263,4 @@ function isIsoDate(value: string): boolean {
 
 function cssEscape(value: string): string {
   return value.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
-}
-
-async function accessibleDateLabels(
-  page: Page,
-): Promise<{ label: string; isoDate: string }[]> {
-  const labels = await page
-    .locator('[aria-label]')
-    .evaluateAll((elements) =>
-      elements
-        .map((element) => element.getAttribute('aria-label')?.trim() ?? '')
-        .filter(Boolean),
-    );
-  const parsed = new Map<string, string>();
-  for (const label of labels) {
-    const timestamp = Date.parse(`${label} 00:00:00 UTC`);
-    if (
-      !/^[A-Za-z]+ \d{1,2}, \d{4}$/.test(label) ||
-      !Number.isFinite(timestamp)
-    ) {
-      continue;
-    }
-    parsed.set(label, new Date(timestamp).toISOString().slice(0, 10));
-  }
-  return [...parsed.entries()]
-    .map(([label, isoDate]) => ({ label, isoDate }))
-    .sort((a, b) => a.isoDate.localeCompare(b.isoDate));
-}
-
-async function assertNoProviderChallenge(page: Page): Promise<void> {
-  const text = await page.locator('body').innerText({ timeout: 5_000 });
-  const signal = [
-    /\bcaptcha\b/i,
-    /\brecaptcha\b/i,
-    /verify (?:that )?you are human/i,
-    /unusual traffic/i,
-    /access denied/i,
-    /security check/i,
-    /temporarily blocked/i,
-    /too many requests/i,
-  ].find((pattern) => pattern.test(text));
-  if (signal) {
-    throw new Error(`IDP India provider boundary detected: ${signal.source}`);
-  }
-}
-
-function delay(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
 }

@@ -344,31 +344,26 @@ British Council's public affiliate programme is a legitimate next commercial con
 publicly promise an availability feed. Full evidence and acceptance criteria are in
 `docs/AVAILABILITY_FEASIBILITY.md`.
 
-**M2.7 — Bounded provider-availability pilot — EXPERIMENTAL.** Public registration flows are being
-reassessed as provider-specific sources rather than one global feed. British Council is deliberately
-limited to country-level directory-presence experiments: 729 centres carry distinct booking queries,
-but collapse to 116 country rotations. The pilot coordinator:
+**M2.7 — Bounded provider-availability pilot — EXPERIMENTAL.** Provider surfaces were tested only
+from manually dispatched GitHub Actions jobs. Every collector is serial, has a hard minimum
+interval, stops without retry on the first timeout/403/429/challenge/source-shape error, and writes a
+diagnostic artifact rather than publishing to the website.
 
-1. checks at most eight countries per run, serially, with at least 15 seconds between checks;
-2. stops on the first timeout, throttle, challenge, source error or parser error;
-3. opens a 48-hour provider circuit breaker without retrying or bypassing the restriction;
-4. advances a persistent cursor and retains the last successful country observation after failure;
-5. records only `registration_listed` evidence—never dates or seats—and makes no live request unless
-   an isolated CI/AWS browser adapter is explicitly enabled.
-
-The British Council browser adapter is not enabled. A centre-by-centre BC session crawl is rejected
-as operationally infeasible: even ten checks per day would take about 73 days to rotate through the
-current dataset. An IDP India one-session collector is now available as a manual-only GitHub Actions
-experiment. It is hard-gated to CI/explicitly isolated workers, stops at the public date-selection
-step, produces only a diagnostic artifact and cannot publish to the product. The provider-neutral
-snapshot distinguishes an explicitly linked `available` statement from a merely
-`session_published` date, and attaches sessions to centres only when location and offering identity
-produce a unique match. An offline check of the 43 observed computer-test location labels matched 41
-uniquely; Chandigarh and Chennai correctly remained ambiguous.
-
-IDP Global is the next adapter after the one-target IDP India run validates the browser collector.
-An authorised British Council feed remains the only acceptable route to comprehensive fresh BC
-dates.
+- IDP Global exposes a first-party public session-search API with venue ids, exact venue metadata,
+  dates, offering dimensions and remaining-seat counts. The implemented full-scale validator is
+  deliberately restricted to the confirmed standard Academic-on-computer request shape and a
+  45-day horizon; it deduplicates venues returned by overlapping cities and never rewrites the
+  IELTS.org fee string.
+- IDP India retains the manually targeted one-session pilot. A bulk selector experiment discovered
+  406 test/module/city combinations without CAPTCHA, but its automatic calendar traversal could not
+  yet distinguish future session evidence safely. The bulk adapter was removed rather than
+  publishing default/past calendar state.
+- IDP China is excluded because its public booking route redirects to login.
+- NEEA is excluded. It is a British Council-only China partner and requires login plus reCAPTCHA;
+  it is not an IDP source.
+- British Council Global is excluded after the bounded GitHub Actions probe received CDN HTTP 403.
+  No bypass was attempted. An authorised feed remains the acceptable route to comprehensive BC
+  dates.
 
 **M3 — Objective score and compliant Google enrichment — PLANNED.** Reassess whether ratings add
 enough user value to justify live API cost and compliance work before implementing them.

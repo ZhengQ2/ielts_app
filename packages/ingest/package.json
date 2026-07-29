@@ -12,7 +12,6 @@
     "availability": "node --experimental-strip-types src/availability-cli.ts",
     "availability:idp-global-full-scale": "node --experimental-strip-types src/idp-global-full-scale-cli.ts",
     "availability:idp-india-pilot": "node --experimental-strip-types src/idp-india-pilot-cli.ts",
-    "availability:idp-india-full-scale": "node --experimental-strip-types src/idp-india-full-scale-cli.ts",
     "availability:idp-global-api-probe": "node --experimental-strip-types src/idp-global-api-probe-cli.ts",
     "availability:surface-probe": "node --experimental-strip-types src/provider-surface-probe-cli.ts",
     "localize": "node --experimental-strip-types src/localize-cli.ts",
