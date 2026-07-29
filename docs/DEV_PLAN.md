@@ -353,7 +353,10 @@ diagnostic artifact rather than publishing to the website.
   dates, offering dimensions and remaining-seat counts. The implemented full-scale validator is
   deliberately restricted to the confirmed standard Academic-on-computer request shape and a
   45-day horizon; it deduplicates venues returned by overlapping cities and never rewrites the
-  IELTS.org fee string.
+  IELTS.org fee string. The 2026-07-29 full-scale GitHub Actions gate scanned all 357 exposed cities
+  and all 501 discovered venues across 74 countries: 859/859 serial requests succeeded without a
+  provider boundary, 8,128 future sessions were parsed, and no capture was rejected. Publication
+  remains disabled until unmatched and ambiguous centre links are reviewed.
 - IDP India retains the manually targeted one-session pilot. A bulk selector experiment discovered
   406 test/module/city combinations without CAPTCHA, but its automatic calendar traversal could not
   yet distinguish future session evidence safely. The bulk adapter was removed rather than

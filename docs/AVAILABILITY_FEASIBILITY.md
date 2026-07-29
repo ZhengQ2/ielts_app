@@ -121,6 +121,12 @@ scans every country/city returned for that offering, scopes a second request by 
 403, 429, CAPTCHA/challenge text, non-JSON responses, or location-filter leakage. Publication
 remains disabled; results are uploaded as a 30-day diagnostic artifact.
 
+The 2026-07-29 full-scale GitHub Actions run covered all 357 exposed cities and 501 discovered
+venues in 74 countries. All 859 serial requests succeeded, with no challenge signal, timeout,
+HTTP 403/429, source-shape failure, or rejected capture. It parsed 8,128 explicitly available
+future sessions: 6,360 matched a directory centre automatically, 55 were ambiguous, and 1,713 were
+unmatched. Ambiguous and unmatched records remain unpublished rather than being guessed.
+
 The other surfaces remain quarantined:
 
 - IDP India bulk discovery found 406 public test/module/city combinations and no CAPTCHA during the

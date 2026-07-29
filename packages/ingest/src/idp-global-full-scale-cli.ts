@@ -348,6 +348,18 @@ function parseCountryCities(value: unknown): CountryCity[] {
 
 function parseLocationIds(value: unknown): string[] {
   const root = asRecord(value, 'session search response');
+  if (root.testLocations === null || root.testLocations === undefined) {
+    if (
+      root.totalCount === 0 &&
+      Array.isArray(root.items) &&
+      root.items.length === 0
+    ) {
+      return [];
+    }
+    throw new ProviderBoundaryError(
+      'non-empty session response omitted testLocations',
+    );
+  }
   const locations = asArray(root.testLocations, 'testLocations');
   const ids = locations.map((raw, index) =>
     requiredText(
