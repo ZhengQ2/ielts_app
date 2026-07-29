@@ -21,6 +21,7 @@
     "availability": "npm run availability --workspace @ielts-map/ingest --",
     "localize": "npm run localize --workspace @ielts-map/ingest --",
     "neutral-pilot": "npm run neutral-pilot --workspace @ielts-map/ingest --",
+    "apple-map-pilot": "npm run apple-map-pilot --workspace @ielts-map/ingest --",
     "deploy:aws": "bash scripts/deploy-aws.sh"
   },
   "devDependencies": {

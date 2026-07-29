@@ -168,6 +168,72 @@ Only after this slice produces an acceptable precision/coverage result should
 the iOS MapKit shell be built. Otherwise the app would launch with a map that
 correctly hides almost every pin.
 
+## Apple search accuracy launch gate
+
+On-demand `MKLocalSearch` is a possible list-to-detail fallback, not assumed
+ground truth. Run the repeatable diagnostic with:
+
+```bash
+npm run apple-map-pilot -- --limit 50 --delay-ms 750
+```
+
+The harness selects internally verified street/rooftop controls across the 25
+largest markets. It withholds each coordinate from Apple, searches by canonical
+name/address inside a coarse country region, ranks candidates using identity
+evidence, and only then measures agreement with the control. Raw and analyzed
+reports are checkpointed under `.artifacts/`.
+
+The report fails closed instead of publishing an accuracy rate when more than
+25% of queries error or more than 25% of returned candidates fall outside the
+required country. A headless macOS command-line run is not a launch
+measurement: MapKit service routing can differ from an iOS Simulator or
+physical device.
+
+Before an Apple-search fallback ships:
+
+1. run at least 300 deterministic controls on the supported iOS deployment
+   target, covering at least 10 controls in each of the 25 largest markets;
+2. require zero wrong-country or wrong-city selections;
+3. require at least 95% exact agreement within 250 m, with the lower bound of
+   the 95% confidence interval at or above 90%;
+4. require at least 99% combined exact/campus agreement within 750 m;
+5. manually review every disagreement/no-result and a stratified 10% of
+   agreements against operator or venue evidence; and
+6. suppress rather than pin any result that lacks independent venue/address
+   identity evidence.
+
+These thresholds measure whether an Apple-only, user-initiated search is safe
+to show. They do not convert an Apple result into a basemap-neutral coordinate
+or authorize bulk background geocoding.
+
+### First iOS Simulator result
+
+On 2026-07-29, the harness ran successfully inside an iOS 17 iPhone 15 Pro
+Simulator for 50 deterministic controls across 25 countries:
+
+| Outcome | Centres | Full-sample rate |
+|---|---:|---:|
+| Exact agreement, within 250 m | 21 | 42% |
+| Campus agreement, 250–750 m | 6 | 12% |
+| In-country disagreement, over 750 m | 16 | 32% |
+| No acceptable in-country result | 7 | 14% |
+| Exact or campus agreement | 27 | 54% |
+
+The environment gate passed: 14 of 100 query forms errored, eight of 86 raw
+candidates fell outside the expected country and were rejected, and no
+accuracy result was derived from those rejected candidates. The 95% confidence
+interval for exact full-sample coverage was 29.4–55.8%; for exact-or-campus
+coverage it was 40.4–67.0%.
+
+This rejects runtime Apple search as a worldwide launch strategy. Even the
+unrealistic best case—assuming every in-country disagreement was caused by an
+incorrect control—could cover at most the 43 centres for which Apple returned
+an acceptable in-country candidate (86%, 95% interval 73.8–93.0%). A larger
+300-control run cannot rescue the current method, so it should be repeated only
+after the query/data strategy materially changes. Market-specific pilots may
+still justify Apple search in a limited country where its own sample clears the
+same launch thresholds.
+
 ## Remaining policy work
 
 - Obtain written Google confirmation about use of Google Maps Platform in an

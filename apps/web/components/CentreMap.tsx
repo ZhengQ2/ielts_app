@@ -127,7 +127,25 @@ export default function CentreMap({
 
         mapListeners.current = [
           instance.addListener('idle', reportViewport),
-          instance.addListener('click', () => onSelectRef.current(null)),
+          instance.addListener(
+            'click',
+            (event: google.maps.MapMouseEvent) => {
+              // AdvancedMarker content lives inside Google's overlay panes.
+              // Depending on the input/browser, Google can surface the same
+              // pointer interaction as both a DOM click on the marker and a
+              // MapMouseEvent on the map. Never let that second event clear a
+              // selection which the marker has just made.
+              const target = event.domEvent.target;
+              if (
+                event.domEvent.defaultPrevented ||
+                (target instanceof Element &&
+                  target.closest('.google-map-pin'))
+              ) {
+                return;
+              }
+              onSelectRef.current(null);
+            },
+          ),
         ];
         setMapReady(true);
       })
@@ -171,23 +189,20 @@ export default function CentreMap({
       const markerElements: google.maps.marker.AdvancedMarkerElement[] = [];
 
       for (const centre of located) {
-        const href = centreDetailHref(
-          centre.ieltsOrgSlug,
-          detailFilterSearchRef.current,
-        );
-        const el = document.createElement('a');
-        el.href = href;
+        const el = document.createElement('button');
+        el.type = 'button';
         el.setAttribute('aria-label', `${centre.name} (${centre.operator})`);
         el.className = 'google-map-pin';
         el.style.setProperty('--pin', operatorStyle(centre.operator).base);
         el.dataset.shape = operatorShape(centre.operator);
 
         el.addEventListener('click', (event) => {
+          // Prevent the same native event from being interpreted as a map
+          // background click. A marker used to be an anchor; when Maps
+          // remapped a later touch/pointer click, its default navigation could
+          // win and make the page appear to jump to the top.
+          event.preventDefault();
           event.stopPropagation();
-          el.href = centreDetailHref(
-            centre.ieltsOrgSlug,
-            detailFilterSearchRef.current,
-          );
           if (
             event.metaKey ||
             event.ctrlKey ||
@@ -197,7 +212,6 @@ export default function CentreMap({
           ) {
             return;
           }
-          event.preventDefault();
           onSelectRef.current(centre.id);
         });
         el.addEventListener('dblclick', (event) => {
@@ -282,22 +296,6 @@ export default function CentreMap({
       cancelled = true;
     };
   }, [markerSignature, mapReady]);
-
-  // Marker links are real anchors for keyboard and modified-click support.
-  // Their filter query can change without any geographic marker changing, so
-  // update the hrefs in place instead of rebuilding and refitting the map.
-  useEffect(() => {
-    for (const [id, marker] of markers.current) {
-      const centre = centresRef.current.find((item) => item.id === id);
-      const element = marker.content;
-      if (centre && element instanceof HTMLAnchorElement) {
-        element.href = centreDetailHref(
-          centre.ieltsOrgSlug,
-          detailFilterSearch,
-        );
-      }
-    }
-  }, [detailFilterSearch, markerSignature]);
 
   // Hover changes marker emphasis only; it never changes the camera.
   useEffect(() => {
@@ -396,6 +394,8 @@ export default function CentreMap({
           --scale: 1;
           --rotate: 0deg;
           display: block;
+          appearance: none;
+          padding: 0;
           user-select: none;
           -webkit-user-select: none;
           width: 16px;
