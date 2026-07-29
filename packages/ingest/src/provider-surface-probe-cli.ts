@@ -9,7 +9,7 @@ interface ProbeTarget {
   id: string;
   source: 'idp_global' | 'idp_india' | 'idp_china' | 'bc_global';
   url: string;
-  interaction?: 'open_search';
+  interaction?: 'open_search' | 'open_academic';
 }
 
 interface ControlSummary {
@@ -167,17 +167,20 @@ async function probeTarget(
     });
     status = response?.status() ?? null;
     await page.waitForTimeout(5_000);
-    if (target.interaction === 'open_search') {
+    if (
+      target.interaction === 'open_search' ||
+      target.interaction === 'open_academic'
+    ) {
       await page
         .getByRole('button', { name: 'Accept and Proceed', exact: true })
         .click({ timeout: 5_000 })
         .catch(() => undefined);
-      await page
-        .getByText('Find an IELTS test session', { exact: true })
-        .filter({ visible: true })
-        .first()
-        .click();
+      await clickVisibleText(page, 'Find an IELTS test session');
       await page.waitForTimeout(5_000);
+      if (target.interaction === 'open_academic') {
+        await clickVisibleText(page, 'IELTS Academic');
+        await page.waitForTimeout(5_000);
+      }
     }
   } catch (cause) {
     error = errorMessage(cause);
@@ -315,7 +318,11 @@ function parseTargets(value: string): ProbeTarget[] {
     ) {
       throw new Error(`Probe target ${id} has an unapproved URL`);
     }
-    if (interaction !== undefined && interaction !== 'open_search') {
+    if (
+      interaction !== undefined &&
+      interaction !== 'open_search' &&
+      interaction !== 'open_academic'
+    ) {
       throw new Error(`Probe target ${id} has an unsupported interaction`);
     }
     return {
@@ -325,6 +332,17 @@ function parseTargets(value: string): ProbeTarget[] {
       interaction,
     };
   });
+}
+
+async function clickVisibleText(
+  page: import('playwright-core').Page,
+  text: string,
+): Promise<void> {
+  await page
+    .getByText(text, { exact: true })
+    .filter({ visible: true })
+    .first()
+    .click();
 }
 
 function allowedHost(source: ProbeTarget['source'], hostname: string): boolean {
