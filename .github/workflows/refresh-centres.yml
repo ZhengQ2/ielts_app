@@ -23,6 +23,7 @@ concurrency:
 
 jobs:
   refresh:
+    if: inputs.country != 'M2_7_RESPONSE_SHAPES'
     runs-on: ubuntu-latest
     timeout-minutes: 60
 
@@ -159,3 +160,72 @@ jobs:
             git commit -m "Update geocode cache [skip ci]"
             git push
           fi
+
+  provider-response-shapes:
+    if: inputs.country == 'M2_7_RESPONSE_SHAPES'
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run unit tests
+        run: npm test
+
+      - name: Run typecheck
+        run: npm run typecheck
+
+      - name: Locate Chrome
+        id: chrome
+        shell: bash
+        run: |
+          chrome_path="$(command -v google-chrome || command -v google-chrome-stable || true)"
+          if [[ -z "$chrome_path" ]]; then
+            echo "::error::Chrome is not installed on this isolated runner."
+            exit 1
+          fi
+          echo "path=$chrome_path" >> "$GITHUB_OUTPUT"
+
+      - name: Capture public response shapes
+        env:
+          M2_7_DISCOVERY_EXPERIMENT: "true"
+          CHROME_PATH: ${{ steps.chrome.outputs.path }}
+          PROVIDER_PROBE_INTERVAL_MS: "15000"
+          PROVIDER_PROBE_TARGETS_JSON: >-
+            [
+              {
+                "id": "idp-global-direct",
+                "source": "idp_global",
+                "url": "https://ielts.idp.com/book/IELTS?countryId=11&testCentreId=101&testCentreLocationId=46&testVenueId=102&testModuleId=1&isSELT=false&lang=en"
+              },
+              {
+                "id": "idp-global-wizard-search",
+                "source": "idp_global",
+                "url": "https://bxsearch.ielts.idp.com/wizard",
+                "interaction": "open_search"
+              }
+            ]
+        run: npm run availability:surface-probe
+
+      - name: Upload provider diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: provider-response-shapes
+          path: |
+            .artifacts/provider-surface-probe.json
+            .artifacts/provider-surface-probe/*.png
+          if-no-files-found: warn
+          retention-days: 14
