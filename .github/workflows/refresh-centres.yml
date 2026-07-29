@@ -198,7 +198,7 @@ jobs:
           fi
           echo "path=$chrome_path" >> "$GITHUB_OUTPUT"
 
-      - name: Inspect IDP Global wizard test-type step
+      - name: Capture IDP Global date results
         env:
           M2_7_DISCOVERY_EXPERIMENT: "true"
           CHROME_PATH: ${{ steps.chrome.outputs.path }}
@@ -206,10 +206,10 @@ jobs:
           PROVIDER_PROBE_TARGETS_JSON: >-
             [
               {
-                "id": "idp-global-wizard-test-type",
+                "id": "idp-global-date-results",
                 "source": "idp_global",
                 "url": "https://bxsearch.ielts.idp.com/wizard",
-                "interaction": "open_search"
+                "interaction": "open_academic_computer_writing_melbourne_date"
               }
             ]
         run: npm run availability:surface-probe
