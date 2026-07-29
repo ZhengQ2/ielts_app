@@ -7,6 +7,7 @@ import type {
 import {
   nameKey,
   nameSimilarity,
+  normaliseText,
   offeringCategory,
   offeringDeliveryMode,
   offeringModule,
@@ -346,7 +347,7 @@ function offeringIdentity(
 }
 
 function moduleFromProvider(value: string): TestModule | null {
-  const key = nameKey(value);
+  const key = normaliseText(value);
   if (key === 'academic') return 'academic';
   if (key === 'general training') return 'general_training';
   if (key.includes('life skills')) return 'life_skills';
@@ -354,7 +355,7 @@ function moduleFromProvider(value: string): TestModule | null {
 }
 
 function categoryFromProvider(value: string): TestCategory | null {
-  const key = nameKey(value);
+  const key = normaliseText(value);
   if (key === 'ielts') return 'standard';
   if (key.includes('ukvi') || key.includes('selt') || key.includes('life skills')) {
     return 'ukvi_selt';
@@ -366,7 +367,7 @@ function deliveryFromProvider(
   format: string,
   languageSkills: readonly string[],
 ): OfferingDeliveryMode | null | undefined {
-  const key = nameKey(format);
+  const key = normaliseText(format);
   if (key === 'cd' || key.includes('computer')) {
     return 'computer_delivered';
   }
