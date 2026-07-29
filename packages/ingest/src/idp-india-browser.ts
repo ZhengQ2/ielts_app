@@ -332,7 +332,7 @@ async function collectFirstSessionFromPage(
     if (ariaDisabled === 'true') continue;
     await locator.click().catch(() => undefined);
     const session = await readSelectedSession(page);
-    if (session) {
+    if (session?.timeText) {
       selected = {
         testDate: candidate.isoDate,
         timeText: session.timeText,
