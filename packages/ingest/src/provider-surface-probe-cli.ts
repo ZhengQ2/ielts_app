@@ -174,6 +174,7 @@ async function probeTarget(
         .catch(() => undefined);
       await page
         .getByText('Find an IELTS test session', { exact: true })
+        .filter({ visible: true })
         .first()
         .click();
       await page.waitForTimeout(5_000);
