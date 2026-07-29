@@ -23,7 +23,7 @@ concurrency:
 
 jobs:
   refresh:
-    if: inputs.country != 'M2_7_FULL_SCALE' && inputs.country != 'M2_7_IDP_INDIA_SMOKE'
+    if: inputs.country != 'M2_7_FULL_SCALE' && inputs.country != 'M2_7_IDP_INDIA_SMOKE' && inputs.country != 'M2_7_IDP_GLOBAL'
     runs-on: ubuntu-latest
     timeout-minutes: 60
 
@@ -162,7 +162,7 @@ jobs:
           fi
 
   m2-7-preflight:
-    if: inputs.country == 'M2_7_FULL_SCALE' || inputs.country == 'M2_7_IDP_INDIA_SMOKE'
+    if: inputs.country == 'M2_7_FULL_SCALE' || inputs.country == 'M2_7_IDP_INDIA_SMOKE' || inputs.country == 'M2_7_IDP_GLOBAL'
     permissions:
       contents: read
     runs-on: ubuntu-latest
@@ -194,7 +194,7 @@ jobs:
         run: npm run build
 
   m2-7-idp-global:
-    if: inputs.country == 'M2_7_FULL_SCALE'
+    if: inputs.country == 'M2_7_FULL_SCALE' || inputs.country == 'M2_7_IDP_GLOBAL'
     permissions:
       contents: read
     needs: m2-7-preflight
@@ -218,7 +218,7 @@ jobs:
         env:
           M2_7_LIVE_EXPERIMENT: "true"
           IDP_GLOBAL_MIN_INTERVAL_MS: "1500"
-          IDP_GLOBAL_HORIZON_DAYS: "180"
+          IDP_GLOBAL_HORIZON_DAYS: "45"
         run: npm run availability:idp-global-full-scale
 
       - name: Upload IDP Global diagnostic

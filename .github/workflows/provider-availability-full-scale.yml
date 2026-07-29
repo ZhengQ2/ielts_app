@@ -79,7 +79,7 @@ jobs:
         env:
           M2_7_LIVE_EXPERIMENT: "true"
           IDP_GLOBAL_MIN_INTERVAL_MS: "1500"
-          IDP_GLOBAL_HORIZON_DAYS: "180"
+          IDP_GLOBAL_HORIZON_DAYS: "45"
         run: npm run availability:idp-global-full-scale
 
       - name: Upload IDP Global diagnostic

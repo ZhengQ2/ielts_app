@@ -45,7 +45,7 @@ async function main(): Promise<void> {
     process.env.IDP_GLOBAL_MIN_INTERVAL_MS ?? '1500',
   );
   const horizonDays = boundedInteger(
-    process.env.IDP_GLOBAL_HORIZON_DAYS ?? '180',
+    process.env.IDP_GLOBAL_HORIZON_DAYS ?? '45',
     1,
     365,
     'IDP_GLOBAL_HORIZON_DAYS',
@@ -71,7 +71,7 @@ async function main(): Promise<void> {
       await fs.readFile(path.join(DATA_DIR, 'centres.all.json'), 'utf8'),
     ) as CentreDataset;
     const captures: IdpGlobalSearchCapture[] = [];
-    let discoveredLocations = 0;
+    const discoveredLocationIds = new Set<string>();
     const today = new Date();
     const through = new Date(today);
     through.setUTCDate(through.getUTCDate() + horizonDays);
@@ -98,9 +98,10 @@ async function main(): Promise<void> {
         diagnostics,
       );
       const locationIds = parseLocationIds(broadRaw);
-      discoveredLocations += locationIds.length;
 
       for (const locationId of locationIds) {
+        if (discoveredLocationIds.has(locationId)) continue;
+        discoveredLocationIds.add(locationId);
         const scopedRaw = await request.postJson(
           `location:${locationId}`,
           SESSION_SEARCH_URL,
@@ -137,7 +138,7 @@ async function main(): Promise<void> {
     const problems = idpGlobalAvailabilitySafetyProblems(
       snapshot,
       countryCities.length,
-      discoveredLocations,
+      discoveredLocationIds.size,
     );
     report = {
       version: 1,
@@ -155,7 +156,7 @@ async function main(): Promise<void> {
         ).size,
         discoveredCities: discovered.length,
         scannedCities: countryCities.length,
-        discoveredLocations,
+        discoveredLocations: discoveredLocationIds.size,
         scannedLocations: captures.length,
         horizonDays,
         truncatedByEnvironment: maxCities !== null,
