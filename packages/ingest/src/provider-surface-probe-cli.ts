@@ -9,6 +9,7 @@ interface ProbeTarget {
   id: string;
   source: 'idp_global' | 'idp_india' | 'idp_china' | 'bc_global';
   url: string;
+  interaction?: 'open_search';
 }
 
 interface ControlSummary {
@@ -41,7 +42,10 @@ interface ProbeResult {
   network: {
     status: number;
     resourceType: string;
+    method: string;
     url: string;
+    postData: string | null;
+    responseBody: string | null;
   }[];
   error: string | null;
 }
@@ -124,6 +128,7 @@ async function probeTarget(
   const page = await context.newPage();
   page.setDefaultTimeout(30_000);
   const network: ProbeResult['network'] = [];
+  const responseTasks: Promise<void>[] = [];
   page.on('response', (response) => {
     const resourceType = response.request().resourceType();
     if (
@@ -131,11 +136,25 @@ async function probeTarget(
       resourceType === 'fetch' ||
       response.status() >= 400
     ) {
-      network.push({
+      const entry: ProbeResult['network'][number] = {
         status: response.status(),
         resourceType,
+        method: response.request().method(),
         url: sanitizeUrl(response.url()),
-      });
+        postData: sanitizePostData(response.request().postData()),
+        responseBody: null,
+      };
+      network.push(entry);
+      if (isApprovedResponseBody(response)) {
+        responseTasks.push(
+          response
+            .text()
+            .then((body) => {
+              entry.responseBody = body.slice(0, 100_000);
+            })
+            .catch(() => undefined),
+        );
+      }
     }
   });
 
@@ -148,9 +167,21 @@ async function probeTarget(
     });
     status = response?.status() ?? null;
     await page.waitForTimeout(5_000);
+    if (target.interaction === 'open_search') {
+      await page
+        .getByRole('button', { name: 'Accept and Proceed', exact: true })
+        .click({ timeout: 5_000 })
+        .catch(() => undefined);
+      await page
+        .getByText('Find an IELTS test session', { exact: true })
+        .first()
+        .click();
+      await page.waitForTimeout(5_000);
+    }
   } catch (cause) {
     error = errorMessage(cause);
   }
+  await Promise.allSettled(responseTasks);
 
   const finalUrl = page.url() || null;
   const title = await safeText(() => page.title());
@@ -261,6 +292,10 @@ function parseTargets(value: string): ProbeTarget[] {
     const id = String(record.id ?? '').trim();
     const source = String(record.source ?? '').trim();
     const url = String(record.url ?? '').trim();
+    const interaction =
+      record.interaction === undefined
+        ? undefined
+        : String(record.interaction).trim();
     if (!id || !/^[a-z0-9_-]+$/i.test(id)) {
       throw new Error(`Probe target ${index} has an invalid id`);
     }
@@ -279,10 +314,14 @@ function parseTargets(value: string): ProbeTarget[] {
     ) {
       throw new Error(`Probe target ${id} has an unapproved URL`);
     }
+    if (interaction !== undefined && interaction !== 'open_search') {
+      throw new Error(`Probe target ${id} has an unsupported interaction`);
+    }
     return {
       id,
       source,
       url: parsedUrl.toString(),
+      interaction,
     };
   });
 }
@@ -333,6 +372,55 @@ function sanitizeUrl(value: string): string {
     return url.toString();
   } catch {
     return value.slice(0, 2_000);
+  }
+}
+
+function sanitizePostData(value: string | null): string | null {
+  if (!value) return null;
+  if (value.length > 20_000) return `${value.slice(0, 20_000)}…`;
+  try {
+    const parsed = JSON.parse(value) as unknown;
+    return JSON.stringify(redactSensitiveFields(parsed));
+  } catch {
+    const params = new URLSearchParams(value);
+    if ([...params.keys()].length < 1) return value;
+    for (const key of Array.from(params.keys())) {
+      if (/token|session|secret|signature|key|auth|cookie|password/i.test(key)) {
+        params.set(key, '[redacted]');
+      }
+    }
+    return params.toString();
+  }
+}
+
+function redactSensitiveFields(value: unknown): unknown {
+  if (Array.isArray(value)) return value.map(redactSensitiveFields);
+  if (!value || typeof value !== 'object') return value;
+  return Object.fromEntries(
+    Object.entries(value).map(([key, candidate]) => [
+      key,
+      /token|session|secret|signature|key|auth|cookie|password/i.test(key)
+        ? '[redacted]'
+        : redactSensitiveFields(candidate),
+    ]),
+  );
+}
+
+function isApprovedResponseBody(
+  response: import('playwright-core').Response,
+): boolean {
+  const contentType = response.headers()['content-type'] ?? '';
+  if (!/json/i.test(contentType)) return false;
+  try {
+    const url = new URL(response.url());
+    const host = url.hostname.toLowerCase();
+    return (
+      (host === 'ielts.idp.com' &&
+        url.pathname.startsWith('/book/Json/')) ||
+      host === 'api.bxsearch.prod.ielts.com'
+    );
+  } catch {
+    return false;
   }
 }
 
