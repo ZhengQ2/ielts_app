@@ -65,6 +65,9 @@ export default async function CentrePage({ params }: Props) {
   const correctionUrl = correctionReportUrl(centre);
   const pickerStart = locationPickerStart(centre);
   const availability = availabilityGuidance(centre);
+  const showAvailabilityWarning =
+    availability.status === 'future_location' ||
+    availability.status === 'not_accepting_registrations';
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-8">
@@ -139,9 +142,11 @@ export default async function CentrePage({ params }: Props) {
           </a>
         )}
       </div>
-      <div className="mt-3 rounded-lg border border-line bg-surface p-3">
-        <CentreAvailabilityNotice centre={centre} />
-      </div>
+      {showAvailabilityWarning && (
+        <div className="mt-3 rounded-lg border border-line bg-surface p-3">
+          <CentreAvailabilityNotice centre={centre} />
+        </div>
+      )}
       <p className="mt-3 text-sm text-muted">
         For other after-test services, please contact the test centre.
       </p>
@@ -199,11 +204,9 @@ export default async function CentrePage({ params }: Props) {
               {centre.geo.source.replace('_', ' ')}
             </Row>
           )}
-          <Row label="Availability evidence">
-            {availability.operatorVerified
-              ? 'Operator-published status'
-              : 'No fresh supported status'}
-          </Row>
+          {showAvailabilityWarning && (
+            <Row label="Opening-status evidence">Operator-published status</Row>
+          )}
           <Row label="Source pages">{centre.sources.length}</Row>
         </dl>
         <ul className="mt-3 flex flex-col gap-1 text-sm">
