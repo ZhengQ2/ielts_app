@@ -1,0 +1,148 @@
+name: Provider availability full-scale validation
+
+on:
+  workflow_dispatch:
+    inputs:
+      provider:
+        description: "Provider surface to validate"
+        required: true
+        default: "all"
+        type: choice
+        options:
+          - all
+          - idp_global
+          - idp_india
+      confirmed:
+        description: "Run the full serial provider scan"
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+concurrency:
+  group: provider-availability-full-scale
+  cancel-in-progress: false
+
+jobs:
+  verify-code:
+    if: inputs.confirmed
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run unit tests
+        run: npm test
+
+      - name: Run typecheck
+        run: npm run typecheck
+
+      - name: Build production static export
+        env:
+          NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: ${{ secrets.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY }}
+          NEXT_PUBLIC_GOOGLE_MAP_ID: ${{ secrets.NEXT_PUBLIC_GOOGLE_MAP_ID }}
+        run: npm run build
+
+  idp-global:
+    if: inputs.confirmed && (inputs.provider == 'all' || inputs.provider == 'idp_global')
+    needs: verify-code
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Scan every discovered IDP Global city and venue serially
+        env:
+          M2_7_LIVE_EXPERIMENT: "true"
+          IDP_GLOBAL_MIN_INTERVAL_MS: "1500"
+          IDP_GLOBAL_HORIZON_DAYS: "180"
+        run: npm run availability:idp-global-full-scale
+
+      - name: Upload IDP Global diagnostic
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: idp-global-full-scale
+          path: .artifacts/provider-availability.idp-global.full-scale.json
+          if-no-files-found: error
+          retention-days: 30
+
+  idp-india:
+    if: inputs.confirmed && (inputs.provider == 'all' || inputs.provider == 'idp_india')
+    needs: verify-code
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Locate Chrome
+        id: chrome
+        shell: bash
+        run: |
+          chrome_path="$(command -v google-chrome || command -v google-chrome-stable || true)"
+          if [[ -z "$chrome_path" ]]; then
+            echo "::error::Chrome is not installed on this isolated runner."
+            exit 1
+          fi
+          echo "path=$chrome_path" >> "$GITHUB_OUTPUT"
+
+      - name: Scan every IDP India public test/module/city target serially
+        env:
+          M2_7_LIVE_EXPERIMENT: "true"
+          CHROME_PATH: ${{ steps.chrome.outputs.path }}
+          IDP_INDIA_MIN_INTERVAL_MS: "3000"
+        run: npm run availability:idp-india-full-scale
+
+      - name: Upload IDP India diagnostic
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: idp-india-full-scale
+          path: .artifacts/provider-availability.idp-india.full-scale.json
+          if-no-files-found: error
+          retention-days: 30
+
+  excluded-providers:
+    if: inputs.confirmed
+    runs-on: ubuntu-latest
+    steps:
+      - name: Record deliberate exclusions
+        run: |
+          echo "IDP China excluded: its public route redirects to login."
+          echo "NEEA excluded: British Council-only China partner requiring login and reCAPTCHA."
+          echo "British Council Global excluded: bounded GitHub Actions probe returned CDN HTTP 403."
