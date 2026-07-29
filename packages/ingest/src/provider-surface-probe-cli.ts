@@ -233,6 +233,7 @@ async function probeTarget(
                 'open_academic_computer_writing_melbourne_date'
               ) {
                 await clickVisibleText(page, '31');
+                await clickVisibleText(page, 'Find sessions');
                 await page.waitForTimeout(8_000);
               }
             }
