@@ -598,7 +598,7 @@ function isApprovedResponseBody(
       host === 'ieltsidpindia.com' ||
       host === 'idpielts.cn' ||
       (host === 'sign.idpielts.cn' &&
-        /^\/chinesetestwebapi\/common\/(?:getOptionList|getProvinceListV2|getCityListV2|test[A-Za-z]+SearchV2)$/.test(
+        /^\/chinesetestwebapi\/common\/(?:getOptionList|getProvinceListV2|getCityListV2|test[A-Za-z]+SearchV2|getExamProject|getProvince|testCenterSearch)$/.test(
           url.pathname,
         ))
     );

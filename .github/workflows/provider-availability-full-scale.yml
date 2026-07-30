@@ -131,12 +131,6 @@ jobs:
           PROVIDER_PROBE_TARGETS_JSON: >-
             [
               {
-                "id": "idp-india-public-date",
-                "source": "idp_india",
-                "url": "https://ieltsidpindia.com/registration/reg1",
-                "interaction": "idp_india_public_date"
-              },
-              {
                 "id": "idp-china-test-centres",
                 "source": "idp_china",
                 "url": "https://www.idpielts.cn/test-center"
