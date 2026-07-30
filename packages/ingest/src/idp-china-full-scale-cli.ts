@@ -9,6 +9,11 @@ import {
   type IdpChinaSession,
 } from './idp-china-availability.ts';
 import { decryptIdpChinaEnvelope } from './idp-china-api.ts';
+import {
+  matchIdpChinaProviderCentre,
+  mergeIdpChinaProviderCentres,
+  parseIdpChinaCentrePage,
+} from './idp-china-centres.ts';
 import { DATA_DIR, REPORT_DIR, REPO_ROOT } from './config.ts';
 
 const API_ORIGIN = 'https://sign.idpielts.cn';
@@ -33,9 +38,9 @@ async function main(): Promise<void> {
     ),
   );
   const pageSize = boundedInteger(
-    process.env.IDP_CHINA_PAGE_SIZE ?? '100',
+    process.env.IDP_CHINA_PAGE_SIZE ?? '2000',
     10,
-    1_000,
+    5_000,
     'IDP_CHINA_PAGE_SIZE',
   );
   const maximumPages = optionalPositiveInteger(
@@ -53,6 +58,38 @@ async function main(): Promise<void> {
       ),
     );
     const projectCodes = parseProjectCodes(projects);
+    const providerCentrePages: ReturnType<
+      typeof parseIdpChinaCentrePage
+    >[] = [];
+    for (const projectCode of projectCodes) {
+      providerCentrePages.push(
+        parseIdpChinaCentrePage(
+          decryptIdpChinaEnvelope(
+            await request.json(
+              `centres:${projectCode}`,
+              '/chinesetestwebapi/common/testCenterSearchV2',
+              {
+                method: 'POST',
+                headers: {
+                  'content-type': 'application/json;charset=UTF-8',
+                },
+                body: JSON.stringify({
+                  cityId: '',
+                  provinceId: '',
+                  kmId: projectCode,
+                  pageNum: 1,
+                  pageSize: 1000,
+                }),
+              },
+            ),
+          ),
+          projectCode,
+        ),
+      );
+    }
+    const providerCentres = mergeIdpChinaProviderCentres(
+      providerCentrePages,
+    );
     const sessions: IdpChinaSession[] = [];
     const sessionIds = new Set<string>();
     let providerTotal: number | null = null;
@@ -121,10 +158,31 @@ async function main(): Promise<void> {
       dataset.centres,
       checkedAt,
     );
+    const centreDiscovery = providerCentres.map((centre) => ({
+      ...centre,
+      match: matchIdpChinaProviderCentre(centre, dataset.centres),
+    }));
     const problems = idpChinaAvailabilitySafetyProblems(
       snapshot,
       sessions.length,
     );
+    if (!providerCentres.length) {
+      problems.push('no IDP China provider centres were returned');
+    }
+    const providerCentreIds = new Set(
+      providerCentres.map((centre) => centre.providerCentreId),
+    );
+    const unknownSessionCentreIds = new Set(
+      sessions
+        .map((session) => session.centreId)
+        .filter((centreId) => !providerCentreIds.has(centreId)),
+    );
+    if (unknownSessionCentreIds.size) {
+      problems.push(
+        `${unknownSessionCentreIds.size} session centre id(s) were absent ` +
+          'from the provider centre inventory',
+      );
+    }
     const truncated =
       providerTotal !== null && sessions.length < providerTotal;
     if (maximumPages === null && truncated) {
@@ -146,6 +204,10 @@ async function main(): Promise<void> {
         scannedPages: pageNumber - 1,
         pageSize,
         truncatedByEnvironment: truncated,
+        providerCentres: providerCentres.length,
+        providerOnlyCentres: centreDiscovery.filter(
+          (centre) => centre.match.status === 'unmatched',
+        ).length,
       },
       safetyGate: {
         passed: problems.length === 0,
@@ -153,6 +215,7 @@ async function main(): Promise<void> {
         stoppedOnProviderBoundary: false,
       },
       requestSummary: request.summary(),
+      centreDiscovery,
       snapshot,
     };
     await writeReport(report);

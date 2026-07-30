@@ -15,6 +15,11 @@ import {
   idpIndiaAvailabilitySafetyProblems,
   type IdpIndiaBrowserCapture,
 } from './idp-india-availability.ts';
+import {
+  IDP_INDIA_COMPUTER_CENTRES_URL,
+  matchIdpIndiaProviderCentre,
+  parseIdpIndiaComputerCentresHtml,
+} from './idp-india-centres.ts';
 
 const API_ORIGIN = 'https://ieltsidpindia.com';
 const REPORT_FILE = path.join(
@@ -53,6 +58,13 @@ async function main(): Promise<void> {
   let finalReportWritten = false;
 
   try {
+    const providerCentres = parseIdpIndiaComputerCentresHtml(
+      await request.text(
+        'computer-centre-inventory',
+        new URL(IDP_INDIA_COMPUTER_CENTRES_URL).pathname +
+          new URL(IDP_INDIA_COMPUTER_CENTRES_URL).search,
+      ),
+    );
     const discoveredTargets = await discoverTargets(request);
     const targets =
       maximumTargets === null
@@ -95,6 +107,10 @@ async function main(): Promise<void> {
       dataset.centres,
       checkedAt,
     );
+    const centreDiscovery = providerCentres.map((centre) => ({
+      ...centre,
+      match: matchIdpIndiaProviderCentre(centre, dataset.centres),
+    }));
     const problems = idpIndiaAvailabilitySafetyProblems(null, snapshot);
     if (snapshot.diagnostics.explicitlyAvailable < 1) {
       problems.push(
@@ -129,6 +145,10 @@ async function main(): Promise<void> {
         targetsWithSessions: captures.length,
         targetsWithoutSessions: targetsWithoutSessions.length,
         truncatedByEnvironment: maximumTargets !== null,
+        providerCentres: providerCentres.length,
+        providerOnlyCentres: centreDiscovery.filter(
+          (centre) => centre.match.status === 'unmatched',
+        ).length,
       },
       safetyGate: {
         passed: problems.length === 0,
@@ -138,6 +158,7 @@ async function main(): Promise<void> {
       requestSummary: request.summary(),
       requestDiagnostics: diagnostics,
       targetsWithoutSessions,
+      centreDiscovery,
       snapshot,
     };
     await writeReport(report);
@@ -272,11 +293,11 @@ function createSerialRequester(
   let attempted = 0;
   let successful = 0;
 
-  async function form(
+  async function raw(
     label: string,
     pathname: string,
-    body: Record<string, string>,
-  ): Promise<unknown> {
+    init?: RequestInit,
+  ): Promise<string> {
     const url = new URL(pathname, API_ORIGIN);
     if (
       url.protocol !== 'https:' ||
@@ -303,19 +324,19 @@ function createSerialRequester(
     const started = Date.now();
     try {
       const response = await fetch(url, {
-        method: 'POST',
+        ...init,
         headers: {
-          accept: 'application/json, text/javascript, */*; q=0.01',
+          accept:
+            init?.method === 'POST'
+              ? 'application/json, text/javascript, */*; q=0.01'
+              : 'text/html,application/xhtml+xml',
           'accept-language': 'en-IN,en;q=0.9',
-          'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
-          origin: API_ORIGIN,
           referer: `${API_ORIGIN}/registration/reg1`,
           'user-agent':
             'ielts-map/0.1 full-scale availability validation ' +
             '(+https://github.com/ZhengQ2/ielts_app)',
-          'x-requested-with': 'XMLHttpRequest',
+          ...(init?.headers ?? {}),
         },
-        body: new URLSearchParams(body),
         signal: AbortSignal.timeout(30_000),
       });
       diagnostic.status = response.status;
@@ -337,13 +358,8 @@ function createSerialRequester(
           `${label} failed with HTTP ${response.status}`,
         );
       }
-      try {
-        const value = JSON.parse(text) as unknown;
-        successful++;
-        return value;
-      } catch {
-        throw new ProviderBoundaryError(`${label} returned non-JSON content`);
-      }
+      successful++;
+      return text;
     } catch (cause) {
       diagnostic.elapsedMs = Date.now() - started;
       diagnostic.error = errorMessage(cause);
@@ -355,15 +371,37 @@ function createSerialRequester(
   }
 
   return {
-    form,
+    async form(
+      label: string,
+      pathname: string,
+      body: Record<string, string>,
+    ): Promise<unknown> {
+      const text = await raw(label, pathname, {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+          origin: API_ORIGIN,
+          'x-requested-with': 'XMLHttpRequest',
+        },
+        body: new URLSearchParams(body),
+      });
+      try {
+        return JSON.parse(text) as unknown;
+      } catch {
+        throw new ProviderBoundaryError(`${label} returned non-JSON content`);
+      }
+    },
+    text(label: string, pathname: string): Promise<string> {
+      return raw(label, pathname);
+    },
     summary: () => ({ attempted, successful, minimumIntervalMs }),
   };
 }
 
 function challengeSignalsFor(value: string): string[] {
   return [
-    /\bcaptcha\b/i,
-    /\brecaptcha\b/i,
+    /<title[^>]*>[^<]*(?:captcha|security check|access denied)/i,
+    /\bcomplete (?:the|this) (?:captcha|recaptcha)\b/i,
     /verify (?:that )?you are human/i,
     /unusual traffic/i,
     /access denied/i,
