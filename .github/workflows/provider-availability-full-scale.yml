@@ -97,13 +97,13 @@ jobs:
           echo "NEEA excluded: British Council-only China partner requiring login and reCAPTCHA."
           echo "British Council Global excluded: bounded GitHub Actions probe returned CDN HTTP 403."
 
-  idp-india-smoke:
+  idp-india-full-scale:
     if: >-
       inputs.confirmed &&
       github.ref_name == 'codex/m2-7-regional-full-scale-run'
     needs: verify-code
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 45
 
     steps:
       - name: Checkout
@@ -118,23 +118,22 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Probe one known IDP India target
+      - name: Scan all discovered IDP India targets
         env:
           M2_7_LIVE_EXPERIMENT: "true"
           IDP_INDIA_MIN_INTERVAL_MS: "3000"
-          IDP_INDIA_MAX_TARGETS: "1"
         run: npm run availability:idp-india-full-scale
 
-      - name: Upload IDP India smoke diagnostic
+      - name: Upload IDP India full-scale diagnostic
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: idp-india-smoke
+          name: idp-india-full-scale
           path: .artifacts/provider-availability.idp-india.full-scale.json
           if-no-files-found: error
           retention-days: 14
 
-  idp-china-smoke:
+  idp-china-full-scale:
     if: >-
       inputs.confirmed &&
       github.ref_name == 'codex/m2-7-regional-full-scale-run'
@@ -155,19 +154,18 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Probe one IDP China schedule page
+      - name: Scan all IDP China schedule pages
         env:
           M2_7_LIVE_EXPERIMENT: "true"
           IDP_CHINA_MIN_INTERVAL_MS: "3000"
           IDP_CHINA_PAGE_SIZE: "100"
-          IDP_CHINA_MAX_PAGES: "1"
         run: npm run availability:idp-china-full-scale
 
-      - name: Upload IDP China smoke diagnostic
+      - name: Upload IDP China full-scale diagnostic
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: idp-china-smoke
+          name: idp-china-full-scale
           path: .artifacts/provider-availability.idp-china.full-scale.json
           if-no-files-found: error
           retention-days: 14
