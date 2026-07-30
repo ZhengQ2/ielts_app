@@ -22,6 +22,7 @@
     "availability:idp-global-full-scale": "npm run availability:idp-global-full-scale --workspace @ielts-map/ingest --",
     "availability:idp-india-pilot": "npm run availability:idp-india-pilot --workspace @ielts-map/ingest --",
     "availability:idp-global-api-probe": "npm run availability:idp-global-api-probe --workspace @ielts-map/ingest --",
+    "availability:idp-china-api-probe": "npm run availability:idp-china-api-probe --workspace @ielts-map/ingest --",
     "availability:surface-probe": "npm run availability:surface-probe --workspace @ielts-map/ingest --",
     "localize": "npm run localize --workspace @ielts-map/ingest --",
     "neutral-pilot": "npm run neutral-pilot --workspace @ielts-map/ingest --",
