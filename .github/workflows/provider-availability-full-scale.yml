@@ -122,7 +122,6 @@ jobs:
         env:
           M2_7_LIVE_EXPERIMENT: "true"
           IDP_INDIA_MIN_INTERVAL_MS: "3000"
-          IDP_INDIA_MAX_TARGETS: "1"
         run: npm run availability:idp-india-full-scale
 
       - name: Upload IDP India full-scale diagnostic
