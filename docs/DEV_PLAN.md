@@ -344,47 +344,6 @@ British Council's public affiliate programme is a legitimate next commercial con
 publicly promise an availability feed. Full evidence and acceptance criteria are in
 `docs/AVAILABILITY_FEASIBILITY.md`.
 
-**M2.7 — Bounded provider-availability pilot — EXPERIMENTAL.** Provider surfaces were tested only
-from manually dispatched GitHub Actions jobs. Every collector is serial, has a hard minimum
-interval, stops without retry on the first timeout/403/429/challenge/source-shape error, and writes a
-diagnostic artifact rather than publishing to the website.
-
-- IDP Global exposes a first-party public session-search API with venue ids, exact venue metadata,
-  dates, offering dimensions and remaining-seat counts. The implemented full-scale validator is
-  deliberately restricted to the confirmed standard Academic-on-computer request shape and a
-  45-day horizon; it deduplicates venues returned by overlapping cities and never rewrites the
-  IELTS.org fee string. The 2026-07-29 full-scale GitHub Actions gate scanned all 357 exposed cities
-  and all 501 discovered venues across 74 countries: 859/859 serial requests succeeded without a
-  provider boundary, 8,128 future sessions were parsed, and no capture was rejected. Publication
-  remains disabled until unmatched and ambiguous centre links are reviewed.
-- IDP India exposes anonymous JSON selectors for every test, module and city plus exact future dates
-  and an integer `SeatAvailable` value. The full-scale validator discovers the selector graph at
-  runtime, scans all 406 combinations serially at a three-second minimum interval, preserves the
-  provider labels and dates, and stops without retry on a provider boundary. Its separate official
-  computer-centre page is parsed as a complete 46-centre inventory and compared by branch plus
-  address evidence; missing or ambiguous centres stay diagnostic rather than being attached to a
-  similarly named city.
-  The 2026-07-30 full-scale GitHub Actions gate completed 422/422 HTTP 200 requests with no
-  challenge signal, covered all 406 combinations, and parsed 13,882 dated sessions with no rejected
-  capture. Its inventory comparison found 41 safe matches, three provider-only centres and two
-  address-review cases.
-- IDP China exposes a public first-party encrypted API used by its test-date page. The validator
-  decodes the SM4-CBC envelope using protocol material shipped in that public site's JavaScript,
-  verifies both project inventories, reads the complete session inventory in one response (avoiding
-  unstable pagination), and checks session centre ids against the 27-centre official inventory.
-  The validated inventory currently contains 1,137 sessions and identifies 14 centres that have no
-  safe IELTS.org match.
-- India/China publication remains disabled. In particular, a provider-only centre is not promoted
-  until it has a source-published offering and fee plus defensible map evidence; provider-localized
-  names and addresses remain matching evidence and are never shown as centre identity.
-- NEEA is excluded. It is a British Council-only China partner and requires login plus reCAPTCHA;
-  it is not an IDP source.
-- British Council Global is excluded after separate bounded GitHub Actions probes received Akamai
-  CDN HTTP 403 from both a centre-prefilled booking URL and the official clean registration root.
-  The clean-root probe made one anonymous request, found no application controls or API calls, and
-  stopped immediately. No bypass was attempted. An authorised feed remains the acceptable route to
-  comprehensive BC dates.
-
 **M3 — Objective score and compliant Google enrichment — PLANNED.** Reassess whether ratings add
 enough user value to justify live API cost and compliance work before implementing them.
 

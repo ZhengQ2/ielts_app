@@ -10,13 +10,6 @@
   "scripts": {
     "ingest": "node --experimental-strip-types src/cli.ts",
     "availability": "node --experimental-strip-types src/availability-cli.ts",
-    "availability:idp-global-full-scale": "node --experimental-strip-types src/idp-global-full-scale-cli.ts",
-    "availability:idp-india-full-scale": "node --experimental-strip-types src/idp-india-full-scale-cli.ts",
-    "availability:idp-china-full-scale": "node --experimental-strip-types src/idp-china-full-scale-cli.ts",
-    "availability:idp-india-pilot": "node --experimental-strip-types src/idp-india-pilot-cli.ts",
-    "availability:idp-global-api-probe": "node --experimental-strip-types src/idp-global-api-probe-cli.ts",
-    "availability:idp-china-api-probe": "node --experimental-strip-types src/idp-china-api-probe-cli.ts",
-    "availability:surface-probe": "node --experimental-strip-types src/provider-surface-probe-cli.ts",
     "localize": "node --experimental-strip-types src/localize-cli.ts",
     "neutral-pilot": "node --experimental-strip-types src/neutral-pilot-cli.ts",
     "apple-map-pilot": "node --experimental-strip-types src/apple-map-pilot-cli.ts",
@@ -24,8 +17,5 @@
   },
   "dependencies": {
     "@ielts-map/core": "*"
-  },
-  "devDependencies": {
-    "playwright-core": "^1.54.1"
   }
 }
