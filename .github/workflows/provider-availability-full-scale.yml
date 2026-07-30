@@ -47,11 +47,11 @@ jobs:
           NEXT_PUBLIC_GOOGLE_MAP_ID: ${{ secrets.NEXT_PUBLIC_GOOGLE_MAP_ID }}
         run: npm run build
 
-  bc-global-root:
+  idp-global:
     if: inputs.confirmed
     needs: verify-code
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 60
 
     steps:
       - name: Checkout
@@ -66,21 +66,29 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Inspect the official BC registration landing page once
+      - name: Scan every discovered IDP Global city and venue serially
         env:
-          M2_7_DISCOVERY_EXPERIMENT: "true"
-          PROVIDER_PROBE_INTERVAL_MS: "15000"
-          PROVIDER_PROBE_TARGETS_JSON: >-
-            [{"id":"bc-global-root","source":"bc_global","url":"https://ieltsregistration.britishcouncil.org/"}]
-        run: npm run availability:surface-probe
+          M2_7_LIVE_EXPERIMENT: "true"
+          IDP_GLOBAL_MIN_INTERVAL_MS: "1500"
+          IDP_GLOBAL_HORIZON_DAYS: "45"
+        run: npm run availability:idp-global-full-scale
 
-      - name: Upload BC Global probe evidence
+      - name: Upload IDP Global diagnostic
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: bc-global-root-probe
-          path: |
-            .artifacts/provider-surface-probe.json
-            .artifacts/provider-surface-probe/
+          name: idp-global-full-scale
+          path: .artifacts/provider-availability.idp-global.full-scale.json
           if-no-files-found: error
-          retention-days: 14
+          retention-days: 30
+
+  excluded-providers:
+    if: inputs.confirmed
+    runs-on: ubuntu-latest
+    steps:
+      - name: Record deliberate exclusions
+        run: |
+          echo "IDP China excluded: its public route redirects to login."
+          echo "IDP India bulk scan excluded: safe calendar discovery did not produce defensible future date/time evidence."
+          echo "NEEA excluded: British Council-only China partner requiring login and reCAPTCHA."
+          echo "British Council Global excluded: bounded GitHub Actions probe returned CDN HTTP 403."

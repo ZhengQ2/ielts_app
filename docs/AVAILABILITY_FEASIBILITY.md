@@ -58,9 +58,13 @@ Until then the supported product action is “Check dates and book on the operat
 
 ## British Council bounded pilot
 
-Anonymous browser testing found that the global British Council registration flow can enumerate
-countries, cities and venues before login, but repeated browsing can time out after a small number
-of searches. That behaviour is treated as a provider boundary, not something to bypass.
+Earlier anonymous browser testing outside the production collector found that the global British
+Council registration flow could enumerate countries, cities and venues before login, but repeated
+browsing timed out after a small number of searches. The required GitHub Actions environment could
+not reproduce even the entry step: separate bounded probes received Akamai HTTP 403 from both a
+centre-prefilled URL and, on 2026-07-30, the official clean registration root. The clean-root probe
+made one request, exposed no application controls or API calls, and stopped. These behaviours are
+provider boundaries, not something to bypass.
 
 The experimental coordinator in `packages/ingest/src/bc-availability-pilot.ts` therefore makes no
 network requests itself. A future browser adapter may run only from an isolated CI/AWS worker and
@@ -78,10 +82,11 @@ The current 729 British Council centres span 116 countries. Eight country checks
 through the directory within the existing 15-day evidence window, but the resulting signal can only
 mean “the registration directory listed this centre.” It cannot support a date or seat claim.
 
-The pilot remains disabled until its browser portion can run from an isolated worker. Its first
-15-day rotation is successful only if it completes without a throttle/challenge, retains all prior
-evidence through simulated failures, and produces no unexplained country-level listing cliff. Any
-provider restriction ends the experiment and leaves British Council dates as unknown.
+The pilot remains disabled. Its browser portion would need an authorised execution environment or
+documented feed before another rotation is attempted. Its first 15-day rotation is successful only
+if it completes without a throttle/challenge, retains all prior evidence through simulated
+failures, and produces no unexplained country-level listing cliff. Any provider restriction ends
+the experiment and leaves British Council dates as unknown.
 
 ## IDP India full-scale validator
 
@@ -157,4 +162,5 @@ The regional surfaces remain quarantined from publication while their full-scale
 - IDP India and IDP China produce complete diagnostics but do not alter the public dataset or the
   operator-published price strings.
 - NEEA is British Council's China partner, not an IDP partner, and requires login plus reCAPTCHA.
-- British Council Global returned CDN HTTP 403 in the bounded Actions probe. No bypass was attempted.
+- British Council Global returned Akamai CDN HTTP 403 for both the prefilled booking URL and the
+  official clean root in bounded Actions probes. No bypass was attempted.

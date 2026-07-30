@@ -379,9 +379,11 @@ diagnostic artifact rather than publishing to the website.
   names and addresses remain matching evidence and are never shown as centre identity.
 - NEEA is excluded. It is a British Council-only China partner and requires login plus reCAPTCHA;
   it is not an IDP source.
-- British Council Global is excluded after the bounded GitHub Actions probe received CDN HTTP 403.
-  No bypass was attempted. An authorised feed remains the acceptable route to comprehensive BC
-  dates.
+- British Council Global is excluded after separate bounded GitHub Actions probes received Akamai
+  CDN HTTP 403 from both a centre-prefilled booking URL and the official clean registration root.
+  The clean-root probe made one anonymous request, found no application controls or API calls, and
+  stopped immediately. No bypass was attempted. An authorised feed remains the acceptable route to
+  comprehensive BC dates.
 
 **M3 — Objective score and compliant Google enrichment — PLANNED.** Reassess whether ratings add
 enough user value to justify live API cost and compliance work before implementing them.
