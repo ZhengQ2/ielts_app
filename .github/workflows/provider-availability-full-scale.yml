@@ -48,7 +48,9 @@ jobs:
         run: npm run build
 
   idp-global:
-    if: inputs.confirmed
+    if: >-
+      inputs.confirmed &&
+      github.ref_name != 'codex/m2-7-regional-full-scale-run'
     needs: verify-code
     runs-on: ubuntu-latest
     timeout-minutes: 60
@@ -83,7 +85,9 @@ jobs:
           retention-days: 30
 
   excluded-providers:
-    if: inputs.confirmed
+    if: >-
+      inputs.confirmed &&
+      github.ref_name != 'codex/m2-7-regional-full-scale-run'
     runs-on: ubuntu-latest
     steps:
       - name: Record deliberate exclusions
@@ -92,3 +96,78 @@ jobs:
           echo "IDP India bulk scan excluded: safe calendar discovery did not produce defensible future date/time evidence."
           echo "NEEA excluded: British Council-only China partner requiring login and reCAPTCHA."
           echo "British Council Global excluded: bounded GitHub Actions probe returned CDN HTTP 403."
+
+  idp-india-smoke:
+    if: >-
+      inputs.confirmed &&
+      github.ref_name == 'codex/m2-7-regional-full-scale-run'
+    needs: verify-code
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Probe one known IDP India target
+        env:
+          M2_7_LIVE_EXPERIMENT: "true"
+          IDP_INDIA_MIN_INTERVAL_MS: "3000"
+          IDP_INDIA_MAX_TARGETS: "1"
+        run: npm run availability:idp-india-full-scale
+
+      - name: Upload IDP India smoke diagnostic
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: idp-india-smoke
+          path: .artifacts/provider-availability.idp-india.full-scale.json
+          if-no-files-found: error
+          retention-days: 14
+
+  idp-china-smoke:
+    if: >-
+      inputs.confirmed &&
+      github.ref_name == 'codex/m2-7-regional-full-scale-run'
+    needs: verify-code
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Probe one IDP China schedule page
+        env:
+          M2_7_LIVE_EXPERIMENT: "true"
+          IDP_CHINA_MIN_INTERVAL_MS: "3000"
+          IDP_CHINA_PAGE_SIZE: "100"
+          IDP_CHINA_MAX_PAGES: "1"
+        run: npm run availability:idp-china-full-scale
+
+      - name: Upload IDP China smoke diagnostic
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: idp-china-smoke
+          path: .artifacts/provider-availability.idp-china.full-scale.json
+          if-no-files-found: error
+          retention-days: 14
