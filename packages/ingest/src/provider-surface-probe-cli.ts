@@ -53,6 +53,10 @@ interface ProbeResult {
     href: string;
   }[];
   frames: string[];
+  scriptEvidence: {
+    url: string;
+    snippets: string[];
+  }[];
   network: {
     status: number;
     resourceType: string;
@@ -143,8 +147,35 @@ async function probeTarget(
   page.setDefaultTimeout(30_000);
   const network: ProbeResult['network'] = [];
   const responseTasks: Promise<void>[] = [];
+  const scriptEvidence: ProbeResult['scriptEvidence'] = [];
   page.on('response', (response) => {
     const resourceType = response.request().resourceType();
+    if (
+      target.source === 'idp_china' &&
+      resourceType === 'script' &&
+      isOfficialIdpChinaScript(response.url())
+    ) {
+      responseTasks.push(
+        response
+          .text()
+          .then((body) => {
+            const snippets = evidenceSnippets(body, [
+              'testCenterSearch',
+              'getExamProject',
+              'getProvince',
+              'decrypt',
+              'CryptoJS',
+            ]);
+            if (snippets.length) {
+              scriptEvidence.push({
+                url: sanitizeUrl(response.url()),
+                snippets,
+              });
+            }
+          })
+          .catch(() => undefined),
+      );
+    }
     if (
       resourceType === 'xhr' ||
       resourceType === 'fetch' ||
@@ -368,6 +399,7 @@ async function probeTarget(
       href: sanitizeUrl(link.href),
     })),
     frames,
+    scriptEvidence,
     network: deduplicateNetwork(network).slice(0, 300),
     error,
   };
@@ -605,6 +637,41 @@ function isApprovedResponseBody(
   } catch {
     return false;
   }
+}
+
+function isOfficialIdpChinaScript(value: string): boolean {
+  try {
+    const url = new URL(value);
+    return (
+      url.protocol === 'https:' &&
+      url.hostname.replace(/^www\./i, '').toLowerCase() ===
+        'idpielts.cn'
+    );
+  } catch {
+    return false;
+  }
+}
+
+function evidenceSnippets(value: string, needles: readonly string[]): string[] {
+  const snippets: string[] = [];
+  const seen = new Set<string>();
+  for (const needle of needles) {
+    let from = 0;
+    while (snippets.length < 20) {
+      const index = value.indexOf(needle, from);
+      if (index < 0) break;
+      const snippet = value
+        .slice(Math.max(0, index - 1_500), index + needle.length + 2_500)
+        .replace(/\s+/g, ' ')
+        .trim();
+      if (!seen.has(snippet)) {
+        seen.add(snippet);
+        snippets.push(snippet);
+      }
+      from = index + needle.length;
+    }
+  }
+  return snippets;
 }
 
 function parseInterval(value: string): number {
