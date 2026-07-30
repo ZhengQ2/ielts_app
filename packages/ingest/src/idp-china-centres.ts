@@ -143,6 +143,7 @@ export function matchIdpChinaProviderCentre(
   candidateCentreIds: string[];
 } {
   const providerName = centreKey(provider.englishName);
+  const providerLocation = providerName.split(' ').filter(Boolean);
   const candidates = centres
     .filter(
       (centre) =>
@@ -150,10 +151,23 @@ export function matchIdpChinaProviderCentre(
         centre.address.country === 'CN' &&
         isIdpChinaBookingUrl(centre.bookingUrl),
     )
-    .map((centre) => ({
-      centre,
-      score: nameSimilarity(providerName, centreKey(centre.name)),
-    }))
+    .map((centre) => {
+      const candidateName = centreKey(centre.name);
+      const candidateLocation = candidateName.split(' ').filter(Boolean);
+      const sameCity =
+        providerLocation[0] === candidateLocation[0];
+      const sameDistrict =
+        providerLocation.length < 2 ||
+        candidateLocation.length < 2 ||
+        providerLocation[1] === candidateLocation[1];
+      return {
+        centre,
+        score:
+          sameCity && sameDistrict
+            ? nameSimilarity(providerName, candidateName)
+            : 0,
+      };
+    })
     .filter(({ score }) => score >= 0.5)
     .sort(
       (a, b) =>
