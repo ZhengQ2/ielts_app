@@ -344,30 +344,6 @@ British Council's public affiliate programme is a legitimate next commercial con
 publicly promise an availability feed. Full evidence and acceptance criteria are in
 `docs/AVAILABILITY_FEASIBILITY.md`.
 
-**M2.7 — Bounded provider-availability pilot — EXPERIMENTAL.** Provider surfaces were tested only
-from manually dispatched GitHub Actions jobs. Every collector is serial, has a hard minimum
-interval, stops without retry on the first timeout/403/429/challenge/source-shape error, and writes a
-diagnostic artifact rather than publishing to the website.
-
-- IDP Global exposes a first-party public session-search API with venue ids, exact venue metadata,
-  dates, offering dimensions and remaining-seat counts. The implemented full-scale validator is
-  deliberately restricted to the confirmed standard Academic-on-computer request shape and a
-  45-day horizon; it deduplicates venues returned by overlapping cities and never rewrites the
-  IELTS.org fee string. The 2026-07-29 full-scale GitHub Actions gate scanned all 357 exposed cities
-  and all 501 discovered venues across 74 countries: 859/859 serial requests succeeded without a
-  provider boundary, 8,128 future sessions were parsed, and no capture was rejected. Publication
-  remains disabled until unmatched and ambiguous centre links are reviewed.
-- IDP India retains the manually targeted one-session pilot. A bulk selector experiment discovered
-  406 test/module/city combinations without CAPTCHA, but its automatic calendar traversal could not
-  yet distinguish future session evidence safely. The bulk adapter was removed rather than
-  publishing default/past calendar state.
-- IDP China is excluded because its public booking route redirects to login.
-- NEEA is excluded. It is a British Council-only China partner and requires login plus reCAPTCHA;
-  it is not an IDP source.
-- British Council Global is excluded after the bounded GitHub Actions probe received CDN HTTP 403.
-  No bypass was attempted. An authorised feed remains the acceptable route to comprehensive BC
-  dates.
-
 **M3 — Objective score and compliant Google enrichment — PLANNED.** Reassess whether ratings add
 enough user value to justify live API cost and compliance work before implementing them.
 
