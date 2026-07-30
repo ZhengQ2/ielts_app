@@ -10,6 +10,11 @@ import {
   matchIdpChinaCentre,
   parseIdpChinaSessionPage,
 } from '../src/idp-china-availability.ts';
+import {
+  matchIdpChinaProviderCentre,
+  mergeIdpChinaProviderCentres,
+  parseIdpChinaCentrePage,
+} from '../src/idp-china-centres.ts';
 
 const KEY = Buffer.from('065574e7ef3d92c579ffba093797b4f2', 'hex');
 const IV = Buffer.from('7a6b964619a05e5ce5423608b7bf4e95', 'hex');
@@ -184,4 +189,64 @@ test('keeps unsupported offerings and ambiguous centres fail-closed', () => {
   );
   assert.equal(match.status, 'ambiguous');
   assert.equal(match.centreId, null);
+});
+
+function providerCentrePage(projectCode: string) {
+  return parseIdpChinaCentrePage(
+    {
+      code: 200,
+      total: 1,
+      rows: [
+        {
+          kdId: 'provider-centre-1',
+          kdCode: 'T10038',
+          kdName: 'IDP雅思广州天河区考场',
+          kdEName: 'IDP IELTS Guangzhou Tianhe Test Center',
+          address: '广州市天河区龙口东横街28号丽柏国际酒店南塔22楼',
+          addressEn:
+            '22/F, South Tower, La Perle International Hotel, ' +
+            'No. 28 Longkou East Cross Street, Tianhe District, Guangzhou',
+          phone: '18024017361',
+          postalCode: '510000',
+          email: 'guangzhoutianhe@idpielts.cn',
+          proId: '440000',
+          cityId: '440100',
+        },
+      ],
+    },
+    projectCode,
+  );
+}
+
+test('merges complete provider centre inventories across both projects', () => {
+  const centres = mergeIdpChinaProviderCentres([
+    providerCentrePage('22'),
+    providerCentrePage('23'),
+  ]);
+  assert.equal(centres.length, 1);
+  assert.deepEqual(centres[0]?.projectCodes, ['22', '23']);
+  assert.equal(
+    matchIdpChinaProviderCentre(centres[0]!, [chinaCentre()]).centreId,
+    'idp-ielts-china-guangzhou-tianhe',
+  );
+});
+
+test('rejects partial or contradictory provider centre inventories', () => {
+  const partial = providerCentrePage('22');
+  partial.total = 2;
+  assert.throws(
+    () => mergeIdpChinaProviderCentres([partial]),
+    /returned 1 of 2 centres/,
+  );
+
+  const changed = providerCentrePage('23');
+  changed.centres[0]!.englishAddress = 'Different address';
+  assert.throws(
+    () =>
+      mergeIdpChinaProviderCentres([
+        providerCentrePage('22'),
+        changed,
+      ]),
+    /metadata changed/,
+  );
 });

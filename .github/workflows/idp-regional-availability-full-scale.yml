@@ -117,7 +117,7 @@ jobs:
         env:
           M2_7_LIVE_EXPERIMENT: "true"
           IDP_CHINA_MIN_INTERVAL_MS: "3000"
-          IDP_CHINA_PAGE_SIZE: "100"
+          IDP_CHINA_PAGE_SIZE: "2000"
         run: npm run availability:idp-china-full-scale
 
       - name: Upload IDP China diagnostic
