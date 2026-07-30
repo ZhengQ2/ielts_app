@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "source": "ielts_usa_network",
+  "sourceUrl": "https://go.ieltsusa.org/TestCenterNetwork",
+  "records": {
+    "ielts-usa-davenport-ia": {
+      "sourceLabel": "Davenport, IA"
+    },
+    "ielts-usa-kansas-city-mo": {
+      "sourceLabel": "Kansas City, MO"
+    },
+    "ielts-usa-lincoln-ne": {
+      "sourceLabel": "Lincoln, NE"
+    },
+    "ielts-usa-new-haven-ct": {
+      "sourceLabel": "New Haven, CT"
+    },
+    "ielts-usa-new-orleans-la": {
+      "sourceLabel": "New Orleans, LA"
+    }
+  }
+}

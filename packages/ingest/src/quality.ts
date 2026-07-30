@@ -126,7 +126,7 @@ interface QualityOptions {
 }
 
 const DEFERRED_CHECKS = [
-  'Outside the public IELTS USA network, opening status is not asserted without a supported operator source.',
+  'Opening and registration status are not automated; curated future openings are display warnings only.',
   'No public operator feed currently supports centre-specific live dates or seat counts.',
   'IELTS.org is the listing authority; centre existence is not yet corroborated by a second operator directory.',
   'Localized addresses may be retained for matching but are never displayed as trusted directions.',

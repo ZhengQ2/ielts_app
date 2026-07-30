@@ -98,8 +98,8 @@ centre_sources      -- which sources currently list a centre + freshness (the fr
   raw               jsonb         -- last parsed payload, for audit/diffing
 
 -- NOTE: no test_dates / live-seat table. No documented global operator feed was found.
--- A separate expiring snapshot carries the narrow public IELTS USA registration/future
--- status evidence without pretending that a registration link guarantees a seat.
+-- A small curated overlay marks IELTS USA future openings and their interest forms;
+-- it does not represent registration availability.
 
 assessments         -- paid student "field assessment" (structured, labelled)
   id, centre_id fk, reviewer_id
@@ -158,7 +158,7 @@ A centre with one 5★ review is pulled toward the city mean until it has enough
 | **IELTS.org** — enumerate via **XML sitemap** `ielts.org/sitemap.xml` → `…section-testCentres-…-p1..p10.xml`; pages `ielts.org/test-centres/{slug}` | **SSR + enumerable** ✅ — full address, price, booking link; **superset**: includes IDP, BC, *and* India centres IDP's own site omits. Dirty (dupes, stale, broken city field) | ✅ **Yes, with cleanup** | **MASTER LIST** — neutral, global, enumerable |
 | **IDP finder** `ielts.idp.com/find-test-centres/{country}` | **SSR** — name, address, **lat/long**, phone, format, OSR, slug. Clean. But **omits India & China** | ✅ **Yes** | **Optional enrichment overlay** — adds coordinates to the IDP subset |
 | **British Council** `takeielts…/find-test-location` & `ors/find-test` | **Empty HTML — client-rendered** | ❌ **No** | Reach BC only *via IELTS.org* |
-| **IELTS USA** `go.ieltsusa.org/TestCenterNetwork` | SSR but **thin**: city+name+format+reg link; no address/coords/price | ⚠️ Partial, US-only | Later |
+| **IELTS USA** `go.ieltsusa.org/TestCenterNetwork` | SSR but **thin**: city+name+format+links; no address/coords/price | ⚠️ Partial, US-only | Curated future-opening interest links only |
 | **IDP India** `ieltsidpindia.com` | separate site; India *is* on IELTS.org | ⚠️ | Use IELTS.org's India entries |
 | **IDP China** `idpielts.cn` | **client-rendered** (fetch returned head only, no body) | ❌ | Use IELTS.org's China entries |
 | **China booking (NEEA)** `ielts.neea.cn` | **login-gated** — not a data source | ❌ | Only the booking-redirect target |
@@ -248,11 +248,10 @@ for any offering. Location problems suppress a precise map pin but do not remove
 useful listing.
 
 Presence on IELTS.org means “currently listed by the master,” not “open and accepting bookings.”
-Google business status is supporting evidence, not an IELTS availability oracle. The one supported
-exception is the public IELTS USA network: explicit future/not-accepting statements are shown, and
-a registration link is described only as a registration link—not proof of a date or seat. All
-other centres remain unknown. User corrections and reviewed overrides remain the safe interim
-mechanism.
+Google business status is supporting evidence, not an IELTS availability oracle. Opening and
+registration status are not automated. Five curated IELTS USA future openings are shown only as
+not-yet-open interest locations; all ordinary centres remain unknown. User corrections and
+reviewed overrides remain the safe interim mechanism.
 
 ### 5.6 Ongoing freshness and self-analysis
 
@@ -268,8 +267,8 @@ mechanism.
   the dataset update; GitHub receives a JSON artifact and targeted warnings.
 - **Crowd signal:** correction reports capture exact user-selected coordinates and feed reviewed
   overrides that survive later crawls.
-- **US operator signal:** a separate weekly IELTS USA snapshot records registration/future status,
-  self-diagnoses parse/match cliffs and expires after 15 days without a successful check.
+- **Future-opening exception:** a small reviewed IELTS USA overlay preserves official candidate
+  interest forms while clearly warning that those locations are not yet open.
 - **End-state:** an operator partnership or supported feed is still required for global opening
   status, centre-specific dates and true seat availability.
 
@@ -329,19 +328,13 @@ failures.
 publish/quarantine a centre without human intervention; unchanged unresolved cases create no
 repeated alert, and country-level quality cannot regress silently.
 
-**M2.6 — Opening-status and test-date feasibility — DONE.** Official-source review found no
-documented global centre/date/seat feed. IELTS USA does publish one usable public status source, so
-the product now:
+**M2.6 — Opening-status and test-date feasibility — PAUSED.** Official-source review found no
+documented global centre/date/seat feed. The experimental IELTS USA status overlay was removed:
+the product does not automate or display registration availability or opening status.
 
-1. fetches that operator page once per weekly run and distinguishes registration links, explicit
-   not-accepting statements and future locations;
-2. matches by exact interest/organisation links, resolving reused link ids by centre-name evidence;
-3. blocks systemic parser/match cliffs and reports unmatched records without recurring alert noise;
-4. expires evidence after 15 days and falls back to unknown;
-5. labels registration links without implying any date or seat is available.
-
-British Council's public affiliate programme is a legitimate next commercial contact, but does not
-publicly promise an availability feed. Full evidence and acceptance criteria are in
+Five IELTS USA future openings remain as a manually curated exception because their official forms
+let candidates register interest. They are visibly marked as not yet open, have no scheduled test
+dates, and are not presented as bookable. Full reasoning is in
 `docs/AVAILABILITY_FEASIBILITY.md`.
 
 **M3 — Objective score and compliant Google enrichment — PLANNED.** Reassess whether ratings add

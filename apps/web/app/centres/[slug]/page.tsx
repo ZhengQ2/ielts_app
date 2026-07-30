@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { centres, getCentreBySlug } from '@ielts-map/core/dataset';
 import {
-  availabilityGuidance,
   boundsFor,
   confidenceLabel,
   correctionReportUrl,
@@ -28,7 +27,7 @@ import {
   FilteredCentrePrice,
 } from '@/components/FilteredCentrePrice';
 import { CentreOfferingsTable } from '@/components/CentreOfferingsTable';
-import { CentreAvailabilityNotice } from '@/components/CentreAvailabilityNotice';
+import { FutureOpeningNotice } from '@/components/FutureOpeningNotice';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -60,14 +59,10 @@ export default async function CentrePage({ params }: Props) {
 
   const caveat = geoCaveat(centre);
   const trust = confidenceLabel(centre);
-  const resultsUrl = resultPortalUrl(centre);
-  const rawScoreUrl = rawScoreInquiryUrl(centre);
+  const resultsUrl = centre.futureOpening ? null : resultPortalUrl(centre);
+  const rawScoreUrl = centre.futureOpening ? null : rawScoreInquiryUrl(centre);
   const correctionUrl = correctionReportUrl(centre);
   const pickerStart = locationPickerStart(centre);
-  const availability = availabilityGuidance(centre);
-  const showAvailabilityWarning =
-    availability.status === 'future_location' ||
-    availability.status === 'not_accepting_registrations';
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-8">
@@ -108,14 +103,16 @@ export default async function CentrePage({ params }: Props) {
       </div>
 
       <div className="mt-6 flex flex-wrap gap-3">
-        {isHttpUrl(availability.actionUrl) && availability.actionLabel && (
+        {isHttpUrl(centre.bookingUrl) && (
           <a
-            href={availability.actionUrl!}
+            href={centre.bookingUrl!}
             target="_blank"
             rel="noreferrer nofollow"
             className="inline-flex items-center gap-2 rounded-md bg-brand px-4 py-2.5 font-medium text-white hover:opacity-90"
           >
-            {availability.actionLabel}
+            {centre.futureOpening
+              ? 'Register interest with IELTS USA'
+              : `Check dates and book on the ${centre.operator} site`}
             <span aria-hidden>↗</span>
           </a>
         )}
@@ -142,14 +139,16 @@ export default async function CentrePage({ params }: Props) {
           </a>
         )}
       </div>
-      {showAvailabilityWarning && (
+      {centre.futureOpening && (
         <div className="mt-3 rounded-lg border border-line bg-surface p-3">
-          <CentreAvailabilityNotice centre={centre} />
+          <FutureOpeningNotice centre={centre} />
         </div>
       )}
-      <p className="mt-3 text-sm text-muted">
-        For other after-test services, please contact the test centre.
-      </p>
+      {!centre.futureOpening && (
+        <p className="mt-3 text-sm text-muted">
+          For other after-test services, please contact the test centre.
+        </p>
+      )}
 
       {centre.offerings.length > 0 && (
         <Suspense
@@ -204,8 +203,8 @@ export default async function CentrePage({ params }: Props) {
               {centre.geo.source.replace('_', ' ')}
             </Row>
           )}
-          {showAvailabilityWarning && (
-            <Row label="Opening-status evidence">Operator-published status</Row>
+          {centre.futureOpening && (
+            <Row label="Opening status">Future opening — not yet operating</Row>
           )}
           <Row label="Source pages">{centre.sources.length}</Row>
         </dl>

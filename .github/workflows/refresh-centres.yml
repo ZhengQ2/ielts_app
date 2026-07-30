@@ -67,36 +67,12 @@ jobs:
             --country "${{ inputs.country || 'ALL' }}" \
             --force
 
-      - name: Refresh operator-supported availability
-        id: availability
-        continue-on-error: true
-        run: npm run availability
-
-      - name: Flag availability refresh failure
-        if: always() && steps.availability.outcome == 'failure'
-        run: |
-          echo "::warning::The IELTS USA status snapshot could not be refreshed. The last good snapshot remains in place and expires to unknown after 15 days."
-
-      - name: Flag newly unmatched directory centres
-        if: always() && steps.availability.outputs.new_unmatched_centres != '' && steps.availability.outputs.new_unmatched_centres != '0'
-        run: |
-          echo "::warning::${{ steps.availability.outputs.new_unmatched_centres }} IELTS USA directory centre(s) lost a safe operator-status match. They now display availability as unknown; see the operator-availability artifact."
-
       - name: Upload automated centre-quality analysis
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: centre-quality-${{ inputs.country || 'ALL' }}
           path: .artifacts/centre-quality.*.json
-          if-no-files-found: warn
-          retention-days: 30
-
-      - name: Upload operator-availability analysis
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: operator-availability
-          path: .artifacts/operator-availability.*.json
           if-no-files-found: warn
           retention-days: 30
 
@@ -129,7 +105,7 @@ jobs:
         run: npm run build
 
       - name: Commit the refreshed dataset
-        if: steps.ingest.outputs.changed == 'true' || steps.availability.outputs.refreshed == 'true'
+        if: steps.ingest.outputs.changed == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -148,7 +124,7 @@ jobs:
       # New geocode results are worth keeping even when no centre changed —
       # they are what stops the next run re-billing Google for the same address.
       - name: Commit geocode cache only
-        if: steps.ingest.outputs.changed != 'true' && steps.availability.outputs.refreshed != 'true'
+        if: steps.ingest.outputs.changed != 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"

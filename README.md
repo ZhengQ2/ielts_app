@@ -15,16 +15,15 @@ Worldwide coverage. The plan, and the research it rests on, is in
 | M1.5 — scheduled re-crawl + automated quality analysis | done |
 | M2 — viewport loading, search, distance sorting and offering filters | done |
 | M2.5 — automated remediation + quality trend gates | done |
-| M2.6 — operator-supported availability feasibility | done |
+| M2.6 — availability feasibility and future-opening notices | paused |
 | M2.7 — basemap-neutral coordinate foundation | **in progress** |
 | M3 — objective score and compliant Google enrichment | **next** |
 | M4+ — assessments, reviews and hardening | planned |
 
-M2.6 found one safe operator-supported exception to the global availability gap: IELTS USA's
-public network page explicitly separates registration links from future locations. A weekly,
-self-checking overlay now marks 23 US centres with registration links and 5 as future locations;
-every other centre remains “availability not verified.” Live dates and seats are still never
-inferred. See [the feasibility decision](docs/AVAILABILITY_FEASIBILITY.md).
+M2.6 confirmed that the directory should not automate registration availability or opening
+status. Five IELTS USA future openings remain as a manually curated exception: they are visibly
+marked as not yet open and link to official candidate-interest forms. Live dates and seats are
+never inferred. See [the feasibility decision](docs/AVAILABILITY_FEASIBILITY.md).
 
 ## Why the repo is shaped this way
 
@@ -242,9 +241,9 @@ Two details make the schedule work rather than just churn:
 - **The geocode cache is committed** (`data/geocode-cache.json`, ~44 KB). CI checks out fresh, so
   without it every run would re-bill every address to Google. The fetched HTML is *not* committed
   and not cached in CI: the point of a scheduled crawl is to see the source as it is now.
-- **Availability expires safely.** The job fetches IELTS USA's public network page once, validates
-  its structure and matching rate, and commits a compact status snapshot. After two missed weekly
-  checks (15 days), the UI stops trusting it and falls back to “verify with operator.”
+- **No automated availability claims.** The weekly job refreshes the neutral centre directory, not
+  opening status, dates, or seats. Five manually curated IELTS USA future openings are retained
+  only so candidates can use their official interest forms.
 
 To enable Google geocoding in CI, add the key as a repository secret — run this yourself, so the
 key stays between you and GitHub:

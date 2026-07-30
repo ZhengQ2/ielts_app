@@ -10,5 +10,5 @@ export * from './format.ts';
 export * from './theme.ts';
 export * from './after-test.ts';
 export * from './corrections.ts';
-export * from './availability.ts';
 export * from './offerings.ts';
+export * from './publication.ts';

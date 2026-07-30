@@ -11,6 +11,7 @@ import type {
 import { haversineKm, isPinnable } from './geo.ts';
 import { normaliseText } from './text.ts';
 import { offeringCategory, offeringModule } from './offerings.ts';
+import { isDirectoryVisible } from './publication.ts';
 
 /**
  * Filtering and sorting for the directory. Lives in core, not in the web app,
@@ -150,7 +151,7 @@ export function filterCentres(
   const out: CentreWithDistance[] = [];
 
   for (const c of centres) {
-    if (!filter.includeUnpublishable && !c.isPublishable) continue;
+    if (!filter.includeUnpublishable && !isDirectoryVisible(c)) continue;
     if (country && c.address.country?.toUpperCase() !== country) continue;
     if (operators && !operators.has(c.operator)) continue;
     if (formats && !c.formats.some((f) => formats.has(f))) continue;
@@ -313,7 +314,7 @@ function nullsLast(a: number | null, b: number | null): number {
 export function cityFacets(centres: Centre[]): { city: string; count: number }[] {
   const counts = new Map<string, number>();
   for (const c of centres) {
-    if (!c.isPublishable) continue;
+    if (!isDirectoryVisible(c)) continue;
     const city = c.address.city;
     if (!city) continue;
     counts.set(city, (counts.get(city) ?? 0) + 1);
@@ -327,7 +328,7 @@ export function cityFacets(centres: Centre[]): { city: string; count: number }[]
 export function countryFacets(centres: Centre[]): { country: string; count: number }[] {
   const counts = new Map<string, number>();
   for (const c of centres) {
-    if (!c.isPublishable) continue;
+    if (!isDirectoryVisible(c)) continue;
     const country = c.address.country;
     if (!country) continue;
     counts.set(country, (counts.get(country) ?? 0) + 1);
@@ -356,7 +357,7 @@ export function currenciesIn(centres: Centre[]): string[] {
 export function operatorFacets(centres: Centre[]): { operator: Operator; count: number }[] {
   const counts = new Map<Operator, number>();
   for (const c of centres) {
-    if (!c.isPublishable) continue;
+    if (!isDirectoryVisible(c)) continue;
     counts.set(c.operator, (counts.get(c.operator) ?? 0) + 1);
   }
   return [...counts.entries()]

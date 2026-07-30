@@ -112,6 +112,35 @@ test('free-text search includes merged contact information', () => {
   assert.equal(filterCentres([centre], { q: '403 555 0100' }).length, 1);
 });
 
+test('future openings remain searchable despite the ordinary price publication rule', () => {
+  const centre = {
+    id: 'future-opening',
+    name: 'Future IELTS USA centre',
+    address: {
+      raw: 'New Haven, Connecticut',
+      lines: ['New Haven', 'Connecticut'],
+      city: 'New Haven',
+      region: 'CT',
+      postcode: null,
+      country: 'US',
+    },
+    contact: { phones: [], emails: [], websites: [] },
+    formats: ['computer_delivered'],
+    offerings: [],
+    isPublishable: false,
+    futureOpening: {
+      source: 'ielts_usa_network',
+      sourceUrl: 'https://go.ieltsusa.org/TestCenterNetwork',
+      sourceLabel: 'New Haven, CT',
+    },
+  } as unknown as Centre;
+
+  assert.deepEqual(
+    filterCentres([centre], { q: 'New Haven' }).map((item) => item.id),
+    ['future-opening'],
+  );
+});
+
 test('test kind and delivery mode must match the same offering', () => {
   const centre = offeringCentre('split', [
     offering('Academic on computer', 'academic', 'computer_delivered', 320),

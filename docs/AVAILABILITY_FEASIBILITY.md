@@ -1,49 +1,36 @@
-# M2.6 — Opening-status and test-date feasibility
+# Opening-status and test-date feasibility
 
-**Decision date:** 2026-07-28
-**Outcome:** ship a narrow IELTS USA status overlay; do not claim global opening status, live test
-dates, or seats.
+**Original review:** 2026-07-28
+**Revised decision:** 2026-07-30
 
-## Evidence reviewed
+## Decision
 
-| Official source | What it supports | Decision |
-|---|---|---|
-| [IELTS test-centre finder](https://ielts.org/test-centres) | Centre and offering discovery; it directs readers to the test centre for specific availability | Keep as the master listing, never as proof that a centre is open |
-| [British Council booking guidance](https://takeielts.britishcouncil.org/take-ielts/book) | General paper/computer cadence and an outbound booking flow; computer dates depend on local demand | No centre/date/seat ingestion |
-| [IDP booking guidance](https://ielts.idp.com/singapore/about/ielts-registration-and-booking) and country test-date pages | Country-level schedules and instructions to select location, type, date and time in the booking journey | No globally consistent centre/date/seat ingestion |
-| [IELTS USA Test Center Network](https://go.ieltsusa.org/TestCenterNetwork) | Public registration links, explicit “not accepting registrations” text, and a separate future-location list that states there are no scheduled or planned dates | Supported US-only status overlay |
-| [British Council IELTS affiliate programme](https://takeielts.britishcouncil.org/ielts-partner-organisations/affiliate-programme) | A legitimate route to referral links and a commercial relationship | Apply later and ask specifically for an authorised availability feed; the public page does not promise one |
-| [British Council terms of use](https://www.britishcouncil.org/terms) | Ordinary text links are generally allowed; copying British Council content into another product requires permission | Continue linking; do not reproduce booking content or inspect private endpoints |
+Do not automate or display IELTS registration availability, opening status, test dates, or seat
+counts. A centre appearing on IELTS.org is a directory listing, not evidence that it is operating
+or accepting bookings.
 
-No public, documented global availability API was found in the official material reviewed. This
-is a bounded finding, not proof that no private partner feed exists.
+The former weekly IELTS USA status overlay and its `registration_available`,
+`not_accepting_registrations`, and expiring snapshot states have been removed.
 
-The IELTS USA network page is anonymous, server-rendered and permitted by its
-[`robots.txt`](https://go.ieltsusa.org/robots.txt). The automation requests it once per weekly run,
-identifies itself, stores only small factual status signals plus attribution, and never enters a
-booking session.
+## Future-opening exception
 
-## Implemented contract
+IELTS USA publishes five potential future locations with official forms that let candidates
+register their interest:
 
-- `registration_available` means the operator currently publishes a registration link. It does
-  **not** mean that a date or seat is available.
-- `future_location` means IELTS USA explicitly lists the place as potential/future with no
-  scheduled or planned dates.
-- `not_accepting_registrations` is used only for an explicit operator statement.
-- No matched evidence means **unknown**, never closed.
-- A snapshot older than 15 days is ignored in the product. This allows one missed weekly run, then
-  automatically degrades every assertion to “verify with operator.”
-- The source parser and matcher emit a machine-readable diagnostic. A major parse/match collapse
-  blocks replacement of the last good snapshot; newly unmatched directory centres create a CI
-  warning, while unchanged or operator-only unmatched rows remain in the artifact without weekly
-  alert noise.
+- Davenport, Iowa
+- Kansas City, Missouri
+- Lincoln, Nebraska
+- New Haven, Connecticut
+- New Orleans, Louisiana
 
-As of the decision date, all 28 IELTS USA centres in the committed directory match the operator
-page: 23 have operator-published registration links and 5 are explicitly future locations. Two
-additional operator rows say “not accepting registrations” but are not present in the IELTS.org
-master, so they are retained only as source diagnostics.
+These records remain in the directory despite having no published test price. They are explicitly
+marked **Future opening**, state that there are no scheduled test dates, and link to the
+operator-provided interest form. They must never be described as open, bookable, or available.
 
-## What would unlock live dates
+The exception is a small, manually curated listing overlay in
+`packages/core/data/future-openings.json`; it is not an availability collector.
+
+## What would unlock availability
 
 An operator-provided contract or documented feed must define:
 
@@ -54,4 +41,5 @@ An operator-provided contract or documented feed must define:
 4. authentication, rate limits, display/retention rights and attribution;
 5. geographic coverage and failure/SLA semantics.
 
-Until then the supported product action is “Check dates and book on the operator site.”
+Until then, ordinary centres link to the operator to check dates and book. Future openings link to
+their official interest form.
