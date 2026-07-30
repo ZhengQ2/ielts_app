@@ -364,6 +364,10 @@ diagnostic artifact rather than publishing to the website.
   computer-centre page is parsed as a complete 46-centre inventory and compared by branch plus
   address evidence; missing or ambiguous centres stay diagnostic rather than being attached to a
   similarly named city.
+  The 2026-07-30 full-scale GitHub Actions gate completed 422/422 HTTP 200 requests with no
+  challenge signal, covered all 406 combinations, and parsed 13,882 dated sessions with no rejected
+  capture. Its inventory comparison found 41 safe matches, three provider-only centres and two
+  address-review cases.
 - IDP China exposes a public first-party encrypted API used by its test-date page. The validator
   decodes the SM4-CBC envelope using protocol material shipped in that public site's JavaScript,
   verifies both project inventories, reads the complete session inventory in one response (avoiding

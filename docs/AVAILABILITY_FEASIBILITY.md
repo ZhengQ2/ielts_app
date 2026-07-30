@@ -104,6 +104,11 @@ The current source graph has 406 test/module/city combinations and the official 
 page has 46 entries. Since availability ids are city-level rather than stable centre ids, ambiguous
 or unmatched sessions stay in diagnostics with `centreId: null`.
 
+The 2026-07-30 full-scale GitHub Actions gate completed all 422 serial requests with HTTP 200 and no
+challenge signal, timeout or provider-boundary stop. It parsed 13,882 dated sessions from all 406
+combinations, rejected no capture, and found 41 safe centre-inventory matches, three provider-only
+centres and two address-review cases.
+
 ## IDP China full-scale validator
 
 IDP China's public date-search application uses first-party JSON endpoints with SM4-CBC response
