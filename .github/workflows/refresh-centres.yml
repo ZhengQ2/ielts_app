@@ -22,7 +22,38 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  validate-usa-availability-revert:
+    if: github.ref_name == 'codex/revert-ielts-usa-availability'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+
+      - name: Run typecheck
+        run: npm run typecheck
+
+      - name: Build production static export
+        env:
+          NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: ${{ secrets.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY }}
+          NEXT_PUBLIC_GOOGLE_MAP_ID: ${{ secrets.NEXT_PUBLIC_GOOGLE_MAP_ID }}
+        run: npm run build
+
   refresh:
+    if: github.ref_name != 'codex/revert-ielts-usa-availability'
     runs-on: ubuntu-latest
     timeout-minutes: 60
 
