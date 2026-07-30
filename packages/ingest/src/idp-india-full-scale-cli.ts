@@ -302,7 +302,10 @@ function createSerialRequester(
     if (
       url.protocol !== 'https:' ||
       url.hostname.replace(/^www\./i, '') !== 'ieltsidpindia.com' ||
-      !/^\/registration\//i.test(url.pathname)
+      !(
+        /^\/registration\//i.test(url.pathname) ||
+        url.pathname.toLowerCase() === '/information/contact'
+      )
     ) {
       throw new Error(`Refusing unapproved IDP India URL ${url}`);
     }
