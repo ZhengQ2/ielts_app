@@ -83,25 +83,45 @@ The pilot remains disabled until its browser portion can run from an isolated wo
 evidence through simulated failures, and produces no unexplained country-level listing cliff. Any
 provider restriction ends the experiment and leaves British Council dates as unknown.
 
-## IDP India one-session pilot
+## IDP India full-scale validator
 
-IDP India exposes test type, module, city, date, time and an “Available” label before personal
-details. M2.7 now has a manual-only collector for exactly one requested combination:
+IDP India exposes anonymous JSON endpoints for test types, modules, cities and exact future dates
+before personal details. M2.7 now discovers this graph at runtime and can validate every exposed
+combination:
 
-- execution requires `M2_7_LIVE_EXPERIMENT=true` plus GitHub Actions or an explicitly isolated
-  worker;
-- the workflow has no schedule and accepts one test/module/city/date target;
-- it never logs in or proceeds past public date selection;
-- “Available” is accepted only when it occurs in the same DOM block as the selected session radio
-  and time—not when it appears only in the calendar legend;
-- the output is uploaded as a 14-day diagnostic artifact and is never committed or displayed;
-- invalid captures, empty results and systemic result cliffs fail the safety gate.
+- execution requires both `GITHUB_ACTIONS=true` and `M2_7_LIVE_EXPERIMENT=true`;
+- requests are serial with a three-second minimum interval, no retries and immediate stop behavior
+  for timeouts, HTTP 403/429, challenge text, non-JSON data or an unexpected response shape;
+- each session keeps the operator's exact test/module/city labels and date, and is called available
+  only when `SeatAvailable` is greater than zero;
+- the official “IELTS on Computer Test Centres” section is bounded away from IDP's student-placement
+  branches, must yield at least 20 unique centres, and is compared with the directory using unique
+  branch/address evidence;
+- the output is a diagnostic artifact and is never committed or displayed; invalid captures,
+  incomplete coverage and systemic result cliffs fail the safety gate.
 
-The source carries a city/branch id but the IELTS.org India records have no provider centre id.
-Matching therefore requires both the exact offering dimensions and a uniquely strong branch-name
-match. In an offline audit of the 43 computer-test locations observed in the public selector, 41
-matched uniquely; the generic Chandigarh and Chennai entries remained ambiguous. Ambiguous and
-unmatched sessions stay in diagnostics with `centreId: null`.
+The current source graph has 406 test/module/city combinations and the official computer-centre
+page has 46 entries. Since availability ids are city-level rather than stable centre ids, ambiguous
+or unmatched sessions stay in diagnostics with `centreId: null`.
+
+## IDP China full-scale validator
+
+IDP China's public date-search application uses first-party JSON endpoints with SM4-CBC response
+envelopes. The decryption key and IV are protocol material shipped to every browser in the site's
+public JavaScript; the validator uses them only to read the same anonymous data displayed by the
+page. It:
+
+- confirms the exact Academic (`22`) and General Training (`23`) project set;
+- fetches and reconciles both complete official centre inventories;
+- requests all sessions in one response because the provider's page ordering is unstable across
+  paginated calls;
+- validates exact dates, capacity, registrations and full-booked state, and requires every session
+  centre id to exist in the official centre inventory;
+- uses English source names for matching and keeps Chinese names/addresses as non-display evidence.
+
+The current complete response contains 1,137 sessions across 27 centres. Thirteen centres match the
+IELTS.org directory and 14 do not; the 14 remain explicit provider-only discoveries rather than
+being guessed onto a fuzzy city/district match.
 
 ## M2.7 provider validation outcome
 
@@ -127,12 +147,9 @@ HTTP 403/429, source-shape failure, or rejected capture. It parsed 8,128 explici
 future sessions: 6,360 matched a directory centre automatically, 55 were ambiguous, and 1,713 were
 unmatched. Ambiguous and unmatched records remain unpublished rather than being guessed.
 
-The other surfaces remain quarantined:
+The regional surfaces remain quarantined from publication while their full-scale validators run:
 
-- IDP India bulk discovery found 406 public test/module/city combinations and no CAPTCHA during the
-  bounded checks, but automatic calendar traversal could not yet produce defensible future
-  date/time evidence. The manual one-session workflow remains available; no bulk result is
-  published.
-- IDP China redirects to login and is excluded.
+- IDP India and IDP China produce complete diagnostics but do not alter the public dataset or the
+  operator-published price strings.
 - NEEA is British Council's China partner, not an IDP partner, and requires login plus reCAPTCHA.
 - British Council Global returned CDN HTTP 403 in the bounded Actions probe. No bypass was attempted.
