@@ -231,6 +231,20 @@ test('merges complete provider centre inventories across both projects', () => {
   );
 });
 
+test('does not confuse a new China district with a nearby fuzzy name', () => {
+  const provider = providerCentrePage('22').centres[0]!;
+  provider.englishName = 'IDP IELTS Shanghai Yangpu Test Center';
+  const existing = chinaCentre(
+    'idp-ielts-china-shanghai-xuhui',
+    'IDP IELTS China Shanghai Xuhui',
+  );
+  existing.address.city = 'Shanghai';
+
+  const match = matchIdpChinaProviderCentre(provider, [existing]);
+  assert.equal(match.status, 'unmatched');
+  assert.equal(match.centreId, null);
+});
+
 test('rejects partial or contradictory provider centre inventories', () => {
   const partial = providerCentrePage('22');
   partial.total = 2;

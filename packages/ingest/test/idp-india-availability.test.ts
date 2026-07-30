@@ -231,6 +231,41 @@ test('a date without an explicit availability label stays session-published', ()
   assert.equal(snapshot.records[0]?.centreMatchStatus, 'unmatched');
 });
 
+test('recognises the UKVI module abbreviations returned by the live API', () => {
+  const academic = buildIdpIndiaAvailabilitySnapshot(
+    [
+      capture({
+        testId: '5',
+        testLabel: 'Computer-delivered IELTS for UKVI',
+        moduleId: '10',
+        moduleLabel: 'CDIELTS for UKVI AC',
+      }),
+    ],
+    [],
+    checkedAt,
+  );
+  const generalTraining = buildIdpIndiaAvailabilitySnapshot(
+    [
+      capture({
+        testId: '5',
+        testLabel: 'Computer-delivered IELTS for UKVI',
+        moduleId: '11',
+        moduleLabel: 'CDIELTS for UKVI GT',
+      }),
+    ],
+    [],
+    checkedAt,
+  );
+
+  assert.equal(academic.diagnostics.rejectedCaptures.length, 0);
+  assert.equal(academic.records[0]?.offering.module, 'academic');
+  assert.equal(generalTraining.diagnostics.rejectedCaptures.length, 0);
+  assert.equal(
+    generalTraining.records[0]?.offering.module,
+    'general_training',
+  );
+});
+
 test('invalid captures and systemic session drops trip the safety gate', () => {
   const invalid = buildIdpIndiaAvailabilitySnapshot(
     [capture({ sessions: [] })],

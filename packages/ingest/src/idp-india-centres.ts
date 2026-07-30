@@ -130,6 +130,7 @@ export function matchIdpIndiaProviderCentre(
   candidateCentreIds: string[];
 } {
   const providerName = locationKey(provider.name);
+  const providerQualifier = locationQualifier(providerName);
   const candidates = centres
     .filter(
       (centre) =>
@@ -138,9 +139,10 @@ export function matchIdpIndiaProviderCentre(
         isIndiaBookingUrl(centre.bookingUrl),
     )
     .map((centre) => {
+      const centreName = locationKey(centre.name);
       const nameScore = nameSimilarity(
         providerName,
-        locationKey(centre.name),
+        centreName,
       );
       const addressScore = nameSimilarity(
         nameKey(provider.address),
@@ -148,13 +150,23 @@ export function matchIdpIndiaProviderCentre(
       );
       return {
         centre,
-        score: Math.max(nameScore, addressScore),
+        nameScore:
+          providerQualifier &&
+          !new Set(centreName.split(' ')).has(providerQualifier)
+            ? 0
+            : nameScore,
+        addressScore,
       };
     })
-    .filter(({ score }) => score >= 0.45)
+    .filter(
+      ({ nameScore, addressScore }) =>
+        nameScore >= 0.45 || addressScore >= 0.55,
+    )
     .sort(
       (a, b) =>
-        b.score - a.score || a.centre.id.localeCompare(b.centre.id),
+        b.addressScore - a.addressScore ||
+        b.nameScore - a.nameScore ||
+        a.centre.id.localeCompare(b.centre.id),
     );
   if (!candidates.length) {
     return { status: 'unmatched', centreId: null, candidateCentreIds: [] };
@@ -162,9 +174,15 @@ export function matchIdpIndiaProviderCentre(
   const best = candidates[0]!;
   const second = candidates[1];
   const candidateCentreIds = candidates.map(({ centre }) => centre.id);
+  const uniqueAddress =
+    best.addressScore >= 0.76 &&
+    (!second || best.addressScore - second.addressScore >= 0.12);
+  const uniqueName =
+    best.nameScore >= 0.78 &&
+    (!second || best.nameScore - second.nameScore >= 0.18);
   if (
-    best.score >= 0.78 &&
-    (!second || best.score - second.score >= 0.18)
+    uniqueAddress ||
+    uniqueName
   ) {
     return {
       status: 'matched',
@@ -226,6 +244,11 @@ function locationKey(value: string): string {
         token !== 'center',
     )
     .join(' ');
+}
+
+function locationQualifier(value: string): string | null {
+  const tokens = value.split(' ').filter(Boolean);
+  return tokens.length > 1 ? tokens[tokens.length - 1]! : null;
 }
 
 function isIndiaBookingUrl(value: string | null): boolean {

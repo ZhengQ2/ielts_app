@@ -261,7 +261,11 @@ function offeringIdentity(
 
 function moduleFromLabel(label: string): TestModule | null {
   if (/general\s*training/i.test(label)) return 'general_training';
+  // The live UKVI endpoint abbreviates its modules as
+  // "CDIELTS for UKVI AC" and "CDIELTS for UKVI GT".
+  if (/\b(?:ukvi\s+)?gt\b/i.test(label)) return 'general_training';
   if (/academic/i.test(label)) return 'academic';
+  if (/\b(?:ukvi\s+)?ac\b/i.test(label)) return 'academic';
   if (/life\s*skills/i.test(label)) return 'life_skills';
   return null;
 }

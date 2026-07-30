@@ -80,6 +80,84 @@ test('matches provider centres by branch name and remains fail-closed', () => {
   );
 });
 
+test('uses a unique exact address to resolve generic city duplicates', () => {
+  const provider = {
+    providerCentreId: 'amritsar-57',
+    name: 'Amritsar',
+    region: 'Punjab',
+    address:
+      'SCO-57, 3rd Floor, District Shopping Complex, Opposite BSNL office, B-Block, Ranjit Avenue, Amritsar',
+    phone: null,
+    sourceUrl: 'https://ieltsidpindia.com/information/contact',
+  };
+  const common = {
+    operator: 'IDP' as const,
+    bookingUrl: 'https://ieltsidpindia.com/registration/reg1',
+  };
+  const match = matchIdpIndiaProviderCentre(provider, [
+    {
+      ...common,
+      id: 'hotel',
+      name: 'Amritsar',
+      address: {
+        raw: 'Hotel Punnu International, Court Road, Amritsar',
+        lines: [],
+        city: 'Amritsar',
+        region: 'Punjab',
+        postcode: null,
+        country: 'IN',
+      },
+    },
+    {
+      ...common,
+      id: 'idp-office',
+      name: 'IDP Education India - Amritsar',
+      address: {
+        raw:
+          'SCO-57, 3rd Floor, District Shopping Complex, opposite BSNL office, B-Block, Ranjit Avenue, Amritsar, Punjab, 143001',
+        lines: [],
+        city: 'Amritsar',
+        region: 'Punjab',
+        postcode: '143001',
+        country: 'IN',
+      },
+    },
+  ]);
+
+  assert.equal(match.status, 'matched');
+  assert.equal(match.centreId, 'idp-office');
+});
+
+test('does not map a missing qualified branch onto another city branch', () => {
+  const provider = {
+    providerCentreId: 'hyderabad-jubilee-hills',
+    name: 'Hyderabad (Jubilee Hills)',
+    region: 'Telangana',
+    address: 'Plot 1202, Road 36, Jubilee Hills, Hyderabad',
+    phone: null,
+    sourceUrl: 'https://ieltsidpindia.com/information/contact',
+  };
+  const match = matchIdpIndiaProviderCentre(provider, [
+    {
+      id: 'hyderabad-kukatpally',
+      name: 'IDP Education India - Hyderabad - Kukatpally',
+      operator: 'IDP',
+      address: {
+        raw: 'Vijay Sai Towers, Kukatpally, Hyderabad',
+        lines: [],
+        city: 'Hyderabad',
+        region: 'Telangana',
+        postcode: null,
+        country: 'IN',
+      },
+      bookingUrl: 'https://ieltsidpindia.com/registration/reg1',
+    },
+  ]);
+
+  assert.equal(match.status, 'unmatched');
+  assert.equal(match.centreId, null);
+});
+
 test('rejects truncated official centre sections', () => {
   assert.throws(
     () =>

@@ -208,6 +208,9 @@ async function main(): Promise<void> {
         providerOnlyCentres: centreDiscovery.filter(
           (centre) => centre.match.status === 'unmatched',
         ).length,
+        ambiguousProviderCentres: centreDiscovery.filter(
+          (centre) => centre.match.status === 'ambiguous',
+        ).length,
       },
       safetyGate: {
         passed: problems.length === 0,
