@@ -15,7 +15,8 @@ interface ProbeTarget {
     | 'open_academic_computer'
     | 'open_academic_computer_writing'
     | 'open_academic_computer_writing_melbourne'
-    | 'open_academic_computer_writing_melbourne_date';
+    | 'open_academic_computer_writing_melbourne_date'
+    | 'idp_india_public_date';
 }
 
 interface ControlSummary {
@@ -40,6 +41,13 @@ interface ProbeResult {
   challengeSignals: string[];
   bodyText: string;
   controls: ControlSummary[];
+  ariaEvidence: {
+    tag: string;
+    label: string;
+    className: string;
+    disabled: string | null;
+    text: string;
+  }[];
   links: {
     text: string;
     href: string;
@@ -173,7 +181,9 @@ async function probeTarget(
     });
     status = response?.status() ?? null;
     await page.waitForTimeout(5_000);
-    if (
+    if (target.interaction === 'idp_india_public_date') {
+      await openIdpIndiaPublicDate(page);
+    } else if (
       target.interaction === 'open_search' ||
       target.interaction === 'open_academic' ||
       target.interaction === 'open_academic_computer' ||
@@ -291,6 +301,26 @@ async function probeTarget(
           }),
         ),
     )) ?? [];
+  const ariaEvidence =
+    (await safeValue(() =>
+      page.locator('[aria-label]').evaluateAll((elements) =>
+        elements.slice(0, 300).map((element) => ({
+          tag: element.tagName.toLowerCase(),
+          label: element.getAttribute('aria-label')?.trim() ?? '',
+          className:
+            typeof element.className === 'string'
+              ? element.className.slice(0, 300)
+              : '',
+          disabled:
+            element.getAttribute('aria-disabled') ??
+            element.getAttribute('disabled'),
+          text: (element.textContent ?? '')
+            .replace(/\s+/g, ' ')
+            .trim()
+            .slice(0, 300),
+        })),
+      ),
+    )) ?? [];
   const links =
     (await safeValue(() =>
       page.locator('a[href]').evaluateAll((elements) =>
@@ -332,6 +362,7 @@ async function probeTarget(
     challengeSignals,
     bodyText: bodyText.replace(/\s+/g, ' ').trim().slice(0, 20_000),
     controls,
+    ariaEvidence,
     links: links.map((link) => ({
       text: link.text,
       href: sanitizeUrl(link.href),
@@ -384,7 +415,8 @@ function parseTargets(value: string): ProbeTarget[] {
       interaction !== 'open_academic_computer' &&
       interaction !== 'open_academic_computer_writing' &&
       interaction !== 'open_academic_computer_writing_melbourne' &&
-      interaction !== 'open_academic_computer_writing_melbourne_date'
+      interaction !== 'open_academic_computer_writing_melbourne_date' &&
+      interaction !== 'idp_india_public_date'
     ) {
       throw new Error(`Probe target ${id} has an unsupported interaction`);
     }
@@ -408,13 +440,75 @@ async function clickVisibleText(
     .click();
 }
 
+async function openIdpIndiaPublicDate(
+  page: import('playwright-core').Page,
+): Promise<void> {
+  const selects = page.locator('select');
+  if ((await selects.count()) < 3) {
+    throw new Error('IDP India registration selects were not found');
+  }
+  await selects.nth(0).selectOption('4');
+  await waitForSelectOption(page, 1, 'Academic', null);
+  await selects.nth(1).selectOption({ label: 'Academic' });
+  await waitForSelectOption(page, 2, null, '60');
+  await selects.nth(2).selectOption('60');
+  const bookNow = page
+    .getByRole('button', { name: 'Book Now', exact: true })
+    .filter({ visible: true })
+    .first();
+  await bookNow.waitFor({ state: 'visible' });
+  await page.waitForFunction(() => {
+    const button = Array.from(document.querySelectorAll('button')).find(
+      (candidate) => candidate.textContent?.trim() === 'Book Now',
+    );
+    return button instanceof HTMLButtonElement && !button.disabled;
+  });
+  await bookNow.click();
+  await page
+    .getByText('Select your preferred test date below', { exact: true })
+    .waitFor({ state: 'visible' });
+  await page.waitForTimeout(5_000);
+}
+
+async function waitForSelectOption(
+  page: import('playwright-core').Page,
+  selectIndex: number,
+  label: string | null,
+  value: string | null,
+): Promise<void> {
+  await page.waitForFunction(
+    ({ index, wantedLabel, wantedValue }) => {
+      const select = document.querySelectorAll('select').item(index);
+      if (!(select instanceof HTMLSelectElement)) return false;
+      return Array.from(select.options).some((option) => {
+        const optionLabel =
+          option.textContent?.replace(/\s+/g, ' ').trim() ?? '';
+        return (
+          (wantedLabel === null || optionLabel === wantedLabel) &&
+          (wantedValue === null || option.value === wantedValue)
+        );
+      });
+    },
+    {
+      index: selectIndex,
+      wantedLabel: label,
+      wantedValue: value,
+    },
+  );
+}
+
 function allowedHost(source: ProbeTarget['source'], hostname: string): boolean {
   const host = hostname.replace(/^www\./i, '').toLowerCase();
   if (source === 'idp_global') {
     return host === 'ielts.idp.com' || host === 'bxsearch.ielts.idp.com';
   }
   if (source === 'idp_india') return host === 'ieltsidpindia.com';
-  if (source === 'idp_china') return host === 'sign.idpielts.cn';
+  if (source === 'idp_china') {
+    return (
+      host === 'sign.idpielts.cn' ||
+      host === 'idpielts.cn'
+    );
+  }
   return host === 'ieltsregistration.britishcouncil.org';
 }
 
@@ -495,12 +589,17 @@ function isApprovedResponseBody(
   if (!/json/i.test(contentType)) return false;
   try {
     const url = new URL(response.url());
-    const host = url.hostname.toLowerCase();
+    const host = url.hostname.replace(/^www\./i, '').toLowerCase();
     return (
       (host === 'ielts.idp.com' &&
         url.pathname.startsWith('/book/Json/')) ||
       host === 'api.bxsearch.prod.ielts.com' ||
-      host === 'api.session-search.prod.ielts.com'
+      host === 'api.session-search.prod.ielts.com' ||
+      host === 'ieltsidpindia.com' ||
+      host === 'idpielts.cn' ||
+      (host === 'sign.idpielts.cn' &&
+        url.pathname ===
+          '/chinesetestwebapi/portal/index/getOptionList')
     );
   } catch {
     return false;
