@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import {
-  availabilityGuidance,
   deliveryModesIn,
   formatDeliveryMode,
   formatPublishedPrice,
@@ -10,7 +9,7 @@ import { OperatorBadge } from './OperatorBadge';
 import { CentreContactDetails } from './CentreContactDetails';
 import { centreDetailHref } from '@/lib/offering-filter';
 import { isHttpUrl } from '@/lib/url-safety';
-import { CentreAvailabilityNotice } from './CentreAvailabilityNotice';
+import { FutureOpeningNotice } from './FutureOpeningNotice';
 
 /**
  * The centre picked on the map, summarised at the top of the list column.
@@ -33,8 +32,6 @@ export function SelectedCentrePanel({
     centre.ieltsOrgSlug,
     detailFilterSearch,
   );
-  const availability = availabilityGuidance(centre);
-
   return (
     <section
       aria-label={`Selected centre: ${centre.name}`}
@@ -78,10 +75,9 @@ export function SelectedCentrePanel({
         </Detail>
       </dl>
 
-      {(availability.status === 'future_location' ||
-        availability.status === 'not_accepting_registrations') && (
+      {centre.futureOpening && (
         <div className="mt-3">
-          <CentreAvailabilityNotice centre={centre} compact />
+          <FutureOpeningNotice centre={centre} compact />
         </div>
       )}
 
@@ -92,14 +88,17 @@ export function SelectedCentrePanel({
         >
           View full details →
         </Link>
-        {isHttpUrl(availability.actionUrl) && availability.actionLabel && (
+        {isHttpUrl(centre.bookingUrl) && (
           <a
-            href={availability.actionUrl!}
+            href={centre.bookingUrl!}
             target="_blank"
             rel="noreferrer nofollow"
             className="text-muted hover:text-ink hover:underline"
           >
-            {availability.actionLabel} ↗
+            {centre.futureOpening
+              ? 'Register interest with IELTS USA'
+              : `Check dates and book on the ${centre.operator} site`}{' '}
+            ↗
           </a>
         )}
       </div>

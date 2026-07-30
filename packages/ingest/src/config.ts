@@ -49,14 +49,6 @@ export const COUNTRY_LISTING_URL = 'https://ielts.org/test-centres';
 export const LISTING_CACHE_DIR = path.join(CACHE_DIR, 'listings');
 
 /**
- * Public, operator-maintained US network page. Unlike a booking session, this
- * page is anonymous, server-rendered and explicitly distinguishes registration
- * links from future locations.
- */
-export const IELTS_USA_NETWORK_URL =
-  'https://go.ieltsusa.org/TestCenterNetwork';
-
-/**
  * Identify ourselves honestly. robots.txt permits /test-centres/; we stay well
  * under any reasonable rate and cache aggressively so a re-run costs nothing.
  */

@@ -1,11 +1,10 @@
 import type { Metadata } from 'next';
 import {
   dataset,
-  omittedFutureLocationCount,
+  futureOpeningCount,
 } from '@ielts-map/core/dataset';
 import {
   countryName,
-  freshAvailability,
   genericCorrectionReportUrl,
 } from '@ielts-map/core';
 
@@ -18,9 +17,6 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   const { stats, generatedAt, country } = dataset;
   const precision = Object.entries(stats.byGeoPrecision).sort((a, b) => b[1] - a[1]);
-  const operatorStatuses = dataset.centres
-    .map((centre) => freshAvailability(centre.availability))
-    .filter((value) => value !== null);
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-10">
@@ -48,8 +44,7 @@ export default function AboutPage() {
             </>
           )}
           , and merged duplicate pages down to {stats.afterDedup.toLocaleString()} real centre
-          records. We omit {omittedFutureLocationCount.toLocaleString()} operator-declared future
-          locations from the public directory and do not generate pages for them.
+          records.
         </p>
         <p>
           Country comes from IELTS.org&rsquo;s own{' '}
@@ -94,20 +89,16 @@ export default function AboutPage() {
         </ul>
       </Section>
 
-      <Section title="How opening-status evidence is handled">
+      <Section title="Future openings">
         <p>
-          A centre appearing on IELTS.org does not prove that it is open. The one automated
-          exception is IELTS USA&rsquo;s public network page, which explicitly separates
-          registration links from potential future locations. The current fresh snapshot matches{' '}
-          {operatorStatuses.length.toLocaleString()} published US centres. It also identifies{' '}
-          {omittedFutureLocationCount.toLocaleString()} future locations with no scheduled or
-          planned test dates; those records are excluded from the public site.
+          The directory includes {futureOpeningCount.toLocaleString()} IELTS USA locations that the
+          operator identifies as future openings. They are clearly marked as not yet open and have
+          no scheduled test dates.
         </p>
         <p>
-          A registration link means only that IELTS USA currently publishes that link; it does not
-          confirm a particular date or remaining seat. The status check runs weekly and expires
-          after 15 days, so stale evidence is hidden. The directory only surfaces explicit warnings
-          such as future locations or centres that are not accepting registrations.
+          These locations are the only exception to the usual published-price requirement because
+          their official forms let candidates register interest before bookings begin. The form is
+          not evidence that a test date or seat is available.
         </p>
       </Section>
 
@@ -124,10 +115,11 @@ export default function AboutPage() {
           tax. Treat them as a comparison aid, not a quote.
         </p>
         <p>
-          A listing being present does not guarantee the centre is currently operating. We hide
-          entries with no test type or no published price for any test type. Apart from the narrow
-          IELTS USA signals described above, we have no supported status source confirming a
-          centre is accepting registrations.
+          A listing being present does not guarantee the centre is currently operating. We
+          ordinarily hide entries with no test type or no published price for any test type. The
+          explicitly marked IELTS USA future openings are retained only so candidates can use the
+          operator&rsquo;s interest forms. We do not otherwise automate opening or registration
+          status.
         </p>
       </Section>
 

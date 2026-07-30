@@ -1,21 +1,17 @@
 import type { Centre, CentreDataset } from './types.ts';
 import raw from '../data/centres.all.json' with { type: 'json' };
-import availabilityRaw from '../data/availability.all.json' with { type: 'json' };
+import futureOpeningsRaw from '../data/future-openings.json' with { type: 'json' };
+import { isDirectoryVisible } from './publication.ts';
 
-interface AvailabilitySnapshotRecord {
-  status:
-    | 'registration_available'
-    | 'not_accepting_registrations'
-    | 'future_location';
+interface FutureOpeningRecord {
   sourceLabel: string;
 }
 
-interface AvailabilitySnapshot {
+interface FutureOpeningSnapshot {
   version: 1;
-  checkedAt: string;
   source: 'ielts_usa_network';
   sourceUrl: string;
-  records: Record<string, AvailabilitySnapshotRecord>;
+  records: Record<string, FutureOpeningRecord>;
 }
 
 /**
@@ -30,37 +26,33 @@ interface AvailabilitySnapshot {
  * is what turns this into a query instead of a bundle.
  */
 const committed = raw as unknown as CentreDataset;
-const availability = availabilityRaw as AvailabilitySnapshot;
+const futureOpenings = futureOpeningsRaw as FutureOpeningSnapshot;
 
-const centresWithAvailability = committed.centres.map((centre) => {
-  const evidence = availability.records[centre.id];
-  if (!evidence) return centre;
+const centresWithFutureOpenings = committed.centres.map((centre) => {
+  const opening = futureOpenings.records[centre.id];
+  if (!opening) return centre;
   return {
     ...centre,
-    availability: {
-      ...evidence,
-      source: availability.source,
-      sourceUrl: availability.sourceUrl,
-      checkedAt: availability.checkedAt,
+    futureOpening: {
+      ...opening,
+      source: futureOpenings.source,
+      sourceUrl: futureOpenings.sourceUrl,
     },
   };
 });
 
 /**
- * Operator-declared future locations are discovery leads, not current test
- * centres. Keep them in the ingest artifacts for later refreshes, but exclude
- * them at the shared publication boundary so web pages, feeds and mobile
- * clients cannot accidentally expose them.
+ * The public directory normally requires a source-published price. Curated
+ * future openings are the sole exception because their official interest form
+ * is useful before bookings begin.
  */
-export const omittedFutureLocationCount = centresWithAvailability.filter(
-  (centre) => centre.availability?.status === 'future_location',
+export const futureOpeningCount = centresWithFutureOpenings.filter(
+  (centre) => centre.futureOpening !== undefined,
 ).length;
 
 export const dataset: CentreDataset = {
   ...committed,
-  centres: centresWithAvailability.filter(
-    (centre) => centre.availability?.status !== 'future_location',
-  ),
+  centres: centresWithFutureOpenings.filter(isDirectoryVisible),
 };
 
 export const centres: Centre[] = dataset.centres;
@@ -73,4 +65,4 @@ export function getCentreById(id: string): Centre | undefined {
   return centres.find((c) => c.id === id);
 }
 
-export const publishableCentres: Centre[] = centres.filter((c) => c.isPublishable);
+export const publishableCentres: Centre[] = centres;

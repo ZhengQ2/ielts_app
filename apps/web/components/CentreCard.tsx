@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import {
-  availabilityGuidance,
   deliveryModesIn,
   formatDistance,
   formatDeliveryMode,
@@ -9,7 +8,7 @@ import {
 } from '@ielts-map/core';
 import { OperatorBadge } from './OperatorBadge';
 import { centreDetailHref } from '@/lib/offering-filter';
-import { CentreAvailabilityNotice } from './CentreAvailabilityNotice';
+import { FutureOpeningNotice } from './FutureOpeningNotice';
 
 interface Props {
   centre: CentreWithDistance;
@@ -31,8 +30,6 @@ export function CentreCard({
     centre.ieltsOrgSlug,
     detailFilterSearch,
   );
-  const availability = availabilityGuidance(centre);
-
   return (
     <li
       onMouseEnter={onHover}
@@ -66,10 +63,9 @@ export function CentreCard({
           {deliveryModesIn(centre.offerings).map(formatDeliveryMode).join(' · ')}
         </span>
       </div>
-      {(availability.status === 'future_location' ||
-        availability.status === 'not_accepting_registrations') && (
+      {centre.futureOpening && (
         <div className="mt-3">
-          <CentreAvailabilityNotice centre={centre} compact />
+          <FutureOpeningNotice centre={centre} compact />
         </div>
       )}
     </li>

@@ -18,6 +18,7 @@ import {
   offeringModule,
   filterCentres,
   geoWithinBounds,
+  isDirectoryVisible,
   operatorFacets,
   operatorShape,
   operatorStyle,
@@ -113,7 +114,7 @@ export function Directory() {
 
   return (
     <DirectoryView
-      centres={dataset.centres.filter((centre) => centre.isPublishable)}
+      centres={dataset.centres.filter(isDirectoryVisible)}
     />
   );
 }

@@ -3,9 +3,9 @@ import test from 'node:test';
 import {
   centres,
   dataset,
+  futureOpeningCount,
   getCentreById,
   getCentreBySlug,
-  omittedFutureLocationCount,
 } from '../src/dataset.ts';
 
 const futureLocationIds = [
@@ -16,16 +16,16 @@ const futureLocationIds = [
   'ielts-usa-new-orleans-la',
 ];
 
-test('operator-declared future locations are absent from every public dataset lookup', () => {
-  assert.equal(omittedFutureLocationCount, futureLocationIds.length);
+test('operator-declared future openings remain visible with an explicit warning marker', () => {
+  assert.equal(futureOpeningCount, futureLocationIds.length);
   assert.equal(dataset.centres, centres);
-  assert.equal(
-    centres.some((centre) => centre.availability?.status === 'future_location'),
-    false,
-  );
 
   for (const id of futureLocationIds) {
-    assert.equal(getCentreById(id), undefined);
-    assert.equal(getCentreBySlug(id), undefined);
+    const centre = getCentreById(id);
+    assert.ok(centre);
+    assert.equal(getCentreBySlug(id), centre);
+    assert.equal(centre.isPublishable, false);
+    assert.equal(centre.futureOpening?.source, 'ielts_usa_network');
+    assert.match(centre.bookingUrl ?? '', /^https:\/\/go\.ieltsusa\.org\//);
   }
 });

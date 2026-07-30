@@ -221,24 +221,11 @@ export interface CentreContactInformation {
   websites: string[];
 }
 
-/**
- * A narrow operator-published registration signal.
- *
- * This is deliberately not `isOpen`: a registration link does not guarantee a
- * particular date or seat, while a future/not-accepting statement is useful
- * only for as long as the supporting operator page remains fresh.
- */
-export type CentreAvailabilityStatus =
-  | 'registration_available'
-  | 'not_accepting_registrations'
-  | 'future_location';
-
-export interface CentreAvailability {
-  status: CentreAvailabilityStatus;
+/** A manually curated operator-declared location that has not opened yet. */
+export interface FutureOpening {
   source: 'ielts_usa_network';
   sourceUrl: string;
   sourceLabel: string;
-  checkedAt: string;
 }
 
 /** A fully resolved centre — one row of the directory. */
@@ -280,11 +267,8 @@ export interface Centre {
   parsedPriceFrom: number | null;
   parsedCurrency: string | null;
   bookingUrl: string | null;
-  /**
-   * Optional operator evidence layered onto the canonical IELTS.org record.
-   * Absence means availability is unknown, not closed.
-   */
-  availability?: CentreAvailability;
+  /** Present only when the operator identifies this as a future opening. */
+  futureOpening?: FutureOpening;
   /**
    * Listing eligibility, not evidence that a centre is currently open.
    * Requires at least one offering carrying source-published fee text.
