@@ -5,6 +5,11 @@ import {
   decryptIdpChinaEnvelope,
   decryptIdpChinaPayload,
 } from '../src/idp-china-api.ts';
+import {
+  buildIdpChinaAvailabilitySnapshot,
+  matchIdpChinaCentre,
+  parseIdpChinaSessionPage,
+} from '../src/idp-china-availability.ts';
 
 const KEY = Buffer.from('065574e7ef3d92c579ffba093797b4f2', 'hex');
 const IV = Buffer.from('7a6b964619a05e5ce5423608b7bf4e95', 'hex');
@@ -42,4 +47,141 @@ test('rejects malformed or unsuccessful IDP China envelopes', () => {
     () => decryptIdpChinaEnvelope({ code: 402, data: '' }),
     /response code was 402/,
   );
+});
+
+const checkedAt = '2026-07-29T12:00:00.000Z';
+
+function sessionPage(
+  overrides: Record<string, unknown> = {},
+): Record<string, unknown> {
+  return {
+    code: 200,
+    msg: '查询成功',
+    total: 1,
+    rows: [
+      {
+        ID: 'session-1',
+        centerId: 'provider-centre-1',
+        centerEnName: 'IDP IELTS Guangzhou Tianhe Test Center',
+        centerCnName: 'IDP雅思广州天河区考场',
+        projectCode: '22',
+        projectName: 'IELTS on Computer Academic',
+        examTimeOrigin: '2026-08-04',
+        examTime: '09:00 AM',
+        participantsCount: '35',
+        signUpCount: '4',
+        fullyBooked: '0',
+        ...overrides,
+      },
+    ],
+  };
+}
+
+function chinaCentre(
+  id = 'idp-ielts-china-guangzhou-tianhe',
+  name = 'IDP IELTS China Guangzhou Tianhe',
+) {
+  return {
+    id,
+    name,
+    operator: 'IDP' as const,
+    bookingUrl: 'https://sign.idpielts.cn/kaoshibaoming/',
+    address: {
+      raw: 'Guangzhou Tianhe',
+      lines: ['Guangzhou Tianhe'],
+      city: 'Guangzhou',
+      region: null,
+      postcode: null,
+      country: 'CN',
+    },
+    offerings: [
+      {
+        label: 'IELTS on Computer Academic',
+        kind: 'academic' as const,
+        module: 'academic' as const,
+        category: 'standard' as const,
+        format: 'computer_delivered' as const,
+        priceText: 'CNY 1,890',
+        parsedCurrency: 'CNY',
+        parsedPrice: 1890,
+        priceParseStatus: 'verified' as const,
+      },
+    ],
+  };
+}
+
+test('parses exact IDP China session capacity and availability', () => {
+  const parsed = parseIdpChinaSessionPage(sessionPage());
+  assert.equal(parsed.total, 1);
+  assert.deepEqual(parsed.sessions[0], {
+    sessionId: 'session-1',
+    centreId: 'provider-centre-1',
+    centreEnglishName: 'IDP IELTS Guangzhou Tianhe Test Center',
+    centreChineseName: 'IDP雅思广州天河区考场',
+    projectCode: '22',
+    projectName: 'IELTS on Computer Academic',
+    testDate: '2026-08-04',
+    timeText: '09:00 AM',
+    capacity: 35,
+    registrations: 4,
+    fullyBooked: false,
+  });
+
+  const snapshot = buildIdpChinaAvailabilitySnapshot(
+    parsed.sessions,
+    [chinaCentre()],
+    checkedAt,
+  );
+  assert.equal(snapshot.records[0]?.status, 'available');
+  assert.equal(
+    snapshot.records[0]?.centreId,
+    'idp-ielts-china-guangzhou-tianhe',
+  );
+  assert.equal(
+    snapshot.records[0]?.providerLocationLabel,
+    'IDP IELTS Guangzhou Tianhe Test Center',
+  );
+});
+
+test('does not trust translated provider names or overstate full sessions', () => {
+  const parsed = parseIdpChinaSessionPage(
+    sessionPage({ fullyBooked: '1', signUpCount: '35' }),
+  );
+  const snapshot = buildIdpChinaAvailabilitySnapshot(
+    parsed.sessions,
+    [chinaCentre()],
+    checkedAt,
+  );
+  assert.equal(snapshot.records[0]?.status, 'session_published');
+  assert.doesNotMatch(
+    snapshot.records[0]?.providerLocationLabel ?? '',
+    /[\u3400-\u9fff]/,
+  );
+});
+
+test('keeps unsupported offerings and ambiguous centres fail-closed', () => {
+  assert.throws(
+    () =>
+      parseIdpChinaSessionPage(
+        sessionPage({ projectCode: '99', projectName: 'Unknown' }),
+      ),
+    /unsupported project 99/,
+  );
+
+  const parsed = parseIdpChinaSessionPage(sessionPage());
+  const offering = buildIdpChinaAvailabilitySnapshot(
+    parsed.sessions,
+    [],
+    checkedAt,
+  ).records[0]!.offering;
+  const match = matchIdpChinaCentre(
+    'IDP IELTS Guangzhou Tianhe Test Center',
+    offering,
+    [
+      chinaCentre('one'),
+      chinaCentre('two'),
+    ],
+  );
+  assert.equal(match.status, 'ambiguous');
+  assert.equal(match.centreId, null);
 });

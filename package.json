@@ -20,6 +20,8 @@
     "ingest": "npm run ingest --workspace @ielts-map/ingest --",
     "availability": "npm run availability --workspace @ielts-map/ingest --",
     "availability:idp-global-full-scale": "npm run availability:idp-global-full-scale --workspace @ielts-map/ingest --",
+    "availability:idp-india-full-scale": "npm run availability:idp-india-full-scale --workspace @ielts-map/ingest --",
+    "availability:idp-china-full-scale": "npm run availability:idp-china-full-scale --workspace @ielts-map/ingest --",
     "availability:idp-india-pilot": "npm run availability:idp-india-pilot --workspace @ielts-map/ingest --",
     "availability:idp-global-api-probe": "npm run availability:idp-global-api-probe --workspace @ielts-map/ingest --",
     "availability:idp-china-api-probe": "npm run availability:idp-china-api-probe --workspace @ielts-map/ingest --",
