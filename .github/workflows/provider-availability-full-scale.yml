@@ -48,7 +48,7 @@ jobs:
         run: npm run build
 
   idp-global:
-    if: inputs.confirmed
+    if: inputs.confirmed && github.ref_name != 'codex/m2-7-regional-discovery-run'
     needs: verify-code
     runs-on: ubuntu-latest
     timeout-minutes: 60
@@ -83,7 +83,7 @@ jobs:
           retention-days: 30
 
   excluded-providers:
-    if: inputs.confirmed
+    if: inputs.confirmed && github.ref_name != 'codex/m2-7-regional-discovery-run'
     runs-on: ubuntu-latest
     steps:
       - name: Record deliberate exclusions
@@ -92,3 +92,65 @@ jobs:
           echo "IDP India bulk scan excluded: safe calendar discovery did not produce defensible future date/time evidence."
           echo "NEEA excluded: British Council-only China partner requiring login and reCAPTCHA."
           echo "British Council Global excluded: bounded GitHub Actions probe returned CDN HTTP 403."
+
+  m2-7-regional-discovery:
+    if: inputs.confirmed && github.ref_name == 'codex/m2-7-regional-discovery-run'
+    needs: verify-code
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Locate Chrome
+        id: chrome
+        shell: bash
+        run: |
+          chrome_path="$(command -v google-chrome || command -v google-chrome-stable || true)"
+          if [[ -z "$chrome_path" ]]; then
+            echo "::error::Chrome is not installed on this isolated runner."
+            exit 1
+          fi
+          echo "path=$chrome_path" >> "$GITHUB_OUTPUT"
+
+      - name: Inspect anonymous India and China provider surfaces
+        env:
+          M2_7_DISCOVERY_EXPERIMENT: "true"
+          CHROME_PATH: ${{ steps.chrome.outputs.path }}
+          PROVIDER_PROBE_INTERVAL_MS: "15000"
+          PROVIDER_PROBE_TARGETS_JSON: >-
+            [
+              {
+                "id": "idp-india-public-date",
+                "source": "idp_india",
+                "url": "https://ieltsidpindia.com/registration/reg1",
+                "interaction": "idp_india_public_date"
+              },
+              {
+                "id": "idp-china-test-centres",
+                "source": "idp_china",
+                "url": "https://www.idpielts.cn/test-center"
+              }
+            ]
+        run: npm run availability:surface-probe
+
+      - name: Upload regional diagnostic
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: idp-regional-discovery
+          path: |
+            .artifacts/provider-surface-probe.json
+            .artifacts/provider-surface-probe/*.png
+          if-no-files-found: error
+          retention-days: 14
