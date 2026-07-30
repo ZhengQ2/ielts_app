@@ -140,6 +140,11 @@ jobs:
                 "id": "idp-china-test-centres",
                 "source": "idp_china",
                 "url": "https://www.idpielts.cn/test-center"
+              },
+              {
+                "id": "idp-china-test-dates",
+                "source": "idp_china",
+                "url": "https://www.idpielts.cn/test-dates"
               }
             ]
         run: npm run availability:surface-probe
