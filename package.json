@@ -16,7 +16,7 @@
     "start": "npm run start --workspace @ielts-map/web",
     "lint": "npm run lint --workspace @ielts-map/web",
     "typecheck": "tsc -b packages/core packages/ingest --pretty",
-    "test": "node --test --experimental-strip-types \"packages/*/test/*.test.ts\"",
+    "test": "node --test --experimental-strip-types \"packages/*/test/*.test.ts\" && python3 scripts/test-internal-api-validation.py",
     "ingest": "npm run ingest --workspace @ielts-map/ingest --",
     "localize": "npm run localize --workspace @ielts-map/ingest --",
     "neutral-pilot": "npm run neutral-pilot --workspace @ielts-map/ingest --",
