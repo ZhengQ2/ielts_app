@@ -9,7 +9,6 @@ import {
 } from 'react';
 import dynamic from 'next/dynamic';
 import {
-  cityFacets,
   countryFacets,
   countryName,
   currenciesIn,
@@ -43,6 +42,7 @@ import {
   TEST_CATEGORY_OPTIONS,
   TEST_MODULE_OPTIONS,
 } from '@/lib/offering-filter';
+import { CitySearch, type CitySearchSelection } from './CitySearch';
 
 // Google Maps touches `window` on load, so it stays out of the server render.
 const CentreMap = dynamic(() => import('./CentreMap'), {
@@ -62,7 +62,6 @@ type MapViewport = GeoBounds & {
 };
 
 const LIST_PAGE_SIZE = 40;
-const WORLD_LIST_ZOOM = 2.5;
 /**
  * Load the directory after the static page shell is visible. Previously the
  * complete dataset was serialized into the home page's React payload, making
@@ -122,7 +121,7 @@ export function Directory() {
 function DirectoryView({ centres }: { centres: Centre[] }) {
   const [query, setQuery] = useState('');
   const [country, setCountry] = useState('');
-  const [city, setCity] = useState<string>('');
+  const [searchLocation, setSearchLocation] = useState<CitySearchSelection | null>(null);
   const [operators, setOperators] = useState<Operator[]>([]);
   const [testModules, setTestModules] = useState<TestModule[]>([
     ...DEFAULT_TEST_MODULES,
@@ -134,8 +133,9 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
     ...DEFAULT_DELIVERY_MODES,
   ]);
   const [maxPrice, setMaxPrice] = useState<number | null>(null);
-  // Null means "use the contextual default": name worldwide, distance after
-  // choosing a country or city. Any explicit menu choice overrides it.
+  // Null means "use the contextual default": name worldwide, distance once a
+  // selected city hint or country supplies an origin. Any explicit menu choice
+  // overrides it.
   const [sort, setSort] = useState<SortKey | null>(null);
   const [viewport, setViewport] = useState<MapViewport | null>(null);
   const [listLimit, setListLimit] = useState(LIST_PAGE_SIZE);
@@ -224,47 +224,31 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
   const showLifeSkillsNote =
     lifeSkillsHovered || lifeSkillsNotePinned;
 
-  // City choices are scoped to country + operators + search — not to city
-  // itself, obviously, and not to price (see below). Without this, picking a
-  // country wouldn't narrow the City dropdown at all, and a worldwide list
-  // would offer all ~300 city names from every country at once.
+  // A selected Google city is a distance origin, not a string filter. This
+  // avoids depending on the source dataset's mixed city languages and
+  // administrative levels while ordinary typed text still searches records.
   const preCityFilter: CentreFilter = {
-    q: query || undefined,
+    q: searchLocation ? undefined : query || undefined,
     country: country || undefined,
     operators: operators.length ? operators : undefined,
     testModules,
     testCategories,
     deliveryModes,
   };
-  const preCityResults = useMemo(
-    () => filterCentres(centres, preCityFilter),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [
-      centres,
-      query,
-      country,
-      operators,
-      testModules,
-      testCategories,
-      deliveryModes,
-    ],
-  );
-  const cities = useMemo(() => cityFacets(preCityResults), [preCityResults]);
-
   // Currencies present in the result set once everything except price is
   // applied. A raw number only means something within one currency — CAD 400
   // and IDR 400 are not remotely comparable — so the price control is only
   // ever shown when exactly one currency is in view (typically because a
-  // country, or a city, has been picked).
-  const prePriceFilter: CentreFilter = { ...preCityFilter, city: city || undefined };
+  // country has been picked).
+  const prePriceFilter: CentreFilter = preCityFilter;
   const prePriceResults = useMemo(
     () => filterCentres(centres, prePriceFilter),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [
       centres,
       query,
+      searchLocation,
       country,
-      city,
       operators,
       testModules,
       testCategories,
@@ -300,8 +284,8 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
   }, [
     centres,
     query,
+    searchLocation,
     country,
-    city,
     operators,
     testModules,
     testCategories,
@@ -310,7 +294,13 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
     priceCurrency,
   ]);
 
-  const distanceOrigin = country || city ? viewport?.center : undefined;
+  // An explicitly selected city hint beats the map view centred on a chosen
+  // country as the more deliberate signal of "distance from where".
+  const distanceOrigin =
+    searchLocation?.center ?? (country ? viewport?.center : undefined);
+  const distanceOriginLabel = searchLocation
+    ? 'Distance from search'
+    : 'Distance from map centre';
   const effectiveSort: SortKey = sort ?? (distanceOrigin ? 'distance' : 'name');
   const results = useMemo(() => {
     const ranked = distanceOrigin
@@ -327,10 +317,7 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
   // A deliberate text search is a list operation and may find an unlocated
   // centre anywhere in the world. Normal browsing stays tied to the map area.
   const searched = query.trim().length > 0;
-  const worldwideOverview =
-    worldwide && !searched && !country && !city && Boolean(viewport) &&
-    viewport!.zoom < WORLD_LIST_ZOOM;
-  const listResults = searched ? results : worldwideOverview ? [] : mapAreaResults;
+  const listResults = searched ? results : mapAreaResults;
   const visibleListResults = listResults.slice(0, listLimit);
 
   useLayoutEffect(() => {
@@ -344,7 +331,6 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
   }, [
     query,
     country,
-    city,
     operators,
     testModules,
     testCategories,
@@ -355,7 +341,7 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
 
   const updateFilter = (update: () => void) => {
     // Keep the directory anchored in the viewport while controls change the
-    // result set. Dynamic controls (price, city and Life Skills guidance) can
+    // result set. Dynamic controls (price and Life Skills guidance) can
     // otherwise make the browser move the outer page during the same render.
     pageScrollBeforeFilter.current = window.scrollY;
     update();
@@ -423,7 +409,7 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
     updateFilter(() => {
       setQuery('');
       setCountry('');
-      setCity('');
+      setSearchLocation(null);
       setOperators([]);
       setTestModules([...DEFAULT_TEST_MODULES]);
       setTestCategories([...DEFAULT_TEST_CATEGORIES]);
@@ -438,7 +424,6 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
   const hasFilters = Boolean(
     query ||
       country ||
-      city ||
       operators.length ||
       !sameSelection(testModules, DEFAULT_TEST_MODULES) ||
       !sameSelection(testCategories, DEFAULT_TEST_CATEGORIES) ||
@@ -470,20 +455,28 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
 
       <div
         data-testid="directory-filters"
-        className="mb-6 grid gap-3 rounded-lg border border-line bg-white p-4 sm:grid-cols-2 lg:grid-cols-5"
+        className="mb-6 grid gap-3 rounded-lg border border-line bg-white p-4 sm:grid-cols-2 lg:grid-cols-4"
       >
-        <label className="flex flex-col gap-1 text-sm">
-          <span className="font-medium">Search</span>
-          <input
-            type="search"
-            value={query}
-            onChange={(event) =>
-              updateFilter(() => setQuery(event.target.value))
-            }
-            placeholder="Centre, city or postal code"
-            className="rounded-md border border-line px-3 py-2 outline-none focus:border-brand"
-          />
-        </label>
+        <CitySearch
+          value={query}
+          country={country}
+          selected={Boolean(searchLocation)}
+          onValueChange={(value) =>
+            updateFilter(() => {
+              setQuery(value);
+              setSearchLocation(null);
+              setSort(null);
+            })
+          }
+          onCitySelect={(selection) =>
+            updateFilter(() => {
+              setQuery(selection.label);
+              setSearchLocation(selection);
+              setSelectedId(null);
+              setSort(null);
+            })
+          }
+        />
 
         {worldwide && (
           <label className="flex flex-col gap-1 text-sm">
@@ -492,9 +485,11 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
               value={country}
               onChange={(event) =>
                 updateFilter(() => {
-                  // A city from the old country will not exist in the new one.
                   setCountry(event.target.value);
-                  setCity('');
+                  if (searchLocation) {
+                    setQuery('');
+                    setSearchLocation(null);
+                  }
                   setSort(null);
                 })
               }
@@ -509,27 +504,6 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
             </select>
           </label>
         )}
-
-        <label className="flex flex-col gap-1 text-sm">
-          <span className="font-medium">City</span>
-          <select
-            value={city}
-            onChange={(event) =>
-              updateFilter(() => {
-                setCity(event.target.value);
-                setSort(null);
-              })
-            }
-            className="rounded-md border border-line bg-white px-3 py-2 outline-none focus:border-brand"
-          >
-            <option value="">All cities</option>
-            {cities.map((c) => (
-              <option key={c.city} value={c.city}>
-                {c.city} ({c.count})
-              </option>
-            ))}
-          </select>
-        </label>
 
         <label className="flex flex-col gap-1 text-sm">
           <span className="font-medium">
@@ -570,12 +544,11 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
           >
             <option value="name">Name</option>
             <option value="price">Price</option>
-            <option value="city">City</option>
-            {distanceOrigin && <option value="distance">Distance from map centre</option>}
+            {distanceOrigin && <option value="distance">{distanceOriginLabel}</option>}
           </select>
         </label>
 
-        <div className="grid gap-4 border-t border-line pt-3 sm:col-span-2 lg:col-span-5 lg:grid-cols-3">
+        <div className="grid gap-4 border-t border-line pt-3 sm:col-span-2 lg:col-span-4 lg:grid-cols-3">
           <fieldset>
             <legend className="text-sm font-medium">Module</legend>
             <div className="mt-2 flex flex-wrap gap-2">
@@ -674,7 +647,7 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
           </fieldset>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2 sm:col-span-2 lg:col-span-5">
+        <div className="flex flex-wrap items-center gap-2 sm:col-span-2 lg:col-span-4">
           {operatorOptions.map(({ operator, count }) => {
             const active = operators.includes(operator);
             const style = operatorStyle(operator);
@@ -737,12 +710,12 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
 
           <p className="mb-3 text-sm text-muted" aria-live="polite">
             {searched
-              ? `${results.length} ${results.length === 1 ? 'centre' : 'centres'} found`
-              : worldwideOverview
-                ? `${results.length} centres available worldwide`
-                : `${listResults.length} of ${results.length} ${
-                    listResults.length === 1 ? 'centre is' : 'centres are'
-                  } in this map area`}
+              ? searchLocation
+                ? `${results.length} centres sorted from ${searchLocation.label}`
+                : `${results.length} ${results.length === 1 ? 'centre' : 'centres'} found`
+              : `${listResults.length} of ${results.length} ${
+                  listResults.length === 1 ? 'centre is' : 'centres are'
+                } in this map area`}
           </p>
 
           {results.length === 0 ? (
@@ -751,13 +724,6 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
               <button type="button" onClick={reset} className="mt-2 text-sm text-brand underline">
                 Clear filters
               </button>
-            </div>
-          ) : worldwideOverview ? (
-            <div className="rounded-lg border border-dashed border-line p-8 text-center">
-              <p className="font-medium">Choose a country or zoom in to browse the list.</p>
-              <p className="mt-2 text-sm text-muted">
-                The worldwide map stays useful without mounting more than a thousand list cards.
-              </p>
             </div>
           ) : !viewport && !searched ? (
             <div className="rounded-lg border border-dashed border-line p-8 text-center text-sm text-muted">
@@ -802,6 +768,7 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
         <div className="h-[24rem] overflow-hidden rounded-lg border border-line lg:sticky lg:top-6 lg:h-[calc(100vh-8rem)]">
           <CentreMap
             centres={filteredResults}
+            focusLocation={searchLocation}
             highlightedId={highlightedId}
             selectedId={selectedId}
             detailFilterSearch={detailFilterSearch}
