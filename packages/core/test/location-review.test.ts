@@ -3,6 +3,7 @@ import test from 'node:test';
 import {
   draftLocationApproval,
   isPinnable,
+  isLocationReviewGeo,
   locationConfirmationToken,
   locationReviewIssues,
   needsLocationReview,
@@ -72,4 +73,13 @@ test('confirmation identity changes with either coordinate', () => {
     locationConfirmationToken(original),
     locationConfirmationToken({ ...original, lng: original.lng + 0.0001 }),
   );
+});
+
+test('rejects malformed textarea geo before review helpers render it', () => {
+  const valid = geo();
+  assert.equal(isLocationReviewGeo(valid), true);
+  assert.equal(isLocationReviewGeo({ ...valid, confidence: null }), false);
+  assert.equal(isLocationReviewGeo({ ...valid, evidencePaths: null }), false);
+  assert.equal(isLocationReviewGeo({ ...valid, lat: '39.945735' }), false);
+  assert.equal(isLocationReviewGeo({ ...valid, precision: 'building' }), false);
 });
