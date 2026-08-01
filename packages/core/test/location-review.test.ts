@@ -3,6 +3,7 @@ import test from 'node:test';
 import {
   draftLocationApproval,
   isPinnable,
+  locationConfirmationToken,
   locationReviewIssues,
   needsLocationReview,
   type Geo,
@@ -58,4 +59,17 @@ test('draft approval records administrator evidence without laundering provenanc
   assert.deepEqual(approved.evidencePaths, ['address', 'venue_name', 'admin']);
   assert.equal(approved.confidence, 0.9);
   assert.equal(original.verification, 'conflicted');
+});
+
+test('confirmation identity changes with either coordinate', () => {
+  const original = geo();
+  assert.equal(locationConfirmationToken(null), null);
+  assert.notEqual(
+    locationConfirmationToken(original),
+    locationConfirmationToken({ ...original, lat: original.lat + 0.0001 }),
+  );
+  assert.notEqual(
+    locationConfirmationToken(original),
+    locationConfirmationToken({ ...original, lng: original.lng + 0.0001 }),
+  );
 });

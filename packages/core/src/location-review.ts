@@ -3,6 +3,12 @@ import type { Geo, GeoPrecision } from './types.ts';
 
 export type ApprovableGeoPrecision = Extract<GeoPrecision, 'street' | 'rooftop'>;
 
+/** Stable identity for the exact point an administrator inspected. */
+export function locationConfirmationToken(geo: Geo | null): string | null {
+  if (!geo || !Number.isFinite(geo.lat) || !Number.isFinite(geo.lng)) return null;
+  return JSON.stringify([geo.lat, geo.lng]);
+}
+
 /** Reasons an existing coordinate cannot be presented as a confident point. */
 export function locationReviewIssues(geo: Geo | null): string[] {
   if (!geo || isPinnable(geo)) return [];

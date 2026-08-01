@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   draftLocationApproval,
+  locationConfirmationToken,
   locationReviewIssues,
   needsLocationReview,
   type ApprovableGeoPrecision,
@@ -44,7 +45,7 @@ export default function InternalPage() {
   const [overrides, setOverrides] = useState<Record<string, StoredOverride>>({});
   const [query, setQuery] = useState('');
   const [locationQueueOnly, setLocationQueueOnly] = useState(false);
-  const [locationConfirmed, setLocationConfirmed] = useState(false);
+  const [confirmedCoordinateToken, setConfirmedCoordinateToken] = useState<string | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [editorValue, setEditorValue] = useState('');
   const [busy, setBusy] = useState(false);
@@ -146,6 +147,18 @@ export default function InternalPage() {
   );
   const selectedCentre = effectiveCentres.find((centre) => centre.id === selectedId);
   const selectedBase = centres.find((centre) => centre.id === selectedId);
+  const editedCentre = useMemo(() => {
+    try {
+      const parsed = JSON.parse(editorValue) as Centre;
+      return parsed.id === selectedId ? parsed : null;
+    } catch {
+      return null;
+    }
+  }, [editorValue, selectedId]);
+  const reviewGeo = editedCentre?.geo ?? null;
+  const reviewCoordinateToken = locationConfirmationToken(reviewGeo);
+  const locationConfirmed =
+    reviewCoordinateToken !== null && confirmedCoordinateToken === reviewCoordinateToken;
   const locationReviewCentres = useMemo(
     () => effectiveCentres.filter((centre) => needsLocationReview(centre.geo)),
     [effectiveCentres],
@@ -174,7 +187,7 @@ export default function InternalPage() {
   function selectCentre(centre: Centre): void {
     setSelectedId(centre.id);
     setEditorValue(JSON.stringify(centre, null, 2));
-    setLocationConfirmed(false);
+    setConfirmedCoordinateToken(null);
     setMessage(null);
     setError(null);
   }
@@ -185,12 +198,18 @@ export default function InternalPage() {
     try {
       const edited = JSON.parse(editorValue) as Centre;
       if (!edited.geo) throw new Error('This centre has no coordinate to approve.');
+      if (
+        confirmedCoordinateToken === null ||
+        confirmedCoordinateToken !== locationConfirmationToken(edited.geo)
+      ) {
+        throw new Error('Inspect and confirm the current coordinate before approving it.');
+      }
       const approved: Centre = {
         ...edited,
         geo: draftLocationApproval(edited.geo, precision),
       };
       setEditorValue(JSON.stringify(approved, null, 2));
-      setLocationConfirmed(false);
+      setConfirmedCoordinateToken(null);
       setMessage(
         `Drafted a ${precision} location approval. Review the JSON, then save the changes.`,
       );
@@ -220,6 +239,7 @@ export default function InternalPage() {
         body: JSON.stringify({ patch }),
       }).then(requireJson<StoredOverride>);
       setOverrides((current) => ({ ...current, [selectedId]: saved }));
+      setConfirmedCoordinateToken(null);
       setMessage(
         'Saved. The public list, map and centre detail page will refresh within about one minute.',
       );
@@ -250,6 +270,7 @@ export default function InternalPage() {
         return next;
       });
       setEditorValue(JSON.stringify(selectedBase, null, 2));
+      setConfirmedCoordinateToken(null);
       setMessage('Override removed. The source-backed centre record is active again.');
     } catch (cause) {
       setError(errorMessage(cause));
@@ -437,16 +458,16 @@ export default function InternalPage() {
                   Editing guide ↗
                 </a>
               </p>
-              {selectedCentre.geo && needsLocationReview(selectedCentre.geo) && (
+              {reviewGeo && reviewCoordinateToken && needsLocationReview(reviewGeo) && (
                 <div className="mt-4 rounded-lg border border-amber-300 bg-amber-50 p-4 text-sm">
                   <h3 className="font-medium text-amber-950">Location approval required</h3>
                   <p className="mt-1 text-amber-900">
-                    {locationReviewIssues(selectedCentre.geo).join(' · ')}. Inspect the candidate
+                    {locationReviewIssues(reviewGeo).join(' · ')}. Inspect the candidate
                     point and source evidence before approving it.
                   </p>
                   <div className="mt-3 flex flex-wrap gap-3">
                     <a
-                      href={`https://www.google.com/maps?q=${selectedCentre.geo.lat},${selectedCentre.geo.lng}`}
+                      href={`https://www.google.com/maps?q=${reviewGeo.lat},${reviewGeo.lng}`}
                       target="_blank"
                       rel="noreferrer"
                       className="font-medium text-brand underline"
@@ -466,7 +487,11 @@ export default function InternalPage() {
                     <input
                       type="checkbox"
                       checked={locationConfirmed}
-                      onChange={(event) => setLocationConfirmed(event.target.checked)}
+                      onChange={(event) =>
+                        setConfirmedCoordinateToken(
+                          event.target.checked ? reviewCoordinateToken : null,
+                        )
+                      }
                       className="mt-0.5"
                     />
                     I have independently confirmed that this coordinate identifies the centre.

@@ -82,13 +82,41 @@ def main() -> None:
         "an oversized integer was accepted",
     )
 
-    base = centres[0]
+    base = next(centre for centre in centres if "localizations" not in centre)
     namespace["centre_by_id"] = lambda centre_id: base if centre_id == base["id"] else None
     expect_invalid(
         lambda: validate_patch(base["id"], {"ieltsOrgSlug": "different-route"}),
         "a changed route slug was accepted",
     )
     validate_patch(base["id"], {"ieltsOrgSlug": base["ieltsOrgSlug"]})
+    validate_patch(
+        base["id"],
+        {
+            "localizations": [
+                {
+                    "locale": "zh-CN",
+                    "name": "reviewed search evidence",
+                    "address": None,
+                    "nameSource": "admin",
+                    "addressSource": None,
+                }
+            ]
+        },
+    )
+    validate_patch(
+        base["id"],
+        {
+            "futureOpening": {
+                "source": "ielts_usa_network",
+                "sourceUrl": "https://example.com/future-centre",
+                "sourceLabel": "Future centre",
+            }
+        },
+    )
+    expect_invalid(
+        lambda: validate_patch(base["id"], {"notACentreField": True}),
+        "an unknown top-level field was accepted",
+    )
 
     print(f"Validated {len(centres)} complete centre records and rejection cases.")
 
