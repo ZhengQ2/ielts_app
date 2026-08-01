@@ -202,6 +202,7 @@ Resources:
       Code:
         ZipFile: |
           import json
+          import math
           import os
           import time
           from datetime import datetime, timezone
@@ -294,6 +295,190 @@ Resources:
                   None,
               )
 
+          def require_object(value, path):
+              if not isinstance(value, dict):
+                  raise ValueError(path + " must be an object")
+              return value
+
+          def require_string(value, path, nullable=False, nonempty=False):
+              if nullable and value is None:
+                  return
+              if not isinstance(value, str) or (nonempty and not value.strip()):
+                  suffix = " or null" if nullable else ""
+                  raise ValueError(path + " must be a string" + suffix)
+
+          def require_bool(value, path):
+              if not isinstance(value, bool):
+                  raise ValueError(path + " must be boolean")
+
+          def require_number(value, path, nullable=False, minimum=None, maximum=None):
+              if nullable and value is None:
+                  return
+              if isinstance(value, bool) or not isinstance(value, (int, float)):
+                  suffix = " or null" if nullable else ""
+                  raise ValueError(path + " must be a finite number" + suffix)
+              try:
+                  finite = math.isfinite(value)
+              except OverflowError:
+                  finite = False
+              if not finite:
+                  suffix = " or null" if nullable else ""
+                  raise ValueError(path + " must be a finite number" + suffix)
+              if minimum is not None and value < minimum:
+                  raise ValueError(path + " is below its minimum")
+              if maximum is not None and value > maximum:
+                  raise ValueError(path + " is above its maximum")
+
+          def require_enum(value, allowed, path, nullable=False):
+              if nullable and value is None:
+                  return
+              if not isinstance(value, str) or value not in allowed:
+                  raise ValueError(path + " has an unsupported value")
+
+          def require_string_array(value, path):
+              if not isinstance(value, list):
+                  raise ValueError(path + " must be an array")
+              for index, item in enumerate(value):
+                  require_string(item, f"{path}[{index}]")
+
+          def validate_centre(centre):
+              require_object(centre, "centre")
+              required = {
+                  "id", "name", "operator", "operatorSource", "externalId", "ieltsOrgSlug",
+                  "mergedSlugs", "address", "contact", "phone", "geo", "googlePlaceId",
+                  "formats", "offerings", "priceFromText", "parsedPriceFrom", "parsedCurrency",
+                  "bookingUrl", "isPublishable", "confidence", "sources", "firstSeenAt", "lastSeenAt",
+              }
+              missing = sorted(required - set(centre))
+              if missing:
+                  raise ValueError("missing centre fields: " + ", ".join(missing))
+
+              require_string(centre["id"], "id", nonempty=True)
+              require_string(centre["name"], "name", nonempty=True)
+              require_enum(centre["operator"], {"IDP", "British Council", "IELTS USA", "unknown"}, "operator")
+              require_enum(centre["operatorSource"], {"booking_domain", "slug", "name", "unknown"}, "operatorSource")
+              require_string(centre["externalId"], "externalId", nullable=True)
+              require_string(centre["ieltsOrgSlug"], "ieltsOrgSlug", nonempty=True)
+              require_string_array(centre["mergedSlugs"], "mergedSlugs")
+
+              address = require_object(centre["address"], "address")
+              for key in ("raw", "lines", "city", "region", "postcode", "country"):
+                  if key not in address:
+                      raise ValueError("address." + key + " is required")
+              require_string(address["raw"], "address.raw", nonempty=True)
+              require_string_array(address["lines"], "address.lines")
+              for key in ("city", "region", "postcode", "country"):
+                  require_string(address[key], "address." + key, nullable=True)
+              if "citySource" in address:
+                  require_enum(address["citySource"], {"address_rule", "geocoder", "legacy", "admin"}, "address.citySource", nullable=True)
+
+              contact = require_object(centre["contact"], "contact")
+              for key in ("phones", "emails", "websites"):
+                  if key not in contact:
+                      raise ValueError("contact." + key + " is required")
+                  require_string_array(contact[key], "contact." + key)
+              require_string(centre["phone"], "phone", nullable=True)
+
+              geo = centre["geo"]
+              if geo is not None:
+                  geo = require_object(geo, "geo")
+                  for key in ("lat", "lng", "precision", "source", "coordinateSystem", "verification", "evidencePaths", "agreementKm", "confidence"):
+                      if key not in geo:
+                          raise ValueError("geo." + key + " is required")
+                  require_number(geo["lat"], "geo.lat", minimum=-90, maximum=90)
+                  require_number(geo["lng"], "geo.lng", minimum=-180, maximum=180)
+                  require_enum(geo["precision"], {"rooftop", "street", "postcode", "city", "country", "approximate"}, "geo.precision")
+                  require_enum(geo["source"], {"page_embed", "google", "google_places", "overture", "amap_places", "mapbox", "nominatim", "amap", "mappls", "kakao", "naver", "crowd", "admin"}, "geo.source")
+                  require_enum(geo["coordinateSystem"], {"WGS84"}, "geo.coordinateSystem")
+                  require_enum(geo["verification"], {"verified", "approximate", "unverified", "conflicted"}, "geo.verification")
+                  require_string_array(geo["evidencePaths"], "geo.evidencePaths")
+                  for index, evidence in enumerate(geo["evidencePaths"]):
+                      require_enum(evidence, {"page_embed", "address", "venue_name", "plus_code", "operator_map", "admin"}, f"geo.evidencePaths[{index}]")
+                  require_number(geo["agreementKm"], "geo.agreementKm", nullable=True, minimum=0)
+                  require_number(geo["confidence"], "geo.confidence", minimum=0, maximum=1)
+                  if "provenance" in geo:
+                      provenance = require_object(geo["provenance"], "geo.provenance")
+                      for key in ("origin", "displayRights", "license", "attribution", "sourceRecordId"):
+                          if key not in provenance:
+                              raise ValueError("geo.provenance." + key + " is required")
+                      require_enum(provenance["origin"], {"ielts_org", "google_maps_platform", "overture_maps", "openstreetmap", "community_submission", "administrator", "third_party_provider", "unknown"}, "geo.provenance.origin")
+                      require_enum(provenance["displayRights"], {"any_basemap", "google_maps_only", "provider_review_required"}, "geo.provenance.displayRights")
+                      for key in ("license", "attribution", "sourceRecordId"):
+                          require_string(provenance[key], "geo.provenance." + key, nullable=True)
+
+              require_string(centre["googlePlaceId"], "googlePlaceId", nullable=True)
+              require_string_array(centre["formats"], "formats")
+              for index, value in enumerate(centre["formats"]):
+                  require_enum(value, {"computer_delivered", "paper_based"}, f"formats[{index}]")
+
+              offerings = centre["offerings"]
+              if not isinstance(offerings, list):
+                  raise ValueError("offerings must be an array")
+              for index, offering_value in enumerate(offerings):
+                  path = f"offerings[{index}]"
+                  offering = require_object(offering_value, path)
+                  for key in ("label", "kind", "format", "priceText", "parsedCurrency", "parsedPrice", "priceParseStatus"):
+                      if key not in offering:
+                          raise ValueError(path + "." + key + " is required")
+                  require_string(offering["label"], path + ".label", nonempty=True)
+                  require_enum(offering["kind"], {"academic", "general_training", "ukvi", "osr", "life_skills", "other"}, path + ".kind")
+                  require_enum(offering["format"], {"computer_delivered", "paper_based"}, path + ".format")
+                  require_string(offering["priceText"], path + ".priceText", nullable=True)
+                  require_string(offering["parsedCurrency"], path + ".parsedCurrency", nullable=True)
+                  require_number(offering["parsedPrice"], path + ".parsedPrice", nullable=True, minimum=0)
+                  require_enum(offering["priceParseStatus"], {"verified", "unparsed", "missing"}, path + ".priceParseStatus")
+                  if "module" in offering:
+                      require_enum(offering["module"], {"academic", "general_training", "life_skills", "other"}, path + ".module")
+                  if "category" in offering:
+                      require_enum(offering["category"], {"standard", "ukvi_selt"}, path + ".category")
+
+              for key in ("priceFromText", "parsedCurrency", "bookingUrl"):
+                  require_string(centre[key], key, nullable=True)
+              require_number(centre["parsedPriceFrom"], "parsedPriceFrom", nullable=True, minimum=0)
+              require_bool(centre["isPublishable"], "isPublishable")
+              require_number(centre["confidence"], "confidence", minimum=0, maximum=1)
+
+              sources = centre["sources"]
+              if not isinstance(sources, list):
+                  raise ValueError("sources must be an array")
+              for index, source_value in enumerate(sources):
+                  path = f"sources[{index}]"
+                  source = require_object(source_value, path)
+                  for key in ("source", "externalSlug", "url", "seenAt", "stillPresent"):
+                      if key not in source:
+                          raise ValueError(path + "." + key + " is required")
+                  for key in ("source", "externalSlug", "url", "seenAt"):
+                      require_string(source[key], path + "." + key)
+                  require_bool(source["stillPresent"], path + ".stillPresent")
+
+              if "localizations" in centre:
+                  localizations = centre["localizations"]
+                  if not isinstance(localizations, list):
+                      raise ValueError("localizations must be an array")
+                  for index, localization_value in enumerate(localizations):
+                      path = f"localizations[{index}]"
+                      localization = require_object(localization_value, path)
+                      for key in ("locale", "name", "address", "nameSource", "addressSource"):
+                          if key not in localization:
+                              raise ValueError(path + "." + key + " is required")
+                      require_enum(localization["locale"], {"zh-CN", "hi-IN"}, path + ".locale")
+                      for key in ("name", "address"):
+                          require_string(localization[key], path + "." + key, nullable=True)
+                      for key in ("nameSource", "addressSource"):
+                          require_enum(localization[key], {"amap", "mappls", "admin"}, path + "." + key, nullable=True)
+
+              if "futureOpening" in centre:
+                  future = require_object(centre["futureOpening"], "futureOpening")
+                  for key in ("source", "sourceUrl", "sourceLabel"):
+                      if key not in future:
+                          raise ValueError("futureOpening." + key + " is required")
+                  require_enum(future["source"], {"ielts_usa_network"}, "futureOpening.source")
+                  require_string(future["sourceUrl"], "futureOpening.sourceUrl")
+                  require_string(future["sourceLabel"], "futureOpening.sourceLabel")
+
+              require_string(centre["firstSeenAt"], "firstSeenAt")
+              require_string(centre["lastSeenAt"], "lastSeenAt")
+
           def validate_patch(centre_id, patch):
               if not isinstance(patch, dict):
                   raise ValueError("patch must be an object")
@@ -304,18 +489,13 @@ Resources:
               base = centre_by_id(centre_id)
               if base is None:
                   raise LookupError("centre not found")
+              if "ieltsOrgSlug" in patch and patch["ieltsOrgSlug"] != base.get("ieltsOrgSlug"):
+                  raise ValueError("IELTS.org route slug cannot be changed without a deployment")
               unknown = sorted(set(patch) - set(base))
               if unknown:
                   raise ValueError("unknown top-level fields: " + ", ".join(unknown))
               merged = {**base, **patch, "id": centre_id}
-              if not isinstance(merged.get("name"), str) or not merged["name"].strip():
-                  raise ValueError("name must be a non-empty string")
-              if not isinstance(merged.get("address"), dict):
-                  raise ValueError("address must be an object")
-              if not isinstance(merged.get("offerings"), list):
-                  raise ValueError("offerings must be an array")
-              if not isinstance(merged.get("isPublishable"), bool):
-                  raise ValueError("isPublishable must be boolean")
+              validate_centre(merged)
               return patch
 
           def handler(event, context):

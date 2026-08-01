@@ -173,6 +173,9 @@ export default function InternalPage() {
     try {
       const edited = JSON.parse(editorValue) as Centre;
       if (edited.id !== selectedId) throw new Error('A centre id cannot be changed.');
+      if (edited.ieltsOrgSlug !== selectedBase.ieltsOrgSlug) {
+        throw new Error('The IELTS.org route slug cannot be changed without a deployment.');
+      }
       const patch = topLevelPatch(selectedBase, edited);
       const saved = await fetch(internalApiUrl(`/internal-api/centres/${encodeURIComponent(selectedId)}`), {
         method: 'PUT',
@@ -352,8 +355,9 @@ export default function InternalPage() {
                 </div>
               </div>
               <p className="mt-3 text-xs text-muted">
-                Edit the complete JSON record. The stable id is read-only. Changed top-level fields
-                become durable overrides; untouched fields continue following the source crawl.
+                Edit the complete JSON record. The stable id and IELTS.org route slug are read-only.
+                Changed top-level fields become durable overrides; untouched fields continue
+                following the source crawl.
               </p>
               <textarea
                 value={editorValue}

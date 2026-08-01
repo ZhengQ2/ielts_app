@@ -17,6 +17,7 @@ import {
   type Centre,
 } from '@ielts-map/core';
 import { isHttpUrl } from '@/lib/url-safety';
+import { centreDocumentTitle, centrePageDescription } from '@/lib/centre-metadata';
 import DetailMap from '@/components/LazyDetailMap';
 import { OperatorBadge } from '@/components/OperatorBadge';
 import { CentreContactDetails } from '@/components/CentreContactDetails';
@@ -57,6 +58,13 @@ export function LiveCentrePage({ initialCentre }: { initialCentre: Centre }) {
       });
     return () => controller.abort();
   }, [initialCentre.id]);
+
+  useEffect(() => {
+    document.title = centreDocumentTitle(centre);
+    document
+      .querySelector<HTMLMetaElement>('meta[name="description"]')
+      ?.setAttribute('content', centrePageDescription(centre));
+  }, [centre]);
 
   if (removed) {
     return (
