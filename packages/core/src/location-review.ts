@@ -42,10 +42,10 @@ export function isLocationReviewGeo(value: unknown): value is Geo {
   if (!finiteInRange(value.lat, -90, 90) || !finiteInRange(value.lng, -180, 180)) {
     return false;
   }
-  if (!GEO_PRECISIONS.has(String(value.precision))) return false;
-  if (!GEO_SOURCES.has(String(value.source))) return false;
+  if (!isAllowedString(value.precision, GEO_PRECISIONS)) return false;
+  if (!isAllowedString(value.source, GEO_SOURCES)) return false;
   if (value.coordinateSystem !== 'WGS84') return false;
-  if (!GEO_VERIFICATIONS.has(String(value.verification))) return false;
+  if (!isAllowedString(value.verification, GEO_VERIFICATIONS)) return false;
   if (
     !Array.isArray(value.evidencePaths) ||
     !value.evidencePaths.every(
@@ -110,6 +110,10 @@ export function draftLocationApproval(
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function isAllowedString(value: unknown, allowed: Set<string>): value is string {
+  return typeof value === 'string' && allowed.has(value);
 }
 
 function finiteInRange(value: unknown, minimum: number, maximum: number): value is number {
