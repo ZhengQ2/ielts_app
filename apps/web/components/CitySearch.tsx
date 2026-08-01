@@ -37,6 +37,7 @@ export function CitySearch({
   const sessionToken = useRef<google.maps.places.AutocompleteSessionToken | null>(null);
 
   useEffect(() => {
+    setSelecting(false);
     const input = value.trim();
     if (selected || input.length < 2) {
       requestId.current += 1;
@@ -84,7 +85,7 @@ export function CitySearch({
   }, [country, selected, value]);
 
   async function choose(prediction: google.maps.places.PlacePrediction): Promise<void> {
-    requestId.current += 1;
+    const selectionRequest = ++requestId.current;
     setSelecting(true);
     setOpen(false);
     try {
@@ -92,6 +93,7 @@ export function CitySearch({
       await place.fetchFields({
         fields: ['displayName', 'formattedAddress', 'location', 'viewport'],
       });
+      if (selectionRequest !== requestId.current) return;
       if (!place.location) return;
       const label = prediction.text.toString();
       onCitySelect({
@@ -104,7 +106,7 @@ export function CitySearch({
     } catch {
       // Keep the typed value as a normal directory search on a details error.
     } finally {
-      setSelecting(false);
+      if (selectionRequest === requestId.current) setSelecting(false);
     }
   }
 
@@ -124,7 +126,11 @@ export function CitySearch({
         type="search"
         value={value}
         autoComplete="off"
-        onChange={(event) => onValueChange(event.target.value)}
+        onChange={(event) => {
+          requestId.current += 1;
+          setSelecting(false);
+          onValueChange(event.target.value);
+        }}
         onKeyDown={(event) => {
           if (event.key === 'Escape') setOpen(false);
         }}
