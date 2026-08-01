@@ -1,7 +1,13 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import type { Centre } from '@ielts-map/core';
+import {
+  draftLocationApproval,
+  locationReviewIssues,
+  needsLocationReview,
+  type ApprovableGeoPrecision,
+  type Centre,
+} from '@ielts-map/core';
 
 interface AuthConfig {
   clientId: string;
@@ -37,6 +43,8 @@ export default function InternalPage() {
   const [centres, setCentres] = useState<Centre[]>([]);
   const [overrides, setOverrides] = useState<Record<string, StoredOverride>>({});
   const [query, setQuery] = useState('');
+  const [locationQueueOnly, setLocationQueueOnly] = useState(false);
+  const [locationConfirmed, setLocationConfirmed] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [editorValue, setEditorValue] = useState('');
   const [busy, setBusy] = useState(false);
@@ -138,10 +146,15 @@ export default function InternalPage() {
   );
   const selectedCentre = effectiveCentres.find((centre) => centre.id === selectedId);
   const selectedBase = centres.find((centre) => centre.id === selectedId);
+  const locationReviewCentres = useMemo(
+    () => effectiveCentres.filter((centre) => needsLocationReview(centre.geo)),
+    [effectiveCentres],
+  );
   const visibleCentres = useMemo(() => {
     const needle = query.trim().toLocaleLowerCase();
+    const candidates = locationQueueOnly ? locationReviewCentres : effectiveCentres;
     const matches = needle
-      ? effectiveCentres.filter((centre) =>
+      ? candidates.filter((centre) =>
           [
             centre.id,
             centre.name,
@@ -154,15 +167,36 @@ export default function InternalPage() {
             .toLocaleLowerCase()
             .includes(needle),
         )
-      : effectiveCentres;
-    return matches.slice(0, 200);
-  }, [effectiveCentres, query]);
+      : candidates;
+    return locationQueueOnly ? matches : matches.slice(0, 200);
+  }, [effectiveCentres, locationQueueOnly, locationReviewCentres, query]);
 
   function selectCentre(centre: Centre): void {
     setSelectedId(centre.id);
     setEditorValue(JSON.stringify(centre, null, 2));
+    setLocationConfirmed(false);
     setMessage(null);
     setError(null);
+  }
+
+  function stageLocationApproval(precision: ApprovableGeoPrecision): void {
+    setMessage(null);
+    setError(null);
+    try {
+      const edited = JSON.parse(editorValue) as Centre;
+      if (!edited.geo) throw new Error('This centre has no coordinate to approve.');
+      const approved: Centre = {
+        ...edited,
+        geo: draftLocationApproval(edited.geo, precision),
+      };
+      setEditorValue(JSON.stringify(approved, null, 2));
+      setLocationConfirmed(false);
+      setMessage(
+        `Drafted a ${precision} location approval. Review the JSON, then save the changes.`,
+      );
+    } catch (cause) {
+      setError(errorMessage(cause));
+    }
   }
 
   async function save(): Promise<void> {
@@ -284,7 +318,8 @@ export default function InternalPage() {
           <h1 className="text-2xl font-semibold">Internal centre editor</h1>
           <p className="mt-1 text-sm text-muted">
             {centres.length.toLocaleString()} source records ·{' '}
-            {Object.keys(overrides).length.toLocaleString()} edited
+            {Object.keys(overrides).length.toLocaleString()} edited ·{' '}
+            {locationReviewCentres.length.toLocaleString()} location approvals pending
           </p>
         </div>
         <button type="button" onClick={logout} className="rounded border border-line px-3 py-2 text-sm">
@@ -297,7 +332,33 @@ export default function InternalPage() {
 
       <div className="mt-6 grid gap-6 lg:grid-cols-[24rem_minmax(0,1fr)]">
         <section className="rounded-lg border border-line bg-white p-3">
-          <label className="text-sm font-medium" htmlFor="internal-search">Search all entries</label>
+          <div className="grid grid-cols-2 gap-2" aria-label="Centre queue">
+            <button
+              type="button"
+              onClick={() => setLocationQueueOnly(false)}
+              className={`rounded border px-3 py-2 text-sm ${
+                !locationQueueOnly
+                  ? 'border-brand bg-brand-soft font-medium text-brand'
+                  : 'border-line'
+              }`}
+            >
+              All centres
+            </button>
+            <button
+              type="button"
+              onClick={() => setLocationQueueOnly(true)}
+              className={`rounded border px-3 py-2 text-sm ${
+                locationQueueOnly
+                  ? 'border-brand bg-brand-soft font-medium text-brand'
+                  : 'border-line'
+              }`}
+            >
+              Location review ({locationReviewCentres.length.toLocaleString()})
+            </button>
+          </div>
+          <label className="mt-4 block text-sm font-medium" htmlFor="internal-search">
+            Search {locationQueueOnly ? 'location tasks' : 'all entries'}
+          </label>
           <input
             id="internal-search"
             value={query}
@@ -305,7 +366,11 @@ export default function InternalPage() {
             placeholder="Name, city, country, id…"
             className="mt-2 w-full rounded-md border border-line px-3 py-2"
           />
-          <p className="mt-2 text-xs text-muted">Showing up to 200 matches.</p>
+          <p className="mt-2 text-xs text-muted">
+            {locationQueueOnly
+              ? `Showing all ${visibleCentres.length.toLocaleString()} matching pending tasks.`
+              : 'Showing up to 200 matches.'}
+          </p>
           <ul className="mt-3 max-h-[70vh] space-y-1 overflow-y-auto">
             {visibleCentres.map((centre) => (
               <li key={centre.id}>
@@ -321,6 +386,11 @@ export default function InternalPage() {
                     {centre.address.country} · {centre.address.raw}
                     {overrides[centre.id] ? ' · edited' : ''}
                   </span>
+                  {locationQueueOnly && (
+                    <span className="mt-1 block text-xs text-amber-700">
+                      {locationReviewIssues(centre.geo).join(' · ')}
+                    </span>
+                  )}
                 </button>
               </li>
             ))}
@@ -357,8 +427,74 @@ export default function InternalPage() {
               <p className="mt-3 text-xs text-muted">
                 Edit the complete JSON record. The stable id and IELTS.org route slug are read-only.
                 Changed top-level fields become durable overrides; untouched fields continue
-                following the source crawl.
+                following the source crawl.{' '}
+                <a
+                  href="https://github.com/ZhengQ2/ielts_app/blob/main/docs/INTERNAL_ADMIN.md"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="font-medium text-brand underline"
+                >
+                  Editing guide ↗
+                </a>
               </p>
+              {selectedCentre.geo && needsLocationReview(selectedCentre.geo) && (
+                <div className="mt-4 rounded-lg border border-amber-300 bg-amber-50 p-4 text-sm">
+                  <h3 className="font-medium text-amber-950">Location approval required</h3>
+                  <p className="mt-1 text-amber-900">
+                    {locationReviewIssues(selectedCentre.geo).join(' · ')}. Inspect the candidate
+                    point and source evidence before approving it.
+                  </p>
+                  <div className="mt-3 flex flex-wrap gap-3">
+                    <a
+                      href={`https://www.google.com/maps?q=${selectedCentre.geo.lat},${selectedCentre.geo.lng}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="font-medium text-brand underline"
+                    >
+                      Inspect coordinate on Google Maps ↗
+                    </a>
+                    <a
+                      href={`/centres/${selectedCentre.ieltsOrgSlug}/`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="font-medium text-brand underline"
+                    >
+                      Open public centre page ↗
+                    </a>
+                  </div>
+                  <label className="mt-4 flex items-start gap-2 text-amber-950">
+                    <input
+                      type="checkbox"
+                      checked={locationConfirmed}
+                      onChange={(event) => setLocationConfirmed(event.target.checked)}
+                      className="mt-0.5"
+                    />
+                    I have independently confirmed that this coordinate identifies the centre.
+                  </label>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    <button
+                      type="button"
+                      disabled={!locationConfirmed}
+                      onClick={() => stageLocationApproval('street')}
+                      className="rounded border border-amber-500 bg-white px-3 py-2 font-medium disabled:opacity-40"
+                    >
+                      Draft street approval
+                    </button>
+                    <button
+                      type="button"
+                      disabled={!locationConfirmed}
+                      onClick={() => stageLocationApproval('rooftop')}
+                      className="rounded border border-amber-500 bg-white px-3 py-2 font-medium disabled:opacity-40"
+                    >
+                      Draft rooftop approval
+                    </button>
+                  </div>
+                  <p className="mt-2 text-xs text-amber-800">
+                    Approval adds administrator evidence and preserves the coordinate provider’s
+                    licensing provenance. It does not save until you press “Save changes”.
+                  </p>
+                </div>
+              )}
               <textarea
                 value={editorValue}
                 onChange={(event) => setEditorValue(event.target.value)}
