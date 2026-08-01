@@ -77,9 +77,15 @@ test('confirmation identity changes with either coordinate', () => {
 
 test('rejects malformed textarea geo before review helpers render it', () => {
   const valid = geo();
+  const hostileEnum = { toString: null, valueOf: null };
   assert.equal(isLocationReviewGeo(valid), true);
   assert.equal(isLocationReviewGeo({ ...valid, confidence: null }), false);
   assert.equal(isLocationReviewGeo({ ...valid, evidencePaths: null }), false);
   assert.equal(isLocationReviewGeo({ ...valid, lat: '39.945735' }), false);
   assert.equal(isLocationReviewGeo({ ...valid, precision: 'building' }), false);
+  assert.doesNotThrow(() => isLocationReviewGeo({ ...valid, precision: hostileEnum }));
+  assert.equal(isLocationReviewGeo({ ...valid, precision: hostileEnum }), false);
+  assert.equal(isLocationReviewGeo({ ...valid, precision: ['street'] }), false);
+  assert.equal(isLocationReviewGeo({ ...valid, source: ['google'] }), false);
+  assert.equal(isLocationReviewGeo({ ...valid, verification: ['verified'] }), false);
 });
