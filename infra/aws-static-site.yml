@@ -499,24 +499,6 @@ Resources:
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub 'arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${AdminApi}/*/*'
 
-  AdminDataCachePolicy:
-    Type: AWS::CloudFront::CachePolicy
-    Properties:
-      CachePolicyConfig:
-        Name: !Sub '${AWS::StackName}-admin-data'
-        DefaultTTL: 60
-        MaxTTL: 60
-        MinTTL: 0
-        ParametersInCacheKeyAndForwardedToOrigin:
-          CookiesConfig:
-            CookieBehavior: none
-          EnableAcceptEncodingBrotli: true
-          EnableAcceptEncodingGzip: true
-          HeadersConfig:
-            HeaderBehavior: none
-          QueryStringsConfig:
-            QueryStringBehavior: none
-
   Distribution:
     Type: AWS::CloudFront::Distribution
     Properties:
@@ -581,7 +563,11 @@ Resources:
             CachedMethods:
               - GET
               - HEAD
-            CachePolicyId: !Ref AdminDataCachePolicy
+            # AWS managed CachingOptimized. The Lambda response's s-maxage=60
+            # controls freshness; using an existing policy avoids a CloudFront
+            # eventual-consistency race when a policy and distribution are
+            # created in the same stack update.
+            CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6
             OriginRequestPolicyId: b689b0a8-53d0-40ab-baf2-68738e2966ac
             Compress: true
             ViewerProtocolPolicy: redirect-to-https
