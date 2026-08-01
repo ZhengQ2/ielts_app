@@ -75,6 +75,13 @@ def main() -> None:
         "a null offering was accepted",
     )
 
+    oversized = copy.deepcopy(centres[0])
+    oversized["parsedPriceFrom"] = 10**400
+    expect_invalid(
+        lambda: validate_centre(oversized),
+        "an oversized integer was accepted",
+    )
+
     base = centres[0]
     namespace["centre_by_id"] = lambda centre_id: base if centre_id == base["id"] else None
     expect_invalid(

@@ -314,7 +314,14 @@ Resources:
           def require_number(value, path, nullable=False, minimum=None, maximum=None):
               if nullable and value is None:
                   return
-              if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value):
+              if isinstance(value, bool) or not isinstance(value, (int, float)):
+                  suffix = " or null" if nullable else ""
+                  raise ValueError(path + " must be a finite number" + suffix)
+              try:
+                  finite = math.isfinite(value)
+              except OverflowError:
+                  finite = False
+              if not finite:
                   suffix = " or null" if nullable else ""
                   raise ValueError(path + " must be a finite number" + suffix)
               if minimum is not None and value < minimum:
