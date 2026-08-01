@@ -39,6 +39,7 @@ aws cloudformation deploy \
   --region "$deploy_region" \
   --stack-name "$stack_name" \
   --template-file infra/aws-static-site.yml \
+  --capabilities CAPABILITY_IAM \
   --parameter-overrides \
     "DomainName=${domain_name}" \
     "HostedZoneId=${hosted_zone_id}" \
@@ -56,6 +57,13 @@ distribution_id="$(
     --region "$deploy_region" \
     --stack-name "$stack_name" \
     --query "Stacks[0].Outputs[?OutputKey=='DistributionId'].OutputValue" \
+    --output text
+)"
+admin_user_pool_id="$(
+  aws cloudformation describe-stacks \
+    --region "$deploy_region" \
+    --stack-name "$stack_name" \
+    --query "Stacks[0].Outputs[?OutputKey=='AdminUserPoolId'].OutputValue" \
     --output text
 )"
 
@@ -84,3 +92,7 @@ aws cloudfront create-invalidation \
   --output text
 
 echo "Deployed: https://${domain_name}"
+if [[ -n "$admin_user_pool_id" && "$admin_user_pool_id" != "None" ]]; then
+  echo "Internal editor: https://${domain_name}/internal/"
+  echo "Admin user pool: ${admin_user_pool_id}"
+fi

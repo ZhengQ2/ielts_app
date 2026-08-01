@@ -21,6 +21,7 @@
     "localize": "npm run localize --workspace @ielts-map/ingest --",
     "neutral-pilot": "npm run neutral-pilot --workspace @ielts-map/ingest --",
     "apple-map-pilot": "npm run apple-map-pilot --workspace @ielts-map/ingest --",
+    "admin:create-user": "bash scripts/create-admin-user.sh",
     "deploy:aws": "bash scripts/deploy-aws.sh"
   },
   "devDependencies": {
