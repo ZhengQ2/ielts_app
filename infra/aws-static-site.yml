@@ -69,6 +69,454 @@ Resources:
           return request;
         }
 
+  CentreOverridesTable:
+    Type: AWS::DynamoDB::Table
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: centreId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: centreId
+          KeyType: HASH
+      PointInTimeRecoverySpecification:
+        PointInTimeRecoveryEnabled: true
+
+  AdminUserPool:
+    Type: AWS::Cognito::UserPool
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      UserPoolName: !Sub '${AWS::StackName}-admins'
+      UsernameAttributes:
+        - email
+      AutoVerifiedAttributes:
+        - email
+      AdminCreateUserConfig:
+        AllowAdminCreateUserOnly: true
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 14
+          RequireLowercase: true
+          RequireNumbers: true
+          RequireSymbols: true
+          RequireUppercase: true
+          TemporaryPasswordValidityDays: 7
+      UserAttributeUpdateSettings:
+        AttributesRequireVerificationBeforeUpdate:
+          - email
+
+  AdminUserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      UserPoolId: !Ref AdminUserPool
+      ClientName: !Sub '${AWS::StackName}-internal-web'
+      GenerateSecret: false
+      PreventUserExistenceErrors: ENABLED
+      AllowedOAuthFlowsUserPoolClient: true
+      AllowedOAuthFlows:
+        - code
+      AllowedOAuthScopes:
+        - openid
+        - email
+        - profile
+      CallbackURLs:
+        - !Sub 'https://${DomainName}/internal/'
+        - 'http://localhost:3000/internal/'
+      LogoutURLs:
+        - !Sub 'https://${DomainName}/internal/'
+        - 'http://localhost:3000/internal/'
+      SupportedIdentityProviders:
+        - COGNITO
+      AccessTokenValidity: 1
+      IdTokenValidity: 1
+      RefreshTokenValidity: 30
+      TokenValidityUnits:
+        AccessToken: hours
+        IdToken: hours
+        RefreshToken: days
+
+  AdminUserPoolDomain:
+    Type: AWS::Cognito::UserPoolDomain
+    Properties:
+      Domain: !Sub '${AWS::StackName}-${AWS::AccountId}'
+      UserPoolId: !Ref AdminUserPool
+
+  AdminGroup:
+    Type: AWS::Cognito::UserPoolGroup
+    Properties:
+      GroupName: admins
+      Description: May edit IELTS centre records through the internal API
+      UserPoolId: !Ref AdminUserPool
+
+  AdminApiRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: centre-admin-api
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: '*'
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                Resource: !Sub '${SiteBucket.Arn}/data/centres.json'
+              - Effect: Allow
+                Action:
+                  - dynamodb:DeleteItem
+                  - dynamodb:PutItem
+                  - dynamodb:Scan
+                Resource: !GetAtt CentreOverridesTable.Arn
+
+  AdminApiFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Description: Authenticated centre override API and merged public centre feed
+      Runtime: python3.13
+      Handler: index.handler
+      Role: !GetAtt AdminApiRole.Arn
+      MemorySize: 512
+      Timeout: 20
+      Environment:
+        Variables:
+          SITE_BUCKET: !Ref SiteBucket
+          OVERRIDES_TABLE: !Ref CentreOverridesTable
+          USER_POOL_ID: !Ref AdminUserPool
+          USER_POOL_CLIENT_ID: !Ref AdminUserPoolClient
+          COGNITO_DOMAIN: !Sub '${AWS::StackName}-${AWS::AccountId}.auth.${AWS::Region}.amazoncognito.com'
+      Code:
+        ZipFile: |
+          import json
+          import os
+          import time
+          from datetime import datetime, timezone
+          from urllib.parse import unquote
+
+          import boto3
+
+          s3 = boto3.client("s3")
+          dynamodb = boto3.client("dynamodb")
+          bucket = os.environ["SITE_BUCKET"]
+          table = os.environ["OVERRIDES_TABLE"]
+          base_cache = {"loaded": 0, "value": None}
+
+          def response(status, body=None, cache="no-store"):
+              headers = {
+                  "content-type": "application/json; charset=utf-8",
+                  "cache-control": cache,
+                  "x-content-type-options": "nosniff",
+              }
+              return {
+                  "statusCode": status,
+                  "headers": headers,
+                  "body": "" if body is None else json.dumps(body, separators=(",", ":")),
+              }
+
+          def base_feed():
+              now = time.time()
+              if base_cache["value"] is None or now - base_cache["loaded"] > 30:
+                  item = s3.get_object(Bucket=bucket, Key="data/centres.json")
+                  base_cache["value"] = json.loads(item["Body"].read())
+                  base_cache["loaded"] = now
+              return base_cache["value"]
+
+          def stored_overrides():
+              items = []
+              request = {"TableName": table, "ConsistentRead": True}
+              while True:
+                  result = dynamodb.scan(**request)
+                  items.extend(result.get("Items", []))
+                  key = result.get("LastEvaluatedKey")
+                  if not key:
+                      break
+                  request["ExclusiveStartKey"] = key
+              output = []
+              for item in items:
+                  try:
+                      output.append({
+                          "centreId": item["centreId"]["S"],
+                          "patch": json.loads(item["patchJson"]["S"]),
+                          "updatedAt": item["updatedAt"]["S"],
+                          "updatedBy": item["updatedBy"]["S"],
+                      })
+                  except (KeyError, TypeError, ValueError):
+                      continue
+              return output
+
+          def merged_feed():
+              base = base_feed()
+              patches = {item["centreId"]: item["patch"] for item in stored_overrides()}
+              centres = []
+              for centre in base.get("centres", []):
+                  merged = {**centre, **patches.get(centre.get("id"), {})}
+                  merged["id"] = centre.get("id")
+                  if merged.get("isPublishable") is False and not merged.get("futureOpening"):
+                      continue
+                  centres.append(merged)
+              return {**base, "count": len(centres), "centres": centres}
+
+          def claims(event):
+              return (
+                  event.get("requestContext", {})
+                  .get("authorizer", {})
+                  .get("jwt", {})
+                  .get("claims", {})
+              )
+
+          def is_admin(event):
+              value = claims(event).get("cognito:groups", "")
+              if isinstance(value, list):
+                  return "admins" in value
+              groups = {
+                  item.strip().strip('"').strip("'")
+                  for item in str(value).replace("[", "").replace("]", "").split(",")
+              }
+              return "admins" in groups
+
+          def centre_by_id(centre_id):
+              return next(
+                  (item for item in base_feed().get("centres", []) if item.get("id") == centre_id),
+                  None,
+              )
+
+          def validate_patch(centre_id, patch):
+              if not isinstance(patch, dict):
+                  raise ValueError("patch must be an object")
+              if "id" in patch:
+                  raise ValueError("centre id cannot be changed")
+              if len(json.dumps(patch)) > 300000:
+                  raise ValueError("patch is too large")
+              base = centre_by_id(centre_id)
+              if base is None:
+                  raise LookupError("centre not found")
+              unknown = sorted(set(patch) - set(base))
+              if unknown:
+                  raise ValueError("unknown top-level fields: " + ", ".join(unknown))
+              merged = {**base, **patch, "id": centre_id}
+              if not isinstance(merged.get("name"), str) or not merged["name"].strip():
+                  raise ValueError("name must be a non-empty string")
+              if not isinstance(merged.get("address"), dict):
+                  raise ValueError("address must be an object")
+              if not isinstance(merged.get("offerings"), list):
+                  raise ValueError("offerings must be an array")
+              if not isinstance(merged.get("isPublishable"), bool):
+                  raise ValueError("isPublishable must be boolean")
+              return patch
+
+          def handler(event, context):
+              method = event.get("requestContext", {}).get("http", {}).get("method", "GET")
+              path = event.get("rawPath", "")
+
+              if method == "GET" and path == "/internal-api/config":
+                  domain = "https://" + os.environ["COGNITO_DOMAIN"]
+                  return response(200, {
+                      "clientId": os.environ["USER_POOL_CLIENT_ID"],
+                      "authorizeUrl": domain + "/oauth2/authorize",
+                      "tokenUrl": domain + "/oauth2/token",
+                      "logoutUrl": domain + "/logout",
+                  })
+
+              if method == "HEAD" and path == "/data/centres.json":
+                  return response(200, None, "public,max-age=60,s-maxage=60")
+
+              if method == "GET" and path == "/data/centres.json":
+                  return response(200, merged_feed(), "public,max-age=60,s-maxage=60")
+
+              if not is_admin(event):
+                  return response(403, {"error": "administrator membership required"})
+
+              if method == "GET" and path == "/internal-api/base-centres":
+                  return response(200, base_feed())
+
+              if method == "GET" and path == "/internal-api/overrides":
+                  return response(200, {"overrides": stored_overrides()})
+
+              centre_id = unquote((event.get("pathParameters") or {}).get("id", ""))
+              if not centre_id:
+                  return response(400, {"error": "centre id is required"})
+
+              if method == "DELETE":
+                  dynamodb.delete_item(
+                      TableName=table,
+                      Key={"centreId": {"S": centre_id}},
+                  )
+                  return response(204)
+
+              if method == "PUT":
+                  try:
+                      payload = json.loads(event.get("body") or "{}")
+                      patch = validate_patch(centre_id, payload.get("patch"))
+                  except LookupError as error:
+                      return response(404, {"error": str(error)})
+                  except (TypeError, ValueError, json.JSONDecodeError) as error:
+                      return response(400, {"error": str(error)})
+                  identity = claims(event).get("email") or claims(event).get("sub") or "unknown"
+                  updated_at = datetime.now(timezone.utc).isoformat()
+                  dynamodb.put_item(
+                      TableName=table,
+                      Item={
+                          "centreId": {"S": centre_id},
+                          "patchJson": {"S": json.dumps(patch, separators=(",", ":"))},
+                          "updatedAt": {"S": updated_at},
+                          "updatedBy": {"S": identity},
+                      },
+                  )
+                  return response(200, {
+                      "centreId": centre_id,
+                      "patch": patch,
+                      "updatedAt": updated_at,
+                      "updatedBy": identity,
+                  })
+
+              return response(404, {"error": "route not found"})
+
+  AdminApi:
+    Type: AWS::ApiGatewayV2::Api
+    Properties:
+      Name: !Sub '${AWS::StackName}-admin'
+      ProtocolType: HTTP
+      CorsConfiguration:
+        AllowCredentials: false
+        AllowHeaders:
+          - authorization
+          - content-type
+        AllowMethods:
+          - GET
+          - PUT
+          - DELETE
+          - OPTIONS
+        AllowOrigins:
+          - !Sub 'https://${DomainName}'
+          - 'http://localhost:3000'
+        MaxAge: 600
+
+  AdminApiIntegration:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId: !Ref AdminApi
+      IntegrationType: AWS_PROXY
+      IntegrationUri: !GetAtt AdminApiFunction.Arn
+      PayloadFormatVersion: '2.0'
+      TimeoutInMillis: 20000
+
+  AdminApiAuthorizer:
+    Type: AWS::ApiGatewayV2::Authorizer
+    Properties:
+      ApiId: !Ref AdminApi
+      AuthorizerType: JWT
+      IdentitySource:
+        - '$request.header.Authorization'
+      Name: cognito-admins
+      JwtConfiguration:
+        Audience:
+          - !Ref AdminUserPoolClient
+        Issuer: !Sub 'https://cognito-idp.${AWS::Region}.amazonaws.com/${AdminUserPool}'
+
+  AdminApiStage:
+    Type: AWS::ApiGatewayV2::Stage
+    Properties:
+      ApiId: !Ref AdminApi
+      StageName: '$default'
+      AutoDeploy: true
+
+  AdminConfigRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref AdminApi
+      RouteKey: 'GET /internal-api/config'
+      Target: !Sub 'integrations/${AdminApiIntegration}'
+
+  PublicCentresRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref AdminApi
+      RouteKey: 'GET /data/centres.json'
+      Target: !Sub 'integrations/${AdminApiIntegration}'
+
+  PublicCentresHeadRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref AdminApi
+      RouteKey: 'HEAD /data/centres.json'
+      Target: !Sub 'integrations/${AdminApiIntegration}'
+
+  AdminBaseCentresRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref AdminApi
+      RouteKey: 'GET /internal-api/base-centres'
+      AuthorizationType: JWT
+      AuthorizerId: !Ref AdminApiAuthorizer
+      Target: !Sub 'integrations/${AdminApiIntegration}'
+
+  AdminOverridesRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref AdminApi
+      RouteKey: 'GET /internal-api/overrides'
+      AuthorizationType: JWT
+      AuthorizerId: !Ref AdminApiAuthorizer
+      Target: !Sub 'integrations/${AdminApiIntegration}'
+
+  AdminPutCentreRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref AdminApi
+      RouteKey: 'PUT /internal-api/centres/{id}'
+      AuthorizationType: JWT
+      AuthorizerId: !Ref AdminApiAuthorizer
+      Target: !Sub 'integrations/${AdminApiIntegration}'
+
+  AdminDeleteCentreRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref AdminApi
+      RouteKey: 'DELETE /internal-api/centres/{id}'
+      AuthorizationType: JWT
+      AuthorizerId: !Ref AdminApiAuthorizer
+      Target: !Sub 'integrations/${AdminApiIntegration}'
+
+  AdminApiPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !Ref AdminApiFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub 'arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${AdminApi}/*/*'
+
+  AdminDataCachePolicy:
+    Type: AWS::CloudFront::CachePolicy
+    Properties:
+      CachePolicyConfig:
+        Name: !Sub '${AWS::StackName}-admin-data'
+        DefaultTTL: 60
+        MaxTTL: 60
+        MinTTL: 0
+        ParametersInCacheKeyAndForwardedToOrigin:
+          CookiesConfig:
+            CookieBehavior: none
+          EnableAcceptEncodingBrotli: true
+          EnableAcceptEncodingGzip: true
+          HeadersConfig:
+            HeaderBehavior: none
+          QueryStringsConfig:
+            QueryStringBehavior: none
+
   Distribution:
     Type: AWS::CloudFront::Distribution
     Properties:
@@ -100,6 +548,43 @@ Resources:
             Id: site-bucket
             OriginAccessControlId: !Ref OriginAccessControl
             S3OriginConfig: {}
+          - DomainName: !Sub '${AdminApi}.execute-api.${AWS::Region}.amazonaws.com'
+            Id: admin-api
+            CustomOriginConfig:
+              OriginProtocolPolicy: https-only
+              OriginSSLProtocols:
+                - TLSv1.2
+        CacheBehaviors:
+          - PathPattern: 'internal-api/*'
+            TargetOriginId: admin-api
+            AllowedMethods:
+              - GET
+              - HEAD
+              - OPTIONS
+              - PUT
+              - POST
+              - PATCH
+              - DELETE
+            CachedMethods:
+              - GET
+              - HEAD
+            CachePolicyId: 413f160b-5154-4f5d-8c8f-f45fe7d177d4
+            OriginRequestPolicyId: b689b0a8-53d0-40ab-baf2-68738e2966ac
+            Compress: true
+            ViewerProtocolPolicy: redirect-to-https
+          - PathPattern: 'data/centres.json'
+            TargetOriginId: admin-api
+            AllowedMethods:
+              - GET
+              - HEAD
+              - OPTIONS
+            CachedMethods:
+              - GET
+              - HEAD
+            CachePolicyId: !Ref AdminDataCachePolicy
+            OriginRequestPolicyId: b689b0a8-53d0-40ab-baf2-68738e2966ac
+            Compress: true
+            ViewerProtocolPolicy: redirect-to-https
         PriceClass: PriceClass_100
         ViewerCertificate:
           AcmCertificateArn: !Ref Certificate
@@ -152,3 +637,11 @@ Outputs:
     Value: !GetAtt Distribution.DomainName
   SiteUrl:
     Value: !Sub 'https://${DomainName}'
+  InternalEditorUrl:
+    Value: !Sub 'https://${DomainName}/internal/'
+  AdminUserPoolId:
+    Value: !Ref AdminUserPool
+  AdminUserPoolClientId:
+    Value: !Ref AdminUserPoolClient
+  AdminApiUrl:
+    Value: !GetAtt AdminApi.ApiEndpoint
