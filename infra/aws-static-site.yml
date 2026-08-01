@@ -550,7 +550,7 @@ Resources:
             CachedMethods:
               - GET
               - HEAD
-            CachePolicyId: 413f160b-5154-4f5d-8c8f-f45fe7d177d4
+            CachePolicyId: 4135ea2d-6df8-44a3-9df3-4b5a84be39ad
             OriginRequestPolicyId: b689b0a8-53d0-40ab-baf2-68738e2966ac
             Compress: true
             ViewerProtocolPolicy: redirect-to-https
