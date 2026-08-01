@@ -491,7 +491,8 @@ Resources:
                   raise LookupError("centre not found")
               if "ieltsOrgSlug" in patch and patch["ieltsOrgSlug"] != base.get("ieltsOrgSlug"):
                   raise ValueError("IELTS.org route slug cannot be changed without a deployment")
-              unknown = sorted(set(patch) - set(base))
+              schema_optional = {"localizations", "futureOpening"}
+              unknown = sorted(set(patch) - set(base) - schema_optional)
               if unknown:
                   raise ValueError("unknown top-level fields: " + ", ".join(unknown))
               merged = {**base, **patch, "id": centre_id}
