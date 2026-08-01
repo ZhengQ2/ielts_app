@@ -15,9 +15,12 @@ import {
 } from '@ielts-map/core';
 import { googleMapId, importGoogleMapLibraries } from '@/lib/google-maps';
 import { centreDetailHref } from '@/lib/offering-filter';
+import type { CitySearchSelection } from './CitySearch';
 
 interface Props {
   centres: Centre[];
+  /** Explicit Google city choice; unlike typing, this may move the camera. */
+  focusLocation: CitySearchSelection | null;
   /** Visual emphasis only; hovering a list card must never move the map. */
   highlightedId: string | null;
   /** Explicit selection from a user click; this is the only focus trigger. */
@@ -31,6 +34,7 @@ interface Props {
 
 export default function CentreMap({
   centres,
+  focusLocation,
   highlightedId,
   selectedId,
   detailFilterSearch,
@@ -48,11 +52,13 @@ export default function CentreMap({
   const centresRef = useRef(centres);
   const selectedIdRef = useRef(selectedId);
   const detailFilterSearchRef = useRef(detailFilterSearch);
+  const focusLocationRef = useRef(focusLocation);
   const [mapReady, setMapReady] = useState(false);
   const [loadError, setLoadError] = useState(false);
   centresRef.current = centres;
   selectedIdRef.current = selectedId;
   detailFilterSearchRef.current = detailFilterSearch;
+  focusLocationRef.current = focusLocation;
 
   const onSelectRef = useRef(onSelect);
   onSelectRef.current = onSelect;
@@ -248,7 +254,7 @@ export default function CentreMap({
         // A selected centre is an explicit camera position chosen by the
         // reader. Filtering must not pull them away from it just because the
         // marker set was rebuilt.
-        if (!selectedLocated) {
+        if (!selectedLocated && !focusLocationRef.current) {
           instance.fitBounds(bounds, 60);
           google.maps.event.addListenerOnce(instance, 'idle', () => {
             if ((instance.getZoom() ?? 2) > 13) instance.setZoom(13);
@@ -296,6 +302,37 @@ export default function CentreMap({
       cancelled = true;
     };
   }, [markerSignature, mapReady]);
+
+  // A city suggestion is an explicit user choice, so it may focus the map.
+  // Clearing that choice restores the full marker extent. Merely typing in
+  // the search field never reaches this effect and cannot move the camera.
+  const previousLocationKey = useRef<string | null>(null);
+  useEffect(() => {
+    const instance = map.current;
+    if (!instance || !mapReady) return;
+
+    if (focusLocation) {
+      previousLocationKey.current = `${focusLocation.center.lat}:${focusLocation.center.lng}`;
+      if (focusLocation.bounds) {
+        instance.fitBounds(focusLocation.bounds, 60);
+      } else {
+        instance.panTo(focusLocation.center);
+        if ((instance.getZoom() ?? 0) < 10) instance.setZoom(10);
+      }
+      return;
+    }
+
+    if (!previousLocationKey.current) return;
+    previousLocationKey.current = null;
+    const bounds = new google.maps.LatLngBounds();
+    let located = 0;
+    for (const centre of centresRef.current) {
+      if (!centre.geo) continue;
+      bounds.extend({ lat: centre.geo.lat, lng: centre.geo.lng });
+      located += 1;
+    }
+    if (located > 0) instance.fitBounds(bounds, 60);
+  }, [focusLocation, mapReady]);
 
   // Hover changes marker emphasis only; it never changes the camera.
   useEffect(() => {

@@ -77,3 +77,8 @@ export async function importGoogleMapLibraries(): Promise<{
   ]);
   return { maps, marker };
 }
+
+export async function importPlacesLibrary(): Promise<google.maps.PlacesLibrary> {
+  await loadGoogleMaps();
+  return google.maps.importLibrary('places') as Promise<google.maps.PlacesLibrary>;
+}
