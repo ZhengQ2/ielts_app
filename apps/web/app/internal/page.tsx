@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   draftLocationApproval,
+  isLocationReviewGeo,
   locationConfirmationToken,
   locationReviewIssues,
   needsLocationReview,
@@ -147,15 +148,16 @@ export default function InternalPage() {
   );
   const selectedCentre = effectiveCentres.find((centre) => centre.id === selectedId);
   const selectedBase = centres.find((centre) => centre.id === selectedId);
-  const editedCentre = useMemo(() => {
+  const reviewGeo = useMemo(() => {
     try {
-      const parsed = JSON.parse(editorValue) as Centre;
-      return parsed.id === selectedId ? parsed : null;
+      const parsed = JSON.parse(editorValue) as unknown;
+      if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) return null;
+      const draft = parsed as Record<string, unknown>;
+      return draft.id === selectedId && isLocationReviewGeo(draft.geo) ? draft.geo : null;
     } catch {
       return null;
     }
   }, [editorValue, selectedId]);
-  const reviewGeo = editedCentre?.geo ?? null;
   const reviewCoordinateToken = locationConfirmationToken(reviewGeo);
   const locationConfirmed =
     reviewCoordinateToken !== null && confirmedCoordinateToken === reviewCoordinateToken;
@@ -196,17 +198,25 @@ export default function InternalPage() {
     setMessage(null);
     setError(null);
     try {
-      const edited = JSON.parse(editorValue) as Centre;
-      if (!edited.geo) throw new Error('This centre has no coordinate to approve.');
+      const parsed = JSON.parse(editorValue) as unknown;
+      if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) {
+        throw new Error('The centre draft must be a JSON object.');
+      }
+      const draft = parsed as Record<string, unknown>;
+      if (draft.geo === null) throw new Error('This centre has no coordinate to approve.');
+      if (!isLocationReviewGeo(draft.geo)) {
+        throw new Error('Complete or correct the location fields before approving this coordinate.');
+      }
+      const edited = parsed as Centre;
       if (
         confirmedCoordinateToken === null ||
-        confirmedCoordinateToken !== locationConfirmationToken(edited.geo)
+        confirmedCoordinateToken !== locationConfirmationToken(draft.geo)
       ) {
         throw new Error('Inspect and confirm the current coordinate before approving it.');
       }
       const approved: Centre = {
         ...edited,
-        geo: draftLocationApproval(edited.geo, precision),
+        geo: draftLocationApproval(draft.geo, precision),
       };
       setEditorValue(JSON.stringify(approved, null, 2));
       setConfirmedCoordinateToken(null);
