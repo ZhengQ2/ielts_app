@@ -174,7 +174,6 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
   // whether a country picker is worth showing at all.
   const worldwide = countryOptions.length > 1;
 
-  const operatorOptions = useMemo(() => operatorFacets(centres), [centres]);
   const testModuleCounts = useMemo(
     () =>
       new Map(
@@ -293,6 +292,34 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
     maxPrice,
     priceCurrency,
   ]);
+
+  // Facet counts answer "how many would this operator have under the other
+  // active filters?" The selected operator buttons are intentionally omitted,
+  // otherwise choosing IDP would misleadingly turn every alternative into 0.
+  // The helper preserves the global operator order and keeps zero-count
+  // buttons visible so an active choice can always be removed.
+  const operatorOptions = useMemo(
+    () =>
+      operatorFacets(centres, {
+        q: searchLocation ? undefined : query || undefined,
+        country: country || undefined,
+        testModules,
+        testCategories,
+        deliveryModes,
+        maxPrice: priceCurrency ? (maxPrice ?? undefined) : undefined,
+      }),
+    [
+      centres,
+      query,
+      searchLocation,
+      country,
+      testModules,
+      testCategories,
+      deliveryModes,
+      maxPrice,
+      priceCurrency,
+    ],
+  );
 
   // An explicitly selected city hint beats the map view centred on a chosen
   // country as the more deliberate signal of "distance from where".

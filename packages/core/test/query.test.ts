@@ -1,9 +1,9 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { geoWithinBounds } from '../src/query.ts';
-import { filterCentres } from '../src/query.ts';
+import { filterCentres, geoWithinBounds, operatorFacets } from '../src/query.ts';
 import type {
   Centre,
+  Operator,
   TestCategory,
   TestKind,
   TestModule,
@@ -336,6 +336,31 @@ test('Life Skills never claims a delivery mode that the source did not publish',
   );
 });
 
+test('operator facets apply other filters while ignoring operator selection', () => {
+  const centres = [
+    operatorCentre('bc-ca', 'British Council', 'CA', 300),
+    operatorCentre('idp-ca', 'IDP', 'CA', 400),
+    operatorCentre('usa-us', 'IELTS USA', 'US', 200),
+  ];
+
+  assert.deepEqual(
+    operatorFacets(centres, { country: 'CA', operators: ['IDP'] }),
+    [
+      { operator: 'British Council', count: 1 },
+      { operator: 'IDP', count: 1 },
+      { operator: 'IELTS USA', count: 0 },
+    ],
+  );
+  assert.deepEqual(
+    operatorFacets(centres, { country: 'CA', maxPrice: 350 }),
+    [
+      { operator: 'British Council', count: 1 },
+      { operator: 'IDP', count: 0 },
+      { operator: 'IELTS USA', count: 0 },
+    ],
+  );
+});
+
 function offering(
   label: string,
   kind: TestKind,
@@ -376,4 +401,20 @@ function offeringCentre(id: string, offerings: TestOffering[]): Centre {
     parsedCurrency: cheapest.parsedCurrency,
     isPublishable: true,
   } as Centre;
+}
+
+function operatorCentre(
+  id: string,
+  operator: Operator,
+  country: string,
+  price: number,
+): Centre {
+  const centre = offeringCentre(id, [
+    offering('Academic Test', 'academic', 'computer_delivered', price),
+  ]);
+  return {
+    ...centre,
+    operator,
+    address: { ...centre.address, country },
+  };
 }

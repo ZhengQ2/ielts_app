@@ -354,13 +354,31 @@ export function currenciesIn(centres: Centre[]): string[] {
   ].sort();
 }
 
-export function operatorFacets(centres: Centre[]): { operator: Operator; count: number }[] {
-  const counts = new Map<Operator, number>();
+/**
+ * Operator choices with counts under the current non-operator filters.
+ *
+ * The operator dimension is deliberately removed from `filter`: selecting IDP
+ * must not make the British Council and IELTS USA alternatives disappear or
+ * report zero solely because they are not selected. The universe and ordering
+ * stay stable, while the displayed counts respond to country, search,
+ * offering, and price filters.
+ */
+export function operatorFacets(
+  centres: Centre[],
+  filter: CentreFilter = {},
+): { operator: Operator; count: number }[] {
+  const universe = new Map<Operator, number>();
   for (const c of centres) {
     if (!isDirectoryVisible(c)) continue;
-    counts.set(c.operator, (counts.get(c.operator) ?? 0) + 1);
+    universe.set(c.operator, (universe.get(c.operator) ?? 0) + 1);
   }
-  return [...counts.entries()]
-    .map(([operator, count]) => ({ operator, count }))
-    .sort((a, b) => b.count - a.count);
+
+  const matchingCounts = new Map<Operator, number>();
+  for (const centre of filterCentres(centres, { ...filter, operators: undefined })) {
+    matchingCounts.set(centre.operator, (matchingCounts.get(centre.operator) ?? 0) + 1);
+  }
+
+  return [...universe.entries()]
+    .sort((left, right) => right[1] - left[1])
+    .map(([operator]) => ({ operator, count: matchingCounts.get(operator) ?? 0 }));
 }
