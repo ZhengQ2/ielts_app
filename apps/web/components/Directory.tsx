@@ -11,7 +11,6 @@ import dynamic from 'next/dynamic';
 import {
   countryFacets,
   countryName,
-  currenciesIn,
   offeringCategory,
   offeringDeliveryMode,
   offeringModule,
@@ -19,6 +18,7 @@ import {
   geoWithinBounds,
   isDirectoryVisible,
   operatorFacets,
+  priceFilterCurrencies,
   operatorShape,
   operatorStyle,
   sortCentres,
@@ -254,7 +254,23 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
       deliveryModes,
     ],
   );
-  const priceCurrencies = useMemo(() => currenciesIn(prePriceResults), [prePriceResults]);
+  // Use the same operator-neutral universe as the operator badges. A slider
+  // derived only from the selected operator could otherwise expose (say) RON
+  // while its alternative operators are priced in EUR, making their counts
+  // numerically incomparable.
+  const priceCurrencies = useMemo(
+    () => priceFilterCurrencies(centres, prePriceFilter),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [
+      centres,
+      query,
+      searchLocation,
+      country,
+      testModules,
+      testCategories,
+      deliveryModes,
+    ],
+  );
   const priceCurrency = priceCurrencies.length === 1 ? priceCurrencies[0]! : null;
   const priceCeiling = useMemo(() => {
     if (!priceCurrency) return null;

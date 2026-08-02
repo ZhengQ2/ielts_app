@@ -355,6 +355,27 @@ export function currenciesIn(centres: Centre[]): string[] {
 }
 
 /**
+ * Currencies that can participate in the max-price facet.
+ *
+ * Operator buttons are alternatives, so the price slider must use the same
+ * operator-neutral universe as their counts. Otherwise selecting one operator
+ * can expose (for example) a RON slider and then apply that raw number to an
+ * alternative operator whose prices are in EUR.
+ */
+export function priceFilterCurrencies(
+  centres: Centre[],
+  filter: CentreFilter = {},
+): string[] {
+  return currenciesIn(
+    filterCentres(centres, {
+      ...filter,
+      operators: undefined,
+      maxPrice: undefined,
+    }),
+  );
+}
+
+/**
  * Operator choices with counts under the current non-operator filters.
  *
  * The operator dimension is deliberately removed from `filter`: selecting IDP

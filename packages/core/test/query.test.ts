@@ -1,6 +1,11 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { filterCentres, geoWithinBounds, operatorFacets } from '../src/query.ts';
+import {
+  filterCentres,
+  geoWithinBounds,
+  operatorFacets,
+  priceFilterCurrencies,
+} from '../src/query.ts';
 import type {
   Centre,
   Operator,
@@ -361,18 +366,36 @@ test('operator facets apply other filters while ignoring operator selection', ()
   );
 });
 
+test('price facet currency comes from the operator-neutral result set', () => {
+  const centres = [
+    operatorCentre('bc-ro', 'British Council', 'RO', 1100, 'RON'),
+    operatorCentre('idp-ro', 'IDP', 'RO', 250, 'EUR'),
+  ];
+
+  assert.deepEqual(
+    priceFilterCurrencies(centres, {
+      country: 'RO',
+      operators: ['British Council'],
+      maxPrice: 1100,
+    }),
+    ['EUR', 'RON'],
+    'a British Council selection must not expose a RON slider while IDP alternatives use EUR',
+  );
+});
+
 function offering(
   label: string,
   kind: TestKind,
   format: TestOffering['format'],
   price: number,
+  currency = 'CAD',
 ): TestOffering {
   return {
     label,
     kind,
     format,
-    priceText: `CAD ${price}`,
-    parsedCurrency: 'CAD',
+    priceText: `${currency} ${price}`,
+    parsedCurrency: currency,
     parsedPrice: price,
     priceParseStatus: 'verified',
   };
@@ -408,9 +431,10 @@ function operatorCentre(
   operator: Operator,
   country: string,
   price: number,
+  currency = 'CAD',
 ): Centre {
   const centre = offeringCentre(id, [
-    offering('Academic Test', 'academic', 'computer_delivered', price),
+    offering('Academic Test', 'academic', 'computer_delivered', price, currency),
   ]);
   return {
     ...centre,
