@@ -58,6 +58,8 @@ function facets(c: Centre): Record<string, unknown> {
       )
       .sort(),
     bookingUrl: c.bookingUrl,
+    offersOneSkillRetake: Boolean(c.offersOneSkillRetake),
+    oneSkillRetakeOnly: Boolean(c.oneSkillRetakeOnly),
     location: c.geo ? `${round(c.geo.lat)},${round(c.geo.lng)}|${c.geo.precision}` : null,
     googlePlaceId: c.googlePlaceId,
     isPublishable: c.isPublishable,

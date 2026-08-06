@@ -10,6 +10,7 @@ import { CentreContactDetails } from './CentreContactDetails';
 import { centreDetailHref } from '@/lib/offering-filter';
 import { isHttpUrl } from '@/lib/url-safety';
 import { FutureOpeningNotice } from './FutureOpeningNotice';
+import { OneSkillRetakeOnlyNotice } from './OneSkillRetakeOnlyNotice';
 
 /**
  * The centre picked on the map, summarised at the top of the list column.
@@ -62,7 +63,11 @@ export function SelectedCentrePanel({
       </div>
 
       <dl className="mt-3 grid gap-x-6 gap-y-2 border-t border-line pt-3 text-sm sm:grid-cols-3">
-        <Detail label="From">{formatPublishedPrice(centre.priceFromText)}</Detail>
+        <Detail label="From">
+          {centre.oneSkillRetakeOnly
+            ? 'One Skill Retake only'
+            : formatPublishedPrice(centre.priceFromText)}
+        </Detail>
         <Detail label="Formats">
           {deliveryModesIn(centre.offerings).map(formatDeliveryMode).join(' · ') || '—'}
         </Detail>
@@ -80,6 +85,11 @@ export function SelectedCentrePanel({
           <FutureOpeningNotice centre={centre} compact />
         </div>
       )}
+      {centre.oneSkillRetakeOnly && (
+        <div className="mt-3">
+          <OneSkillRetakeOnlyNotice />
+        </div>
+      )}
 
       <div className="mt-3 flex flex-wrap items-center gap-4 text-sm">
         <Link
@@ -88,7 +98,7 @@ export function SelectedCentrePanel({
         >
           View full details →
         </Link>
-        {isHttpUrl(centre.bookingUrl) && (
+        {!centre.oneSkillRetakeOnly && isHttpUrl(centre.bookingUrl) && (
           <a
             href={centre.bookingUrl!}
             target="_blank"

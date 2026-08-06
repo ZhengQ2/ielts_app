@@ -1,6 +1,11 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { rawScoreInquiryUrl, resultPortalUrl } from '../src/after-test.ts';
+import {
+  BRITISH_COUNCIL_CHINA_MINI_PROGRAM_QR,
+  rawScoreInquiryUrl,
+  resultPortalUrl,
+  usesBritishCouncilChinaMiniProgram,
+} from '../src/after-test.ts';
 import type { Centre } from '../src/types.ts';
 
 function centre(
@@ -29,11 +34,18 @@ test('British Council candidates use the Test Taker Portal', () => {
   );
 });
 
-test('British Council candidates in China use NEEA', () => {
+test('British Council candidates in China retain NEEA as a browser fallback', () => {
   assert.equal(
     resultPortalUrl(centre('British Council', 'CN')),
     'https://ielts.neea.cn/login',
   );
+});
+
+test('British Council candidates in China receive the official WeChat mini-program option', () => {
+  assert.equal(usesBritishCouncilChinaMiniProgram(centre('British Council', 'CN')), true);
+  assert.equal(usesBritishCouncilChinaMiniProgram(centre('British Council', 'CA')), false);
+  assert.equal(usesBritishCouncilChinaMiniProgram(centre('IDP', 'CN')), false);
+  assert.match(BRITISH_COUNCIL_CHINA_MINI_PROGRAM_QR, /^https:\/\/www\.chinaielts\.org\//);
 });
 
 test('IDP candidates use the country-specific India and China portals', () => {

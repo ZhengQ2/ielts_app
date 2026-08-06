@@ -126,6 +126,28 @@ test('a healthy newly discovered centre is accepted automatically', () => {
   assert.deepEqual(run.analyses[0]?.issues, []);
 });
 
+test('an explicitly OSR-only discovery is not quarantined for missing offerings or price', () => {
+  const run = analyse([
+    centre({
+      id: 'osr-only',
+      offerings: [],
+      formats: [],
+      priceFromText: null,
+      parsedPriceFrom: null,
+      parsedCurrency: null,
+      bookingUrl: null,
+      offersOneSkillRetake: true,
+      oneSkillRetakeOnly: true,
+      isPublishable: true,
+    }),
+  ]);
+  assert.equal(run.analyses[0]?.decision, 'ready');
+  assert.deepEqual(
+    run.analyses[0]?.issues.map((issue) => issue.code),
+    ['osr_only_centre'],
+  );
+});
+
 test('source price text survives an unparsed derived value', () => {
   const item = centre({ id: 'unparsed' });
   item.offerings[0] = {

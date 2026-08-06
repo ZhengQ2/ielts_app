@@ -90,6 +90,8 @@ the effective feed refreshes.
 | `parsedPriceFrom` | Numeric amount derived from `priceFromText`, or `null`. It is for sorting, not display. |
 | `parsedCurrency` | ISO currency code associated with the summary price, such as `CNY`, or `null`. |
 | `bookingUrl` | Operator booking/interest URL or `null`. Use an `https://` URL. |
+| `offersOneSkillRetake` | Source-managed boolean derived from the One Skill Retake badge on the IELTS.org country listing. Override only when current operator evidence shows the listing is wrong. |
+| `oneSkillRetakeOnly` | Source-managed boolean for a centre that provides OSR but no full test. It is `true` only when no merged source page or offering supplies Academic, General Training, UKVI, or SELT. |
 | `futureOpening` | Optional operator-declared future-opening block. Do not infer this merely because dates are unavailable. |
 | `isPublishable` | Boolean. `false` hides an ordinary centre; future openings remain visible with their warning and interest form. |
 | `confidence` | Overall record confidence from `0` to `1`. This is distinct from `geo.confidence`. |
@@ -218,6 +220,14 @@ After changing offerings, also update `formats`, `priceFromText`, `parsedPriceFr
 This remains Google-only because the coordinate came from Google. For a coordinate independently
 supplied and owned by an administrator, use `source: "admin"`, `origin: "administrator"`, and
 `displayRights: "any_basemap"`, and remove an unrelated `googlePlaceId`.
+
+## One Skill Retake fields
+
+`offersOneSkillRetake` is maintained automatically from the One Skill Retake badge on IELTS.org's
+country listing. Override this boolean only when current operator evidence shows that the listing is
+wrong. `oneSkillRetakeOnly` is narrower: it is true only when an OSR-badged source card publishes no
+full-test format and no merged source page or offering supplies Academic, General Training, UKVI, or
+SELT. The next ingest run refreshes both fields for existing and newly discovered centres.
 
 ## Create an administrator
 

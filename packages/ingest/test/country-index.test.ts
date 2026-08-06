@@ -4,6 +4,8 @@ import {
   ALPHA3_TO_ALPHA2,
   parseCentreSlugs,
   parseCountryOptions,
+  parseOsrCentreSlugs,
+  parseOsrOnlyCentreSlugs,
 } from '../src/country-index.ts';
 
 /**
@@ -29,8 +31,18 @@ const LISTING_FIXTURE = `
     <option value="Tirana">Tirana</option>
   </select>
   <div class="results">
-    <a href="https://ielts.org/test-centres/british-council-kullat-binjake">Kullat Binjake</a>
-    <a href="/test-centres/another-centre">Another Centre</a>
+    <a href="https://ielts.org/test-centres/british-council-kullat-binjake" class="test-centre-card">
+      <span>Kullat Binjake</span>
+      <div class="test-centre-card__formats-box"><span>Computer based</span></div>
+      <div class="test-centre-card__osr"><span>One Skill Retake</span></div>
+    </a>
+    <a href="/test-centres/osr-only-centre" class="test-centre-card">
+      <span>OSR-only Centre</span>
+      <div class="test-centre-card__osr"><span>One Skill Retake</span></div>
+    </a>
+    <a href="/test-centres/another-centre" class="test-centre-card">
+      <span>Another Centre</span>
+    </a>
   </div>
   <nav>
     <a href="/test-centres?country=can&city=all">Home breadcrumb (not a centre)</a>
@@ -63,7 +75,33 @@ test('a listing with too few three-letter options is not mistaken for the countr
 
 test('centre slugs are extracted; the listing page itself is not one', () => {
   const slugs = parseCentreSlugs(LISTING_FIXTURE);
-  assert.deepEqual([...slugs].sort(), ['another-centre', 'british-council-kullat-binjake']);
+  assert.deepEqual([...slugs].sort(), [
+    'another-centre',
+    'british-council-kullat-binjake',
+    'osr-only-centre',
+  ]);
+});
+
+test('OSR slugs come only from result cards carrying the OSR badge', () => {
+  assert.deepEqual(parseOsrCentreSlugs(LISTING_FIXTURE), [
+    'british-council-kullat-binjake',
+    'osr-only-centre',
+  ]);
+});
+
+test('OSR-only slugs have the badge but no full-test format box', () => {
+  assert.deepEqual(parseOsrOnlyCentreSlugs(LISTING_FIXTURE), [
+    'osr-only-centre',
+  ]);
+});
+
+test('generic OSR explanatory text does not mark an ordinary centre', () => {
+  const html = `
+    <p>One Skill Retake is widely available.</p>
+    <a class="test-centre-card" href="/test-centres/ordinary-centre">
+      <span>Ordinary centre</span>
+    </a>`;
+  assert.deepEqual(parseOsrCentreSlugs(html), []);
 });
 
 test('a bare "/test-centres" breadcrumb link is not read as a slug', () => {

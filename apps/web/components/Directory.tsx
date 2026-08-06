@@ -132,6 +132,7 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
   const [deliveryModes, setDeliveryModes] = useState<OfferingDeliveryMode[]>([
     ...DEFAULT_DELIVERY_MODES,
   ]);
+  const [oneSkillRetakeOnly, setOneSkillRetakeOnly] = useState(false);
   const [maxPrice, setMaxPrice] = useState<number | null>(null);
   // Null means "use the contextual default": name worldwide, distance once a
   // selected city hint or country supplies an origin. Any explicit menu choice
@@ -226,7 +227,7 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
   // A selected Google city is a distance origin, not a string filter. This
   // avoids depending on the source dataset's mixed city languages and
   // administrative levels while ordinary typed text still searches records.
-  const preCityFilter: CentreFilter = {
+  const preOsrFilter: CentreFilter = {
     q: searchLocation ? undefined : query || undefined,
     country: country || undefined,
     operators: operators.length ? operators : undefined,
@@ -234,12 +235,56 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
     testCategories,
     deliveryModes,
   };
+  const preOsrResults = useMemo(
+    () => filterCentres(centres, preOsrFilter),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [
+      centres,
+      query,
+      searchLocation,
+      country,
+      operators,
+      testModules,
+      testCategories,
+      deliveryModes,
+    ],
+  );
+  const oneSkillRetakeCount = useMemo(
+    () =>
+      filterCentres(centres, {
+        ...preOsrFilter,
+        oneSkillRetake: true,
+      }).length,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [
+      centres,
+      query,
+      searchLocation,
+      country,
+      operators,
+      testModules,
+      testCategories,
+      deliveryModes,
+    ],
+  );
+  // A contextual filter can move to a market with no OSR centres (for example,
+  // IELTS USA). Clear the now-invisible feature filter so the new market does
+  // not misleadingly show zero results with no control available to undo it.
+  useEffect(() => {
+    if (oneSkillRetakeOnly && oneSkillRetakeCount === 0) {
+      setOneSkillRetakeOnly(false);
+    }
+  }, [oneSkillRetakeCount, oneSkillRetakeOnly]);
+  const prePriceFilter: CentreFilter = {
+    ...preOsrFilter,
+    oneSkillRetake:
+      oneSkillRetakeOnly && oneSkillRetakeCount > 0 ? true : undefined,
+  };
   // Currencies present in the result set once everything except price is
   // applied. A raw number only means something within one currency — CAD 400
   // and IDR 400 are not remotely comparable — so the price control is only
   // ever shown when exactly one currency is in view (typically because a
   // country has been picked).
-  const prePriceFilter: CentreFilter = preCityFilter;
   const prePriceResults = useMemo(
     () => filterCentres(centres, prePriceFilter),
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -252,6 +297,7 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
       testModules,
       testCategories,
       deliveryModes,
+      oneSkillRetakeOnly,
     ],
   );
   // Use the same operator-neutral universe as the operator badges. A slider
@@ -305,6 +351,7 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
     testModules,
     testCategories,
     deliveryModes,
+    oneSkillRetakeOnly,
     maxPrice,
     priceCurrency,
   ]);
@@ -382,6 +429,7 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
     testModules,
     testCategories,
     deliveryModes,
+    oneSkillRetakeOnly,
     maxPrice,
     sort,
   ]);
@@ -461,6 +509,7 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
       setTestModules([...DEFAULT_TEST_MODULES]);
       setTestCategories([...DEFAULT_TEST_CATEGORIES]);
       setDeliveryModes([...DEFAULT_DELIVERY_MODES]);
+      setOneSkillRetakeOnly(false);
       setLifeSkillsHovered(false);
       setLifeSkillsNotePinned(false);
       setMaxPrice(null);
@@ -475,6 +524,7 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
       !sameSelection(testModules, DEFAULT_TEST_MODULES) ||
       !sameSelection(testCategories, DEFAULT_TEST_CATEGORIES) ||
       !sameSelection(deliveryModes, DEFAULT_DELIVERY_MODES) ||
+      oneSkillRetakeOnly ||
       maxPrice !== null,
   );
   const detailFilterSearch = useMemo(
@@ -595,7 +645,7 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
           </select>
         </label>
 
-        <div className="grid gap-4 border-t border-line pt-3 sm:col-span-2 lg:col-span-4 lg:grid-cols-3">
+        <div className="grid gap-4 border-t border-line pt-3 sm:col-span-2 lg:col-span-4 lg:grid-cols-4">
           <fieldset>
             <legend className="text-sm font-medium">Module</legend>
             <div className="mt-2 flex flex-wrap gap-2">
@@ -692,6 +742,28 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
               options are on because IELTS.org publishes no mode.
             </p>
           </fieldset>
+
+          {oneSkillRetakeCount > 0 && (
+            <fieldset>
+              <legend className="text-sm font-medium">Features</legend>
+              <div className="mt-2 flex flex-wrap gap-2">
+                <FilterCheckbox
+                  checked={oneSkillRetakeOnly}
+                  label="One Skill Retake"
+                  count={oneSkillRetakeCount}
+                  onChange={() =>
+                    updateFilter(() =>
+                      setOneSkillRetakeOnly((selected) => !selected),
+                    )
+                  }
+                />
+              </div>
+              <p className="mt-2 text-xs text-muted">
+                Based on the One Skill Retake badge published for each centre by IELTS.org.
+                OSR-only venues appear only while this filter is selected.
+              </p>
+            </fieldset>
+          )}
         </div>
 
         <div className="flex flex-wrap items-center gap-2 sm:col-span-2 lg:col-span-4">

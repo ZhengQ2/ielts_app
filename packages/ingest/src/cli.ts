@@ -276,6 +276,8 @@ async function main(): Promise<void> {
     // link and the phone prefix remain the fallback for whatever this listing
     // does not cover (a slug added between the two fetches, a naming mismatch).
     let fromIndex = 0;
+    let osrCentres = 0;
+    let osrOnlySourcePages = 0;
     for (const centre of parsed) {
       const known = index.bySlug.get(centre.slug);
       if (known) {
@@ -283,10 +285,16 @@ async function main(): Promise<void> {
         // that context enables dedicated country rules while deliberately
         // disabling the old last-line city guess everywhere else.
         centre.address = parseAddress(centre.address.lines, known);
+        centre.offersOneSkillRetake = index.osrSlugs.has(centre.slug);
+        centre.oneSkillRetakeOnly = index.osrOnlySlugs.has(centre.slug);
+        if (centre.offersOneSkillRetake) osrCentres++;
+        if (centre.oneSkillRetakeOnly) osrOnlySourcePages++;
         fromIndex++;
       }
     }
     console.log(`  ${fromIndex}/${parsed.length} centres matched to a country this way`);
+    console.log(`  ${osrCentres}/${parsed.length} source pages marked for One Skill Retake`);
+    console.log(`  ${osrOnlySourcePages}/${parsed.length} source pages marked OSR-only before dedup`);
 
     // The listing's own dropdown names every country it offers ("Indonesia",
     // not just "ID") — free to keep, since it was already fetched to get the

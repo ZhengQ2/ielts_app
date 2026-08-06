@@ -354,7 +354,7 @@ function analyseOne(
       `Operator was derived from ${centre.operatorSource}, not a booking domain.`,
     );
   }
-  if (!centre.bookingUrl) {
+  if (!centre.bookingUrl && !centre.oneSkillRetakeOnly) {
     add(
       'missing_booking_url',
       'warning',
@@ -378,7 +378,15 @@ function analyseOne(
     );
   }
 
-  if (centre.offerings.length === 0) {
+  if (centre.oneSkillRetakeOnly) {
+    add(
+      'osr_only_centre',
+      'info',
+      'none',
+      'IELTS.org publishes this venue for One Skill Retake without a full IELTS test offering.',
+    );
+  }
+  if (centre.offerings.length === 0 && !centre.oneSkillRetakeOnly) {
     add(
       'no_offerings',
       'error',
@@ -389,7 +397,7 @@ function analyseOne(
   const pricedOfferings = centre.offerings.filter((offering) =>
     Boolean(offering.priceText?.trim()),
   );
-  if (pricedOfferings.length === 0) {
+  if (pricedOfferings.length === 0 && !centre.oneSkillRetakeOnly) {
     add(
       'no_published_price',
       'error',

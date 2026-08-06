@@ -49,7 +49,7 @@ jobs:
       # scheduled run is to see the source as it is *now*, so it refetches every
       # page; caching ~300 MB weekly to then ignore it would be pure waste.
       # The geocode cache is the one worth keeping, and that lives in the repo.
-      - name: Crawl, geocode and diff
+      - name: Crawl, enrich, geocode and diff
         id: ingest
         env:
           # Google is the production address + venue evidence provider. The
@@ -62,6 +62,11 @@ jobs:
           AMAP_API_KEY: ${{ secrets.AMAP_API_KEY }}
           MAPPLS_API_KEY: ${{ secrets.MAPPLS_API_KEY }}
         run: |
+          # The existing country-listing pass also records IELTS.org's One
+          # Skill Retake badge and source-card format for every source page,
+          # including centres first discovered by this run. Dedup then prevents
+          # an OSR-only page from hiding a merged full-test offering. This adds
+          # no separate provider request.
           cd packages/ingest
           node --experimental-strip-types src/cli.ts \
             --country "${{ inputs.country || 'ALL' }}" \

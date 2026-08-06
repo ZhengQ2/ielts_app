@@ -9,8 +9,23 @@ const IDP_INDIA_RESULTS = 'https://www.ieltsidpindia.com/access/candidatelogin';
 const IELTS_USA_RESULTS = 'https://ieltsregistration.registration-ieltsusa.org/ttp';
 const IDP_CHINA_RESULTS = 'https://sign.idpielts.cn/personal-test';
 const BRITISH_COUNCIL_CHINA_RESULTS = 'https://ielts.neea.cn/login';
+export const BRITISH_COUNCIL_CHINA_MINI_PROGRAM_QR =
+  'https://www.chinaielts.org/assets/static/qr-official.WwT7N6og.png';
+export const BRITISH_COUNCIL_CHINA_OSR_GUIDE =
+  'https://www.chinaielts.org/book-ielts/one-skill-retake';
 const BRITISH_COUNCIL_RAW_SCORE_FORM = 'https://forms.office.com/r/qj0ECRwGuD';
 const IDP_PRIVACY_EMAIL = 'privacyofficer@idp.com';
+
+/**
+ * Mainland British Council candidates use the official WeChat mini-program
+ * for their test record, results and One Skill Retake. NEEA remains available
+ * as a browser-based result-service fallback.
+ */
+export function usesBritishCouncilChinaMiniProgram(centre: PortalCentre): boolean {
+  return (
+    centre.operator === 'British Council' && centre.address.country?.toUpperCase() === 'CN'
+  );
+}
 
 /**
  * Candidate results portals vary by operator and, for IDP India and both
