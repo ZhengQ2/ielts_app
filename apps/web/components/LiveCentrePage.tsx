@@ -3,6 +3,8 @@
 import { Suspense, useEffect, useState } from 'react';
 import Link from 'next/link';
 import {
+  BRITISH_COUNCIL_CHINA_MINI_PROGRAM_QR,
+  BRITISH_COUNCIL_CHINA_OSR_GUIDE,
   boundsFor,
   confidenceLabel,
   correctionReportUrl,
@@ -14,6 +16,7 @@ import {
   operatorStyle,
   rawScoreInquiryUrl,
   resultPortalUrl,
+  usesBritishCouncilChinaMiniProgram,
   type Centre,
 } from '@ielts-map/core';
 import { isHttpUrl } from '@/lib/url-safety';
@@ -29,6 +32,7 @@ import {
 } from '@/components/FilteredCentrePrice';
 import { CentreOfferingsTable } from '@/components/CentreOfferingsTable';
 import { FutureOpeningNotice } from '@/components/FutureOpeningNotice';
+import { OneSkillRetakeOnlyNotice } from '@/components/OneSkillRetakeOnlyNotice';
 
 interface CentreFeed {
   centres: Centre[];
@@ -38,6 +42,7 @@ export function LiveCentrePage({ initialCentre }: { initialCentre: Centre }) {
   const [centre, setCentre] = useState(initialCentre);
   const [allCentres, setAllCentres] = useState<Centre[]>([]);
   const [removed, setRemoved] = useState(false);
+  const [showChinaAfterTest, setShowChinaAfterTest] = useState(false);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -81,6 +86,7 @@ export function LiveCentrePage({ initialCentre }: { initialCentre: Centre }) {
   const caveat = geoCaveat(centre);
   const trust = confidenceLabel(centre);
   const resultsUrl = centre.futureOpening ? null : resultPortalUrl(centre);
+  const usesChinaMiniProgram = usesBritishCouncilChinaMiniProgram(centre);
   const rawScoreUrl = centre.futureOpening ? null : rawScoreInquiryUrl(centre);
   const correctionUrl = correctionReportUrl(centre);
   const pickerStart = locationPickerStart(centre, allCentres);
@@ -99,27 +105,41 @@ export function LiveCentrePage({ initialCentre }: { initialCentre: Centre }) {
 
       <div className="mt-6 grid gap-6 sm:grid-cols-3">
         <Fact label="From">
-          <Suspense fallback={formatPublishedPrice(centre.priceFromText)}>
-            <FilteredCentrePrice centre={centre} />
-          </Suspense>
+          {centre.oneSkillRetakeOnly ? (
+            'One Skill Retake only'
+          ) : (
+            <Suspense fallback={formatPublishedPrice(centre.priceFromText)}>
+              <FilteredCentrePrice centre={centre} />
+            </Suspense>
+          )}
         </Fact>
         <Fact label="Formats">
-          <Suspense
-            fallback={
-              deliveryModesIn(centre.offerings).map(formatDeliveryMode).join(' · ') ||
-              'Not published'
-            }
-          >
-            <FilteredCentreFormats centre={centre} />
-          </Suspense>
+          {centre.oneSkillRetakeOnly ? (
+            'No full IELTS test published'
+          ) : (
+            <Suspense
+              fallback={
+                deliveryModesIn(centre.offerings).map(formatDeliveryMode).join(' · ') ||
+                'Not published'
+              }
+            >
+              <FilteredCentreFormats centre={centre} />
+            </Suspense>
+          )}
         </Fact>
         <Fact label="Contact information">
           <CentreContactDetails centre={centre} />
         </Fact>
       </div>
 
+      {centre.oneSkillRetakeOnly && (
+        <div className="mt-6">
+          <OneSkillRetakeOnlyNotice />
+        </div>
+      )}
+
       <div className="mt-6 flex flex-wrap gap-3">
-        {isHttpUrl(centre.bookingUrl) && (
+        {!centre.oneSkillRetakeOnly && isHttpUrl(centre.bookingUrl) && (
           <a
             href={centre.bookingUrl!}
             target="_blank"
@@ -132,14 +152,26 @@ export function LiveCentrePage({ initialCentre }: { initialCentre: Centre }) {
             <span aria-hidden>↗</span>
           </a>
         )}
-        {resultsUrl && (
+        {resultsUrl && usesChinaMiniProgram && (
+          <button
+            type="button"
+            aria-expanded={showChinaAfterTest}
+            aria-controls="china-after-test-options"
+            onClick={() => setShowChinaAfterTest((shown) => !shown)}
+            className="inline-flex items-center gap-2 rounded-md border border-brand bg-white px-4 py-2.5 font-medium text-brand hover:bg-brand-soft"
+          >
+            Results &amp; One Skill Retake
+            <span aria-hidden>{showChinaAfterTest ? '−' : '+'}</span>
+          </button>
+        )}
+        {resultsUrl && !usesChinaMiniProgram && (
           <a
             href={resultsUrl}
             target="_blank"
             rel="noreferrer nofollow"
             className="inline-flex items-center gap-2 rounded-md border border-brand bg-white px-4 py-2.5 font-medium text-brand hover:bg-brand-soft"
           >
-            Check results <span aria-hidden>↗</span>
+            Results &amp; One Skill Retake <span aria-hidden>↗</span>
           </a>
         )}
         {rawScoreUrl && (
@@ -154,6 +186,54 @@ export function LiveCentrePage({ initialCentre }: { initialCentre: Centre }) {
           </a>
         )}
       </div>
+      {resultsUrl && usesChinaMiniProgram && showChinaAfterTest && (
+        <section
+          id="china-after-test-options"
+          aria-label="Results and One Skill Retake for mainland China"
+          className="mt-4 grid gap-5 rounded-lg border border-line bg-white p-4 sm:grid-cols-[12rem_1fr] sm:items-center"
+        >
+          {/* This is the official BC IELTS China mini-program code. A plain
+              image is intentional because the site is statically exported. */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={BRITISH_COUNCIL_CHINA_MINI_PROGRAM_QR}
+            alt="WeChat QR code for the official BC IELTS China mini-program"
+            width={192}
+            height={192}
+            className="mx-auto h-48 w-48 rounded-md border border-line object-contain"
+          />
+          <div>
+            <h2 className="font-medium">Use the official WeChat mini-program</h2>
+            <p className="mt-2 text-sm text-muted">
+              In WeChat, scan this code to open “雅思考试官方服务平台”. Mainland British
+              Council candidates can view their test record and results there and, when eligible,
+              register for One Skill Retake.
+            </p>
+            <p className="mt-2 text-sm text-muted">
+              One Skill Retake is limited to an eligible full IELTS on computer test and must be
+              taken within 60 days. The mini-program shows the sessions available for your result.
+            </p>
+            <div className="mt-3 flex flex-wrap gap-x-4 gap-y-2 text-sm">
+              <a
+                href={BRITISH_COUNCIL_CHINA_OSR_GUIDE}
+                target="_blank"
+                rel="noreferrer nofollow"
+                className="font-medium text-brand hover:underline"
+              >
+                Official OSR guidance ↗
+              </a>
+              <a
+                href={resultsUrl}
+                target="_blank"
+                rel="noreferrer nofollow"
+                className="text-muted hover:text-ink hover:underline"
+              >
+                Use the NEEA result service instead ↗
+              </a>
+            </div>
+          </div>
+        </section>
+      )}
       {centre.futureOpening && (
         <div className="mt-3 rounded-lg border border-line bg-surface p-3">
           <FutureOpeningNotice centre={centre} />
@@ -218,6 +298,9 @@ export function LiveCentrePage({ initialCentre }: { initialCentre: Centre }) {
           )}
           {centre.futureOpening && (
             <Row label="Opening status">Future opening — not yet operating</Row>
+          )}
+          {centre.oneSkillRetakeOnly && (
+            <Row label="Test availability">One Skill Retake-only venue</Row>
           )}
           <Row label="Source pages">{centre.sources.length}</Row>
         </dl>

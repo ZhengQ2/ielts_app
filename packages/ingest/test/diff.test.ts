@@ -158,6 +158,22 @@ test('a centre becoming unpublishable is reported', () => {
   assert.deepEqual(diff.changed[0]?.fields, ['isPublishable']);
 });
 
+test('an OSR badge change is reported', () => {
+  const diff = diffDatasets(
+    wrap([centre({ id: 'a', offersOneSkillRetake: false })]),
+    wrap([centre({ id: 'a', offersOneSkillRetake: true })]),
+  );
+  assert.deepEqual(diff.changed[0]?.fields, ['offersOneSkillRetake']);
+});
+
+test('a centre becoming OSR-only is reported', () => {
+  const diff = diffDatasets(
+    wrap([centre({ id: 'a', oneSkillRetakeOnly: false })]),
+    wrap([centre({ id: 'a', oneSkillRetakeOnly: true })]),
+  );
+  assert.deepEqual(diff.changed[0]?.fields, ['oneSkillRetakeOnly']);
+});
+
 test('the first run has no previous dataset and is all additions', () => {
   const diff = diffDatasets(null, wrap([centre({ id: 'a' }), centre({ id: 'b' })]));
   assert.equal(diff.added.length, 2);

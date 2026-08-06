@@ -267,11 +267,19 @@ export interface Centre {
   parsedPriceFrom: number | null;
   parsedCurrency: string | null;
   bookingUrl: string | null;
+  /** True only when IELTS.org's country listing marks this centre for One Skill Retake. */
+  offersOneSkillRetake?: boolean;
+  /**
+   * IELTS.org publishes OSR for this venue but no full Academic, General
+   * Training, UKVI or SELT test after all duplicate source pages are merged.
+   */
+  oneSkillRetakeOnly?: boolean;
   /** Present only when the operator identifies this as a future opening. */
   futureOpening?: FutureOpening;
   /**
    * Listing eligibility, not evidence that a centre is currently open.
-   * Requires at least one offering carrying source-published fee text.
+   * Requires at least one offering carrying source-published fee text, except
+   * for an explicit IELTS.org OSR-only listing.
    */
   isPublishable: boolean;
   /** Cross-source agreement, 0..1. */
@@ -325,6 +333,10 @@ export interface ParsedCentre {
   } | null;
   offerings: TestOffering[];
   bookingUrl: string | null;
+  /** Filled from IELTS.org's country listing after the detail page is parsed. */
+  offersOneSkillRetake?: boolean;
+  /** Source card publishes OSR without a full-test delivery format. */
+  oneSkillRetakeOnly?: boolean;
   fetchedAt: string;
 }
 

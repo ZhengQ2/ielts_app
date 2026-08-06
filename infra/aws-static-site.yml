@@ -347,7 +347,8 @@ Resources:
                   "id", "name", "operator", "operatorSource", "externalId", "ieltsOrgSlug",
                   "mergedSlugs", "address", "contact", "phone", "geo", "googlePlaceId",
                   "formats", "offerings", "priceFromText", "parsedPriceFrom", "parsedCurrency",
-                  "bookingUrl", "isPublishable", "confidence", "sources", "firstSeenAt", "lastSeenAt",
+                  "bookingUrl", "offersOneSkillRetake", "oneSkillRetakeOnly", "isPublishable",
+                  "confidence", "sources", "firstSeenAt", "lastSeenAt",
               }
               missing = sorted(required - set(centre))
               if missing:
@@ -435,6 +436,8 @@ Resources:
               for key in ("priceFromText", "parsedCurrency", "bookingUrl"):
                   require_string(centre[key], key, nullable=True)
               require_number(centre["parsedPriceFrom"], "parsedPriceFrom", nullable=True, minimum=0)
+              require_bool(centre["offersOneSkillRetake"], "offersOneSkillRetake")
+              require_bool(centre["oneSkillRetakeOnly"], "oneSkillRetakeOnly")
               require_bool(centre["isPublishable"], "isPublishable")
               require_number(centre["confidence"], "confidence", minimum=0, maximum=1)
 

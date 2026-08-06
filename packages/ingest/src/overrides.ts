@@ -12,6 +12,8 @@ export type CentreOverridePatch = Partial<
     | 'geo'
     | 'googlePlaceId'
     | 'bookingUrl'
+    | 'offersOneSkillRetake'
+    | 'oneSkillRetakeOnly'
     | 'isPublishable'
   >
 >;

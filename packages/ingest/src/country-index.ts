@@ -1,5 +1,6 @@
 import { CENTRE_URL_PREFIX, COUNTRY_LISTING_URL, LISTING_CACHE_DIR } from './config.ts';
 import { fetchText } from './fetcher.ts';
+import { sliceElement } from './html.ts';
 
 /**
  * Authoritative slug → country mapping, taken from IELTS.org itself.
@@ -20,6 +21,10 @@ export interface CountryIndex {
   bySlug: Map<string, string>;
   /** alpha-2 → the country name IELTS.org uses. */
   names: Map<string, string>;
+  /** Centre slugs whose IELTS.org result card publishes One Skill Retake. */
+  osrSlugs: Set<string>;
+  /** OSR-badged source cards that publish no full-test delivery format. */
+  osrOnlySlugs: Set<string>;
   /** Countries enumerated, and slugs attributed. */
   stats: { countries: number; slugs: number; unmappedCodes: string[] };
 }
@@ -60,6 +65,39 @@ export function parseCentreSlugs(html: string): string[] {
   return [...out];
 }
 
+/**
+ * OSR is a centre-level badge on IELTS.org's country result cards; it is not
+ * present on the individual centre page. Read each complete card so the
+ * generic explanatory copy elsewhere on the page cannot create false matches.
+ */
+export function parseOsrCentreSlugs(html: string): string[] {
+  const out = new Set<string>();
+  const cardRe = /<a\b[^>]*class="[^"]*\btest-centre-card\b[^"]*"[^>]*>/gi;
+  for (const match of html.matchAll(cardRe)) {
+    const card = sliceElement(html, match.index ?? 0, 'a');
+    if (!/\btest-centre-card__osr(?:-box)?\b/i.test(card)) continue;
+    for (const slug of parseCentreSlugs(match[0] ?? '')) out.add(slug);
+  }
+  return [...out];
+}
+
+/**
+ * A source listing is OSR-only when its card has the OSR badge but no
+ * Computer/Paper format box. This remains source-level evidence until dedup:
+ * another page for the same physical centre may publish ordinary full tests.
+ */
+export function parseOsrOnlyCentreSlugs(html: string): string[] {
+  const out = new Set<string>();
+  const cardRe = /<a\b[^>]*class="[^"]*\btest-centre-card\b[^"]*"[^>]*>/gi;
+  for (const match of html.matchAll(cardRe)) {
+    const card = sliceElement(html, match.index ?? 0, 'a');
+    if (!/\btest-centre-card__osr(?:-box)?\b/i.test(card)) continue;
+    if (/\btest-centre-card__formats-box\b/i.test(card)) continue;
+    for (const slug of parseCentreSlugs(match[0] ?? '')) out.add(slug);
+  }
+  return [...out];
+}
+
 export async function fetchCountryIndex(force = false): Promise<CountryIndex> {
   // Any country page carries the full dropdown; 'all' lists every centre, which
   // is a much larger download for the same option list.
@@ -77,6 +115,8 @@ export async function fetchCountryIndex(force = false): Promise<CountryIndex> {
 
   const bySlug = new Map<string, string>();
   const names = new Map<string, string>();
+  const osrSlugs = new Set<string>();
+  const osrOnlySlugs = new Set<string>();
   const unmappedCodes: string[] = [];
 
   for (const [i, { code3, name }] of options.entries()) {
@@ -95,6 +135,8 @@ export async function fetchCountryIndex(force = false): Promise<CountryIndex> {
       // First country wins; a slug should only ever be listed under one.
       if (!bySlug.has(slug)) bySlug.set(slug, alpha2);
     }
+    for (const slug of parseOsrCentreSlugs(res.body)) osrSlugs.add(slug);
+    for (const slug of parseOsrOnlyCentreSlugs(res.body)) osrOnlySlugs.add(slug);
 
     if ((i + 1) % 25 === 0 || i === options.length - 1) {
       process.stdout.write(`\r  ${i + 1}/${options.length} countries, ${bySlug.size} centres`);
@@ -105,6 +147,8 @@ export async function fetchCountryIndex(force = false): Promise<CountryIndex> {
   return {
     bySlug,
     names,
+    osrSlugs,
+    osrOnlySlugs,
     stats: { countries: options.length, slugs: bySlug.size, unmappedCodes },
   };
 }

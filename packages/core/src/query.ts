@@ -38,6 +38,8 @@ export interface CentreFilter {
   /** @deprecated Use `testModules` and `testCategories`. */
   testKinds?: TestKind[];
   deliveryModes?: OfferingDeliveryMode[];
+  /** Only centres explicitly marked by IELTS.org as offering One Skill Retake. */
+  oneSkillRetake?: boolean;
   maxPrice?: number;
   /** Include centres that do not meet the listing publication rule. */
   includeUnpublishable?: boolean;
@@ -155,9 +157,18 @@ export function filterCentres(
     if (country && c.address.country?.toUpperCase() !== country) continue;
     if (operators && !operators.has(c.operator)) continue;
     if (formats && !c.formats.some((f) => formats.has(f))) continue;
+    if (filter.oneSkillRetake && !c.offersOneSkillRetake) continue;
     if (city && normaliseText(c.address.city ?? '') !== city) continue;
 
-    const matchingOfferings = offeringFilterActive
+    // IELTS.org can list a venue specifically for OSR without publishing a
+    // full Academic/GT offering there. It should participate only in an
+    // explicit OSR search; the ordinary module/delivery defaults must not
+    // silently erase it once that feature is selected.
+    const osrOnlyMatch = Boolean(
+      filter.oneSkillRetake && c.oneSkillRetakeOnly,
+    );
+
+    const matchingOfferings = offeringFilterActive && !osrOnlyMatch
       ? c.offerings.filter((offering) => {
           if (testKinds && !testKinds.has(offering.kind)) return false;
           if (testModules && !testModules.has(offeringModule(offering))) {
@@ -179,16 +190,20 @@ export function filterCentres(
             : deliveryModes.has(delivery);
         })
       : c.offerings;
-    if (offeringFilterActive && matchingOfferings.length === 0) continue;
+    if (
+      offeringFilterActive &&
+      !osrOnlyMatch &&
+      matchingOfferings.length === 0
+    ) continue;
 
     // Project the centre summary onto the offerings the reader selected. This
     // keeps "from", price sorting and format labels from leaking a cheaper
     // Life Skills fee into an Academic-only result.
-    const projected = offeringFilterActive
+    const projected = offeringFilterActive && !osrOnlyMatch
       ? projectCentreOfferings(c, matchingOfferings)
       : c;
 
-    if (filter.maxPrice !== undefined) {
+    if (filter.maxPrice !== undefined && !osrOnlyMatch) {
       if (
         projected.parsedPriceFrom === null ||
         projected.parsedPriceFrom > filter.maxPrice

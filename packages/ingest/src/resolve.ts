@@ -92,7 +92,12 @@ export async function resolveCluster(
     stillPresent: true,
   }));
 
-  const isPublishable = hasPricedOffering(offerings);
+  const { offersOneSkillRetake, oneSkillRetakeOnly } =
+    resolveOneSkillRetakeStatus(cluster, offerings, options.previous);
+  // A genuine OSR-only venue has no ordinary full-test fee by definition. Its
+  // explicit IELTS.org OSR badge is the narrowly scoped publication exception;
+  // ordinary centres still require a source-published price.
+  const isPublishable = hasPricedOffering(offerings) || oneSkillRetakeOnly;
   const confidence = scoreConfidence(canonical, cluster, offerings.length, geo);
   const localizations =
     options.previous?.address.raw === canonical.address.raw &&
@@ -120,11 +125,53 @@ export async function resolveCluster(
     parsedPriceFrom: priceSummary.parsedPriceFrom,
     parsedCurrency: priceSummary.parsedCurrency,
     bookingUrl: cluster.find((c) => c.bookingUrl)?.bookingUrl ?? null,
+    offersOneSkillRetake,
+    oneSkillRetakeOnly,
     isPublishable,
     confidence,
     sources,
     firstSeenAt: now,
     lastSeenAt: now,
+  };
+}
+
+export function resolveOneSkillRetakeStatus(
+  cluster: Pick<ParsedCentre, 'offersOneSkillRetake' | 'oneSkillRetakeOnly'>[],
+  offerings: ParsedCentre['offerings'],
+  previous?: Pick<Centre, 'offersOneSkillRetake' | 'oneSkillRetakeOnly'>,
+): { offersOneSkillRetake: boolean; oneSkillRetakeOnly: boolean } {
+  const statusKnown = cluster.some(
+    (centre) => centre.offersOneSkillRetake !== undefined,
+  );
+  if (!statusKnown) {
+    return {
+      offersOneSkillRetake: previous?.offersOneSkillRetake ?? false,
+      oneSkillRetakeOnly: previous?.oneSkillRetakeOnly ?? false,
+    };
+  }
+
+  const offersOneSkillRetake = cluster.some(
+    (centre) => centre.offersOneSkillRetake === true,
+  );
+  const hasOsrOnlySource = cluster.some(
+    (centre) => centre.oneSkillRetakeOnly === true,
+  );
+  const hasOsrFullTestCard = cluster.some(
+    (centre) =>
+      centre.offersOneSkillRetake === true &&
+      centre.oneSkillRetakeOnly === false,
+  );
+  const hasFullTestOffering = offerings.some(
+    (offering) => offering.kind !== 'life_skills',
+  );
+
+  return {
+    offersOneSkillRetake,
+    oneSkillRetakeOnly:
+      offersOneSkillRetake &&
+      hasOsrOnlySource &&
+      !hasOsrFullTestCard &&
+      !hasFullTestOffering,
   };
 }
 

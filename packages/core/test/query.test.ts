@@ -9,6 +9,7 @@ import {
 import type {
   Centre,
   Operator,
+  OfferingDeliveryMode,
   TestCategory,
   TestKind,
   TestModule,
@@ -380,6 +381,50 @@ test('price facet currency comes from the operator-neutral result set', () => {
     }),
     ['EUR', 'RON'],
     'a British Council selection must not expose a RON slider while IDP alternatives use EUR',
+  );
+});
+
+test('One Skill Retake filter requires an explicit IELTS.org listing badge', () => {
+  const osr = offeringCentre('osr', [
+    offering('Academic Test', 'academic', 'computer_delivered', 330),
+  ]);
+  osr.offersOneSkillRetake = true;
+  const unmarked = offeringCentre('unmarked', [
+    offering('Academic Test', 'academic', 'computer_delivered', 330),
+  ]);
+  unmarked.offersOneSkillRetake = false;
+
+  assert.deepEqual(
+    filterCentres([osr, unmarked], { oneSkillRetake: true }).map((centre) => centre.id),
+    ['osr'],
+  );
+});
+
+test('an OSR-only venue bypasses ordinary offering and price filters only for OSR', () => {
+  const osrOnly = offeringCentre('osr-only', [
+    offering('Life Skills A1', 'life_skills', 'computer_delivered', 180),
+  ]);
+  osrOnly.offerings = [];
+  osrOnly.formats = [];
+  osrOnly.priceFromText = null;
+  osrOnly.parsedPriceFrom = null;
+  osrOnly.parsedCurrency = null;
+  osrOnly.offersOneSkillRetake = true;
+  osrOnly.oneSkillRetakeOnly = true;
+
+  const ordinaryFilters = {
+    testModules: ['academic', 'general_training'] as TestModule[],
+    testCategories: ['standard', 'ukvi_selt'] as TestCategory[],
+    deliveryModes: ['computer_delivered'] as OfferingDeliveryMode[],
+    maxPrice: 100,
+  };
+  assert.equal(filterCentres([osrOnly], ordinaryFilters).length, 0);
+  assert.deepEqual(
+    filterCentres([osrOnly], {
+      ...ordinaryFilters,
+      oneSkillRetake: true,
+    }).map((centre) => centre.id),
+    ['osr-only'],
   );
 });
 
