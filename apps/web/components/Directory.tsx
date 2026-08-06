@@ -312,8 +312,9 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
   // Facet counts answer "how many would this operator have under the other
   // active filters?" The selected operator buttons are intentionally omitted,
   // otherwise choosing IDP would misleadingly turn every alternative into 0.
-  // The helper preserves the global operator order and keeps zero-count
-  // buttons visible so an active choice can always be removed.
+  // The helper preserves the global operator order. Zero-count alternatives
+  // are hidden because selecting them cannot produce a result; an active
+  // choice remains visible so it can always be removed.
   const operatorOptions = useMemo(
     () =>
       operatorFacets(centres, {
@@ -335,6 +336,9 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
       maxPrice,
       priceCurrency,
     ],
+  );
+  const visibleOperatorOptions = operatorOptions.filter(
+    ({ operator, count }) => count > 0 || operators.includes(operator),
   );
 
   // An explicitly selected city hint beats the map view centred on a chosen
@@ -691,7 +695,7 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
         </div>
 
         <div className="flex flex-wrap items-center gap-2 sm:col-span-2 lg:col-span-4">
-          {operatorOptions.map(({ operator, count }) => {
+          {visibleOperatorOptions.map(({ operator, count }) => {
             const active = operators.includes(operator);
             const style = operatorStyle(operator);
             return (
