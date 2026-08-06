@@ -32,6 +32,12 @@ interface Props {
   ) => void;
 }
 
+// Google can emit the map-level click after retargeting the same pointer event
+// that activated an AdvancedMarker. The retargeted event no longer exposes
+// the marker element, so DOM ancestry alone cannot reliably distinguish it
+// from a deliberate background click.
+const MARKER_CLICK_GUARD_MS = 500;
+
 export default function CentreMap({
   centres,
   focusLocation,
@@ -53,6 +59,7 @@ export default function CentreMap({
   const selectedIdRef = useRef(selectedId);
   const detailFilterSearchRef = useRef(detailFilterSearch);
   const focusLocationRef = useRef(focusLocation);
+  const lastMarkerInteractionAt = useRef(Number.NEGATIVE_INFINITY);
   const [mapReady, setMapReady] = useState(false);
   const [loadError, setLoadError] = useState(false);
   centresRef.current = centres;
@@ -115,6 +122,9 @@ export default function CentreMap({
           gestureHandling: 'greedy',
         });
         map.current = instance;
+        const infoWindow = new google.maps.InfoWindow();
+        infoWindow.addListener('closeclick', () => onSelectRef.current(null));
+        popup.current = infoWindow;
 
         const reportViewport = () => {
           const bounds = instance.getBounds();
@@ -143,6 +153,8 @@ export default function CentreMap({
               // selection which the marker has just made.
               const target = event.domEvent.target;
               if (
+                performance.now() - lastMarkerInteractionAt.current <
+                  MARKER_CLICK_GUARD_MS ||
                 event.domEvent.defaultPrevented ||
                 (target instanceof Element &&
                   target.closest('.google-map-pin'))
@@ -202,11 +214,16 @@ export default function CentreMap({
         el.style.setProperty('--pin', operatorStyle(centre.operator).base);
         el.dataset.shape = operatorShape(centre.operator);
 
+        el.addEventListener('pointerdown', () => {
+          lastMarkerInteractionAt.current = performance.now();
+        });
+
         el.addEventListener('click', (event) => {
           // Prevent the same native event from being interpreted as a map
           // background click. A marker used to be an anchor; when Maps
           // remapped a later touch/pointer click, its default navigation could
           // win and make the page appear to jump to the top.
+          lastMarkerInteractionAt.current = performance.now();
           event.preventDefault();
           event.stopPropagation();
           if (
@@ -293,7 +310,6 @@ export default function CentreMap({
           popup.current.open({ map: instance, shouldFocus: false });
         } else {
           popup.current.close();
-          popup.current = null;
         }
       }
     });
@@ -346,9 +362,9 @@ export default function CentreMap({
 
   // Only an explicit marker/list click changes selectedId and moves the map.
   useEffect(() => {
-    popup.current?.close();
-    popup.current = null;
-    if (!selectedId || !map.current || !mapReady) return;
+    const infoWindow = popup.current;
+    infoWindow?.close();
+    if (!selectedId || !map.current || !mapReady || !infoWindow) return;
 
     const centre = centresRef.current.find((item) => item.id === selectedId);
     const marker = markers.current.get(selectedId);
@@ -357,7 +373,7 @@ export default function CentreMap({
     map.current.panTo({ lat: centre.geo.lat, lng: centre.geo.lng });
     if ((map.current.getZoom() ?? 0) < 12) map.current.setZoom(12);
 
-    const infoWindow = new google.maps.InfoWindow({
+    infoWindow.setOptions({
       content: popupContent(
         centre,
         centreDetailHref(
@@ -367,9 +383,7 @@ export default function CentreMap({
       ),
       ariaLabel: centre.name,
     });
-    infoWindow.addListener('closeclick', () => onSelectRef.current(null));
     infoWindow.open({ map: map.current, anchor: marker, shouldFocus: false });
-    popup.current = infoWindow;
   }, [selectedId, mapReady]);
 
   // Price/type filters replace the selected centre with an offering-level

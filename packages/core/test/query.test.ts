@@ -1,9 +1,14 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { geoWithinBounds } from '../src/query.ts';
-import { filterCentres } from '../src/query.ts';
+import {
+  filterCentres,
+  geoWithinBounds,
+  operatorFacets,
+  priceFilterCurrencies,
+} from '../src/query.ts';
 import type {
   Centre,
+  Operator,
   TestCategory,
   TestKind,
   TestModule,
@@ -336,18 +341,61 @@ test('Life Skills never claims a delivery mode that the source did not publish',
   );
 });
 
+test('operator facets apply other filters while ignoring operator selection', () => {
+  const centres = [
+    operatorCentre('bc-ca', 'British Council', 'CA', 300),
+    operatorCentre('idp-ca', 'IDP', 'CA', 400),
+    operatorCentre('usa-us', 'IELTS USA', 'US', 200),
+  ];
+
+  assert.deepEqual(
+    operatorFacets(centres, { country: 'CA', operators: ['IDP'] }),
+    [
+      { operator: 'British Council', count: 1 },
+      { operator: 'IDP', count: 1 },
+      { operator: 'IELTS USA', count: 0 },
+    ],
+  );
+  assert.deepEqual(
+    operatorFacets(centres, { country: 'CA', maxPrice: 350 }),
+    [
+      { operator: 'British Council', count: 1 },
+      { operator: 'IDP', count: 0 },
+      { operator: 'IELTS USA', count: 0 },
+    ],
+  );
+});
+
+test('price facet currency comes from the operator-neutral result set', () => {
+  const centres = [
+    operatorCentre('bc-ro', 'British Council', 'RO', 1100, 'RON'),
+    operatorCentre('idp-ro', 'IDP', 'RO', 250, 'EUR'),
+  ];
+
+  assert.deepEqual(
+    priceFilterCurrencies(centres, {
+      country: 'RO',
+      operators: ['British Council'],
+      maxPrice: 1100,
+    }),
+    ['EUR', 'RON'],
+    'a British Council selection must not expose a RON slider while IDP alternatives use EUR',
+  );
+});
+
 function offering(
   label: string,
   kind: TestKind,
   format: TestOffering['format'],
   price: number,
+  currency = 'CAD',
 ): TestOffering {
   return {
     label,
     kind,
     format,
-    priceText: `CAD ${price}`,
-    parsedCurrency: 'CAD',
+    priceText: `${currency} ${price}`,
+    parsedCurrency: currency,
     parsedPrice: price,
     priceParseStatus: 'verified',
   };
@@ -376,4 +424,21 @@ function offeringCentre(id: string, offerings: TestOffering[]): Centre {
     parsedCurrency: cheapest.parsedCurrency,
     isPublishable: true,
   } as Centre;
+}
+
+function operatorCentre(
+  id: string,
+  operator: Operator,
+  country: string,
+  price: number,
+  currency = 'CAD',
+): Centre {
+  const centre = offeringCentre(id, [
+    offering('Academic Test', 'academic', 'computer_delivered', price, currency),
+  ]);
+  return {
+    ...centre,
+    operator,
+    address: { ...centre.address, country },
+  };
 }

@@ -33,6 +33,7 @@ export function CitySearch({
   const [predictions, setPredictions] = useState<google.maps.places.PlacePrediction[]>([]);
   const [open, setOpen] = useState(false);
   const [selecting, setSelecting] = useState(false);
+  const [placesUnavailable, setPlacesUnavailable] = useState(false);
   const requestId = useRef(0);
   const sessionToken = useRef<google.maps.places.AutocompleteSessionToken | null>(null);
 
@@ -48,6 +49,7 @@ export function CitySearch({
     }
 
     const currentRequest = ++requestId.current;
+    setPlacesUnavailable(false);
     const timer = window.setTimeout(() => {
       importPlacesLibrary()
         .then(async ({ AutocompleteSessionToken, AutocompleteSuggestion }) => {
@@ -71,13 +73,16 @@ export function CitySearch({
                 Boolean(prediction),
               ),
           );
+          setPlacesUnavailable(false);
           setOpen(true);
         })
-        .catch(() => {
+        .catch((error: unknown) => {
           // Plain centre/address search remains available when Places is not.
           if (currentRequest !== requestId.current) return;
+          console.error('Google Places city suggestions are unavailable', error);
           setPredictions([]);
           setOpen(false);
+          setPlacesUnavailable(true);
         });
     }, 350);
 
@@ -142,8 +147,14 @@ export function CitySearch({
         role="combobox"
         className="rounded-md border border-line px-3 py-2 outline-none focus:border-brand"
       />
-      <span id="directory-search-hint" className="text-xs text-muted">
-        Choose a Google Maps city hint to search nearby.
+      <span
+        id="directory-search-hint"
+        className="text-xs text-muted"
+        aria-live="polite"
+      >
+        {placesUnavailable
+          ? 'City hints are temporarily unavailable. Text search still works.'
+          : 'Choose a Google Maps city hint to search nearby.'}
       </span>
 
       {open && predictions.length > 0 && (
