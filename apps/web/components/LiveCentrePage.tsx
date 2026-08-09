@@ -187,6 +187,12 @@ export function LiveCentrePage({ initialCentre }: { initialCentre: Centre }) {
           </a>
         )}
       </div>
+      {resultsUrl && !centre.offersOneSkillRetake && (
+        <p className="mt-3 text-sm text-muted">
+          One Skill Retake may not be available at this test centre. Check your test portal for
+          eligible centres and dates.
+        </p>
+      )}
       {resultsUrl && usesChinaMiniProgram && showChinaAfterTest && (
         <section
           id="china-after-test-options"
