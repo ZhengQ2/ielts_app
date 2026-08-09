@@ -11,6 +11,7 @@ import { centreDetailHref } from '@/lib/offering-filter';
 import { isHttpUrl } from '@/lib/url-safety';
 import { FutureOpeningNotice } from './FutureOpeningNotice';
 import { OneSkillRetakeOnlyNotice } from './OneSkillRetakeOnlyNotice';
+import { UnitedStatesOsrWarning } from './UnitedStatesOsrWarning';
 
 /**
  * The centre picked on the map, summarised at the top of the list column.
@@ -89,6 +90,9 @@ export function SelectedCentrePanel({
         <div className="mt-3">
           <OneSkillRetakeOnlyNotice />
         </div>
+      )}
+      {centre.address.country?.toUpperCase() === 'US' && (
+        <UnitedStatesOsrWarning compact />
       )}
 
       <div className="mt-3 flex flex-wrap items-center gap-4 text-sm">

@@ -21,6 +21,8 @@
     "localize": "npm run localize --workspace @ielts-map/ingest --",
     "neutral-pilot": "npm run neutral-pilot --workspace @ielts-map/ingest --",
     "apple-map-pilot": "npm run apple-map-pilot --workspace @ielts-map/ingest --",
+    "monitor:bc-us-osr": "node --experimental-strip-types packages/ingest/src/bc-us-osr-policy-cli.ts",
+    "deploy:after-test-policy:aws": "bash scripts/deploy-after-test-policy-aws.sh",
     "admin:create-user": "bash scripts/create-admin-user.sh",
     "deploy:aws": "bash scripts/deploy-aws.sh"
   },

@@ -1,0 +1,62 @@
+name: Monitor British Council USA OSR policy
+
+on:
+  schedule:
+    # Four low-volume checks per day keep the warning current without putting
+    # browser-like traffic on British Council's registration systems.
+    - cron: "17 */6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  id-token: write
+
+concurrency:
+  group: monitor-bc-us-osr
+  cancel-in-progress: false
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Test the policy parser
+        run: node --test --experimental-strip-types packages/ingest/test/bc-us-osr-policy.test.ts
+
+      - name: Check the official British Council policy
+        id: policy
+        run: npm run monitor:bc-us-osr
+
+      - name: Configure AWS for a changed policy
+        if: steps.policy.outputs.changed == 'true'
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::994752003745:role/ielts-map-static-github-policy-publisher
+          role-session-name: bc-us-osr-policy-monitor
+          aws-region: us-east-1
+
+      - name: Publish the changed policy feed
+        if: steps.policy.outputs.changed == 'true'
+        run: npm run deploy:after-test-policy:aws
+
+      - name: Commit the changed policy after publication
+        if: steps.policy.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add packages/core/data/after-test-policy.json
+          git commit -m "Update British Council USA OSR policy [skip ci]"
+          git push
