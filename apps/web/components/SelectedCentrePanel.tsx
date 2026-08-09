@@ -107,7 +107,7 @@ export function SelectedCentrePanel({
           >
             {centre.futureOpening
               ? 'Register interest with IELTS USA'
-              : `Check dates and book on the ${centre.operator} site`}{' '}
+              : 'Check dates and book'}{' '}
             ↗
           </a>
         )}

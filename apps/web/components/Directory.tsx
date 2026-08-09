@@ -139,10 +139,42 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
   // overrides it.
   const [sort, setSort] = useState<SortKey | null>(null);
   const [viewport, setViewport] = useState<MapViewport | null>(null);
+  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
+  const [geolocationStatus, setGeolocationStatus] = useState<
+    'idle' | 'requesting' | 'ready' | 'error'
+  >('idle');
   const [listLimit, setListLimit] = useState(LIST_PAGE_SIZE);
   const [lifeSkillsHovered, setLifeSkillsHovered] = useState(false);
   const [lifeSkillsNotePinned, setLifeSkillsNotePinned] = useState(false);
   const pageScrollBeforeFilter = useRef<number | null>(null);
+
+  const requestUserLocation = () => {
+    if (!navigator.geolocation) {
+      setGeolocationStatus('error');
+      return;
+    }
+
+    setGeolocationStatus('requesting');
+    navigator.geolocation.getCurrentPosition(
+      ({ coords }) => {
+        // The coordinate stays in browser memory. It is used only to order the
+        // current result set and is never sent to the directory service.
+        pageScrollBeforeFilter.current = window.scrollY;
+        setUserLocation({ lat: coords.latitude, lng: coords.longitude });
+        setSort(null);
+        setGeolocationStatus('ready');
+      },
+      () => setGeolocationStatus('error'),
+      { enableHighAccuracy: false, maximumAge: 300_000, timeout: 5_000 },
+    );
+  };
+
+  const clearUserLocation = () => {
+    pageScrollBeforeFilter.current = window.scrollY;
+    setUserLocation(null);
+    setSort(null);
+    setGeolocationStatus('idle');
+  };
 
   /**
    * Hover and selection are tracked separately. Hovering a card only highlights
@@ -393,10 +425,12 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
   // An explicitly selected city hint beats the map view centred on a chosen
   // country as the more deliberate signal of "distance from where".
   const distanceOrigin =
-    searchLocation?.center ?? (country ? viewport?.center : undefined);
+    searchLocation?.center ?? userLocation ?? (country ? viewport?.center : undefined);
   const distanceOriginLabel = searchLocation
     ? 'Distance from search'
-    : 'Distance from map centre';
+    : userLocation
+      ? 'Distance from your location'
+      : 'Distance from map centre';
   const effectiveSort: SortKey = sort ?? (distanceOrigin ? 'distance' : 'name');
   const results = useMemo(() => {
     const ranked = distanceOrigin
@@ -434,6 +468,7 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
     oneSkillRetakeOnly,
     maxPrice,
     sort,
+    userLocation,
   ]);
 
   const updateFilter = (update: () => void) => {
@@ -556,26 +591,56 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
         data-testid="directory-filters"
         className="mb-6 grid gap-3 rounded-lg border border-line bg-white p-4 sm:grid-cols-2 lg:grid-cols-4"
       >
-        <CitySearch
-          value={query}
-          country={country}
-          selected={Boolean(searchLocation)}
-          onValueChange={(value) =>
-            updateFilter(() => {
-              setQuery(value);
-              setSearchLocation(null);
-              setSort(null);
-            })
-          }
-          onCitySelect={(selection) =>
-            updateFilter(() => {
-              setQuery(selection.label);
-              setSearchLocation(selection);
-              setSelectedId(null);
-              setSort(null);
-            })
-          }
-        />
+        <div className="flex flex-col gap-2">
+          <CitySearch
+            value={query}
+            country={country}
+            selected={Boolean(searchLocation)}
+            onValueChange={(value) =>
+              updateFilter(() => {
+                setQuery(value);
+                setSearchLocation(null);
+                setSort(null);
+              })
+            }
+            onCitySelect={(selection) =>
+              updateFilter(() => {
+                setQuery(selection.label);
+                setSearchLocation(selection);
+                setSelectedId(null);
+                setSort(null);
+              })
+            }
+          />
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs">
+            <button
+              type="button"
+              disabled={geolocationStatus === 'requesting'}
+              onClick={requestUserLocation}
+              className="font-medium text-brand hover:underline disabled:cursor-wait disabled:text-muted"
+            >
+              {geolocationStatus === 'requesting'
+                ? 'Finding your location…'
+                : geolocationStatus === 'ready'
+                  ? 'Update my location'
+                  : 'Use my location'}
+            </button>
+            {geolocationStatus === 'ready' && (
+              <button
+                type="button"
+                onClick={clearUserLocation}
+                className="text-muted hover:text-ink hover:underline"
+              >
+                Stop using it
+              </button>
+            )}
+            <span className="text-muted" role="status" aria-live="polite">
+              {geolocationStatus === 'ready' &&
+                'Approximate location ready for distance sorting.'}
+              {geolocationStatus === 'error' && 'Location unavailable. Search by city instead.'}
+            </span>
+          </div>
+        </div>
 
         {worldwide && (
           <label className="flex flex-col gap-1 text-sm">
