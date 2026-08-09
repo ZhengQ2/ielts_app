@@ -149,7 +149,7 @@ export function LiveCentrePage({ initialCentre }: { initialCentre: Centre }) {
           >
             {centre.futureOpening
               ? 'Register interest with IELTS USA'
-              : `Check dates and book on the ${centre.operator} site`}
+              : 'Check dates and book'}
             <span aria-hidden>↗</span>
           </a>
         )}
