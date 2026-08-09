@@ -172,7 +172,7 @@ export function LiveCentrePage({ initialCentre }: { initialCentre: Centre }) {
             rel="noreferrer nofollow"
             className="inline-flex items-center gap-2 rounded-md border border-brand bg-white px-4 py-2.5 font-medium text-brand hover:bg-brand-soft"
           >
-            {resultsActionLabel(centre)} <span aria-hidden>↗</span>
+            {resultsActionLabel()} <span aria-hidden>↗</span>
           </a>
         )}
         {rawScoreUrl && (
@@ -187,6 +187,12 @@ export function LiveCentrePage({ initialCentre }: { initialCentre: Centre }) {
           </a>
         )}
       </div>
+      {resultsUrl && !centre.offersOneSkillRetake && (
+        <p className="mt-3 text-sm text-muted">
+          One Skill Retake may not be available at this test centre. Check your test portal for
+          eligible centres and dates.
+        </p>
+      )}
       {resultsUrl && usesChinaMiniProgram && showChinaAfterTest && (
         <section
           id="china-after-test-options"
@@ -200,8 +206,8 @@ export function LiveCentrePage({ initialCentre }: { initialCentre: Centre }) {
             src={BRITISH_COUNCIL_CHINA_MINI_PROGRAM_QR}
             alt="WeChat QR code for the official BC IELTS China mini-program"
             width={192}
-            height={192}
-            className="mx-auto h-48 w-48 rounded-md border border-line object-contain"
+            height={217}
+            className="mx-auto h-auto w-48 rounded-md border border-line"
           />
           <div>
             <h2 className="font-medium">Use the official WeChat mini-program</h2>

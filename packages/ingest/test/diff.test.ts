@@ -241,7 +241,29 @@ test('mass OSR removals are blocked even when centre identities remain stable', 
     ),
   );
   assert.deepEqual(osrSafetyProblems(previous, next), [
-    '30 OSR badge removals exceed the automatic limit of 20 (100 → 70)',
+    '30 OSR badge removals exceed the automatic limit of 20 ' +
+      '(100 previously marked; 70 marked after crawl)',
+  ]);
+});
+
+test('OSR additions cannot hide removals from different stable centres', () => {
+  const previous = wrap(
+    Array.from({ length: 100 }, (_, index) =>
+      centre({ id: `centre-${index}`, offersOneSkillRetake: true }),
+    ),
+  );
+  const next = wrap([
+    ...Array.from({ length: 100 }, (_, index) =>
+      centre({ id: `centre-${index}`, offersOneSkillRetake: index < 50 }),
+    ),
+    ...Array.from({ length: 50 }, (_, index) =>
+      centre({ id: `replacement-${index}`, offersOneSkillRetake: true }),
+    ),
+  ]);
+
+  assert.deepEqual(osrSafetyProblems(previous, next), [
+    '50 OSR badge removals exceed the automatic limit of 20 ' +
+      '(100 previously marked; 100 marked after crawl)',
   ]);
 });
 

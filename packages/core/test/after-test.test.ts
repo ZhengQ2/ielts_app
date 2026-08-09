@@ -48,7 +48,10 @@ test('British Council candidates in China receive the official WeChat mini-progr
   assert.equal(usesBritishCouncilChinaMiniProgram(centre('British Council', 'CN')), true);
   assert.equal(usesBritishCouncilChinaMiniProgram(centre('British Council', 'CA')), false);
   assert.equal(usesBritishCouncilChinaMiniProgram(centre('IDP', 'CN')), false);
-  assert.match(BRITISH_COUNCIL_CHINA_MINI_PROGRAM_QR, /^https:\/\/www\.chinaielts\.org\//);
+  assert.equal(
+    BRITISH_COUNCIL_CHINA_MINI_PROGRAM_QR,
+    '/assets/bc-ielts-china-mini-program.png',
+  );
 });
 
 test('IDP candidates use the country-specific India and China portals', () => {
@@ -62,7 +65,7 @@ test('IDP candidates use the country-specific India and China portals', () => {
   );
   assert.equal(
     resultPortalUrl(centre('IDP', 'CA')),
-    'https://ielts.idp.com/results/check-your-result',
+    'https://account.ielts.idp.com/',
   );
 });
 
@@ -73,17 +76,8 @@ test('IELTS USA has its own Test Taker Portal', () => {
   );
 });
 
-test('results action mentions OSR only with evidence, except for the China mini-program', () => {
-  assert.equal(resultsActionLabel(centre('IELTS USA', 'US')), 'Check results');
-  assert.equal(
-    resultsActionLabel(centre('British Council', 'CA', 'OSR Centre', true)),
-    'Results & One Skill Retake',
-  );
-  assert.equal(
-    resultsActionLabel(centre('British Council', 'CN')),
-    'Results & One Skill Retake',
-    'the official China mini-program combines results and eligibility-based OSR registration',
-  );
+test('every results action includes One Skill Retake', () => {
+  assert.equal(resultsActionLabel(), 'Results & One Skill Retake');
 });
 
 test('British Council and IELTS USA use the raw-score request form', () => {

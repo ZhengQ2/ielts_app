@@ -1,17 +1,16 @@
 import type { Centre } from './types.ts';
 
 type PortalCentre = Pick<Centre, 'operator' | 'address'>;
-type ResultsActionCentre = Pick<Centre, 'operator' | 'address' | 'offersOneSkillRetake'>;
 type InquiryCentre = Pick<Centre, 'name' | 'operator' | 'address'>;
 
 const BRITISH_COUNCIL_RESULTS = 'https://ieltsregistration.britishcouncil.org/ttp';
-const IDP_RESULTS = 'https://ielts.idp.com/results/check-your-result';
+const IDP_RESULTS = 'https://account.ielts.idp.com/';
 const IDP_INDIA_RESULTS = 'https://www.ieltsidpindia.com/access/candidatelogin';
 const IELTS_USA_RESULTS = 'https://ieltsregistration.registration-ieltsusa.org/ttp';
 const IDP_CHINA_RESULTS = 'https://sign.idpielts.cn/personal-test';
 const BRITISH_COUNCIL_CHINA_RESULTS = 'https://ielts.neea.cn/login';
 export const BRITISH_COUNCIL_CHINA_MINI_PROGRAM_QR =
-  'https://www.chinaielts.org/assets/static/qr-official.WwT7N6og.png';
+  '/assets/bc-ielts-china-mini-program.png';
 export const BRITISH_COUNCIL_CHINA_OSR_GUIDE =
   'https://www.chinaielts.org/book-ielts/one-skill-retake';
 const BRITISH_COUNCIL_RAW_SCORE_FORM = 'https://forms.office.com/r/qj0ECRwGuD';
@@ -47,10 +46,9 @@ export function resultPortalUrl(centre: PortalCentre): string | null {
   return null;
 }
 
-/** Do not advertise OSR from a generic results link unless evidence marks the centre. */
-export function resultsActionLabel(centre: ResultsActionCentre): string {
-  if (usesBritishCouncilChinaMiniProgram(centre)) return 'Results & One Skill Retake';
-  return centre.offersOneSkillRetake ? 'Results & One Skill Retake' : 'Check results';
+/** A result may remain OSR-eligible at another centre operated by the same provider. */
+export function resultsActionLabel(): string {
+  return 'Results & One Skill Retake';
 }
 
 /**

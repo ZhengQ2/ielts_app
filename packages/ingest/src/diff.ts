@@ -153,17 +153,26 @@ export function osrSafetyProblems(
   next: CentreDataset,
 ): string[] {
   if (!previous) return [];
+  const nextById = new Map(next.centres.map((centre) => [centre.id, centre]));
   const before = previous.centres.filter((centre) => centre.offersOneSkillRetake).length;
   const after = next.centres.filter((centre) => centre.offersOneSkillRetake).length;
-  const drop = before - after;
-  if (drop <= 0) return [];
+  const removals = previous.centres.filter(
+    (centre) =>
+      centre.offersOneSkillRetake &&
+      nextById.has(centre.id) &&
+      !nextById.get(centre.id)!.offersOneSkillRetake,
+  ).length;
+  if (removals === 0) return [];
 
-  if (before >= 5 && after === 0) {
-    return [`OSR availability fell from ${before} centres to zero`];
+  if (before >= 5 && removals === before) {
+    return [`OSR availability was removed from all ${before} previously marked centres`];
   }
   const limit = Math.max(20, Math.ceil(before * 0.05));
-  return drop > limit
-    ? [`${drop} OSR badge removals exceed the automatic limit of ${limit} (${before} → ${after})`]
+  return removals > limit
+    ? [
+        `${removals} OSR badge removals exceed the automatic limit of ${limit} ` +
+          `(${before} previously marked; ${after} marked after crawl)`,
+      ]
     : [];
 }
 
