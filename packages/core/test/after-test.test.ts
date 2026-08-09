@@ -48,7 +48,10 @@ test('British Council candidates in China receive the official WeChat mini-progr
   assert.equal(usesBritishCouncilChinaMiniProgram(centre('British Council', 'CN')), true);
   assert.equal(usesBritishCouncilChinaMiniProgram(centre('British Council', 'CA')), false);
   assert.equal(usesBritishCouncilChinaMiniProgram(centre('IDP', 'CN')), false);
-  assert.match(BRITISH_COUNCIL_CHINA_MINI_PROGRAM_QR, /^https:\/\/www\.chinaielts\.org\//);
+  assert.equal(
+    BRITISH_COUNCIL_CHINA_MINI_PROGRAM_QR,
+    '/assets/bc-ielts-china-mini-program.png',
+  );
 });
 
 test('IDP candidates use the country-specific India and China portals', () => {
@@ -62,7 +65,7 @@ test('IDP candidates use the country-specific India and China portals', () => {
   );
   assert.equal(
     resultPortalUrl(centre('IDP', 'CA')),
-    'https://ielts.idp.com/results/check-your-result',
+    'https://account.ielts.idp.com/',
   );
 });
 

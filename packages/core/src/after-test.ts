@@ -5,13 +5,13 @@ type ResultsActionCentre = Pick<Centre, 'operator' | 'address' | 'offersOneSkill
 type InquiryCentre = Pick<Centre, 'name' | 'operator' | 'address'>;
 
 const BRITISH_COUNCIL_RESULTS = 'https://ieltsregistration.britishcouncil.org/ttp';
-const IDP_RESULTS = 'https://ielts.idp.com/results/check-your-result';
+const IDP_RESULTS = 'https://account.ielts.idp.com/';
 const IDP_INDIA_RESULTS = 'https://www.ieltsidpindia.com/access/candidatelogin';
 const IELTS_USA_RESULTS = 'https://ieltsregistration.registration-ieltsusa.org/ttp';
 const IDP_CHINA_RESULTS = 'https://sign.idpielts.cn/personal-test';
 const BRITISH_COUNCIL_CHINA_RESULTS = 'https://ielts.neea.cn/login';
 export const BRITISH_COUNCIL_CHINA_MINI_PROGRAM_QR =
-  'https://www.chinaielts.org/assets/static/qr-official.WwT7N6og.png';
+  '/assets/bc-ielts-china-mini-program.png';
 export const BRITISH_COUNCIL_CHINA_OSR_GUIDE =
   'https://www.chinaielts.org/book-ielts/one-skill-retake';
 const BRITISH_COUNCIL_RAW_SCORE_FORM = 'https://forms.office.com/r/qj0ECRwGuD';

@@ -200,8 +200,8 @@ export function LiveCentrePage({ initialCentre }: { initialCentre: Centre }) {
             src={BRITISH_COUNCIL_CHINA_MINI_PROGRAM_QR}
             alt="WeChat QR code for the official BC IELTS China mini-program"
             width={192}
-            height={192}
-            className="mx-auto h-48 w-48 rounded-md border border-line object-contain"
+            height={217}
+            className="mx-auto h-auto w-48 rounded-md border border-line"
           />
           <div>
             <h2 className="font-medium">Use the official WeChat mini-program</h2>
