@@ -90,7 +90,7 @@ the effective feed refreshes.
 | `parsedPriceFrom` | Numeric amount derived from `priceFromText`, or `null`. It is for sorting, not display. |
 | `parsedCurrency` | ISO currency code associated with the summary price, such as `CNY`, or `null`. |
 | `bookingUrl` | Operator booking/interest URL or `null`. Use an `https://` URL. |
-| `offersOneSkillRetake` | Source-managed boolean derived from the One Skill Retake badge on the IELTS.org country listing. Override only when current operator evidence shows the listing is wrong. |
+| `offersOneSkillRetake` | Source-managed boolean derived from official OSR listings: the IELTS.org country finder plus reviewed market supplements such as China IELTS. Override only when current operator evidence shows the listing is wrong. |
 | `oneSkillRetakeOnly` | Source-managed boolean for a centre that provides OSR but no full test. It is `true` only when no merged source page or offering supplies Academic, General Training, UKVI, or SELT. |
 | `futureOpening` | Optional operator-declared future-opening block. Do not infer this merely because dates are unavailable. |
 | `isPublishable` | Boolean. `false` hides an ordinary centre; future openings remain visible with their warning and interest form. |
@@ -224,8 +224,9 @@ supplied and owned by an administrator, use `source: "admin"`, `origin: "adminis
 ## One Skill Retake fields
 
 `offersOneSkillRetake` is maintained automatically from the One Skill Retake badge on IELTS.org's
-country listing. Override this boolean only when current operator evidence shows that the listing is
-wrong. `oneSkillRetakeOnly` is narrower: it is true only when an OSR-badged source card publishes no
+country listing and official market supplements, currently the China IELTS British Council venue
+list. Override this boolean only when current operator evidence shows that a source is wrong.
+`oneSkillRetakeOnly` is narrower: it is true only when an OSR-badged source card publishes no
 full-test format and no merged source page or offering supplies Academic, General Training, UKVI, or
 SELT. The next ingest run refreshes both fields for existing and newly discovered centres.
 

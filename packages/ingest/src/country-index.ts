@@ -1,6 +1,11 @@
-import { CENTRE_URL_PREFIX, COUNTRY_LISTING_URL, LISTING_CACHE_DIR } from './config.ts';
+import {
+  CENTRE_URL_PREFIX,
+  CHINA_OSR_LISTING_URL,
+  COUNTRY_LISTING_URL,
+  LISTING_CACHE_DIR,
+} from './config.ts';
 import { fetchText } from './fetcher.ts';
-import { sliceElement } from './html.ts';
+import { sliceElement, stripTags } from './html.ts';
 
 /**
  * Authoritative slug → country mapping, taken from IELTS.org itself.
@@ -26,7 +31,13 @@ export interface CountryIndex {
   /** OSR-badged source cards that publish no full-test delivery format. */
   osrOnlySlugs: Set<string>;
   /** Countries enumerated, and slugs attributed. */
-  stats: { countries: number; slugs: number; unmappedCodes: string[] };
+  stats: {
+    countries: number;
+    slugs: number;
+    globalOsrSlugs: number;
+    chinaSupplementalOsrSlugs: number;
+    unmappedCodes: string[];
+  };
 }
 
 const OPTION_RE = /<option[^>]*value="([^"]*)"[^>]*>\s*([^<]*?)\s*<\/option>/g;
@@ -98,6 +109,61 @@ export function parseOsrOnlyCentreSlugs(html: string): string[] {
   return [...out];
 }
 
+/**
+ * China IELTS publishes six British Council OSR venues on its own official
+ * page, while the global IELTS.org finder currently omits the OSR badge from
+ * those same venue cards. The page has no IELTS.org slugs, so this reviewed
+ * crosswalk joins its stable official labels to records already discovered
+ * from IELTS.org. Unknown labels block the crawl instead of being guessed.
+ */
+export const CHINA_OSR_SLUG_BY_LABEL: Readonly<Record<string, string>> = {
+  'British Council 北京雅思机考考点': 'british-council-beijing',
+  'British Council 北京国贸商圈雅思机考考点': 'british-council-beijing-cbd-venue',
+  'British Council 北京嘉华世达(崇文门)雅思机考考点':
+    'british-council-beijing-chivast-education-international-chongwenmen',
+  'British Council 上海雅思机考考点': 'british-council-shanghai',
+  'British Council 广州雅思机考考点': 'british-council-guangzhou',
+  'British Council 重庆雅思机考考点': 'british-council-chongqing',
+};
+
+export function parseChinaOsrVenueLabels(html: string): string[] {
+  const labels = new Set<string>();
+  for (const match of html.matchAll(/<li\b[^>]*>([\s\S]*?)<\/li>/gi)) {
+    const label = stripTags(match[1] ?? '').replace(/\s+/g, ' ').trim();
+    if (/^British Council .+雅思机考考点$/.test(label)) labels.add(label);
+  }
+  return [...labels];
+}
+
+export function chinaOsrVenueSlugs(html: string): string[] {
+  const labels = parseChinaOsrVenueLabels(html);
+  const expectedLabels = Object.keys(CHINA_OSR_SLUG_BY_LABEL).length;
+  if (labels.length !== expectedLabels) {
+    throw new Error(
+      `China IELTS OSR venue list looks wrong (${labels.length} labels; expected ${expectedLabels}) — ` +
+        'refusing to clear or invent availability until the official list and crosswalk are reviewed.',
+    );
+  }
+  const unknown = labels.filter((label) => !CHINA_OSR_SLUG_BY_LABEL[label]);
+  if (unknown.length) {
+    throw new Error(
+      `China IELTS published unmapped OSR venue(s): ${unknown.join(', ')}. Review the official venue before updating the crosswalk.`,
+    );
+  }
+  return labels.map((label) => CHINA_OSR_SLUG_BY_LABEL[label]!);
+}
+
+/** Catch a renamed/removed OSR badge class before it can clear the dataset. */
+export function assertOsrListingCoverage(osrSlugs: number, centreSlugs: number): void {
+  const minimum = Math.max(100, Math.ceil(centreSlugs * 0.1));
+  if (osrSlugs < minimum) {
+    throw new Error(
+      `IELTS.org OSR parser found ${osrSlugs}/${centreSlugs} source cards; expected at least ${minimum}. ` +
+        'The listing markup may have changed, so the dataset write is blocked.',
+    );
+  }
+}
+
 export async function fetchCountryIndex(force = false): Promise<CountryIndex> {
   // Any country page carries the full dropdown; 'all' lists every centre, which
   // is a much larger download for the same option list.
@@ -144,12 +210,35 @@ export async function fetchCountryIndex(force = false): Promise<CountryIndex> {
   }
   process.stdout.write('\n');
 
+  const globalOsrSlugs = osrSlugs.size;
+  assertOsrListingCoverage(globalOsrSlugs, bySlug.size);
+
+  const chinaOsrPage = await fetchText(CHINA_OSR_LISTING_URL, {
+    cacheDir: LISTING_CACHE_DIR,
+    force,
+  });
+  const chinaSupplementalSlugs = chinaOsrVenueSlugs(chinaOsrPage.body);
+  for (const slug of chinaSupplementalSlugs) {
+    if (!bySlug.has(slug)) {
+      throw new Error(
+        `China IELTS OSR venue ${slug} is absent from the global country listing; review its identity before publishing.`,
+      );
+    }
+    osrSlugs.add(slug);
+  }
+
   return {
     bySlug,
     names,
     osrSlugs,
     osrOnlySlugs,
-    stats: { countries: options.length, slugs: bySlug.size, unmappedCodes },
+    stats: {
+      countries: options.length,
+      slugs: bySlug.size,
+      globalOsrSlugs,
+      chinaSupplementalOsrSlugs: chinaSupplementalSlugs.length,
+      unmappedCodes,
+    },
   };
 }
 

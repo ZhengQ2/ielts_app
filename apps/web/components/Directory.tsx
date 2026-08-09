@@ -370,6 +370,7 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
         testModules,
         testCategories,
         deliveryModes,
+        oneSkillRetake: oneSkillRetakeOnly ? true : undefined,
         maxPrice: priceCurrency ? (maxPrice ?? undefined) : undefined,
       }),
     [
@@ -380,6 +381,7 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
       testModules,
       testCategories,
       deliveryModes,
+      oneSkillRetakeOnly,
       maxPrice,
       priceCurrency,
     ],
@@ -759,7 +761,7 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
                 />
               </div>
               <p className="mt-2 text-xs text-muted">
-                Based on the One Skill Retake badge published for each centre by IELTS.org.
+                Based on official IELTS One Skill Retake listings for each market.
                 OSR-only venues appear only while this filter is selected.
               </p>
             </fieldset>

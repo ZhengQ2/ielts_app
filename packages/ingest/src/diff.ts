@@ -143,6 +143,30 @@ export function diffSafetyProblems(
   return problems;
 }
 
+/**
+ * Refuse a systemic OSR availability drop even when centre identity is stable.
+ * A renamed badge class otherwise looks like an ordinary field update and can
+ * silently clear hundreds of centres in the scheduled crawl.
+ */
+export function osrSafetyProblems(
+  previous: CentreDataset | null,
+  next: CentreDataset,
+): string[] {
+  if (!previous) return [];
+  const before = previous.centres.filter((centre) => centre.offersOneSkillRetake).length;
+  const after = next.centres.filter((centre) => centre.offersOneSkillRetake).length;
+  const drop = before - after;
+  if (drop <= 0) return [];
+
+  if (before >= 5 && after === 0) {
+    return [`OSR availability fell from ${before} centres to zero`];
+  }
+  const limit = Math.max(20, Math.ceil(before * 0.05));
+  return drop > limit
+    ? [`${drop} OSR badge removals exceed the automatic limit of ${limit} (${before} → ${after})`]
+    : [];
+}
+
 /** Markdown detail for a CI job summary or a commit body. */
 export function renderDiff(diff: DatasetDiff): string {
   if (!diff.meaningful) return '_No centre changes._';

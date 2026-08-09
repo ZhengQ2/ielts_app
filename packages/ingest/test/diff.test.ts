@@ -4,6 +4,7 @@ import type { Centre, CentreDataset } from '@ielts-map/core';
 import {
   diffDatasets,
   diffSafetyProblems,
+  osrSafetyProblems,
   summariseDiff,
 } from '../src/diff.ts';
 
@@ -226,4 +227,35 @@ test('the first complete import is not mistaken for a change cliff', () => {
     meaningful: true,
   };
   assert.deepEqual(diffSafetyProblems(initial, 0), []);
+});
+
+test('mass OSR removals are blocked even when centre identities remain stable', () => {
+  const previous = wrap(
+    Array.from({ length: 100 }, (_, index) =>
+      centre({ id: `centre-${index}`, offersOneSkillRetake: true }),
+    ),
+  );
+  const next = wrap(
+    Array.from({ length: 100 }, (_, index) =>
+      centre({ id: `centre-${index}`, offersOneSkillRetake: index < 70 }),
+    ),
+  );
+  assert.deepEqual(osrSafetyProblems(previous, next), [
+    '30 OSR badge removals exceed the automatic limit of 20 (100 → 70)',
+  ]);
+});
+
+test('a small OSR correction and the first import remain automatic', () => {
+  const previous = wrap(
+    Array.from({ length: 100 }, (_, index) =>
+      centre({ id: `centre-${index}`, offersOneSkillRetake: true }),
+    ),
+  );
+  const next = wrap(
+    Array.from({ length: 100 }, (_, index) =>
+      centre({ id: `centre-${index}`, offersOneSkillRetake: index < 95 }),
+    ),
+  );
+  assert.deepEqual(osrSafetyProblems(previous, next), []);
+  assert.deepEqual(osrSafetyProblems(null, next), []);
 });

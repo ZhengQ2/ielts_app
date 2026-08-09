@@ -1,6 +1,7 @@
 import type { Centre } from './types.ts';
 
 type PortalCentre = Pick<Centre, 'operator' | 'address'>;
+type ResultsActionCentre = Pick<Centre, 'operator' | 'address' | 'offersOneSkillRetake'>;
 type InquiryCentre = Pick<Centre, 'name' | 'operator' | 'address'>;
 
 const BRITISH_COUNCIL_RESULTS = 'https://ieltsregistration.britishcouncil.org/ttp';
@@ -44,6 +45,12 @@ export function resultPortalUrl(centre: PortalCentre): string | null {
     return IDP_RESULTS;
   }
   return null;
+}
+
+/** Do not advertise OSR from a generic results link unless evidence marks the centre. */
+export function resultsActionLabel(centre: ResultsActionCentre): string {
+  if (usesBritishCouncilChinaMiniProgram(centre)) return 'Results & One Skill Retake';
+  return centre.offersOneSkillRetake ? 'Results & One Skill Retake' : 'Check results';
 }
 
 /**

@@ -3,6 +3,7 @@ import test from 'node:test';
 import {
   BRITISH_COUNCIL_CHINA_MINI_PROGRAM_QR,
   rawScoreInquiryUrl,
+  resultsActionLabel,
   resultPortalUrl,
   usesBritishCouncilChinaMiniProgram,
 } from '../src/after-test.ts';
@@ -12,10 +13,12 @@ function centre(
   operator: Centre['operator'],
   country: string,
   name = 'Example IELTS Centre',
-): Pick<Centre, 'name' | 'operator' | 'address'> {
+  offersOneSkillRetake = false,
+): Pick<Centre, 'name' | 'operator' | 'address' | 'offersOneSkillRetake'> {
   return {
     name,
     operator,
+    offersOneSkillRetake,
     address: {
       raw: '',
       lines: [],
@@ -67,6 +70,19 @@ test('IELTS USA has its own Test Taker Portal', () => {
   assert.equal(
     resultPortalUrl(centre('IELTS USA', 'US')),
     'https://ieltsregistration.registration-ieltsusa.org/ttp',
+  );
+});
+
+test('results action mentions OSR only with evidence, except for the China mini-program', () => {
+  assert.equal(resultsActionLabel(centre('IELTS USA', 'US')), 'Check results');
+  assert.equal(
+    resultsActionLabel(centre('British Council', 'CA', 'OSR Centre', true)),
+    'Results & One Skill Retake',
+  );
+  assert.equal(
+    resultsActionLabel(centre('British Council', 'CN')),
+    'Results & One Skill Retake',
+    'the official China mini-program combines results and eligibility-based OSR registration',
   );
 });
 

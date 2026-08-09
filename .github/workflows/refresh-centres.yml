@@ -65,8 +65,10 @@ jobs:
           # The existing country-listing pass also records IELTS.org's One
           # Skill Retake badge and source-card format for every source page,
           # including centres first discovered by this run. Dedup then prevents
-          # an OSR-only page from hiding a merged full-test offering. This adds
-          # no separate provider request.
+          # an OSR-only page from hiding a merged full-test offering. The same
+          # pass supplements British Council's six mainland-China OSR venues
+          # from the official China IELTS page because the global finder omits
+          # those badges. Parser sanity and change-rate gates block mass clears.
           cd packages/ingest
           node --experimental-strip-types src/cli.ts \
             --country "${{ inputs.country || 'ALL' }}" \

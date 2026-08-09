@@ -367,6 +367,18 @@ test('operator facets apply other filters while ignoring operator selection', ()
   );
 });
 
+test('operator facets apply the active One Skill Retake filter', () => {
+  const britishCouncil = operatorCentre('bc-osr', 'British Council', 'CA', 300);
+  britishCouncil.offersOneSkillRetake = true;
+  const idp = operatorCentre('idp-no-osr', 'IDP', 'CA', 400);
+  idp.offersOneSkillRetake = false;
+
+  assert.deepEqual(operatorFacets([britishCouncil, idp], { oneSkillRetake: true }), [
+    { operator: 'British Council', count: 1 },
+    { operator: 'IDP', count: 0 },
+  ]);
+});
+
 test('price facet currency comes from the operator-neutral result set', () => {
   const centres = [
     operatorCentre('bc-ro', 'British Council', 'RO', 1100, 'RON'),
@@ -384,7 +396,7 @@ test('price facet currency comes from the operator-neutral result set', () => {
   );
 });
 
-test('One Skill Retake filter requires an explicit IELTS.org listing badge', () => {
+test('One Skill Retake filter requires explicit official-source evidence', () => {
   const osr = offeringCentre('osr', [
     offering('Academic Test', 'academic', 'computer_delivered', 330),
   ]);
