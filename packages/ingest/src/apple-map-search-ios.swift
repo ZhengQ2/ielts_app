@@ -15,14 +15,14 @@ struct PilotRecord: Decodable {
     let searchRegion: SearchRegion?
 }
 
-struct SearchRegion: Decodable {
+struct SearchRegion: Codable, Equatable {
     let centerLatitude: Double
     let centerLongitude: Double
     let latitudeDelta: Double
     let longitudeDelta: Double
 }
 
-struct PilotQuery: Codable {
+struct PilotQuery: Codable, Equatable {
     let kind: String
     let text: String
 }
@@ -46,7 +46,15 @@ struct SearchAttempt: Codable {
 
 struct CentreResult: Codable {
     let centreId: String
+    let inputFingerprint: String?
     let searches: [SearchAttempt]
+}
+
+struct CacheInput: Encodable {
+    let version: Int
+    let queries: [PilotQuery]
+    let searchRegion: SearchRegion?
+    let maximumCandidates: Int
 }
 
 struct PilotOutput: Codable {
@@ -103,13 +111,18 @@ struct AuditView: View {
         )
         let outputURL = try outputFile()
         var completed = try existingResults(at: outputURL)
-        let completedIds = Set(completed.map(\.centreId))
         let delay = input.delayMilliseconds ?? 750
         let maximumCandidates = input.maximumCandidates ?? 5
 
         for (index, record) in input.records.enumerated() {
             status = "Checking \(index + 1) of \(input.records.count)"
-            if completedIds.contains(record.id) { continue }
+            let inputFingerprint = try cacheFingerprint(
+                for: record,
+                maximumCandidates: maximumCandidates
+            )
+            if completed.contains(where: {
+                $0.centreId == record.id && $0.inputFingerprint == inputFingerprint
+            }) { continue }
             var searches: [SearchAttempt] = []
             for query in record.queries {
                 searches.append(
@@ -123,10 +136,32 @@ struct AuditView: View {
                     try await Task.sleep(nanoseconds: delay * 1_000_000)
                 }
             }
-            completed.append(CentreResult(centreId: record.id, searches: searches))
+            completed.removeAll(where: { $0.centreId == record.id })
+            completed.append(
+                CentreResult(
+                    centreId: record.id,
+                    inputFingerprint: inputFingerprint,
+                    searches: searches
+                )
+            )
             try write(completed, to: outputURL)
         }
         fputs("AUDIT_COMPLETE records=\(completed.count)\n", stderr)
+    }
+
+    private func cacheFingerprint(
+        for record: PilotRecord,
+        maximumCandidates: Int
+    ) throws -> String {
+        let input = CacheInput(
+            version: 2,
+            queries: record.queries,
+            searchRegion: record.searchRegion,
+            maximumCandidates: maximumCandidates
+        )
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.sortedKeys]
+        return try encoder.encode(input).base64EncodedString()
     }
 
     private func search(
@@ -201,7 +236,7 @@ struct AuditView: View {
 
     private func write(_ records: [CentreResult], to url: URL) throws {
         let output = PilotOutput(
-            version: 1,
+            version: 2,
             generatedAt: ISO8601DateFormatter().string(from: Date()),
             records: records
         )

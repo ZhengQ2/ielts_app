@@ -29,6 +29,7 @@ import os
 import re
 import sys
 import urllib.request
+import urllib.parse
 
 INDEX = "https://ielts.org/sitemap.xml"
 UA = "Mozilla/5.0 (sitemap-audit; personal research)"
@@ -47,7 +48,25 @@ def fetch(url: str, timeout: int = 30) -> str:
 
 def sub_sitemaps(index_xml: str):
     locs = LOC_RE.findall(index_xml)
-    subs = [u for u in locs if "testcentres" in u.lower()]
+    subs = []
+    for value in locs:
+        try:
+            parsed = urllib.parse.urlsplit(value)
+            trusted = (
+                parsed.scheme == "https"
+                and parsed.hostname == "ielts.org"
+                and not parsed.port
+                and not parsed.username
+                and not parsed.password
+                and not parsed.query
+                and not parsed.fragment
+                and "testcentres" in parsed.path.lower()
+                and parsed.path.lower().endswith(".xml")
+            )
+        except ValueError:
+            trusted = False
+        if trusted:
+            subs.append(value)
     # keep page order p1..pN
     def pageno(u):
         m = re.search(r"-p(\d+)\.xml", u)
@@ -78,8 +97,6 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", default="ielts_dump")
     args = ap.parse_args()
-    os.makedirs(args.out, exist_ok=True)
-
     print(f"[*] index: {INDEX}")
     try:
         idx = fetch(INDEX)
@@ -92,6 +109,8 @@ def main():
         sys.exit("no testCentres sub-sitemaps found — sitemap layout may have changed")
 
     combined = []
+    pages = []
+    failures = []
     totals = {"british-council": 0, "idp": 0, "no-prefix": 0}
     china_hits, idp_china_hits = [], []
 
@@ -102,10 +121,10 @@ def main():
             xml = fetch(url)
         except Exception as e:
             print(f"    [!] p{page} fetch failed: {e}")
+            failures.append(f"p{page}: {e}")
             continue
         slugs = slugs_from(xml)
-        with open(os.path.join(args.out, f"p{page}_slugs.txt"), "w") as f:
-            f.write("\n".join(slugs) + "\n")
+        pages.append((page, slugs))
         for s in slugs:
             totals[classify(s)] += 1
             combined.append(s)
@@ -114,6 +133,17 @@ def main():
             if "idp-ielts-china" in s.lower():
                 idp_china_hits.append(s)
         print(f"    p{page}: {len(slugs)} centres")
+
+    if failures:
+        sys.exit(
+            "refusing to publish an incomplete dump; failed pages: "
+            + "; ".join(failures)
+        )
+
+    os.makedirs(args.out, exist_ok=True)
+    for page, slugs in pages:
+        with open(os.path.join(args.out, f"p{page}_slugs.txt"), "w") as f:
+            f.write("\n".join(slugs) + "\n")
 
     with open(os.path.join(args.out, "ALL_slugs.txt"), "w") as f:
         f.write("\n".join(combined) + "\n")

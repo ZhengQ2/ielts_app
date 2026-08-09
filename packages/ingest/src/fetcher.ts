@@ -19,6 +19,9 @@ export interface FetchOptions {
    * sitemap during the feasibility work (DEV_PLAN §5.1).
    */
   requireSuffix?: string;
+  /** Reject every redirect. Used for trusted sitemap URLs so a compromised
+   * index cannot make the crawler contact a different host. */
+  forbidRedirects?: boolean;
 }
 
 export interface FetchResult {
@@ -67,7 +70,7 @@ export async function fetchText(url: string, opts: FetchOptions = {}): Promise<F
     try {
       const res = await fetch(url, {
         headers: { 'user-agent': USER_AGENT, accept: 'text/html,application/xml,*/*' },
-        redirect: 'follow',
+        redirect: opts.forbidRedirects ? 'error' : 'follow',
         signal: controller.signal,
       });
       if (!res.ok) {

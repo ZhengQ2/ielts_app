@@ -56,6 +56,9 @@ export function loadGoogleMaps(): Promise<void> {
     script.async = true;
     script.src = url.toString();
     script.onerror = () => {
+      // A failed element cannot be reused: its load event will never fire. Remove
+      // it so the next map/city-search attempt can create a fresh request.
+      script.remove();
       loader = null;
       delete window[CALLBACK_NAME];
       reject(new Error('Google Maps failed to load'));

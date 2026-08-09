@@ -11,6 +11,7 @@ import {
   rankOvertureCandidates,
   selectNeutralPilotSample,
 } from './neutral-pilot.ts';
+import { googleSqlString } from './neutral-pilot-sql.ts';
 import type {
   NeutralPilotCentre,
   OverturePlaceCandidate,
@@ -57,6 +58,11 @@ if (
   throw new Error('--release must use YYYY-MM-DD.N.');
 }
 const limit = positiveInteger(args.limit ?? '50', '--limit');
+if (limit > 50) {
+  throw new Error(
+    '--limit cannot exceed 50 because the query retains up to 500 candidates per centre and the result cap is 25,000 rows.',
+  );
+}
 const dryRunOnly = args.dryRunOnly === 'true';
 if (args.dryRunOnly && !['true', 'false'].includes(args.dryRunOnly)) {
   throw new Error('--dry-run-only must be true or false.');
@@ -256,10 +262,10 @@ async function queryOverture(
 function buildQuery(centres: NeutralPilotCentre[]): string {
   const sampleRows = centres.map((centre) => {
     const tokens = distinctiveNameTokens(centre.name)
-      .map((token) => `'${sql(token)}'`)
+      .map(googleSqlString)
       .join(', ');
     const addressTokens = distinctiveAddressTokens(centre)
-      .map((token) => `'${sql(token)}'`)
+      .map(googleSqlString)
       .join(', ');
     const addressNumbers = [
       ...new Set(
@@ -268,24 +274,24 @@ function buildQuery(centres: NeutralPilotCentre[]): string {
           ?.filter((value) => value.length <= 6) ?? [],
       ),
     ]
-      .map((value) => `'${sql(value)}'`)
+      .map(googleSqlString)
       .join(', ');
     const postcode = centre.postcode
-      ? `'${sql(centre.postcode.toLowerCase().replaceAll(' ', ''))}'`
+      ? googleSqlString(centre.postcode.toLowerCase().replaceAll(' ', ''))
       : 'NULL';
     const phones = centre.phones
       .map((phone) => phone.replace(/\D/g, '').slice(-8))
       .filter((phone) => phone.length >= 7)
-      .map((phone) => `'${sql(phone)}'`)
+      .map(googleSqlString)
       .join(', ');
     const websiteHosts = centre.websites
       .map(websiteHost)
       .filter(Boolean)
-      .map((host) => `'${sql(host)}'`)
+      .map(googleSqlString)
       .join(', ');
     return `STRUCT<centre_id STRING, country STRING, tokens ARRAY<STRING>, address_tokens ARRAY<STRING>, address_numbers ARRAY<STRING>, postcode STRING, phones ARRAY<STRING>, website_hosts ARRAY<STRING>>(
-      '${sql(centre.id)}',
-      '${sql(centre.country.toLowerCase())}',
+      ${googleSqlString(centre.id)},
+      ${googleSqlString(centre.country.toLowerCase())},
       [${tokens}],
       [${addressTokens}],
       [${addressNumbers}],
@@ -655,8 +661,4 @@ function positiveInteger(value: string, flag: string): number {
     throw new Error(`${flag} must be a positive integer.`);
   }
   return parsed;
-}
-
-function sql(value: string): string {
-  return value.replaceAll("'", "''");
 }

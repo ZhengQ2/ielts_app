@@ -6,6 +6,7 @@ import {
   fetchProviderResponse,
   gcj02ToWgs84,
   GeocodeCache,
+  google,
   googlePlaces,
   localProviderFor,
   mappls,
@@ -402,6 +403,52 @@ test('Mappls retries cannot exceed the request budget', async (t) => {
   assert.equal(calls, 1);
   assert.equal(cache.stats.mapplsCalls, 1);
   assert.equal(cache.stats.budgetSkips, 1);
+  assert.equal(cache.stats.cacheHits, 0);
+});
+
+test('Google retries cannot exceed the physical request budget', async (t) => {
+  const originalFetch = globalThis.fetch;
+  const originalKey = process.env.GOOGLE_MAPS_API_KEY;
+  t.after(() => {
+    globalThis.fetch = originalFetch;
+    restoreEnv('GOOGLE_MAPS_API_KEY', originalKey);
+  });
+
+  process.env.GOOGLE_MAPS_API_KEY = 'test-google-key';
+  let calls = 0;
+  globalThis.fetch = async () => {
+    calls++;
+    if (calls === 1) return new Response(null, { status: 503 });
+    return Response.json({ status: 'ZERO_RESULTS', results: [] });
+  };
+
+  const cache = new GeocodeCache({ googleBudget: 1 });
+  const result = await cache.lookup(google, {
+    text: '1 Test Street, Toronto',
+    country: 'CA',
+  });
+
+  assert.deepEqual(result, []);
+  assert.equal(calls, 1);
+  assert.equal(cache.stats.googleCalls, 1);
+  assert.equal(cache.stats.budgetSkips, 1);
+});
+
+test('empty provider results expire instead of becoming permanent', async () => {
+  let calls = 0;
+  const emptyProvider = {
+    name: 'nominatim' as const,
+    async lookup() {
+      calls++;
+      return [];
+    },
+  };
+  const cache = new GeocodeCache({ emptyResultTtlMs: 0 });
+
+  await cache.lookup(emptyProvider, { text: 'Missing venue', country: 'CA' });
+  await cache.lookup(emptyProvider, { text: 'Missing venue', country: 'CA' });
+
+  assert.equal(calls, 2);
   assert.equal(cache.stats.cacheHits, 0);
 });
 

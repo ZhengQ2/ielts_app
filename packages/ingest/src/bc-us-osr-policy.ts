@@ -21,7 +21,9 @@ export interface BritishCouncilUsOsrObservation {
 export function resolveBritishCouncilUsOsrWarning(
   previous: boolean,
   observation: BritishCouncilUsOsrObservation,
+  trusted = true,
 ): boolean {
+  if (!trusted) return previous;
   if (observation.status === 'unavailable') return true;
   if (observation.status === 'available') return false;
   return previous;
@@ -44,16 +46,24 @@ export function inspectBritishCouncilUsOsrPage(
     );
   }
 
-  const countryMentions = [
-    ...normalizedText.matchAll(/\b(?:usa|united states(?: of america)?)\b/g),
-  ];
-  const contexts = countryMentions
-    .map((mention) => {
-    const start = Math.max(0, (mention.index ?? 0) - 300);
-    const end = Math.min(normalizedText.length, (mention.index ?? 0) + mention[0].length + 160);
-      return normalizedText.slice(start, end);
-    })
-    .filter((context) => context.includes('one skill retake'));
+  // Bind the policy wording to the country in the same grammatical clause.
+  // A broad character window can accidentally attach Canada's restriction to
+  // an explicit USA availability statement on the same line.
+  const clauseText = stripTags(
+    html.replace(
+      /(?:<\/?(?:p|li|div|section|article|h[1-6])\b[^>]*>|\r?\n+)/gi,
+      '. ',
+    ),
+  );
+  const contexts = clauseText
+    .toLowerCase()
+    .split(/(?:[.!?;]+|,\s*(?:but|while|whereas|however)\b|\b(?:but|while|whereas|however)\b)/)
+    .map((clause) => clause.replace(/\s+/g, ' ').trim())
+    .filter(
+      (clause) =>
+        clause.includes('one skill retake') &&
+        /\b(?:usa|united states(?: of america)?)\b/.test(clause),
+    );
 
   const unavailable = contexts.some((context) =>
     /(?:not\s+(?:currently\s+)?available|currently\s+not\s+available|unavailable|cannot\s+be\s+booked|can't\s+be\s+booked|not\s+eligible|ineligible|not\s+offered|does\s+not\s+offer|not\s+supported)/.test(

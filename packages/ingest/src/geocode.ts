@@ -64,6 +64,8 @@ export interface GeocodeQuery {
  * not just its logical call, count against the ceiling.
  */
 export interface ProviderContext {
+  /** Consumes one unit of Google request budget per physical HTTP attempt. */
+  allowGoogleRequest(kind: 'geocode' | 'places' | 'amap_places'): boolean;
   /** Consumes one unit of AMap request budget; false once exhausted for this run. */
   allowAmapRequest(): boolean;
   /** Consumes one unit of Mappls request budget; false once exhausted for this run. */
@@ -72,6 +74,7 @@ export interface ProviderContext {
 
 /** Used when a provider is exercised directly (e.g. tests) outside a GeocodeCache. */
 const UNLIMITED_CONTEXT: ProviderContext = {
+  allowGoogleRequest: () => true,
   allowAmapRequest: () => true,
   allowMapplsRequest: () => true,
 };
@@ -83,9 +86,9 @@ export interface GeocodeProvider {
 
 class ProviderUnavailableError extends Error {}
 export class ProviderBudgetExhaustedError extends Error {
-  readonly provider: 'amap' | 'mappls';
+  readonly provider: 'google' | 'amap' | 'mappls';
 
-  constructor(provider: 'amap' | 'mappls') {
+  constructor(provider: 'google' | 'amap' | 'mappls') {
     super(`${provider} request budget exhausted`);
     this.provider = provider;
   }
@@ -349,8 +352,10 @@ export const nominatim: GeocodeProvider = {
     url.searchParams.set('limit', '3');
     if (q.country) url.searchParams.set('countrycodes', q.country.toLowerCase());
 
-    const res = await serialise(() =>
-      fetch(url, { headers: { 'user-agent': USER_AGENT, accept: 'application/json' } }),
+    const res = await fetchProviderResponse(
+      url,
+      { headers: { 'user-agent': USER_AGENT, accept: 'application/json' } },
+      { schedule: serialise },
     );
     if (!res.ok) throw new Error(`Nominatim HTTP ${res.status} for ${url.search}`);
     const hits = (await res.json()) as NominatimHit[];
@@ -378,6 +383,14 @@ export const nominatim: GeocodeProvider = {
  * for every query already on disk.
  */
 const MAPPING_VERSION = 2;
+const EMPTY_RESULT_TTL_MS = 7 * 24 * 60 * 60 * 1000;
+
+interface GeocodeCacheRecord {
+  results: GeocodeCandidateRaw[];
+  cachedAt: string;
+}
+
+type GeocodeCacheEntry = GeocodeCandidateRaw[] | GeocodeCacheRecord;
 
 interface GoogleResult {
   formatted_address?: string;
@@ -445,7 +458,7 @@ function googlePrecision(r: GoogleResult): GeoPrecision {
  */
 export const google: GeocodeProvider = {
   name: 'google',
-  async lookup(q) {
+  async lookup(q, ctx = UNLIMITED_CONTEXT) {
     const key = process.env.GOOGLE_MAPS_API_KEY;
     if (!key) return [];
 
@@ -463,7 +476,17 @@ export const google: GeocodeProvider = {
     if (q.country) url.searchParams.set('components', `country:${q.country.toUpperCase()}`);
     url.searchParams.set('key', key);
 
-    const res = await fetchProviderResponse(url, { headers: { accept: 'application/json' } });
+    const res = await fetchProviderResponse(
+      url,
+      { headers: { accept: 'application/json' } },
+      {
+        beforeAttempt() {
+          if (!ctx.allowGoogleRequest('geocode')) {
+            throw new ProviderBudgetExhaustedError('google');
+          }
+        },
+      },
+    );
     if (!res.ok) throw new Error(`Google HTTP ${res.status} for "${address}"`);
 
     const body = (await res.json()) as { status?: string; results?: GoogleResult[]; error_message?: string };
@@ -541,7 +564,7 @@ function googlePlacePrecision(place: GooglePlace): GeoPrecision {
  */
 export const googlePlaces: GeocodeProvider = {
   name: 'google_places',
-  async lookup(q) {
+  async lookup(q, ctx = UNLIMITED_CONTEXT) {
     const key = process.env.GOOGLE_MAPS_API_KEY;
     const textQuery = queryText(q);
     if (!key || !textQuery) return [];
@@ -558,17 +581,27 @@ export const googlePlaces: GeocodeProvider = {
     };
     if (q.country) body.regionCode = q.country.toUpperCase();
 
-    const res = await fetchProviderResponse(GOOGLE_PLACES_TEXT_SEARCH_URL, {
-      method: 'POST',
-      headers: {
-        accept: 'application/json',
-        'content-type': 'application/json',
-        'X-Goog-Api-Key': key,
-        'X-Goog-FieldMask':
-          'places.id,places.types,places.location,places.addressComponents',
+    const res = await fetchProviderResponse(
+      GOOGLE_PLACES_TEXT_SEARCH_URL,
+      {
+        method: 'POST',
+        headers: {
+          accept: 'application/json',
+          'content-type': 'application/json',
+          'X-Goog-Api-Key': key,
+          'X-Goog-FieldMask':
+            'places.id,places.types,places.location,places.addressComponents',
+        },
+        body: JSON.stringify(body),
       },
-      body: JSON.stringify(body),
-    });
+      {
+        beforeAttempt() {
+          if (!ctx.allowGoogleRequest('places')) {
+            throw new ProviderBudgetExhaustedError('google');
+          }
+        },
+      },
+    );
     if (!res.ok) {
       const error = (await res.json().catch(() => null)) as {
         error?: { status?: string; message?: string };
@@ -800,13 +833,23 @@ export const amapPlaces: GeocodeProvider = {
     );
     detailsUrl.searchParams.set('languageCode', 'zh-CN');
     detailsUrl.searchParams.set('regionCode', 'CN');
-    const detailsResponse = await fetchProviderResponse(detailsUrl, {
-      headers: {
-        accept: 'application/json',
-        'X-Goog-Api-Key': googleKey,
-        'X-Goog-FieldMask': 'displayName,addressComponents',
+    const detailsResponse = await fetchProviderResponse(
+      detailsUrl,
+      {
+        headers: {
+          accept: 'application/json',
+          'X-Goog-Api-Key': googleKey,
+          'X-Goog-FieldMask': 'displayName,addressComponents',
+        },
       },
-    });
+      {
+        beforeAttempt() {
+          if (!ctx.allowGoogleRequest('amap_places')) {
+            throw new ProviderBudgetExhaustedError('google');
+          }
+        },
+      },
+    );
     if (!detailsResponse.ok) {
       const error = (await detailsResponse.json().catch(() => null)) as {
         error?: { status?: string };
@@ -1041,9 +1084,9 @@ export function localProviderFor(
   }
 }
 
-/** Disk-backed memo so re-runs never re-hit the geocoder. */
+/** Disk-backed memo; positive hits persist and empty hits expire after one week. */
 export class GeocodeCache implements ProviderContext {
-  private map = new Map<string, GeocodeCandidateRaw[]>();
+  private map = new Map<string, GeocodeCacheEntry>();
   private dirty = false;
   /** When disabled, every lookup returns nothing and no request is made. */
   private readonly disabled: boolean;
@@ -1053,6 +1096,8 @@ export class GeocodeCache implements ProviderContext {
   private readonly amapBudget: number;
   /** Hard ceiling on Mappls requests for one run (geocode + Place Details). */
   private readonly mapplsBudget: number;
+  private readonly emptyResultTtlMs: number;
+  private readonly now: () => number;
   private budgetWarned = false;
   private amapBudgetWarned = false;
   private mapplsBudgetWarned = false;
@@ -1076,12 +1121,37 @@ export class GeocodeCache implements ProviderContext {
       googleBudget?: number;
       amapBudget?: number;
       mapplsBudget?: number;
+      emptyResultTtlMs?: number;
+      now?: () => number;
     } = {},
   ) {
     this.disabled = opts.disabled ?? false;
     this.googleBudget = opts.googleBudget ?? Number.POSITIVE_INFINITY;
     this.amapBudget = opts.amapBudget ?? Number.POSITIVE_INFINITY;
     this.mapplsBudget = opts.mapplsBudget ?? Number.POSITIVE_INFINITY;
+    this.emptyResultTtlMs = opts.emptyResultTtlMs ?? EMPTY_RESULT_TTL_MS;
+    this.now = opts.now ?? Date.now;
+  }
+
+  /** Google budget, consumed by every actual attempt, including retries. */
+  allowGoogleRequest(kind: 'geocode' | 'places' | 'amap_places'): boolean {
+    if (this.stats.googleCalls + this.stats.placesCalls >= this.googleBudget) {
+      this.stats.budgetSkips++;
+      if (!this.budgetWarned) {
+        console.warn(
+          `\n    ⚠ Google budget of ${this.googleBudget} requests reached — remaining lookups fall back to what is already cached.`,
+        );
+        this.budgetWarned = true;
+      }
+      return false;
+    }
+    if (kind === 'geocode') {
+      this.stats.googleCalls++;
+    } else {
+      this.stats.placesCalls++;
+      if (kind === 'amap_places') this.stats.amapPlacesCalls++;
+    }
+    return true;
   }
 
   /** AMap request budget, consumed per actual HTTP request (geocode or POI search). */
@@ -1120,7 +1190,7 @@ export class GeocodeCache implements ProviderContext {
     try {
       const json = JSON.parse(await fs.readFile(GEOCODE_CACHE, 'utf8')) as Record<
         string,
-        GeocodeCandidateRaw[]
+        GeocodeCacheEntry
       >;
       this.map = new Map(Object.entries(json));
     } catch {
@@ -1142,35 +1212,24 @@ export class GeocodeCache implements ProviderContext {
       q.structured ? `s:${JSON.stringify(q.structured)}` : q.text
     }${q.placeId ? `|pid:${q.placeId}` : ''}`;
     const hit = this.map.get(key);
-    if (hit) {
-      this.stats.cacheHits++;
-      return hit;
+    if (hit !== undefined) {
+      const results = Array.isArray(hit) ? hit : hit.results;
+      const cachedAt = Array.isArray(hit) ? Number.NaN : Date.parse(hit.cachedAt);
+      const emptyResultIsFresh =
+        results.length > 0 ||
+        (Number.isFinite(cachedAt) && this.now() - cachedAt < this.emptyResultTtlMs);
+      if (emptyResultIsFresh) {
+        this.stats.cacheHits++;
+        return results;
+      }
+      // Legacy empty arrays had no age and are therefore treated as expired.
+      this.map.delete(key);
+      this.dirty = true;
     }
 
-    // A cache miss on Google costs money on every call; AMap and Mappls cost
-    // money too, but only sometimes make it past this point — their own
-    // request budgets (this.allowAmapRequest / this.allowMapplsRequest) gate
-    // the actual HTTP requests inside each provider, since a single logical
-    // lookup can issue more than one of them (Mappls geocode + Place Details).
-    if (
-      provider.name === 'google' ||
-      provider.name === 'google_places' ||
-      provider.name === 'amap_places'
-    ) {
-      if (this.stats.googleCalls + this.stats.placesCalls >= this.googleBudget) {
-        this.stats.budgetSkips++;
-        if (!this.budgetWarned) {
-          console.warn(
-            `\n    ⚠ Google budget of ${this.googleBudget} calls reached — remaining lookups fall back to what is already cached.`,
-          );
-          this.budgetWarned = true;
-        }
-        return [];
-      }
-      if (provider.name === 'google') this.stats.googleCalls++;
-      else this.stats.placesCalls++;
-      if (provider.name === 'amap_places') this.stats.amapPlacesCalls++;
-    } else if (provider.name === 'nominatim') {
+    // Paid-provider budgets are consumed inside each transport attempt so a
+    // retry can never exceed the hard ceiling.
+    if (provider.name === 'nominatim') {
       this.stats.nominatimCalls++;
     }
 
@@ -1197,7 +1256,10 @@ export class GeocodeCache implements ProviderContext {
       return [];
     }
 
-    this.map.set(key, result);
+    this.map.set(key, {
+      results: result,
+      cachedAt: new Date(this.now()).toISOString(),
+    });
     this.dirty = true;
     return result;
   }

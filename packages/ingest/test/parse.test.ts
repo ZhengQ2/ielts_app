@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { parseCentrePage, parsePublishedPrice } from '../src/parse.ts';
+import { ParseError, parseCentrePage, parsePublishedPrice } from '../src/parse.ts';
 
 /**
  * Fixtures are trimmed from real pages, keeping the markup the parser depends
@@ -153,6 +153,27 @@ const MULTI_CONTACT_PAGE = page(`
   </div>`);
 
 const NOW = '2026-07-27T00:00:00.000Z';
+
+test('a generic error page cannot be parsed as a centre', () => {
+  assert.throws(
+    () => parseCentrePage('temporary-failure', '<h1>Gateway timeout</h1>', NOW),
+    (error: unknown) =>
+      error instanceof ParseError && /No centre title/.test(error.message),
+  );
+});
+
+test('a partial centre header without an address cannot replace a complete centre', () => {
+  assert.throws(
+    () =>
+      parseCentrePage(
+        'partial-centre',
+        '<h1 class="test-center-header__title">Partial Centre</h1>',
+        NOW,
+      ),
+    (error: unknown) =>
+      error instanceof ParseError && /No centre address/.test(error.message),
+  );
+});
 
 test('a /book/UKVI path on bare ielts.idp.com is recognised as IDP', () => {
   const c = parseCentrePage('aeo-lahore-life-skills', IDP_LIFE_SKILLS_PAGE, NOW);

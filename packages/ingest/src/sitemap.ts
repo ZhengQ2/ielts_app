@@ -38,10 +38,11 @@ export async function readSitemap(force = false): Promise<SitemapResult> {
     cacheDir: SITEMAP_CACHE_DIR,
     force,
     requireSuffix: '</sitemapindex>',
+    forbidRedirects: true,
   });
 
   const pages = locs(index.body)
-    .filter((u) => u.toLowerCase().includes('testcentres'))
+    .filter(isTrustedTestCentreSitemap)
     .sort((a, b) => pageNo(a) - pageNo(b));
 
   if (pages.length === 0) {
@@ -59,6 +60,7 @@ export async function readSitemap(force = false): Promise<SitemapResult> {
       cacheDir: SITEMAP_CACHE_DIR,
       force,
       requireSuffix: '</urlset>',
+      forbidRedirects: true,
     });
     let onPage = 0;
     for (const loc of locs(res.body)) {
@@ -74,6 +76,25 @@ export async function readSitemap(force = false): Promise<SitemapResult> {
   }
 
   return { pages, slugs, origin };
+}
+
+export function isTrustedTestCentreSitemap(value: string): boolean {
+  try {
+    const url = new URL(value);
+    return (
+      url.protocol === 'https:' &&
+      url.hostname === 'ielts.org' &&
+      url.port === '' &&
+      url.username === '' &&
+      url.password === '' &&
+      url.search === '' &&
+      url.hash === '' &&
+      /testcentres/i.test(url.pathname) &&
+      /\.xml$/i.test(url.pathname)
+    );
+  } catch {
+    return false;
+  }
 }
 
 function pageNo(u: string): number {

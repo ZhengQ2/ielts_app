@@ -63,6 +63,26 @@ test('unrecognized USA wording preserves the previous warning state', () => {
   assert.equal(resolveBritishCouncilUsOsrWarning(false, observation), false);
 });
 
+test('availability and a different country restriction are classified independently', () => {
+  const observation = inspectBritishCouncilUsOsrPage(
+    intactPage(
+      'IELTS One Skill Retake is available for tests in the USA, but remains unavailable in Canada.',
+    ),
+  );
+  assert.equal(observation.status, 'available');
+});
+
+test('an untrusted representation cannot change either previous state', () => {
+  const available = inspectBritishCouncilUsOsrPage(
+    intactPage('IELTS One Skill Retake is now available for tests taken in the USA.'),
+  );
+  const unavailable = inspectBritishCouncilUsOsrPage(
+    intactPage('IELTS One Skill Retake is unavailable for tests taken in the USA.'),
+  );
+  assert.equal(resolveBritishCouncilUsOsrWarning(true, available, false), true);
+  assert.equal(resolveBritishCouncilUsOsrWarning(false, unavailable, false), false);
+});
+
 test('a challenge or redesigned page cannot clear the warning', () => {
   assert.throws(
     () => inspectBritishCouncilUsOsrPage('<html><title>Please wait</title></html>'),
