@@ -39,7 +39,7 @@ aws cloudformation deploy \
   --region "$deploy_region" \
   --stack-name "$stack_name" \
   --template-file infra/aws-static-site.yml \
-  --capabilities CAPABILITY_IAM \
+  --capabilities CAPABILITY_NAMED_IAM \
   --parameter-overrides \
     "DomainName=${domain_name}" \
     "HostedZoneId=${hosted_zone_id}" \
