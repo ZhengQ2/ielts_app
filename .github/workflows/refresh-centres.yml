@@ -17,8 +17,8 @@ permissions:
   contents: write
 
 concurrency:
-  # Never let two crawls race to commit the same dataset.
-  group: refresh-centres
+  # Serialize every scheduled workflow that can push generated repository data.
+  group: repository-data-writes
   cancel-in-progress: false
 
 jobs:

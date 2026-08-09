@@ -12,7 +12,8 @@ permissions:
   id-token: write
 
 concurrency:
-  group: monitor-bc-us-osr
+  # Share the centre refresh lock so neither generated-data push can lose a race.
+  group: repository-data-writes
   cancel-in-progress: false
 
 jobs:

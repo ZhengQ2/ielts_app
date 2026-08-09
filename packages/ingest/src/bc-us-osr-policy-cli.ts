@@ -6,6 +6,7 @@ import {
   BRITISH_COUNCIL_US_OSR_MONITOR,
   BRITISH_COUNCIL_US_OSR_SOURCE,
   inspectBritishCouncilUsOsrPage,
+  resolveBritishCouncilUsOsrWarning,
 } from './bc-us-osr-policy.ts';
 
 const POLICY_FILE = path.join(DATA_DIR, 'after-test-policy.json');
@@ -28,29 +29,45 @@ async function main(): Promise<void> {
   // URL; policy authority remains the British Council page recorded below.
   const response = await fetchText(BRITISH_COUNCIL_US_OSR_MONITOR, { force: true });
   const observation = inspectBritishCouncilUsOsrPage(response.body);
+  const previousText = await fs.readFile(POLICY_FILE, 'utf8');
+  const previous = JSON.parse(previousText) as PolicyFile;
+  if (
+    typeof previous.britishCouncilUnitedStates?.oneSkillRetakeUnavailable !== 'boolean'
+  ) {
+    throw new Error('Existing British Council USA OSR policy is missing or invalid');
+  }
+  const oneSkillRetakeUnavailable = resolveBritishCouncilUsOsrWarning(
+    previous.britishCouncilUnitedStates.oneSkillRetakeUnavailable,
+    observation,
+  );
   const next: PolicyFile = {
     version: 1,
     britishCouncilUnitedStates: {
-      oneSkillRetakeUnavailable: observation.oneSkillRetakeUnavailable,
+      oneSkillRetakeUnavailable,
       sourceUrl: BRITISH_COUNCIL_US_OSR_SOURCE,
       monitorUrl: BRITISH_COUNCIL_US_OSR_MONITOR,
       monitoredClaim: MONITORED_CLAIM,
     },
   };
   const nextText = `${JSON.stringify(next, null, 2)}\n`;
-  const previousText = await fs.readFile(POLICY_FILE, 'utf8').catch(() => '');
   const changed = previousText !== nextText;
+
+  if (observation.status === 'unknown') {
+    console.warn(
+      `British Council USA OSR wording was not recognized; preserving the previous ${oneSkillRetakeUnavailable ? 'unavailable' : 'not restricted'} state.`,
+    );
+  }
 
   if (changed) {
     const temporaryFile = `${POLICY_FILE}.tmp`;
     await fs.writeFile(temporaryFile, nextText, 'utf8');
     await fs.rename(temporaryFile, POLICY_FILE);
     console.log(
-      `British Council USA OSR policy changed to ${observation.oneSkillRetakeUnavailable ? 'unavailable' : 'not restricted'}.`,
+      `British Council USA OSR policy changed to ${oneSkillRetakeUnavailable ? 'unavailable' : 'not restricted'}.`,
     );
   } else {
     console.log(
-      `British Council USA OSR policy remains ${observation.oneSkillRetakeUnavailable ? 'unavailable' : 'not restricted'}.`,
+      `British Council USA OSR policy remains ${oneSkillRetakeUnavailable ? 'unavailable' : 'not restricted'}.`,
     );
   }
 
@@ -58,7 +75,7 @@ async function main(): Promise<void> {
   if (GITHUB_OUTPUT) {
     await fs.appendFile(
       GITHUB_OUTPUT,
-      `changed=${changed}\nunavailable=${observation.oneSkillRetakeUnavailable}\n`,
+      `changed=${changed}\nunavailable=${oneSkillRetakeUnavailable}\nobservation=${observation.status}\n`,
       'utf8',
     );
   }
@@ -70,7 +87,8 @@ async function main(): Promise<void> {
         '',
         `- Source: ${BRITISH_COUNCIL_US_OSR_SOURCE}`,
         `- Read via: ${BRITISH_COUNCIL_US_OSR_MONITOR}`,
-        `- Warning active: ${observation.oneSkillRetakeUnavailable ? 'yes' : 'no'}`,
+        `- Source observation: ${observation.status}`,
+        `- Warning active: ${oneSkillRetakeUnavailable ? 'yes' : 'no'}`,
         `- Policy file changed: ${changed ? 'yes' : 'no'}`,
         '',
       ].join('\n'),

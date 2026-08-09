@@ -14,8 +14,17 @@ const REQUIRED_PAGE_ANCHORS = [
 ] as const;
 
 export interface BritishCouncilUsOsrObservation {
-  oneSkillRetakeUnavailable: boolean;
+  status: 'unavailable' | 'available' | 'unknown';
   normalizedText: string;
+}
+
+export function resolveBritishCouncilUsOsrWarning(
+  previous: boolean,
+  observation: BritishCouncilUsOsrObservation,
+): boolean {
+  if (observation.status === 'unavailable') return true;
+  if (observation.status === 'available') return false;
+  return previous;
 }
 
 /**
@@ -35,18 +44,30 @@ export function inspectBritishCouncilUsOsrPage(
     );
   }
 
-  const countryMentions = [...normalizedText.matchAll(/\b(?:usa|united states(?: of america)?)\b/g)];
-  const oneSkillRetakeUnavailable = countryMentions.some((mention) => {
+  const countryMentions = [
+    ...normalizedText.matchAll(/\b(?:usa|united states(?: of america)?)\b/g),
+  ];
+  const contexts = countryMentions
+    .map((mention) => {
     const start = Math.max(0, (mention.index ?? 0) - 300);
     const end = Math.min(normalizedText.length, (mention.index ?? 0) + mention[0].length + 160);
-    const context = normalizedText.slice(start, end);
-    return (
-      context.includes('one skill retake') &&
-      /(?:not\s+(?:currently\s+)?available|currently\s+not\s+available|unavailable)/.test(
-        context,
-      )
-    );
-  });
+      return normalizedText.slice(start, end);
+    })
+    .filter((context) => context.includes('one skill retake'));
 
-  return { oneSkillRetakeUnavailable, normalizedText };
+  const unavailable = contexts.some((context) =>
+    /(?:not\s+(?:currently\s+)?available|currently\s+not\s+available|unavailable|cannot\s+be\s+booked|can't\s+be\s+booked|not\s+eligible|ineligible|not\s+offered|does\s+not\s+offer|not\s+supported)/.test(
+      context,
+    ),
+  );
+  if (unavailable) return { status: 'unavailable', normalizedText };
+
+  const available = contexts.some((context) =>
+    /(?:is\s+(?:now\s+|currently\s+)?available|can\s+be\s+booked|(?:is\s+)?eligible|(?:is\s+)?offered)/.test(
+      context,
+    ),
+  );
+  if (available) return { status: 'available', normalizedText };
+
+  return { status: 'unknown', normalizedText };
 }
