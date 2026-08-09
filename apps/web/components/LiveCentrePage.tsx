@@ -172,7 +172,7 @@ export function LiveCentrePage({ initialCentre }: { initialCentre: Centre }) {
             rel="noreferrer nofollow"
             className="inline-flex items-center gap-2 rounded-md border border-brand bg-white px-4 py-2.5 font-medium text-brand hover:bg-brand-soft"
           >
-            {resultsActionLabel(centre)} <span aria-hidden>↗</span>
+            {resultsActionLabel()} <span aria-hidden>↗</span>
           </a>
         )}
         {rawScoreUrl && (

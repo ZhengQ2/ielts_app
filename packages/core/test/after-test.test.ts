@@ -76,17 +76,8 @@ test('IELTS USA has its own Test Taker Portal', () => {
   );
 });
 
-test('results action mentions OSR only with evidence, except for the China mini-program', () => {
-  assert.equal(resultsActionLabel(centre('IELTS USA', 'US')), 'Check results');
-  assert.equal(
-    resultsActionLabel(centre('British Council', 'CA', 'OSR Centre', true)),
-    'Results & One Skill Retake',
-  );
-  assert.equal(
-    resultsActionLabel(centre('British Council', 'CN')),
-    'Results & One Skill Retake',
-    'the official China mini-program combines results and eligibility-based OSR registration',
-  );
+test('every results action includes One Skill Retake', () => {
+  assert.equal(resultsActionLabel(), 'Results & One Skill Retake');
 });
 
 test('British Council and IELTS USA use the raw-score request form', () => {
