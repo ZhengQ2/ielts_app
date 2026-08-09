@@ -2,8 +2,11 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import {
   ALPHA3_TO_ALPHA2,
+  assertOsrListingCoverage,
+  chinaOsrVenueSlugs,
   parseCentreSlugs,
   parseCountryOptions,
+  parseChinaOsrVenueLabels,
   parseOsrCentreSlugs,
   parseOsrOnlyCentreSlugs,
 } from '../src/country-index.ts';
@@ -102,6 +105,57 @@ test('generic OSR explanatory text does not mark an ordinary centre', () => {
       <span>Ordinary centre</span>
     </a>`;
   assert.deepEqual(parseOsrCentreSlugs(html), []);
+});
+
+const CHINA_OSR_FIXTURE = `
+  <section>
+    <ul><li><span>British Council 北京雅思机考考点</span></li></ul>
+    <ul><li>British Council 北京国贸商圈雅思机考考点</li></ul>
+    <ul><li>British Council 北京嘉华世达(崇文门)雅思机考考点</li></ul>
+    <ul><li>British Council 上海雅思机考考点</li></ul>
+    <ul><li>British Council 广州雅思机考考点&nbsp;</li></ul>
+    <ul><li>British Council 重庆雅思机考考点</li></ul>
+  </section>`;
+
+test('the official China IELTS OSR list maps its six venues to existing slugs', () => {
+  assert.equal(parseChinaOsrVenueLabels(CHINA_OSR_FIXTURE).length, 6);
+  assert.deepEqual(chinaOsrVenueSlugs(CHINA_OSR_FIXTURE), [
+    'british-council-beijing',
+    'british-council-beijing-cbd-venue',
+    'british-council-beijing-chivast-education-international-chongwenmen',
+    'british-council-shanghai',
+    'british-council-guangzhou',
+    'british-council-chongqing',
+  ]);
+});
+
+test('an unknown or missing China OSR venue blocks the supplement', () => {
+  assert.throws(
+    () => chinaOsrVenueSlugs('<li>British Council 新城市雅思机考考点</li>'),
+    /looks wrong/,
+  );
+  assert.throws(
+    () =>
+      chinaOsrVenueSlugs(
+        CHINA_OSR_FIXTURE.replace('<ul><li>British Council 重庆雅思机考考点</li></ul>', ''),
+      ),
+    /expected 6/,
+  );
+  assert.throws(
+    () =>
+      chinaOsrVenueSlugs(
+        CHINA_OSR_FIXTURE.replace(
+          'British Council 重庆雅思机考考点',
+          'British Council 新城市雅思机考考点',
+        ),
+      ),
+    /unmapped OSR venue/,
+  );
+});
+
+test('a systemic IELTS.org OSR parser drop is rejected', () => {
+  assert.doesNotThrow(() => assertOsrListingCoverage(1200, 1900));
+  assert.throws(() => assertOsrListingCoverage(0, 1900), /dataset write is blocked/);
 });
 
 test('a bare "/test-centres" breadcrumb link is not read as a slug', () => {

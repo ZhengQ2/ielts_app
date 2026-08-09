@@ -28,6 +28,7 @@ import { localizeCentres } from './localize.ts';
 import {
   diffDatasets,
   diffSafetyProblems,
+  osrSafetyProblems,
   renderDiff,
   summariseDiff,
   type DatasetDiff,
@@ -294,6 +295,10 @@ async function main(): Promise<void> {
     }
     console.log(`  ${fromIndex}/${parsed.length} centres matched to a country this way`);
     console.log(`  ${osrCentres}/${parsed.length} source pages marked for One Skill Retake`);
+    console.log(
+      `    ${index.stats.globalOsrSlugs} global IELTS.org badge(s), ` +
+        `${index.stats.chinaSupplementalOsrSlugs} official China supplement(s)`,
+    );
     console.log(`  ${osrOnlySourcePages}/${parsed.length} source pages marked OSR-only before dedup`);
 
     // The listing's own dropdown names every country it offers ("Indonesia",
@@ -531,10 +536,10 @@ async function main(): Promise<void> {
   for (const c of diff.removed.slice(0, 15)) console.log(`    - ${c.name}`);
   for (const c of diff.changed.slice(0, 15)) console.log(`    ~ ${c.name} (${c.fields.join(', ')})`);
 
-  const diffProblems = diffSafetyProblems(
-    diff,
-    previous?.centres.length ?? 0,
-  );
+  const diffProblems = [
+    ...diffSafetyProblems(diff, previous?.centres.length ?? 0),
+    ...osrSafetyProblems(previous, dataset),
+  ];
   const knownSourceProblems: string[] = [];
   if (quality.report.summary.failedPreviouslyKnownSourcePages) {
     knownSourceProblems.push(
