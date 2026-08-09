@@ -144,9 +144,9 @@ export function diffSafetyProblems(
 }
 
 /**
- * Refuse a systemic OSR availability drop even when centre identity is stable.
- * A renamed badge class otherwise looks like an ordinary field update and can
- * silently clear hundreds of centres in the scheduled crawl.
+ * Refuse a systemic OSR availability drop whether marked centres remain or disappear.
+ * A parser regression can otherwise look like ordinary field updates or centre
+ * removals and silently clear OSR coverage in the scheduled crawl.
  */
 export function osrSafetyProblems(
   previous: CentreDataset | null,
@@ -159,8 +159,7 @@ export function osrSafetyProblems(
   const removals = previous.centres.filter(
     (centre) =>
       centre.offersOneSkillRetake &&
-      nextById.has(centre.id) &&
-      !nextById.get(centre.id)!.offersOneSkillRetake,
+      !nextById.get(centre.id)?.offersOneSkillRetake,
   ).length;
   if (removals === 0) return [];
 

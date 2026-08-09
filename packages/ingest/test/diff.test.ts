@@ -267,6 +267,23 @@ test('OSR additions cannot hide removals from different stable centres', () => {
   ]);
 });
 
+test('deleted OSR centres count as removals', () => {
+  const retained = Array.from({ length: 995 }, (_, index) =>
+    centre({ id: `ordinary-${index}`, offersOneSkillRetake: false }),
+  );
+  const previous = wrap([
+    ...retained,
+    ...Array.from({ length: 5 }, (_, index) =>
+      centre({ id: `osr-${index}`, offersOneSkillRetake: true }),
+    ),
+  ]);
+  const next = wrap(retained);
+
+  assert.deepEqual(osrSafetyProblems(previous, next), [
+    'OSR availability was removed from all 5 previously marked centres',
+  ]);
+});
+
 test('a small OSR correction and the first import remain automatic', () => {
   const previous = wrap(
     Array.from({ length: 100 }, (_, index) =>
