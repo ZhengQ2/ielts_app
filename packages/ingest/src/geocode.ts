@@ -1102,6 +1102,8 @@ export class GeocodeCache implements ProviderContext {
   private amapBudgetWarned = false;
   private mapplsBudgetWarned = false;
   private unavailableProviders = new Set<GeoCandidate['source']>();
+  /** Keys already refreshed during this process; force never double-bills one key. */
+  private refreshedKeys = new Set<string>();
 
   /** Billable requests actually issued, and lookups served from disk. */
   readonly stats = {
@@ -1205,14 +1207,19 @@ export class GeocodeCache implements ProviderContext {
     this.dirty = false;
   }
 
-  async lookup(provider: GeocodeProvider, q: GeocodeQuery): Promise<GeocodeCandidateRaw[]> {
+  async lookup(
+    provider: GeocodeProvider,
+    q: GeocodeQuery,
+    options: { force?: boolean } = {},
+  ): Promise<GeocodeCandidateRaw[]> {
     if (this.disabled) return [];
     if (this.unavailableProviders.has(provider.name)) return [];
     const key = `v${MAPPING_VERSION}|${provider.name}|${q.country ?? ''}|${
       q.structured ? `s:${JSON.stringify(q.structured)}` : q.text
     }${q.placeId ? `|pid:${q.placeId}` : ''}`;
     const hit = this.map.get(key);
-    if (hit !== undefined) {
+    const forceRefresh = options.force === true && !this.refreshedKeys.has(key);
+    if (hit !== undefined && !forceRefresh) {
       const results = Array.isArray(hit) ? hit : hit.results;
       const cachedAt = Array.isArray(hit) ? Number.NaN : Date.parse(hit.cachedAt);
       const emptyResultIsFresh =
@@ -1260,6 +1267,7 @@ export class GeocodeCache implements ProviderContext {
       results: result,
       cachedAt: new Date(this.now()).toISOString(),
     });
+    if (options.force) this.refreshedKeys.add(key);
     this.dirty = true;
     return result;
   }

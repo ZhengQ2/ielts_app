@@ -18,16 +18,17 @@ export function DetailMap({ lat, lng, precise, label, color }: Props) {
   const [loadError, setLoadError] = useState(false);
 
   useEffect(() => {
-    if (!container.current) return;
+    const containerElement = container.current;
+    if (!containerElement) return;
     let cancelled = false;
     let marker: google.maps.marker.AdvancedMarkerElement | null = null;
     let circle: google.maps.Circle | null = null;
 
     importGoogleMapLibraries()
       .then(({ maps, marker: markerLibrary }) => {
-        if (cancelled || !container.current) return;
+        if (cancelled) return;
         const position = { lat, lng };
-        const map = new maps.Map(container.current, {
+        const map = new maps.Map(containerElement, {
           center: position,
           zoom: precise ? 15 : 11,
           mapId: googleMapId,
@@ -70,7 +71,7 @@ export function DetailMap({ lat, lng, precise, label, color }: Props) {
       cancelled = true;
       if (marker) marker.map = null;
       circle?.setMap(null);
-      container.current?.replaceChildren();
+      containerElement.replaceChildren();
     };
   }, [lat, lng, precise, label, color]);
 

@@ -73,8 +73,8 @@ export function offeringFilterSearch(
   deliveryModes: readonly OfferingDeliveryMode[],
 ): string {
   const params = new URLSearchParams();
-  for (const module of testModules) {
-    params.append(TEST_MODULE_PARAM, module);
+  for (const testModule of testModules) {
+    params.append(TEST_MODULE_PARAM, testModule);
   }
   for (const category of testCategories) {
     params.append(TEST_CATEGORY_PARAM, category);

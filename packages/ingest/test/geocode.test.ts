@@ -452,6 +452,39 @@ test('empty provider results expire instead of becoming permanent', async () => 
   assert.equal(cache.stats.cacheHits, 0);
 });
 
+test('force refresh bypasses a positive cache entry once per run', async () => {
+  let calls = 0;
+  const provider = {
+    name: 'nominatim' as const,
+    async lookup() {
+      calls++;
+      return [{
+        lat: 40 + calls,
+        lng: -79.4,
+        coordinateSystem: 'WGS84' as const,
+        precision: 'street' as const,
+        echoedPostcode: null,
+        echoedCity: 'Toronto',
+        echoedRegion: 'Ontario',
+        echoedCountry: 'CA',
+      }];
+    },
+  };
+  const cache = new GeocodeCache();
+  const query = { text: '1 Test Street', country: 'CA' };
+
+  const original = await cache.lookup(provider, query);
+  const cached = await cache.lookup(provider, query);
+  const refreshed = await cache.lookup(provider, query, { force: true });
+  const refreshedAgain = await cache.lookup(provider, query, { force: true });
+
+  assert.equal(original[0]?.lat, 41);
+  assert.equal(cached[0]?.lat, 41);
+  assert.equal(refreshed[0]?.lat, 42);
+  assert.equal(refreshedAgain[0]?.lat, 42);
+  assert.equal(calls, 2);
+});
+
 test('local providers are gated by both country and configured key', (t) => {
   const originalAmap = process.env.AMAP_API_KEY;
   const originalMappls = process.env.MAPPLS_API_KEY;

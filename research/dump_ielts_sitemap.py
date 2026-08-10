@@ -40,10 +40,15 @@ LOC_RE = re.compile(r"<loc>\s*([^<]+?)\s*</loc>", re.I)
 TC_RE = re.compile(r"<loc>\s*https?://ielts\.org/test-centres/([^<\s]+?)\s*</loc>", re.I)
 
 
-def fetch(url: str, timeout: int = 30) -> str:
+def fetch(url: str, required_suffix: str, timeout: int = 30) -> str:
     req = urllib.request.Request(url, headers={"User-Agent": UA})
     with urllib.request.urlopen(req, timeout=timeout) as r:
-        return r.read().decode("utf-8", "replace")
+        body = r.read().decode("utf-8", "replace")
+    if not body.rstrip().endswith(required_suffix):
+        raise RuntimeError(
+            f"truncated response: expected document to end with {required_suffix}"
+        )
+    return body
 
 
 def sub_sitemaps(index_xml: str):
@@ -99,7 +104,7 @@ def main():
     args = ap.parse_args()
     print(f"[*] index: {INDEX}")
     try:
-        idx = fetch(INDEX)
+        idx = fetch(INDEX, "</sitemapindex>")
     except Exception as e:
         sys.exit(f"failed to fetch index: {e}")
 
@@ -118,7 +123,7 @@ def main():
         m = re.search(r"-p(\d+)\.xml", url)
         page = m.group(1) if m else "x"
         try:
-            xml = fetch(url)
+            xml = fetch(url, "</urlset>")
         except Exception as e:
             print(f"    [!] p{page} fetch failed: {e}")
             failures.append(f"p{page}: {e}")

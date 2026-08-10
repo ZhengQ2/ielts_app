@@ -104,13 +104,15 @@ export default function CentreMap({
   }, [centres, selectedId]);
 
   useEffect(() => {
-    if (!container.current || map.current) return;
+    const containerElement = container.current;
+    const markerStore = markers.current;
+    if (!containerElement || map.current) return;
     let cancelled = false;
 
     importGoogleMapLibraries()
       .then(({ maps }) => {
-        if (cancelled || !container.current) return;
-        const instance = new maps.Map(container.current, {
+        if (cancelled) return;
+        const instance = new maps.Map(containerElement, {
           center: { lat: 18, lng: 5 },
           zoom: 2,
           minZoom: 2,
@@ -178,12 +180,12 @@ export default function CentreMap({
       clusterer.current?.clearMarkers();
       clusterer.current?.setMap(null);
       clusterer.current = null;
-      for (const marker of markers.current.values()) marker.map = null;
-      markers.current.clear();
+      for (const marker of markerStore.values()) marker.map = null;
+      markerStore.clear();
       popup.current?.close();
       popup.current = null;
       map.current = null;
-      container.current?.replaceChildren();
+      containerElement.replaceChildren();
     };
   }, []);
 

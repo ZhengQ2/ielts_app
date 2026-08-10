@@ -225,17 +225,6 @@ async function runIosSimulatorSearch(): Promise<void> {
     ['simctl', 'install', device.udid, appBundle],
     { env: environment, maxBuffer: 10_000_000 },
   );
-  await execFile(
-    'xcrun',
-    [
-      'simctl',
-      'launch',
-      '--console',
-      device.udid,
-      'net.zhengqiu.ielts.apple-map-audit',
-    ],
-    { env: environment, maxBuffer: 20_000_000 },
-  );
   const container = (
     await execFile(
       'xcrun',
@@ -249,17 +238,34 @@ async function runIosSimulatorSearch(): Promise<void> {
       { env: environment, maxBuffer: 10_000_000 },
     )
   ).stdout.trim();
-  await fs.copyFile(
-    path.join(
-      container,
-      'Documents/apple-map-pilot-raw-ios.json',
-    ),
-    rawFile,
+  const simulatorRawFile = path.join(
+    container,
+    'Documents/apple-map-pilot-raw-ios.json',
   );
+  await fs.mkdir(path.dirname(simulatorRawFile), { recursive: true });
+  try {
+    // Uninstalling keeps the simulator run deterministic, then this restores
+    // the portable artifact so fingerprint-matched searches can be reused.
+    await fs.copyFile(rawFile, simulatorRawFile);
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error;
+  }
+  await execFile(
+    'xcrun',
+    [
+      'simctl',
+      'launch',
+      '--console',
+      device.udid,
+      'net.zhengqiu.ielts.apple-map-audit',
+    ],
+    { env: environment, maxBuffer: 20_000_000 },
+  );
+  await fs.copyFile(simulatorRawFile, rawFile);
 }
 
 const raw = JSON.parse(await fs.readFile(rawFile, 'utf8')) as {
-  version: 1;
+  version: number;
   generatedAt: string;
   records: AppleCentreSearchResult[];
 };

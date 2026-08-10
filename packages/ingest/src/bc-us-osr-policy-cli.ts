@@ -100,6 +100,11 @@ async function main(): Promise<void> {
   }
 
   console.log(`Policy file: ${path.relative(REPO_ROOT, POLICY_FILE)}`);
+  if (!source.trusted) {
+    throw new Error(
+      'No authoritative British Council observation was obtained. The prior warning was preserved; manual review is required.',
+    );
+  }
 }
 
 async function readPolicySource(): Promise<{

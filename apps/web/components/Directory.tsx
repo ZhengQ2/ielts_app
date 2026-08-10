@@ -160,7 +160,10 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
         // The coordinate stays in browser memory. It is used only to order the
         // current result set and is never sent to the directory service.
         pageScrollBeforeFilter.current = window.scrollY;
+        setQuery('');
+        setSearchLocation(null);
         setUserLocation({ lat: coords.latitude, lng: coords.longitude });
+        setSelectedId(null);
         setSort(null);
         setGeolocationStatus('ready');
       },
@@ -267,20 +270,6 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
     testCategories,
     deliveryModes,
   };
-  const preOsrResults = useMemo(
-    () => filterCentres(centres, preOsrFilter),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [
-      centres,
-      query,
-      searchLocation,
-      country,
-      operators,
-      testModules,
-      testCategories,
-      deliveryModes,
-    ],
-  );
   const oneSkillRetakeCount = useMemo(
     () =>
       filterCentres(centres, {
@@ -364,7 +353,6 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
   // cleared) — reset it rather than silently keep an unusable value around.
   useEffect(() => {
     if (!priceCurrency) setMaxPrice(null);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [priceCurrency]);
 
   const filteredResults = useMemo(() => {
@@ -607,6 +595,8 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
               updateFilter(() => {
                 setQuery(selection.label);
                 setSearchLocation(selection);
+                setUserLocation(null);
+                setGeolocationStatus('idle');
                 setSelectedId(null);
                 setSort(null);
               })
