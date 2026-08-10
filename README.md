@@ -78,17 +78,13 @@ The script builds the app, deploys `infra/aws-static-site.yml`, syncs the export
 CloudFront. Override `AWS_REGION`, `STACK_NAME`, `DOMAIN_NAME`, `ZONE_NAME`, or `HOSTED_ZONE_ID`
 only when deploying a different environment. CloudFront certificates require `us-east-1`.
 
-The `Monitor British Council USA OSR policy` GitHub Action checks the official British Council
-guidance every six hours. It fails closed when the page no longer resembles the expected OSR
-guidance, and changes the warning only when the intact page adds or removes the USA restriction.
-Because British Council rejects direct non-browser HTTP clients, the monitor reads that exact
-public source URL through the documented, rate-limited Jina Reader transport; the policy feed
-records both URLs, and British Council remains the sole authority for the claim.
-When the policy changes, the action uploads only `/data/after-test-policy.json` and invalidates
-that CloudFront path. The hosting stack creates a GitHub OpenID Connect role restricted to this
-repository's `main` branch and that single S3 object, so GitHub stores no long-lived AWS key. Run
-one normal `npm run deploy:aws` after merging infrastructure changes to provision the role before
-the scheduled monitor can publish a policy change.
+The `Monitor British Council USA OSR policy` GitHub Action performs an advisory check every six
+hours. British Council normally rejects non-browser HTTP clients, so the fallback reads the exact
+public source URL through the documented, rate-limited Jina Reader transport. That representation
+is not treated as authoritative: when it suggests a policy change, or the wording is unknown, the
+workflow opens or refreshes a GitHub issue for browser verification. It never edits or deploys the
+production policy automatically. After verification, update
+`packages/core/data/after-test-policy.json` and deploy through the normal reviewed release process.
 
 ## Rebuilding the dataset
 

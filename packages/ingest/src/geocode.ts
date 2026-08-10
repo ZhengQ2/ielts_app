@@ -1104,6 +1104,8 @@ export class GeocodeCache implements ProviderContext {
   private unavailableProviders = new Set<GeoCandidate['source']>();
   /** Keys already refreshed during this process; force never double-bills one key. */
   private refreshedKeys = new Set<string>();
+  /** Concurrent callers for the same provider query share one transport request. */
+  private inFlight = new Map<string, Promise<GeocodeCandidateRaw[]>>();
 
   /** Billable requests actually issued, and lookups served from disk. */
   readonly stats = {
@@ -1213,14 +1215,24 @@ export class GeocodeCache implements ProviderContext {
     options: { force?: boolean } = {},
   ): Promise<GeocodeCandidateRaw[]> {
     if (this.disabled) return [];
-    if (this.unavailableProviders.has(provider.name)) return [];
     const key = `v${MAPPING_VERSION}|${provider.name}|${q.country ?? ''}|${
       q.structured ? `s:${JSON.stringify(q.structured)}` : q.text
     }${q.placeId ? `|pid:${q.placeId}` : ''}`;
     const hit = this.map.get(key);
-    const forceRefresh = options.force === true && !this.refreshedKeys.has(key);
-    if (hit !== undefined && !forceRefresh) {
-      const results = Array.isArray(hit) ? hit : hit.results;
+    const cachedResults = hit === undefined ? undefined : Array.isArray(hit) ? hit : hit.results;
+    const forceRequested = options.force === true;
+    const pending = this.inFlight.get(key);
+    if (pending) {
+      if (forceRequested) this.refreshedKeys.add(key);
+      return pending;
+    }
+    const forceAlreadyAttempted = forceRequested && this.refreshedKeys.has(key);
+    if (forceAlreadyAttempted) {
+      if (cachedResults !== undefined) this.stats.cacheHits++;
+      return cachedResults ?? [];
+    }
+    if (hit !== undefined && !forceRequested) {
+      const results = cachedResults ?? [];
       const cachedAt = Array.isArray(hit) ? Number.NaN : Date.parse(hit.cachedAt);
       const emptyResultIsFresh =
         results.length > 0 ||
@@ -1229,10 +1241,36 @@ export class GeocodeCache implements ProviderContext {
         this.stats.cacheHits++;
         return results;
       }
-      // Legacy empty arrays had no age and are therefore treated as expired.
-      this.map.delete(key);
-      this.dirty = true;
+      // Preserve an expired entry until a replacement request succeeds. It is
+      // still a safer fallback than silently discarding known coordinates when
+      // a provider or request budget is temporarily unavailable.
     }
+
+    // Reserve before the first await so concurrent forced lookups cannot both
+    // consume paid quota. A failed refresh is attempted at most once per run.
+    if (forceRequested) this.refreshedKeys.add(key);
+
+    const fallback = (): GeocodeCandidateRaw[] => {
+      if (cachedResults !== undefined) this.stats.cacheHits++;
+      return cachedResults ?? [];
+    };
+    if (this.unavailableProviders.has(provider.name)) return fallback();
+
+    const request = this.refreshLookup(provider, q, key, fallback);
+    this.inFlight.set(key, request);
+    try {
+      return await request;
+    } finally {
+      if (this.inFlight.get(key) === request) this.inFlight.delete(key);
+    }
+  }
+
+  private async refreshLookup(
+    provider: GeocodeProvider,
+    q: GeocodeQuery,
+    key: string,
+    fallback: () => GeocodeCandidateRaw[],
+  ): Promise<GeocodeCandidateRaw[]> {
 
     // Paid-provider budgets are consumed inside each transport attempt so a
     // retry can never exceed the hard ceiling.
@@ -1249,7 +1287,7 @@ export class GeocodeCache implements ProviderContext {
       // poisons the cache permanently — the next run would skip the lookup and
       // silently leave the centre unlocated.
       if (err instanceof ProviderBudgetExhaustedError) {
-        return [];
+        return fallback();
       } else if (err instanceof ProviderUnavailableError) {
         this.unavailableProviders.add(provider.name);
         console.warn(
@@ -1260,14 +1298,13 @@ export class GeocodeCache implements ProviderContext {
           `    ${provider.name} failed (not cached): ${(err as Error).message}`,
         );
       }
-      return [];
+      return fallback();
     }
 
     this.map.set(key, {
       results: result,
       cachedAt: new Date(this.now()).toISOString(),
     });
-    if (options.force) this.refreshedKeys.add(key);
     this.dirty = true;
     return result;
   }

@@ -485,6 +485,75 @@ test('force refresh bypasses a positive cache entry once per run', async () => {
   assert.equal(calls, 2);
 });
 
+test('failed force refresh preserves the last successful cached result', async () => {
+  let calls = 0;
+  const provider = {
+    name: 'nominatim' as const,
+    async lookup() {
+      calls++;
+      if (calls === 2) throw new Error('temporary transport failure');
+      return [{
+        lat: 43.65,
+        lng: -79.38,
+        coordinateSystem: 'WGS84' as const,
+        precision: 'street' as const,
+        echoedPostcode: null,
+        echoedCity: 'Toronto',
+        echoedRegion: 'Ontario',
+        echoedCountry: 'CA',
+      }];
+    },
+  };
+  const cache = new GeocodeCache();
+  const query = { text: '1 Cached Street', country: 'CA' };
+
+  const original = await cache.lookup(provider, query);
+  const fallback = await cache.lookup(provider, query, { force: true });
+  const fallbackAgain = await cache.lookup(provider, query, { force: true });
+
+  assert.deepEqual(fallback, original);
+  assert.deepEqual(fallbackAgain, original);
+  assert.equal(calls, 2);
+});
+
+test('concurrent force refreshes share one provider request', async () => {
+  let calls = 0;
+  let releaseRefresh: (() => void) | undefined;
+  const refreshStarted = new Promise<void>((resolve) => {
+    releaseRefresh = resolve;
+  });
+  const provider = {
+    name: 'nominatim' as const,
+    async lookup() {
+      calls++;
+      if (calls === 2) await refreshStarted;
+      return [{
+        lat: 43 + calls,
+        lng: -79.38,
+        coordinateSystem: 'WGS84' as const,
+        precision: 'street' as const,
+        echoedPostcode: null,
+        echoedCity: 'Toronto',
+        echoedRegion: 'Ontario',
+        echoedCountry: 'CA',
+      }];
+    },
+  };
+  const cache = new GeocodeCache();
+  const query = { text: '1 Shared Street', country: 'CA' };
+  await cache.lookup(provider, query);
+
+  const first = cache.lookup(provider, query, { force: true });
+  const second = cache.lookup(provider, query, { force: true });
+  await Promise.resolve();
+  assert.equal(calls, 2);
+  releaseRefresh?.();
+  const [firstResult, secondResult] = await Promise.all([first, second]);
+
+  assert.deepEqual(firstResult, secondResult);
+  assert.equal(calls, 2);
+});
+
 test('local providers are gated by both country and configured key', (t) => {
   const originalAmap = process.env.AMAP_API_KEY;
   const originalMappls = process.env.MAPPLS_API_KEY;

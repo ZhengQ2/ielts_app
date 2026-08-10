@@ -141,22 +141,26 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
   const [viewport, setViewport] = useState<MapViewport | null>(null);
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [geolocationStatus, setGeolocationStatus] = useState<
-    'idle' | 'requesting' | 'ready' | 'error'
+    'idle' | 'requesting' | 'ready' | 'error' | 'update_error'
   >('idle');
   const [listLimit, setListLimit] = useState(LIST_PAGE_SIZE);
   const [lifeSkillsHovered, setLifeSkillsHovered] = useState(false);
   const [lifeSkillsNotePinned, setLifeSkillsNotePinned] = useState(false);
   const pageScrollBeforeFilter = useRef<number | null>(null);
+  const geolocationRequestId = useRef(0);
 
   const requestUserLocation = () => {
+    const requestId = ++geolocationRequestId.current;
+    const updatingExistingLocation = userLocation !== null;
     if (!navigator.geolocation) {
-      setGeolocationStatus('error');
+      setGeolocationStatus(updatingExistingLocation ? 'update_error' : 'error');
       return;
     }
 
     setGeolocationStatus('requesting');
     navigator.geolocation.getCurrentPosition(
       ({ coords }) => {
+        if (requestId !== geolocationRequestId.current) return;
         // The coordinate stays in browser memory. It is used only to order the
         // current result set and is never sent to the directory service.
         pageScrollBeforeFilter.current = window.scrollY;
@@ -167,12 +171,17 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
         setSort(null);
         setGeolocationStatus('ready');
       },
-      () => setGeolocationStatus('error'),
+      () => {
+        if (requestId !== geolocationRequestId.current) return;
+        if (!updatingExistingLocation) setUserLocation(null);
+        setGeolocationStatus(updatingExistingLocation ? 'update_error' : 'error');
+      },
       { enableHighAccuracy: false, maximumAge: 300_000, timeout: 5_000 },
     );
   };
 
   const clearUserLocation = () => {
+    geolocationRequestId.current++;
     pageScrollBeforeFilter.current = window.scrollY;
     setUserLocation(null);
     setSort(null);
@@ -593,6 +602,7 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
             }
             onCitySelect={(selection) =>
               updateFilter(() => {
+                geolocationRequestId.current++;
                 setQuery(selection.label);
                 setSearchLocation(selection);
                 setUserLocation(null);
@@ -611,11 +621,11 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
             >
               {geolocationStatus === 'requesting'
                 ? 'Finding your location…'
-                : geolocationStatus === 'ready'
+                : userLocation
                   ? 'Update my location'
                   : 'Use my location'}
             </button>
-            {geolocationStatus === 'ready' && (
+            {userLocation && (
               <button
                 type="button"
                 onClick={clearUserLocation}
@@ -628,6 +638,8 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
               {geolocationStatus === 'ready' &&
                 'Approximate location ready for distance sorting.'}
               {geolocationStatus === 'error' && 'Location unavailable. Search by city instead.'}
+              {geolocationStatus === 'update_error' &&
+                'Could not update; continuing to use your previous location.'}
             </span>
           </div>
         </div>

@@ -290,7 +290,11 @@ const queryErrors = records.reduce(
   (count, record) => count + record.transportErrors.length,
   0,
 );
-const candidateCount = raw.records.reduce(
+const currentRawRecords = sample.flatMap((centre) => {
+  const record = byId.get(centre.id);
+  return record ? [record] : [];
+});
+const candidateCount = currentRawRecords.reduce(
   (count, record) =>
     count +
     record.searches.reduce(

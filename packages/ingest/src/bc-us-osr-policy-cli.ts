@@ -10,9 +10,6 @@ import {
 } from './bc-us-osr-policy.ts';
 
 const POLICY_FILE = path.join(DATA_DIR, 'after-test-policy.json');
-const MONITORED_CLAIM =
-  'IELTS One Skill Retake is currently not available for tests taken in the USA.';
-
 interface PolicyFile {
   version: number;
   britishCouncilUnitedStates: {
@@ -24,8 +21,28 @@ interface PolicyFile {
 }
 
 async function main(): Promise<void> {
-  const source = await readPolicySource();
-  const observation = inspectBritishCouncilUsOsrPage(source.body);
+  let source: Awaited<ReturnType<typeof readPolicySource>>;
+  try {
+    source = await readPolicySource();
+  } catch (error) {
+    console.warn(
+      `Neither the British Council origin nor the advisory proxy could be read: ${error instanceof Error ? error.message : String(error)}`,
+    );
+    source = {
+      body: '',
+      trusted: false,
+      transport: 'unavailable',
+    };
+  }
+  let observation: ReturnType<typeof inspectBritishCouncilUsOsrPage>;
+  let inspectionError: string | null = null;
+  try {
+    observation = inspectBritishCouncilUsOsrPage(source.body);
+  } catch (error) {
+    inspectionError = error instanceof Error ? error.message : String(error);
+    observation = { status: 'unknown', normalizedText: '' };
+    console.warn(inspectionError);
+  }
   const previousText = await fs.readFile(POLICY_FILE, 'utf8');
   const previous = JSON.parse(previousText) as PolicyFile;
   if (
@@ -33,51 +50,34 @@ async function main(): Promise<void> {
   ) {
     throw new Error('Existing British Council USA OSR policy is missing or invalid');
   }
-  const oneSkillRetakeUnavailable = resolveBritishCouncilUsOsrWarning(
-    previous.britishCouncilUnitedStates.oneSkillRetakeUnavailable,
+  const currentUnavailable =
+    previous.britishCouncilUnitedStates.oneSkillRetakeUnavailable;
+  // Even an intact proxy rendering is advisory rather than authoritative. The
+  // monitor therefore never mutates production policy: it only asks for human
+  // review when the observed wording is unknown or disagrees with the current
+  // state. A direct origin response is also reviewed manually so the scheduled
+  // workflow has one predictable, auditable behaviour.
+  const observedUnavailable = resolveBritishCouncilUsOsrWarning(
+    currentUnavailable,
     observation,
-    source.trusted,
   );
-  const next: PolicyFile = {
-    version: 1,
-    britishCouncilUnitedStates: {
-      oneSkillRetakeUnavailable,
-      sourceUrl: BRITISH_COUNCIL_US_OSR_SOURCE,
-      monitorUrl: BRITISH_COUNCIL_US_OSR_MONITOR,
-      monitoredClaim: MONITORED_CLAIM,
-    },
-  };
-  const nextText = `${JSON.stringify(next, null, 2)}\n`;
-  const changed = previousText !== nextText;
+  const reviewRequired =
+    observation.status === 'unknown' || observedUnavailable !== currentUnavailable;
 
   if (!source.trusted) {
-    console.warn(
-      `The official page was unavailable. The proxy observation is advisory only; preserving the previous ${oneSkillRetakeUnavailable ? 'unavailable' : 'not restricted'} state.`,
-    );
-  } else if (observation.status === 'unknown') {
-    console.warn(
-      `British Council USA OSR wording was not recognized; preserving the previous ${oneSkillRetakeUnavailable ? 'unavailable' : 'not restricted'} state.`,
-    );
+    console.warn('The official page was unavailable; the proxy observation is advisory only.');
   }
-
-  if (changed) {
-    const temporaryFile = `${POLICY_FILE}.tmp`;
-    await fs.writeFile(temporaryFile, nextText, 'utf8');
-    await fs.rename(temporaryFile, POLICY_FILE);
-    console.log(
-      `British Council USA OSR policy changed to ${oneSkillRetakeUnavailable ? 'unavailable' : 'not restricted'}.`,
-    );
+  if (reviewRequired) {
+    console.warn('The observation requires manual review; the policy file was not changed.');
   } else {
-    console.log(
-      `British Council USA OSR policy remains ${oneSkillRetakeUnavailable ? 'unavailable' : 'not restricted'}.`,
-    );
+    console.log('The observation agrees with the current policy; no review is required.');
   }
 
   const { GITHUB_OUTPUT, GITHUB_STEP_SUMMARY } = process.env;
   if (GITHUB_OUTPUT) {
     await fs.appendFile(
       GITHUB_OUTPUT,
-      `changed=${changed}\nunavailable=${oneSkillRetakeUnavailable}\nobservation=${observation.status}\ntrusted=${source.trusted}\n`,
+      `review_required=${reviewRequired}\ncurrent_unavailable=${currentUnavailable}\nobservation=${observation.status}\nauthoritative=${source.trusted}\n`,
       'utf8',
     );
   }
@@ -89,10 +89,12 @@ async function main(): Promise<void> {
         '',
         `- Source: ${BRITISH_COUNCIL_US_OSR_SOURCE}`,
         `- Read via: ${source.transport}`,
-        `- Authoritative response: ${source.trusted ? 'yes' : 'no; prior state preserved'}`,
+        `- Authoritative response: ${source.trusted ? 'yes' : 'no; proxy observation only'}`,
         `- Source observation: ${observation.status}`,
-        `- Warning active: ${oneSkillRetakeUnavailable ? 'yes' : 'no'}`,
-        `- Policy file changed: ${changed ? 'yes' : 'no'}`,
+        ...(inspectionError ? [`- Inspection error: ${inspectionError}`] : []),
+        `- Current warning active: ${currentUnavailable ? 'yes' : 'no'}`,
+        `- Manual review required: ${reviewRequired ? 'yes' : 'no'}`,
+        '- Policy file changed: no (this workflow is advisory only)',
         '',
       ].join('\n'),
       'utf8',
@@ -100,11 +102,6 @@ async function main(): Promise<void> {
   }
 
   console.log(`Policy file: ${path.relative(REPO_ROOT, POLICY_FILE)}`);
-  if (!source.trusted) {
-    throw new Error(
-      'No authoritative British Council observation was obtained. The prior warning was preserved; manual review is required.',
-    );
-  }
 }
 
 async function readPolicySource(): Promise<{
