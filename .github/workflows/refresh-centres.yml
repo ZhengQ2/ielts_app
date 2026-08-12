@@ -63,8 +63,12 @@ jobs:
           MAPPLS_API_KEY: ${{ secrets.MAPPLS_API_KEY }}
         run: |
           # The existing country-listing pass also records IELTS.org's One
-          # Skill Retake badge and source-card format for every source page,
-          # including centres first discovered by this run. Dedup then prevents
+          # Skill Retake badge, source-card format and operator-specific IELTS
+          # Online booking cards for every country. Online availability is
+          # generated from current IELTS.org results, with parser and mass-drop
+          # gates blocking unsafe rewrites rather than relying on older partner
+          # marketing pages. This includes centres first discovered by the
+          # same run. Dedup then prevents
           # an OSR-only page from hiding a merged full-test offering. The same
           # pass supplements British Council's six mainland-China OSR venues
           # from the official China IELTS page because the global finder omits

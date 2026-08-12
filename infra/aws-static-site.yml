@@ -178,6 +178,7 @@ Resources:
               - Effect: Allow
                 Action:
                   - dynamodb:DeleteItem
+                  - dynamodb:GetItem
                   - dynamodb:PutItem
                   - dynamodb:Scan
                 Resource: !GetAtt CentreOverridesTable.Arn
@@ -203,11 +204,20 @@ Resources:
           import json
           import math
           import os
+          import re
           import time
           from datetime import datetime, timezone
-          from urllib.parse import unquote
+          from urllib.parse import unquote, urlsplit
+          from uuid import uuid4
 
           import boto3
+          from botocore.exceptions import ClientError
+
+          KNOWN_COUNTRY_OR_REGION_CODES = {
+              "AE", "AG", "AL", "AM", "AR", "AT", "AU", "AW", "AZ", "BA", "BB", "BD", "BE", "BG", "BH", "BN", "BO", "BR", "BS", "BT", "BW", "BY", "BZ", "CA", "CH", "CI", "CL", "CM", "CN", "CO", "CR", "CW", "CY", "CZ", "DE", "DK", "DM", "DO", "DZ", "EC", "EE", "EG", "ES", "ET", "FI", "FJ", "FR", "GB", "GD", "GE", "GG", "GH", "GM", "GP", "GR", "GT", "GY", "HK", "HN", "HR", "HT", "HU", "ID", "IE", "IL", "IM", "IN", "IQ", "IR", "IS", "IT", "JE", "JM", "JO", "JP", "KE", "KG", "KH", "KI", "KN", "KR", "KW", "KZ", "LA", "LB", "LC", "LK", "LT", "LU", "LV", "LY", "MA", "MD", "ME", "MF", "MG", "MK", "MM", "MN", "MO", "MQ", "MT", "MU", "MV", "MW", "MX", "MY", "MZ", "NA", "NC", "NG", "NI", "NL", "NO", "NP", "NR", "NZ", "OM", "PA", "PE", "PF", "PG", "PH", "PK", "PL", "PS", "PT", "PW", "PY", "QA", "RE", "RO", "RS", "RW", "SA", "SB", "SC", "SE", "SG", "SI", "SK", "SL", "SN", "SR", "SV", "SY", "TG", "TH", "TJ", "TL", "TN", "TO", "TR", "TT", "TV", "TW", "TZ", "UA", "UG", "US", "UY", "UZ", "VA", "VC", "VE", "VN", "VU", "WS", "XK", "YE", "ZA", "ZM", "ZW"
+          }
+          MAX_PUBLIC_FEED_RESPONSE_BYTES = 5500000
+          PUBLIC_FEED_WRITE_LOCK_ID = "__public_feed_write_lock__"
 
           s3 = boto3.client("s3")
           dynamodb = boto3.client("dynamodb")
@@ -251,6 +261,7 @@ Resources:
                       output.append({
                           "centreId": item["centreId"]["S"],
                           "patch": json.loads(item["patchJson"]["S"]),
+                          "created": item.get("recordType", {}).get("S") == "created",
                           "updatedAt": item["updatedAt"]["S"],
                           "updatedBy": item["updatedBy"]["S"],
                       })
@@ -258,9 +269,15 @@ Resources:
                       continue
               return output
 
-          def merged_feed():
+          def merged_feed(stored=None):
               base = base_feed()
-              patches = {item["centreId"]: item["patch"] for item in stored_overrides()}
+              if stored is None:
+                  stored = stored_overrides()
+              patches = {
+                  item["centreId"]: item["patch"]
+                  for item in stored
+                  if not item.get("created")
+              }
               centres = []
               for centre in base.get("centres", []):
                   merged = {**centre, **patches.get(centre.get("id"), {})}
@@ -268,7 +285,71 @@ Resources:
                   if merged.get("isPublishable") is False and not merged.get("futureOpening"):
                       continue
                   centres.append(merged)
+              for item in stored:
+                  if not item.get("created"):
+                      continue
+                  centre = {**item["patch"], "id": item["centreId"]}
+                  if centre.get("isPublishable") is False and not centre.get("futureOpening"):
+                      continue
+                  centres.append(centre)
               return {**base, "count": len(centres), "centres": centres}
+
+          def assert_public_feed_fits(centre_id, value, created):
+              stored = [
+                  item for item in stored_overrides()
+                  if item.get("centreId") != centre_id
+              ]
+              if value is not None:
+                  stored.append({
+                      "centreId": centre_id,
+                      "patch": value,
+                      "created": created,
+                      "updatedAt": "prospective",
+                      "updatedBy": "prospective",
+                  })
+              prospective = response(
+                  200,
+                  merged_feed(stored),
+                  "public,max-age=60,s-maxage=60",
+              )
+              payload_bytes = len(
+                  json.dumps(prospective, separators=(",", ":")).encode("utf-8")
+              )
+              if payload_bytes > MAX_PUBLIC_FEED_RESPONSE_BYTES:
+                  raise ValueError(
+                      "this change would make the public centre feed too large; "
+                      "deploy a compacted base dataset before adding more data"
+                  )
+
+          def acquire_public_feed_write_lock(identity):
+              now = int(time.time())
+              token = str(uuid4())
+              dynamodb.put_item(
+                  TableName=table,
+                  Item={
+                      "centreId": {"S": PUBLIC_FEED_WRITE_LOCK_ID},
+                      "recordType": {"S": "write_lock"},
+                      "updatedAt": {"S": datetime.now(timezone.utc).isoformat()},
+                      "updatedBy": {"S": identity},
+                      "lockToken": {"S": token},
+                      "expiresAt": {"N": str(now + 30)},
+                  },
+                  ConditionExpression="attribute_not_exists(centreId) OR expiresAt < :now",
+                  ExpressionAttributeValues={":now": {"N": str(now)}},
+              )
+              return token
+
+          def release_public_feed_write_lock(token):
+              try:
+                  dynamodb.delete_item(
+                      TableName=table,
+                      Key={"centreId": {"S": PUBLIC_FEED_WRITE_LOCK_ID}},
+                      ConditionExpression="lockToken = :token",
+                      ExpressionAttributeValues={":token": {"S": token}},
+                  )
+              except ClientError as error:
+                  if error.response.get("Error", {}).get("Code") != "ConditionalCheckFailedException":
+                      raise
 
           def claims(event):
               return (
@@ -293,6 +374,56 @@ Resources:
                   (item for item in base_feed().get("centres", []) if item.get("id") == centre_id),
                   None,
               )
+
+          def stored_record_by_id(centre_id):
+              result = dynamodb.get_item(
+                  TableName=table,
+                  Key={"centreId": {"S": centre_id}},
+                  ConsistentRead=True,
+              )
+              item = result.get("Item")
+              if not item:
+                  return None
+              try:
+                  return {
+                      "centreId": item["centreId"]["S"],
+                      "patch": json.loads(item["patchJson"]["S"]),
+                      "created": item.get("recordType", {}).get("S") == "created",
+                      "updatedAt": item["updatedAt"]["S"],
+                  }
+              except (KeyError, TypeError, ValueError):
+                  return None
+
+          def store_record(centre_id, value, identity, created, expected_updated_at=None):
+              updated_at = datetime.now(timezone.utc).isoformat()
+              item = {
+                  "centreId": {"S": centre_id},
+                  "patchJson": {"S": json.dumps(value, separators=(",", ":"))},
+                  "updatedAt": {"S": updated_at},
+                  "updatedBy": {"S": identity},
+              }
+              if created:
+                  item["recordType"] = {"S": "created"}
+              request = {
+                  "TableName": table,
+                  "Item": item,
+              }
+              if expected_updated_at is None:
+                  request["ConditionExpression"] = "attribute_not_exists(centreId)"
+              else:
+                  request["ConditionExpression"] = "#updatedAt = :expected"
+                  request["ExpressionAttributeNames"] = {"#updatedAt": "updatedAt"}
+                  request["ExpressionAttributeValues"] = {
+                      ":expected": {"S": expected_updated_at},
+                  }
+              dynamodb.put_item(**request)
+              return {
+                  "centreId": centre_id,
+                  "patch": value,
+                  "created": created,
+                  "updatedAt": updated_at,
+                  "updatedBy": identity,
+              }
 
           def require_object(value, path):
               if not isinstance(value, dict):
@@ -501,6 +632,74 @@ Resources:
               validate_centre(merged)
               return patch
 
+          def validate_created_centre(centre, expected_id=None):
+              validate_centre(centre)
+              if len(json.dumps(centre)) > 300000:
+                  raise ValueError("centre is too large")
+              centre_id = centre.get("id")
+              if expected_id is not None and centre_id != expected_id:
+                  raise ValueError("centre id cannot be changed")
+              if not centre_id.startswith("manual-"):
+                  raise ValueError("a manually added centre id must start with manual-")
+              if centre.get("ieltsOrgSlug") != "added":
+                  raise ValueError("a manually added centre must use the reserved added route")
+              if centre.get("operator") not in {"IDP", "British Council", "IELTS USA"}:
+                  raise ValueError("a manually added centre requires a known operator")
+              country = centre.get("address", {}).get("country")
+              if country not in KNOWN_COUNTRY_OR_REGION_CODES:
+                  raise ValueError("a manually added centre requires an ISO two-letter country code")
+              city = centre.get("address", {}).get("city")
+              if not isinstance(city, str) or not city.strip():
+                  raise ValueError("a manually added centre requires a city")
+              geo = centre.get("geo")
+              if geo is not None and (
+                  geo.get("source") != "admin"
+                  or geo.get("verification") != "verified"
+                  or geo.get("precision") not in {"street", "rooftop"}
+                  or "admin" not in geo.get("evidencePaths", [])
+                  or geo.get("provenance", {}).get("origin") != "administrator"
+                  or geo.get("provenance", {}).get("displayRights") != "any_basemap"
+              ):
+                  raise ValueError("a manually added coordinate requires verified administrator provenance")
+              sources = centre.get("sources", [])
+              if not sources or not any(
+                  source.get("source") == "Administrator"
+                  and source.get("externalSlug") == centre_id
+                  for source in sources
+              ):
+                  raise ValueError("a manually added centre requires administrator source evidence")
+              urls = [source.get("url") for source in sources]
+              if centre.get("bookingUrl"):
+                  urls.append(centre["bookingUrl"])
+              urls.extend(centre.get("contact", {}).get("websites", []))
+              for value in urls:
+                  try:
+                      parsed = urlsplit(value)
+                      trusted = (
+                          parsed.scheme == "https"
+                          and bool(parsed.hostname)
+                          and not parsed.username
+                          and not parsed.password
+                      )
+                  except (TypeError, ValueError):
+                      trusted = False
+                  if not trusted:
+                      raise ValueError("manually added centre URLs must use HTTPS")
+              if centre.get("oneSkillRetakeOnly") and not centre.get("offersOneSkillRetake"):
+                  raise ValueError("an OSR-only centre must offer One Skill Retake")
+              if not centre.get("oneSkillRetakeOnly") and not any(
+                  isinstance(offering.get("priceText"), str) and offering["priceText"].strip()
+                  for offering in centre.get("offerings", [])
+              ):
+                  raise ValueError("a full-test centre requires at least one source-published price")
+              if any(
+                  offering.get("module") == "life_skills"
+                  and offering.get("category") != "ukvi_selt"
+                  for offering in centre.get("offerings", [])
+              ):
+                  raise ValueError("Life Skills must use the UKVI / SELT category")
+              return centre
+
           def handler(event, context):
               method = event.get("requestContext", {}).get("http", {}).get("method", "GET")
               path = event.get("rawPath", "")
@@ -529,42 +728,117 @@ Resources:
               if method == "GET" and path == "/internal-api/overrides":
                   return response(200, {"overrides": stored_overrides()})
 
+              identity = claims(event).get("email") or claims(event).get("sub") or "unknown"
+
+              if method == "POST" and path == "/internal-api/centres":
+                  try:
+                      payload = json.loads(event.get("body") or "{}")
+                      centre = validate_created_centre(payload.get("centre"))
+                      centre_id = centre["id"]
+                      if centre_by_id(centre_id) is not None:
+                          return response(409, {"error": "a centre with this generated id already exists"})
+                  except (TypeError, ValueError, json.JSONDecodeError) as error:
+                      return response(400, {"error": str(error)})
+                  lock_token = None
+                  try:
+                      lock_token = acquire_public_feed_write_lock(identity)
+                      assert_public_feed_fits(centre_id, centre, True)
+                      return response(201, store_record(centre_id, centre, identity, True))
+                  except ValueError as error:
+                      return response(409, {"error": str(error)})
+                  except ClientError as error:
+                      if error.response.get("Error", {}).get("Code") == "ConditionalCheckFailedException":
+                          message = (
+                              "the centre was created by another administrator"
+                              if lock_token
+                              else "another administrator is saving; retry this change"
+                          )
+                          return response(409, {"error": message})
+                      raise
+                  finally:
+                      if lock_token:
+                          release_public_feed_write_lock(lock_token)
+
               centre_id = unquote((event.get("pathParameters") or {}).get("id", ""))
               if not centre_id:
                   return response(400, {"error": "centre id is required"})
 
               if method == "DELETE":
-                  dynamodb.delete_item(
-                      TableName=table,
-                      Key={"centreId": {"S": centre_id}},
-                  )
+                  expected_updated_at = (event.get("headers") or {}).get("if-match")
+                  if not expected_updated_at:
+                      return response(428, {"error": "the saved version is required"})
+                  lock_token = None
+                  try:
+                      lock_token = acquire_public_feed_write_lock(identity)
+                      assert_public_feed_fits(centre_id, None, False)
+                      dynamodb.delete_item(
+                          TableName=table,
+                          Key={"centreId": {"S": centre_id}},
+                          ConditionExpression="#updatedAt = :expected",
+                          ExpressionAttributeNames={"#updatedAt": "updatedAt"},
+                          ExpressionAttributeValues={":expected": {"S": expected_updated_at}},
+                      )
+                  except ClientError as error:
+                      if error.response.get("Error", {}).get("Code") == "ConditionalCheckFailedException":
+                          message = (
+                              "the centre changed after you opened it; reload before deleting"
+                              if lock_token
+                              else "another administrator is saving; retry this change"
+                          )
+                          return response(409, {"error": message})
+                      raise
+                  except ValueError as error:
+                      return response(409, {"error": str(error)})
+                  finally:
+                      if lock_token:
+                          release_public_feed_write_lock(lock_token)
                   return response(204)
 
               if method == "PUT":
                   try:
                       payload = json.loads(event.get("body") or "{}")
-                      patch = validate_patch(centre_id, payload.get("patch"))
+                      expected_updated_at = payload.get("expectedUpdatedAt")
+                      if expected_updated_at is not None and not isinstance(expected_updated_at, str):
+                          raise ValueError("expectedUpdatedAt must be a string or null")
+                      stored = stored_record_by_id(centre_id)
+                      if stored and stored.get("created"):
+                          patch = validate_created_centre(payload.get("centre"), centre_id)
+                          created = True
+                      else:
+                          patch = validate_patch(centre_id, payload.get("patch"))
+                          created = False
                   except LookupError as error:
                       return response(404, {"error": str(error)})
                   except (TypeError, ValueError, json.JSONDecodeError) as error:
                       return response(400, {"error": str(error)})
-                  identity = claims(event).get("email") or claims(event).get("sub") or "unknown"
-                  updated_at = datetime.now(timezone.utc).isoformat()
-                  dynamodb.put_item(
-                      TableName=table,
-                      Item={
-                          "centreId": {"S": centre_id},
-                          "patchJson": {"S": json.dumps(patch, separators=(",", ":"))},
-                          "updatedAt": {"S": updated_at},
-                          "updatedBy": {"S": identity},
-                      },
-                  )
-                  return response(200, {
-                      "centreId": centre_id,
-                      "patch": patch,
-                      "updatedAt": updated_at,
-                      "updatedBy": identity,
-                  })
+                  lock_token = None
+                  try:
+                      lock_token = acquire_public_feed_write_lock(identity)
+                      assert_public_feed_fits(centre_id, patch, created)
+                      return response(
+                          200,
+                          store_record(
+                              centre_id,
+                              patch,
+                              identity,
+                              created,
+                              expected_updated_at,
+                          ),
+                      )
+                  except ValueError as error:
+                      return response(409, {"error": str(error)})
+                  except ClientError as error:
+                      if error.response.get("Error", {}).get("Code") == "ConditionalCheckFailedException":
+                          message = (
+                              "the centre changed after you opened it; reload before saving"
+                              if lock_token
+                              else "another administrator is saving; retry this change"
+                          )
+                          return response(409, {"error": message})
+                      raise
+                  finally:
+                      if lock_token:
+                          release_public_feed_write_lock(lock_token)
 
               return response(404, {"error": "route not found"})
 
@@ -578,8 +852,10 @@ Resources:
         AllowHeaders:
           - authorization
           - content-type
+          - if-match
         AllowMethods:
           - GET
+          - POST
           - PUT
           - DELETE
           - OPTIONS
@@ -661,6 +937,15 @@ Resources:
     Properties:
       ApiId: !Ref AdminApi
       RouteKey: 'PUT /internal-api/centres/{id}'
+      AuthorizationType: JWT
+      AuthorizerId: !Ref AdminApiAuthorizer
+      Target: !Sub 'integrations/${AdminApiIntegration}'
+
+  AdminCreateCentreRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref AdminApi
+      RouteKey: 'POST /internal-api/centres'
       AuthorizationType: JWT
       AuthorizerId: !Ref AdminApiAuthorizer
       Target: !Sub 'integrations/${AdminApiIntegration}'

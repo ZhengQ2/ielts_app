@@ -28,8 +28,8 @@ export function usesBritishCouncilChinaMiniProgram(centre: PortalCentre): boolea
 }
 
 /**
- * Candidate results portals vary by operator and, for IDP India and both
- * operators in China, by the country where the test was taken.
+ * Candidate results portals vary by operator and, for the IDP India candidate
+ * system (India and Bhutan) and both operators in China, by test country.
  */
 export function resultPortalUrl(centre: PortalCentre): string | null {
   const country = centre.address.country?.toUpperCase();
@@ -40,7 +40,7 @@ export function resultPortalUrl(centre: PortalCentre): string | null {
   }
   if (centre.operator === 'IDP') {
     if (country === 'CN') return IDP_CHINA_RESULTS;
-    if (country === 'IN') return IDP_INDIA_RESULTS;
+    if (country === 'IN' || country === 'BT') return IDP_INDIA_RESULTS;
     return IDP_RESULTS;
   }
   return null;
@@ -72,7 +72,7 @@ export function rawScoreInquiryUrl(centre: InquiryCentre): string | null {
     'Candidate number:',
     'Test date (YYYY-MM-DD):',
     `Test centre: ${centre.name}`,
-    `Country of test: ${centre.address.country ?? ''}`,
+    `Country or region of test: ${centre.address.country ?? ''}`,
     'Test module (Academic / General Training / Life Skills):',
     'Test category (Standard IELTS / UKVI or SELT):',
     'Modules requested:',

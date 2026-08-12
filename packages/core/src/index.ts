@@ -14,3 +14,7 @@ export * from './corrections.ts';
 export * from './offerings.ts';
 export * from './publication.ts';
 export * from './location-review.ts';
+export * from './osr-eligibility.ts';
+export * from './test-availability.ts';
+export * from './manual-centre.ts';
+export * from './price.ts';

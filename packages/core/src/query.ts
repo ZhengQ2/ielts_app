@@ -12,6 +12,7 @@ import { haversineKm, isPinnable } from './geo.ts';
 import { normaliseText } from './text.ts';
 import { offeringCategory, offeringModule } from './offerings.ts';
 import { isDirectoryVisible } from './publication.ts';
+import { countryName } from './country-names.ts';
 
 /**
  * Filtering and sorting for the directory. Lives in core, not in the web app,
@@ -350,7 +351,7 @@ export function countryFacets(centres: Centre[]): { country: string; count: numb
   }
   return [...counts.entries()]
     .map(([country, count]) => ({ country, count }))
-    .sort((a, b) => b.count - a.count || a.country.localeCompare(b.country));
+    .sort((a, b) => countryName(a.country).localeCompare(countryName(b.country), 'en'));
 }
 
 /**

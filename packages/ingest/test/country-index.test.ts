@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import {
   ALPHA3_TO_ALPHA2,
+  assertOnlineListingCoverage,
   assertOsrListingCoverage,
   chinaOsrVenueSlugs,
   parseCentreSlugs,
@@ -9,6 +10,7 @@ import {
   parseChinaOsrVenueLabels,
   parseOsrCentreSlugs,
   parseOsrOnlyCentreSlugs,
+  parseOnlineTestOperators,
 } from '../src/country-index.ts';
 
 /**
@@ -105,6 +107,64 @@ test('generic OSR explanatory text does not mark an ordinary centre', () => {
       <span>Ordinary centre</span>
     </a>`;
   assert.deepEqual(parseOsrCentreSlugs(html), []);
+});
+
+test('IELTS Online operators come only from current IELTS.org booking cards', () => {
+  const hongKong = `
+    <div class="booking-card">
+      <a href="https://ieltsregistration.britishcouncil.org/online-exam-choose?examType=ac">
+        <h5 class="booking-card__title">IELTS Online</h5>
+        <span>Book now with British Council</span>
+      </a>
+    </div>`;
+  const idp = `
+    <div class="booking-card">
+      <a href="https://book.ielts.idp.com/booking">
+        <h5>IELTS Online</h5>
+      </a>
+    </div>`;
+  assert.deepEqual(parseOnlineTestOperators(hongKong), ['British Council']);
+  assert.deepEqual(parseOnlineTestOperators(idp), ['IDP']);
+});
+
+test('an unrecognized IELTS Online destination blocks availability inference', () => {
+  assert.throws(
+    () => parseOnlineTestOperators(`
+      <div class="booking-card">
+        <a href="https://example.test/online"><h5>IELTS Online</h5></a>
+      </div>`),
+    /unrecognized booking destination/,
+  );
+});
+
+test('IELTS Online parser and mass-removal cliffs are blocked', () => {
+  const healthy = new Map([
+    ['British Council', new Set(Array.from({ length: 60 }, (_, index) => `B${index}`))],
+    ['IDP', new Set(Array.from({ length: 22 }, (_, index) => `I${index}`))],
+  ]) as Parameters<typeof assertOnlineListingCoverage>[0];
+  assert.doesNotThrow(() => assertOnlineListingCoverage(healthy));
+  assert.throws(
+    () => assertOnlineListingCoverage(new Map([
+      ['British Council', new Set()],
+      ['IDP', new Set()],
+    ])),
+    /expected at least 50/,
+  );
+  const previous = {
+    version: 1 as const,
+    source: 'https://ielts.org/test-centres' as const,
+    updatedAt: '2026-08-01',
+    operators: {
+      'British Council': [...healthy.get('British Council')!],
+      IDP: [...healthy.get('IDP')!],
+    },
+  };
+  const massDrop = new Map(healthy);
+  massDrop.set('IDP', new Set([...healthy.get('IDP')!].slice(0, 10)));
+  assert.throws(
+    () => assertOnlineListingCoverage(massDrop, previous),
+    /guarded write is blocked/,
+  );
 });
 
 const CHINA_OSR_FIXTURE = `

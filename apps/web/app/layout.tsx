@@ -4,7 +4,7 @@ import { dataset } from '@ielts-map/core/dataset';
 import { countryFacets, countryName } from '@ielts-map/core';
 import './globals.css';
 
-/** 'ALL' means the dataset spans every country IELTS.org lists. */
+/** 'ALL' means the dataset spans every country or region IELTS.org lists. */
 const countries = countryFacets(dataset.centres);
 const isWorldwide = countries.length > 1;
 const scopeLabel = isWorldwide

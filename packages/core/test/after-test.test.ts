@@ -54,9 +54,13 @@ test('British Council candidates in China receive the official WeChat mini-progr
   );
 });
 
-test('IDP candidates use the country-specific India and China portals', () => {
+test('IDP candidates use the India-system and China-specific portals', () => {
   assert.equal(
     resultPortalUrl(centre('IDP', 'IN')),
+    'https://www.ieltsidpindia.com/access/candidatelogin',
+  );
+  assert.equal(
+    resultPortalUrl(centre('IDP', 'BT')),
     'https://www.ieltsidpindia.com/access/candidatelogin',
   );
   assert.equal(

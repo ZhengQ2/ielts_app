@@ -15,6 +15,7 @@ interface Props {
   centre: CentreWithDistance;
   selected?: boolean;
   detailFilterSearch: string;
+  displayMode?: 'full_test' | 'osr';
   onHover?: () => void;
   onSelect?: () => void;
 }
@@ -23,6 +24,7 @@ export function CentreCard({
   centre,
   selected,
   detailFilterSearch,
+  displayMode = 'full_test',
   onHover,
   onSelect,
 }: Props) {
@@ -30,6 +32,7 @@ export function CentreCard({
   const detailHref = centreDetailHref(
     centre.ieltsOrgSlug,
     detailFilterSearch,
+    centre.id,
   );
   return (
     <li
@@ -56,14 +59,18 @@ export function CentreCard({
 
       <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm">
         <span className="font-medium">
-          {centre.oneSkillRetakeOnly
+          {displayMode === 'osr'
+            ? 'One Skill Retake available'
+            : centre.oneSkillRetakeOnly
             ? 'One Skill Retake only'
             : centre.priceFromText !== null
             ? `from ${formatPublishedPrice(centre.priceFromText)}`
             : 'Price not published'}
         </span>
         <span className="text-muted">
-          {centre.oneSkillRetakeOnly
+          {displayMode === 'osr'
+            ? 'Check your test portal for dates and price'
+            : centre.oneSkillRetakeOnly
             ? 'No full IELTS test published'
             : deliveryModesIn(centre.offerings).map(formatDeliveryMode).join(' · ')}
         </span>

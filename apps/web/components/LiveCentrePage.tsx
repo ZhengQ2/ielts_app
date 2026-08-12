@@ -40,13 +40,32 @@ interface CentreFeed {
   centres: Centre[];
 }
 
-export function LiveCentrePage({ initialCentre }: { initialCentre: Centre }) {
+export function LiveCentrePage({
+  initialCentre,
+  initialFeedCentres,
+}: {
+  initialCentre: Centre;
+  initialFeedCentres?: Centre[];
+}) {
   const [centre, setCentre] = useState(initialCentre);
-  const [allCentres, setAllCentres] = useState<Centre[]>([]);
+  const [allCentres, setAllCentres] = useState<Centre[]>(initialFeedCentres ?? []);
   const [removed, setRemoved] = useState(false);
   const [showChinaAfterTest, setShowChinaAfterTest] = useState(false);
 
   useEffect(() => {
+    if (initialFeedCentres) {
+      setAllCentres(initialFeedCentres);
+      const updated = initialFeedCentres.find(
+        (candidate) => candidate.id === initialCentre.id,
+      );
+      if (updated) {
+        setCentre(updated);
+        setRemoved(false);
+      } else {
+        setRemoved(true);
+      }
+      return;
+    }
     const controller = new AbortController();
     fetch('/data/centres.json', { signal: controller.signal })
       .then((response) => {
@@ -64,7 +83,7 @@ export function LiveCentrePage({ initialCentre }: { initialCentre: Centre }) {
         // Keep the static source-backed record as the resilient fallback.
       });
     return () => controller.abort();
-  }, [initialCentre.id]);
+  }, [initialCentre, initialFeedCentres]);
 
   useEffect(() => {
     document.title = centreDocumentTitle(centre);
@@ -286,6 +305,7 @@ export function LiveCentrePage({ initialCentre }: { initialCentre: Centre }) {
         )}
         <LocationCorrectionReport
           centre={{
+            id: centre.id,
             name: centre.name,
             ieltsOrgSlug: centre.ieltsOrgSlug,
             sources: centre.sources,

@@ -1,4 +1,5 @@
 import type {
+  Centre,
   CentreFilter,
   OfferingDeliveryMode,
   TestCategory,
@@ -136,6 +137,15 @@ export function offeringFilterFromSearch(
   };
 }
 
-export function centreDetailHref(slug: string, filterSearch: string): string {
+export function centreDetailHref(
+  slug: string,
+  filterSearch: string,
+  centreId?: Centre['id'],
+): string {
+  if (slug === 'added' && centreId) {
+    const params = new URLSearchParams(filterSearch.replace(/^\?/, ''));
+    params.set('id', centreId);
+    return `/centres/added/?${params.toString()}`;
+  }
   return `/centres/${slug}${filterSearch}`;
 }

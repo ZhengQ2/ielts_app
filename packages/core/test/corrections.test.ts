@@ -5,6 +5,7 @@ import { correctionReportUrl, genericCorrectionReportUrl } from '../src/correcti
 test('centre correction reports are prefilled with identity, sources and review fields', () => {
   const url = new URL(
     correctionReportUrl({
+      id: 'idp-ielts-china-guangzhou-tianhe',
       name: 'IDP IELTS China Guangzhou Tianhe',
       ieltsOrgSlug: 'idp-ielts-china-guangzhou-tianhe',
       sources: [
@@ -37,6 +38,7 @@ test('location correction reports include the exact user-selected map coordinate
   const url = new URL(
     correctionReportUrl(
       {
+        id: 'idp-ielts-china-guangzhou-tianhe',
         name: 'IDP IELTS China Guangzhou Tianhe',
         ieltsOrgSlug: 'idp-ielts-china-guangzhou-tianhe',
         sources: [
@@ -73,6 +75,30 @@ test('location correction reports include the exact user-selected map coordinate
   assert.match(body, /IDP IELTS China Guangzhou Tianhe/);
   assert.match(body, /https:\/\/ielts\.org\/test-centres\/idp-ielts-china-guangzhou-tianhe/);
   assert.match(body, /### Evidence/);
+});
+
+test('manual-centre correction reports preserve the centre id in the public route', () => {
+  const url = new URL(
+    correctionReportUrl({
+      id: 'manual-cn-british-council-harbin-example',
+      name: 'Harbin Example IELTS Centre',
+      ieltsOrgSlug: 'added',
+      sources: [
+        {
+          source: 'Administrator',
+          externalSlug: 'manual-cn-british-council-harbin-example',
+          url: 'https://example.org/harbin-centre',
+          seenAt: '2026-08-12T00:00:00.000Z',
+          stillPresent: true,
+        },
+      ],
+    }),
+  );
+
+  assert.match(
+    url.searchParams.get('body') ?? '',
+    /https:\/\/ielts\.zhengqiu\.net\/centres\/added\/\?id=manual-cn-british-council-harbin-example/,
+  );
 });
 
 test('generic correction reports ask for the centre and supporting evidence', () => {

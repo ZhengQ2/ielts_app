@@ -56,7 +56,7 @@ export function FilteredCentreOfferings({ centre }: { centre: Centre }) {
     <CentreOfferingsTable
       offerings={projected?.offerings ?? []}
       filtered={Boolean(offeringFilter)}
-      clearHref={centreDetailHref(centre.ieltsOrgSlug, '')}
+      clearHref={centreDetailHref(centre.ieltsOrgSlug, '', centre.id)}
     />
   );
 }

@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "source": "https://ielts.org/test-centres",
+  "updatedAt": "2026-08-12",
+  "operators": {
+    "British Council": [
+      "AG", "AR", "AM", "AW", "AT", "AZ", "BS", "BH", "BB", "BE", "BZ", "BO",
+      "BR", "BG", "CL", "CO", "CR", "HR", "CW", "CY", "CZ", "DK", "DM", "DO",
+      "EC", "EG", "SV", "ET", "FI", "FR", "PF", "GE", "DE", "GR", "GD", "GP",
+      "GT", "GY", "HT", "HN", "HK", "HU", "IS", "IT", "JM", "JO", "LB", "LU",
+      "MQ", "MU", "MX", "MA", "MM", "NL", "NC", "NZ", "NI", "NO", "OM", "PS",
+      "PA", "PY", "PE", "PH", "PL", "PT", "QA", "RO", "RE", "KN", "LC", "MF",
+      "VC", "SK", "SI", "ZA", "ES", "LK", "SR", "SE", "CH", "TJ", "TT", "TN",
+      "TR", "UG", "UA", "UY", "VE", "ZM", "ZW"
+    ],
+    "IDP": [
+      "AT", "BE", "CA", "CY", "DK", "FI", "FR", "DE", "GR", "HU", "IE", "IT",
+      "JP", "NL", "NZ", "NO", "PL", "PT", "RO", "ES", "SE", "CH"
+    ]
+  }
+}

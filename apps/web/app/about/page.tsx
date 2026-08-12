@@ -35,7 +35,7 @@ export default function AboutPage() {
         <p>
           We read {stats.sitemapSlugs.toLocaleString()} centre pages worldwide
           {country === 'ALL' ? (
-            <>, attributed {stats.matchedCountry.toLocaleString()} of them to a country</>
+            <>, attributed {stats.matchedCountry.toLocaleString()} of them to a country or region</>
           ) : (
             <>
               {' '}
@@ -47,7 +47,7 @@ export default function AboutPage() {
           records.
         </p>
         <p>
-          Country comes from IELTS.org&rsquo;s own{' '}
+          Country or region comes from IELTS.org&rsquo;s own{' '}
           <span className="whitespace-nowrap">/test-centres?country=</span> listing — the
           operator&rsquo;s own filing, not a guess — with the page&rsquo;s address, booking link and
           phone number as a fallback for the rare slug that listing omits.
@@ -111,7 +111,7 @@ export default function AboutPage() {
         <p>
           Prices are what the source page published when we last crawled it, in whatever currency
           that centre quotes — we don&rsquo;t convert between currencies, so the price filter only
-          appears once you&rsquo;ve narrowed to one country. Prices change, and may exclude local
+          appears once you&rsquo;ve narrowed to one country or region. Prices change, and may exclude local
           tax. Treat them as a comparison aid, not a quote.
         </p>
         <p>
