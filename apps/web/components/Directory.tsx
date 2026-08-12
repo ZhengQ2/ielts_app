@@ -9,6 +9,7 @@ import {
 } from 'react';
 import dynamic from 'next/dynamic';
 import {
+  allAvailableCountryOrRegionCodes,
   countryFacets,
   countryName,
   offeringCategory,
@@ -17,11 +18,17 @@ import {
   filterCentres,
   geoWithinBounds,
   isDirectoryVisible,
+  isOsrDestinationCountryAllowed,
+  inPersonCountryOrRegionCodes,
+  onlineCountryOrRegionCodes,
   operatorFacets,
   priceFilterCurrencies,
   operatorShape,
   operatorStyle,
+  osrDestinationCountry,
+  osrEligibilityPolicy,
   sortCentres,
+  testAvailabilityForCountryOrRegion,
   type Centre,
   type CentreFilter,
   type GeoBounds,
@@ -62,6 +69,7 @@ type MapViewport = GeoBounds & {
 };
 
 const LIST_PAGE_SIZE = 40;
+type DirectoryMode = 'full_test' | 'osr';
 /**
  * Load the directory after the static page shell is visible. Previously the
  * complete dataset was serialized into the home page's React payload, making
@@ -119,6 +127,9 @@ export function Directory() {
 }
 
 function DirectoryView({ centres }: { centres: Centre[] }) {
+  const [directoryMode, setDirectoryMode] = useState<DirectoryMode>('full_test');
+  const [originalOperator, setOriginalOperator] = useState<Operator | ''>('');
+  const [originalCountry, setOriginalCountry] = useState('');
   const [query, setQuery] = useState('');
   const [country, setCountry] = useState('');
   const [searchLocation, setSearchLocation] = useState<CitySearchSelection | null>(null);
@@ -132,7 +143,6 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
   const [deliveryModes, setDeliveryModes] = useState<OfferingDeliveryMode[]>([
     ...DEFAULT_DELIVERY_MODES,
   ]);
-  const [oneSkillRetakeOnly, setOneSkillRetakeOnly] = useState(false);
   const [maxPrice, setMaxPrice] = useState<number | null>(null);
   // Null means "use the contextual default": name worldwide, distance once a
   // selected city hint or country supplies an origin. Any explicit menu choice
@@ -214,52 +224,178 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
     }
   }, [selectedId]);
 
-  const countryOptions = useMemo(() => countryFacets(centres), [centres]);
+  const osrPolicy = originalOperator
+    ? osrEligibilityPolicy(originalOperator, originalCountry)
+    : null;
+  const originalCountryOptions = useMemo(
+    () => {
+      if (!originalOperator || originalOperator === 'IELTS USA') return [];
+      const counts = new Map(
+        countryFacets(
+          centres.filter(
+            (centre) =>
+              centre.operator === originalOperator && !centre.oneSkillRetakeOnly,
+          ),
+        ).map(({ country: code, count }) => [code, count]),
+      );
+      const codes = [
+        ...new Set([
+          ...inPersonCountryOrRegionCodes(originalOperator),
+          ...counts.keys(),
+        ]),
+      ].sort((a, b) => countryName(a).localeCompare(countryName(b), 'en'));
+      return codes.map((code) => ({
+        country: code,
+        count: counts.get(code) ?? 0,
+      }));
+    },
+    [centres, originalOperator],
+  );
+  const osrReady = Boolean(
+    directoryMode === 'osr' &&
+      originalOperator &&
+      osrPolicy?.portabilitySupported &&
+      originalCountry,
+  );
+  const directoryCentres = useMemo(() => {
+    if (directoryMode === 'full_test') return centres;
+    if (!osrReady || !osrPolicy?.destinationOperator) return [];
+    return centres.filter(
+      (centre) =>
+        centre.offersOneSkillRetake &&
+        centre.operator === osrPolicy.destinationOperator &&
+        isOsrDestinationCountryAllowed(
+          originalOperator as Operator,
+          originalCountry,
+          centre.address.country ?? '',
+        ),
+    );
+  }, [centres, directoryMode, originalCountry, originalOperator, osrPolicy, osrReady]);
+  const effectiveCountry =
+    directoryMode === 'osr' && originalOperator
+      ? osrDestinationCountry(originalOperator, originalCountry, country)
+      : country || undefined;
+  const countryOptions = useMemo(() => {
+    if (directoryMode === 'osr') {
+      return countryFacets(directoryCentres).map((option) => ({
+        ...option,
+        online: false,
+      }));
+    }
+
+    const countedCentres = operators.length
+      ? directoryCentres.filter((centre) => operators.includes(centre.operator))
+      : directoryCentres;
+    const counts = new Map(
+      countryFacets(countedCentres).map(({ country: code, count }) => [code, count]),
+    );
+    const observedCodes = [...counts.keys()];
+    const codes = operators.length
+      ? [
+          ...new Set(
+            [
+              ...operators.flatMap((operator) => inPersonCountryOrRegionCodes(operator)),
+              ...operators.flatMap((operator) => onlineCountryOrRegionCodes(operator)),
+              ...observedCodes,
+            ],
+          ),
+        ].sort((a, b) => countryName(a).localeCompare(countryName(b), 'en'))
+      : [...new Set([...allAvailableCountryOrRegionCodes(), ...observedCodes])].sort((a, b) =>
+          countryName(a).localeCompare(countryName(b), 'en'),
+        );
+
+    return codes
+      .map((code) => ({
+        country: code,
+        count: counts.get(code) ?? 0,
+        online: Boolean(
+          testAvailabilityForCountryOrRegion(code)?.online.some(
+            ({ operator }) => operators.length === 0 || operators.includes(operator),
+          ),
+        ),
+      }))
+      .filter(({ count, online }) => count > 0 || online);
+  }, [directoryCentres, directoryMode, operators]);
+
+  // Changing the operator can remove the selected country when it has neither
+  // a directory centre nor an operator-matching Online option. Do not retain a
+  // hidden select value that would leave the directory looking inexplicably
+  // empty.
+  useEffect(() => {
+    if (
+      directoryMode === 'full_test' &&
+      country &&
+      !countryOptions.some((option) => option.country === country)
+    ) {
+      pageScrollBeforeFilter.current = window.scrollY;
+      setCountry('');
+    }
+  }, [country, countryOptions, directoryMode]);
   // Worldwide vs single-country changes what the page calls itself and
   // whether a country picker is worth showing at all.
   const worldwide = countryOptions.length > 1;
+  const selectedAvailability = useMemo(
+    () =>
+      directoryMode === 'full_test'
+        ? testAvailabilityForCountryOrRegion(country)
+        : null,
+    [country, directoryMode],
+  );
+  const onlineAvailability = useMemo(() => {
+    if (
+      !selectedAvailability ||
+      !testModules.includes('academic') ||
+      !testCategories.includes('standard') ||
+      !deliveryModes.includes('computer_delivered')
+    ) {
+      return [];
+    }
+    return selectedAvailability.online.filter(
+      ({ operator }) => operators.length === 0 || operators.includes(operator),
+    );
+  }, [deliveryModes, operators, selectedAvailability, testCategories, testModules]);
 
   const testModuleCounts = useMemo(
     () =>
       new Map(
         TEST_MODULE_OPTIONS.map(({ value }) => [
           value,
-          centres.filter((centre) =>
+          directoryCentres.filter((centre) =>
             centre.offerings.some(
               (offering) => offeringModule(offering) === value,
             ),
           ).length,
         ]),
       ),
-    [centres],
+    [directoryCentres],
   );
   const testCategoryCounts = useMemo(
     () =>
       new Map(
         TEST_CATEGORY_OPTIONS.map(({ value }) => [
           value,
-          centres.filter((centre) =>
+          directoryCentres.filter((centre) =>
             centre.offerings.some(
               (offering) => offeringCategory(offering) === value,
             ),
           ).length,
         ]),
       ),
-    [centres],
+    [directoryCentres],
   );
   const deliveryCounts = useMemo(
     () =>
       new Map(
         DELIVERY_OPTIONS.map(({ value }) => [
           value,
-          centres.filter((centre) =>
+          directoryCentres.filter((centre) =>
             centre.offerings.some(
               (offering) => offeringDeliveryMode(offering) === value,
             ),
           ).length,
         ]),
       ),
-    [centres],
+    [directoryCentres],
   );
   const availableTestModules = TEST_MODULE_OPTIONS.filter(
     ({ value }) => (testModuleCounts.get(value) ?? 0) > 0,
@@ -271,55 +407,27 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
   // A selected Google city is a distance origin, not a string filter. This
   // avoids depending on the source dataset's mixed city languages and
   // administrative levels while ordinary typed text still searches records.
-  const preOsrFilter: CentreFilter = {
+  const baseFilter: CentreFilter = {
     q: searchLocation ? undefined : query || undefined,
-    country: country || undefined,
-    operators: operators.length ? operators : undefined,
-    testModules,
-    testCategories,
-    deliveryModes,
+    country: effectiveCountry,
+    operators:
+      directoryMode === 'full_test' && operators.length ? operators : undefined,
+    testModules: directoryMode === 'full_test' ? testModules : undefined,
+    testCategories: directoryMode === 'full_test' ? testCategories : undefined,
+    deliveryModes: directoryMode === 'full_test' ? deliveryModes : undefined,
+    oneSkillRetake: directoryMode === 'osr' ? true : undefined,
   };
-  const oneSkillRetakeCount = useMemo(
-    () =>
-      filterCentres(centres, {
-        ...preOsrFilter,
-        oneSkillRetake: true,
-      }).length,
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [
-      centres,
-      query,
-      searchLocation,
-      country,
-      operators,
-      testModules,
-      testCategories,
-      deliveryModes,
-    ],
-  );
-  // A contextual filter can move to a market with no OSR centres (for example,
-  // IELTS USA). Clear the now-invisible feature filter so the new market does
-  // not misleadingly show zero results with no control available to undo it.
-  useEffect(() => {
-    if (oneSkillRetakeOnly && oneSkillRetakeCount === 0) {
-      setOneSkillRetakeOnly(false);
-    }
-  }, [oneSkillRetakeCount, oneSkillRetakeOnly]);
-  const prePriceFilter: CentreFilter = {
-    ...preOsrFilter,
-    oneSkillRetake:
-      oneSkillRetakeOnly && oneSkillRetakeCount > 0 ? true : undefined,
-  };
+  const prePriceFilter: CentreFilter = baseFilter;
   // Currencies present in the result set once everything except price is
   // applied. A raw number only means something within one currency — CAD 400
   // and IDR 400 are not remotely comparable — so the price control is only
   // ever shown when exactly one currency is in view (typically because a
   // country has been picked).
   const prePriceResults = useMemo(
-    () => filterCentres(centres, prePriceFilter),
+    () => filterCentres(directoryCentres, prePriceFilter),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [
-      centres,
+      directoryCentres,
       query,
       searchLocation,
       country,
@@ -327,7 +435,7 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
       testModules,
       testCategories,
       deliveryModes,
-      oneSkillRetakeOnly,
+      directoryMode,
     ],
   );
   // Use the same operator-neutral universe as the operator badges. A slider
@@ -335,10 +443,13 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
   // while its alternative operators are priced in EUR, making their counts
   // numerically incomparable.
   const priceCurrencies = useMemo(
-    () => priceFilterCurrencies(centres, prePriceFilter),
+    () =>
+      directoryMode === 'full_test'
+        ? priceFilterCurrencies(directoryCentres, prePriceFilter)
+        : [],
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [
-      centres,
+      directoryCentres,
       query,
       searchLocation,
       country,
@@ -369,10 +480,10 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
       ...prePriceFilter,
       maxPrice: priceCurrency ? (maxPrice ?? undefined) : undefined,
     };
-    return filterCentres(centres, filter);
+    return filterCentres(directoryCentres, filter);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    centres,
+    directoryCentres,
     query,
     searchLocation,
     country,
@@ -380,7 +491,7 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
     testModules,
     testCategories,
     deliveryModes,
-    oneSkillRetakeOnly,
+    directoryMode,
     maxPrice,
     priceCurrency,
   ]);
@@ -393,24 +504,22 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
   // choice remains visible so it can always be removed.
   const operatorOptions = useMemo(
     () =>
-      operatorFacets(centres, {
+      operatorFacets(directoryCentres, {
         q: searchLocation ? undefined : query || undefined,
-        country: country || undefined,
+        country: effectiveCountry,
         testModules,
         testCategories,
         deliveryModes,
-        oneSkillRetake: oneSkillRetakeOnly ? true : undefined,
         maxPrice: priceCurrency ? (maxPrice ?? undefined) : undefined,
       }),
     [
-      centres,
+      directoryCentres,
       query,
       searchLocation,
-      country,
+      effectiveCountry,
       testModules,
       testCategories,
       deliveryModes,
-      oneSkillRetakeOnly,
       maxPrice,
       priceCurrency,
     ],
@@ -422,7 +531,7 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
   // An explicitly selected city hint beats the map view centred on a chosen
   // country as the more deliberate signal of "distance from where".
   const distanceOrigin =
-    searchLocation?.center ?? userLocation ?? (country ? viewport?.center : undefined);
+    searchLocation?.center ?? userLocation ?? (effectiveCountry ? viewport?.center : undefined);
   const distanceOriginLabel = searchLocation
     ? 'Distance from search'
     : userLocation
@@ -444,7 +553,14 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
   // A deliberate text search is a list operation and may find an unlocated
   // centre anywhere in the world. Normal browsing stays tied to the map area.
   const searched = query.trim().length > 0;
-  const listResults = searched ? results : mapAreaResults;
+  const unlocatedCountryResults = effectiveCountry
+    ? results.filter((centre) => !centre.geo)
+    : [];
+  const listResults = searched
+    ? results
+    : effectiveCountry
+      ? [...mapAreaResults, ...unlocatedCountryResults]
+      : mapAreaResults;
   const visibleListResults = listResults.slice(0, listLimit);
 
   useLayoutEffect(() => {
@@ -462,7 +578,9 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
     testModules,
     testCategories,
     deliveryModes,
-    oneSkillRetakeOnly,
+    directoryMode,
+    originalOperator,
+    originalCountry,
     maxPrice,
     sort,
     userLocation,
@@ -543,7 +661,6 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
       setTestModules([...DEFAULT_TEST_MODULES]);
       setTestCategories([...DEFAULT_TEST_CATEGORIES]);
       setDeliveryModes([...DEFAULT_DELIVERY_MODES]);
-      setOneSkillRetakeOnly(false);
       setLifeSkillsHovered(false);
       setLifeSkillsNotePinned(false);
       setMaxPrice(null);
@@ -558,32 +675,177 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
       !sameSelection(testModules, DEFAULT_TEST_MODULES) ||
       !sameSelection(testCategories, DEFAULT_TEST_CATEGORIES) ||
       !sameSelection(deliveryModes, DEFAULT_DELIVERY_MODES) ||
-      oneSkillRetakeOnly ||
       maxPrice !== null,
   );
   const detailFilterSearch = useMemo(
     () =>
-      offeringFilterSearch(
-        testModules,
-        testCategories,
-        deliveryModes,
-      ),
-    [testModules, testCategories, deliveryModes],
+      directoryMode === 'full_test'
+        ? offeringFilterSearch(
+            testModules,
+            testCategories,
+            deliveryModes,
+          )
+        : '',
+    [directoryMode, testModules, testCategories, deliveryModes],
   );
+
+  const changeMode = (mode: DirectoryMode) => {
+    geolocationRequestId.current++;
+    setDirectoryMode(mode);
+    setOriginalOperator('');
+    setOriginalCountry('');
+    setQuery('');
+    setCountry('');
+    setSearchLocation(null);
+    setUserLocation(null);
+    setGeolocationStatus('idle');
+    setViewport(null);
+    setOperators([]);
+    setTestModules([...DEFAULT_TEST_MODULES]);
+    setTestCategories([...DEFAULT_TEST_CATEGORIES]);
+    setDeliveryModes([...DEFAULT_DELIVERY_MODES]);
+    setMaxPrice(null);
+    setSort(null);
+    setSelectedId(null);
+  };
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8">
       <div className="mb-6">
         <h1 className="text-2xl font-semibold tracking-tight">
-          IELTS test centres {worldwide ? 'worldwide' : `in ${countryName(centres[0]?.address.country)}`}
+          {directoryMode === 'full_test'
+            ? 'IELTS test centres worldwide'
+            : 'Find a One Skill Retake centre'}
         </h1>
         <p className="mt-1 text-sm text-muted">
-          {centres.length} official centres
-          {worldwide && ` across ${countryOptions.length} countries`}, compiled from IELTS.org and
-          deduplicated. Compare operator, format, price and location.
+          {directoryMode === 'full_test'
+            ? `${centres.length} official centres, compiled from IELTS.org and deduplicated. Compare operator, format, price and location.`
+            : 'Start with the administrator and country or region of your original full test. We will apply its OSR portability rule before showing destinations.'}
         </p>
       </div>
 
+      <div
+        className="mb-6 inline-flex rounded-lg border border-line bg-white p-1"
+        role="tablist"
+        aria-label="Test search type"
+      >
+        <button
+          type="button"
+          role="tab"
+          aria-selected={directoryMode === 'full_test'}
+          onClick={() => changeMode('full_test')}
+          className={`rounded-md px-4 py-2 text-sm font-medium ${
+            directoryMode === 'full_test' ? 'bg-brand text-white' : 'text-muted hover:text-ink'
+          }`}
+        >
+          Full IELTS test
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-selected={directoryMode === 'osr'}
+          onClick={() => changeMode('osr')}
+          className={`rounded-md px-4 py-2 text-sm font-medium ${
+            directoryMode === 'osr' ? 'bg-brand text-white' : 'text-muted hover:text-ink'
+          }`}
+        >
+          One Skill Retake
+        </button>
+      </div>
+
+      {directoryMode === 'osr' && (
+        <section className="mb-6 rounded-lg border border-line bg-white p-4" aria-labelledby="osr-origin-heading">
+          <h2 id="osr-origin-heading" className="font-medium">Your original full IELTS test</h2>
+          <p className="mt-1 text-sm text-muted">
+            Choose both fields so we can apply the known operator and country or region rules to
+            possible OSR destinations.
+          </p>
+          <div className="mt-4 grid gap-4 sm:grid-cols-2">
+            <label className="flex flex-col gap-1 text-sm">
+              <span className="font-medium">Full test operator</span>
+              <select
+                required
+                value={originalOperator}
+                onChange={(event) => {
+                  geolocationRequestId.current++;
+                  setOriginalOperator(event.target.value as Operator | '');
+                  setOriginalCountry('');
+                  setCountry('');
+                  setQuery('');
+                  setSearchLocation(null);
+                  setUserLocation(null);
+                  setGeolocationStatus('idle');
+                  setViewport(null);
+                  setSelectedId(null);
+                }}
+                className="rounded-md border border-line bg-white px-3 py-2 outline-none focus:border-brand"
+              >
+                <option value="">Choose operator</option>
+                <option value="British Council">British Council</option>
+                <option value="IDP">IDP</option>
+                <option value="IELTS USA">IELTS USA</option>
+              </select>
+            </label>
+            {originalOperator && originalOperator !== 'IELTS USA' && (
+              <label className="flex flex-col gap-1 text-sm">
+                <span className="font-medium">Full test country or region</span>
+                <select
+                  required
+                  value={originalCountry}
+                  onChange={(event) => {
+                    geolocationRequestId.current++;
+                    setOriginalCountry(event.target.value);
+                    setCountry('');
+                    setQuery('');
+                    setSearchLocation(null);
+                    setUserLocation(null);
+                    setGeolocationStatus('idle');
+                    setViewport(null);
+                    setSelectedId(null);
+                  }}
+                  className="rounded-md border border-line bg-white px-3 py-2 outline-none focus:border-brand"
+                >
+                  <option value="">Choose country or region</option>
+                  {originalCountryOptions.map((option) => (
+                    <option key={option.country} value={option.country}>
+                      {countryName(option.country)}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            )}
+          </div>
+          {osrPolicy && (
+            <div
+              className={`mt-4 rounded-md border p-3 text-sm ${
+                osrPolicy.portabilitySupported
+                  ? 'border-brand/30 bg-brand-soft text-ink'
+                  : 'border-amber-300 bg-amber-50 text-amber-950'
+              }`}
+              role="status"
+            >
+              <p>{osrPolicy.explanation}</p>
+              <p className="mt-1 text-xs">
+                This finder does not confirm your eligibility. Your original test must meet the
+                operator&apos;s requirements, which can include an eligible computer test at a
+                participating centre and completing OSR within 60 days. Actual test centres, dates
+                and availability may differ. Confirm the Retake option and current choices in your
+                result portal before booking.{' '}
+                <a
+                  href={osrPolicy.sourceUrl}
+                  target="_blank"
+                  rel="noreferrer nofollow"
+                  className="font-medium text-brand underline"
+                >
+                  Official guidance ↗
+                </a>
+              </p>
+            </div>
+          )}
+        </section>
+      )}
+
+      {(directoryMode === 'full_test' || osrReady) && <>
       <div
         data-testid="directory-filters"
         className="mb-6 grid gap-3 rounded-lg border border-line bg-white p-4 sm:grid-cols-2 lg:grid-cols-4"
@@ -591,7 +853,7 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
         <div className="flex flex-col gap-2">
           <CitySearch
             value={query}
-            country={country}
+            country={effectiveCountry ?? ''}
             selected={Boolean(searchLocation)}
             onValueChange={(value) =>
               updateFilter(() => {
@@ -650,9 +912,17 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
           </div>
         </div>
 
-        {worldwide && (
+        {(directoryMode === 'full_test'
+          ? worldwide
+          : (osrPolicy?.destinationCountryRule === 'any_country' ||
+              osrPolicy?.destinationCountryRule === 'country_group') &&
+            worldwide) && (
           <label className="flex flex-col gap-1 text-sm">
-            <span className="font-medium">Country</span>
+            <span className="font-medium">
+              {directoryMode === 'osr'
+                ? 'OSR destination country or region'
+                : 'Country or Region'}
+            </span>
             <select
               value={country}
               onChange={(event) =>
@@ -667,17 +937,19 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
               }
               className="rounded-md border border-line bg-white px-3 py-2 outline-none focus:border-brand"
             >
-              <option value="">All countries</option>
+              <option value="">All countries or regions</option>
               {countryOptions.map((c) => (
                 <option key={c.country} value={c.country}>
-                  {countryName(c.country)} ({c.count})
+                  {countryName(c.country)}
+                  {c.count > 0 ? ` (${c.count})` : ''}
+                  {c.online ? ' · IELTS Online' : ''}
                 </option>
               ))}
             </select>
           </label>
         )}
 
-        <label className="flex flex-col gap-1 text-sm">
+        {directoryMode === 'full_test' && <label className="flex flex-col gap-1 text-sm">
           <span className="font-medium">
             Max price
             {priceCurrency && maxPrice !== null && (
@@ -700,10 +972,10 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
             <p className="mt-2 text-xs italic text-muted">
               {priceCurrencies.length === 0
                 ? 'No published prices in view'
-                : 'Pick a country to filter by price — currencies vary too much to compare directly'}
+                : 'Pick a country or region to filter by price — currencies vary too much to compare directly'}
             </p>
           )}
-        </label>
+        </label>}
 
         <label className="flex flex-col gap-1 text-sm">
           <span className="font-medium">Sort by</span>
@@ -715,12 +987,12 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
             className="rounded-md border border-line bg-white px-3 py-2 outline-none focus:border-brand"
           >
             <option value="name">Name</option>
-            <option value="price">Price</option>
+            {directoryMode === 'full_test' && <option value="price">Price</option>}
             {distanceOrigin && <option value="distance">{distanceOriginLabel}</option>}
           </select>
         </label>
 
-        <div className="grid gap-4 border-t border-line pt-3 sm:col-span-2 lg:col-span-4 lg:grid-cols-4">
+        {directoryMode === 'full_test' && <div className="grid gap-4 border-t border-line pt-3 sm:col-span-2 lg:col-span-4 lg:grid-cols-4">
           <fieldset>
             <legend className="text-sm font-medium">Module</legend>
             <div className="mt-2 flex flex-wrap gap-2">
@@ -818,31 +1090,10 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
             </p>
           </fieldset>
 
-          {oneSkillRetakeCount > 0 && (
-            <fieldset>
-              <legend className="text-sm font-medium">Features</legend>
-              <div className="mt-2 flex flex-wrap gap-2">
-                <FilterCheckbox
-                  checked={oneSkillRetakeOnly}
-                  label="One Skill Retake"
-                  count={oneSkillRetakeCount}
-                  onChange={() =>
-                    updateFilter(() =>
-                      setOneSkillRetakeOnly((selected) => !selected),
-                    )
-                  }
-                />
-              </div>
-              <p className="mt-2 text-xs text-muted">
-                Based on official IELTS One Skill Retake listings for each market.
-                OSR-only venues appear only while this filter is selected.
-              </p>
-            </fieldset>
-          )}
-        </div>
+        </div>}
 
         <div className="flex flex-wrap items-center gap-2 sm:col-span-2 lg:col-span-4">
-          {visibleOperatorOptions.map(({ operator, count }) => {
+          {directoryMode === 'full_test' && visibleOperatorOptions.map(({ operator, count }) => {
             const active = operators.includes(operator);
             const style = operatorStyle(operator);
             return (
@@ -873,6 +1124,12 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
               </button>
             );
           })}
+          {directoryMode === 'osr' && (
+            <p className="text-sm text-muted">
+              Showing centres explicitly listed for One Skill Retake with{' '}
+              {osrPolicy?.destinationOperator}.
+            </p>
+          )}
           {hasFilters && (
             <button
               type="button"
@@ -884,6 +1141,38 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
           )}
         </div>
       </div>
+
+      {directoryMode === 'full_test' && country && onlineAvailability.length > 0 && (
+        <section
+          className="mb-6 rounded-lg border border-brand/30 bg-brand-soft p-4"
+          aria-labelledby="ielts-online-heading"
+        >
+          <h2 id="ielts-online-heading" className="font-medium">
+            IELTS Online is available in {countryName(country)}
+          </h2>
+          <p className="mt-1 text-sm text-muted">
+            IELTS Online is an Academic test taken remotely. It is separate from the in-person
+            centres listed below and is not accepted for immigration purposes.
+          </p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {onlineAvailability.map(({ operator, url }) => (
+              <a
+                key={operator}
+                href={url}
+                target="_blank"
+                rel="noreferrer nofollow"
+                className="rounded-md border border-brand bg-white px-3 py-2 text-sm font-medium text-brand hover:bg-brand-soft"
+              >
+                Check IELTS Online with {operator} <span aria-hidden>↗</span>
+              </a>
+            ))}
+          </div>
+          <p className="mt-2 text-xs text-muted">
+            Actual eligibility, test dates and availability may differ. Confirm them on the
+            operator&rsquo;s booking site.
+          </p>
+        </section>
+      )}
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
         <div
@@ -897,6 +1186,7 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
               <SelectedCentrePanel
                 centre={selectedCentre}
                 detailFilterSearch={detailFilterSearch}
+                displayMode={directoryMode}
                 onClose={() => setSelectedId(null)}
               />
             </div>
@@ -937,6 +1227,7 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
                     centre={centre}
                     selected={centre.id === selectedId}
                     detailFilterSearch={detailFilterSearch}
+                    displayMode={directoryMode}
                     onHover={() => setHoveredId(centre.id)}
                     // Clicking the already-selected card clears it.
                     onSelect={() => {
@@ -966,6 +1257,7 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
             highlightedId={highlightedId}
             selectedId={selectedId}
             detailFilterSearch={detailFilterSearch}
+            displayMode={directoryMode}
             onSelect={(id) => {
               selectionSource.current = 'map';
               setSelectedId(id);
@@ -974,6 +1266,7 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
           />
         </div>
       </div>
+      </>}
     </div>
   );
 }

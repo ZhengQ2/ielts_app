@@ -28,6 +28,26 @@ Removing an override restores the source-backed record. Setting `isPublishable` 
 an ordinary centre from the merged public feed. A record marked `futureOpening` remains visible so
 its interest form can be shown.
 
+## Adding a new centre
+
+Choose **Add centre** for a location that is not present in the source feed. This is deliberately
+separate from editing: the guided form asks only for identity, official evidence, the minimum
+bookable offering (or OSR-only status), and optional contact/map details. It generates the complete
+validated JSON record and stores it in DynamoDB as an administrator-created centre.
+
+- Use a canonical English name and the exact published address and price text.
+- The official source URL is required. A normal full-test centre also requires at least one
+  source-published price; an explicitly supported OSR-only venue is the exception.
+- Coordinates are optional. Add them only after independently confirming both the point and the
+  right to display it on any map; otherwise leave them blank for later review.
+- Added centres use the reserved `/centres/added/?id=...` live detail route, so they can appear in
+  the web list, map and detail view without a static rebuild.
+- **Delete centre** permanently removes an administrator-created row. **Remove override** remains
+  the separate action for a source-backed centre.
+
+The Apple and other static export files remain build-time snapshots. A later reviewed dataset
+release should absorb a durable manual addition into the source pipeline before mobile release.
+
 ## Location approval queue
 
 Choose **Location review** in the left column to list every centre that has a candidate coordinate

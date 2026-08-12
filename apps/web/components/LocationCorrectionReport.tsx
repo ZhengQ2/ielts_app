@@ -14,7 +14,7 @@ const LocationPickerMap = dynamic(
 );
 
 interface Props {
-  centre: Pick<Centre, 'name' | 'ieltsOrgSlug' | 'sources'>;
+  centre: Pick<Centre, 'id' | 'name' | 'ieltsOrgSlug' | 'sources'>;
   initialCenter: PickedLocation;
   initialZoom: number;
   hasLocation: boolean;

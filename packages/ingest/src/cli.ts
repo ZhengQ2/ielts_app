@@ -19,7 +19,11 @@ import {
 import { fetchText, mapWithConcurrency } from './fetcher.ts';
 import { readSitemap } from './sitemap.ts';
 import { ParseError, parseCentrePage } from './parse.ts';
-import { fetchCountryIndex } from './country-index.ts';
+import {
+  assertOnlineListingCoverage,
+  fetchCountryIndex,
+  type OnlineTestAvailability,
+} from './country-index.ts';
 import { GeocodeCache } from './geocode.ts';
 import { clusterId, resolveCluster } from './resolve.ts';
 import { applyCentreOverrides, loadCentreOverrides } from './overrides.ts';
@@ -225,6 +229,7 @@ async function main(): Promise<void> {
     qualityBaselineFile,
     opts.country,
   );
+  let onlineAvailabilityChanged = false;
 
   console.log(`\n▸ Reading sitemap`);
   const sitemap = await readSitemap(opts.force);
@@ -307,6 +312,43 @@ async function main(): Promise<void> {
         `${index.stats.chinaSupplementalOsrSlugs} official China supplement(s)`,
     );
     console.log(`  ${osrOnlySourcePages}/${parsed.length} source pages marked OSR-only before dedup`);
+
+    const onlineAvailabilityFile = path.join(DATA_DIR, 'online-test-availability.json');
+    const previousOnlineAvailability = await readOnlineTestAvailability(
+      onlineAvailabilityFile,
+    );
+    assertOnlineListingCoverage(index.onlineCountries, previousOnlineAvailability);
+    const nextOnlineOperators = {
+      'British Council': [...index.onlineCountries.get('British Council')!].sort(),
+      IDP: [...index.onlineCountries.get('IDP')!].sort(),
+    };
+    onlineAvailabilityChanged =
+      !previousOnlineAvailability ||
+      JSON.stringify(previousOnlineAvailability.operators) !== JSON.stringify(nextOnlineOperators);
+    if (onlineAvailabilityChanged) {
+      const nextOnlineAvailability: OnlineTestAvailability = {
+        version: 1,
+        source: 'https://ielts.org/test-centres',
+        updatedAt: new Date().toISOString().slice(0, 10),
+        operators: nextOnlineOperators,
+      };
+      await fs.writeFile(
+        onlineAvailabilityFile,
+        `${JSON.stringify(nextOnlineAvailability, null, 2)}\n`,
+        'utf8',
+      );
+      console.log(
+        `  Wrote ${path.relative(process.cwd(), onlineAvailabilityFile)} ` +
+          `(${nextOnlineOperators['British Council'].length} British Council, ` +
+          `${nextOnlineOperators.IDP.length} IDP online markets)`,
+      );
+    } else {
+      console.log(
+        `  IELTS Online availability unchanged ` +
+          `(${nextOnlineOperators['British Council'].length} British Council, ` +
+          `${nextOnlineOperators.IDP.length} IDP markets)`,
+      );
+    }
 
     // The listing's own dropdown names every country it offers ("Indonesia",
     // not just "ID") — free to keep, since it was already fetched to get the
@@ -573,6 +615,7 @@ async function main(): Promise<void> {
     baselineChanged,
     qualityTrend,
     remediation,
+    onlineAvailabilityChanged,
   );
 
   const enforcedSafetyProblems = [
@@ -712,6 +755,25 @@ async function readQualityState(file: string): Promise<QualityState | null> {
   }
 }
 
+async function readOnlineTestAvailability(
+  file: string,
+): Promise<OnlineTestAvailability | null> {
+  try {
+    const parsed = JSON.parse(await fs.readFile(file, 'utf8')) as OnlineTestAvailability;
+    if (
+      parsed.version !== 1 ||
+      parsed.source !== 'https://ielts.org/test-centres' ||
+      !Array.isArray(parsed.operators?.['British Council']) ||
+      !Array.isArray(parsed.operators?.IDP)
+    ) {
+      return null;
+    }
+    return parsed;
+  } catch {
+    return null;
+  }
+}
+
 async function readQualityBaseline(
   file: string,
   country: string,
@@ -763,12 +825,13 @@ async function reportToCi(
   baselineChanged: boolean,
   qualityTrend: QualityDelta,
   remediation: RemediationReport,
+  onlineAvailabilityChanged: boolean,
 ): Promise<void> {
   const { GITHUB_OUTPUT, GITHUB_STEP_SUMMARY } = process.env;
 
   if (GITHUB_OUTPUT) {
     const changed =
-      diff.meaningful || qualityStateChanged || baselineChanged;
+      diff.meaningful || qualityStateChanged || baselineChanged || onlineAvailabilityChanged;
     const summary =
       diff.meaningful
         ? summariseDiff(diff)
@@ -776,6 +839,8 @@ async function reportToCi(
           ? 'Quality discovery state updated'
           : baselineChanged
             ? 'Quality baseline updated'
+            : onlineAvailabilityChanged
+              ? 'IELTS Online availability updated'
             : summariseDiff(diff);
     const actionableRegressions = qualityTrend.newIssues.filter(
       (issue) => issue.severity !== 'info',

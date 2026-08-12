@@ -24,15 +24,18 @@ import { UnitedStatesOsrWarning } from './UnitedStatesOsrWarning';
 export function SelectedCentrePanel({
   centre,
   detailFilterSearch,
+  displayMode = 'full_test',
   onClose,
 }: {
   centre: Centre;
   detailFilterSearch: string;
+  displayMode?: 'full_test' | 'osr';
   onClose: () => void;
 }) {
   const detailHref = centreDetailHref(
     centre.ieltsOrgSlug,
     detailFilterSearch,
+    centre.id,
   );
   return (
     <section
@@ -64,21 +67,27 @@ export function SelectedCentrePanel({
       </div>
 
       <dl className="mt-3 grid gap-x-6 gap-y-2 border-t border-line pt-3 text-sm sm:grid-cols-3">
-        <Detail label="From">
-          {centre.oneSkillRetakeOnly
+        <Detail label={displayMode === 'osr' ? 'Availability' : 'From'}>
+          {displayMode === 'osr'
+            ? 'One Skill Retake'
+            : centre.oneSkillRetakeOnly
             ? 'One Skill Retake only'
             : formatPublishedPrice(centre.priceFromText)}
         </Detail>
-        <Detail label="Formats">
-          {deliveryModesIn(centre.offerings).map(formatDeliveryMode).join(' · ') || '—'}
+        <Detail label={displayMode === 'osr' ? 'Booking' : 'Formats'}>
+          {displayMode === 'osr'
+            ? 'Use the portal for your original test'
+            : deliveryModesIn(centre.offerings).map(formatDeliveryMode).join(' · ') || '—'}
         </Detail>
         <Detail label="Contact information">
           <CentreContactDetails centre={centre} />
         </Detail>
         <Detail label="City">{centre.address.city ?? '—'}</Detail>
-        <Detail label="Tests offered">
-          {centre.offerings.length} {centre.offerings.length === 1 ? 'option' : 'options'}
-        </Detail>
+        {displayMode === 'full_test' && (
+          <Detail label="Tests offered">
+            {centre.offerings.length} {centre.offerings.length === 1 ? 'option' : 'options'}
+          </Detail>
+        )}
       </dl>
 
       {centre.futureOpening && (
@@ -102,7 +111,7 @@ export function SelectedCentrePanel({
         >
           View full details →
         </Link>
-        {!centre.oneSkillRetakeOnly && isHttpUrl(centre.bookingUrl) && (
+        {displayMode === 'full_test' && !centre.oneSkillRetakeOnly && isHttpUrl(centre.bookingUrl) && (
           <a
             href={centre.bookingUrl!}
             target="_blank"

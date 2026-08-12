@@ -10,6 +10,7 @@ import {
   type ApprovableGeoPrecision,
   type Centre,
 } from '@ielts-map/core';
+import { NewCentreForm } from '@/components/NewCentreForm';
 
 interface AuthConfig {
   clientId: string;
@@ -27,6 +28,7 @@ interface Tokens {
 interface StoredOverride {
   centreId: string;
   patch: Partial<Centre>;
+  created?: boolean;
   updatedAt: string;
   updatedBy: string;
 }
@@ -48,6 +50,7 @@ export default function InternalPage() {
   const [locationQueueOnly, setLocationQueueOnly] = useState(false);
   const [confirmedCoordinateToken, setConfirmedCoordinateToken] = useState<string | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [addingCentre, setAddingCentre] = useState(false);
   const [editorValue, setEditorValue] = useState('');
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
@@ -138,16 +141,23 @@ export default function InternalPage() {
   }, [loadAdminData, tokens]);
 
   const effectiveCentres = useMemo(
-    () =>
-      centres.map((centre) => ({
-        ...centre,
-        ...(overrides[centre.id]?.patch ?? {}),
-        id: centre.id,
-      })),
+    () => [
+      ...centres.map((centre) => ({
+          ...centre,
+          ...(overrides[centre.id]?.patch ?? {}),
+          id: centre.id,
+        })),
+      ...Object.values(overrides)
+        .filter((entry) => entry.created)
+        .map((entry) => ({ ...entry.patch, id: entry.centreId } as Centre)),
+    ],
     [centres, overrides],
   );
   const selectedCentre = effectiveCentres.find((centre) => centre.id === selectedId);
-  const selectedBase = centres.find((centre) => centre.id === selectedId);
+  const selectedStored = selectedId ? overrides[selectedId] : undefined;
+  const selectedBase = selectedStored?.created
+    ? selectedCentre
+    : centres.find((centre) => centre.id === selectedId);
   const reviewGeo = useMemo(() => {
     try {
       const parsed = JSON.parse(editorValue) as unknown;
@@ -187,6 +197,7 @@ export default function InternalPage() {
   }, [effectiveCentres, locationQueueOnly, locationReviewCentres, query]);
 
   function selectCentre(centre: Centre): void {
+    setAddingCentre(false);
     setSelectedId(centre.id);
     setEditorValue(JSON.stringify(centre, null, 2));
     setConfirmedCoordinateToken(null);
@@ -236,17 +247,22 @@ export default function InternalPage() {
     try {
       const edited = JSON.parse(editorValue) as Centre;
       if (edited.id !== selectedId) throw new Error('A centre id cannot be changed.');
-      if (edited.ieltsOrgSlug !== selectedBase.ieltsOrgSlug) {
+      if (!selectedStored?.created && edited.ieltsOrgSlug !== selectedBase.ieltsOrgSlug) {
         throw new Error('The IELTS.org route slug cannot be changed without a deployment.');
       }
-      const patch = topLevelPatch(selectedBase, edited);
+      const body = selectedStored?.created
+        ? { centre: edited, expectedUpdatedAt: selectedStored.updatedAt }
+        : {
+            patch: topLevelPatch(selectedBase, edited),
+            expectedUpdatedAt: selectedStored?.updatedAt ?? null,
+          };
       const saved = await fetch(internalApiUrl(`/internal-api/centres/${encodeURIComponent(selectedId)}`), {
         method: 'PUT',
         headers: {
           authorization: `Bearer ${tokens.idToken}`,
           'content-type': 'application/json',
         },
-        body: JSON.stringify({ patch }),
+        body: JSON.stringify(body),
       }).then(requireJson<StoredOverride>);
       setOverrides((current) => ({ ...current, [selectedId]: saved }));
       setConfirmedCoordinateToken(null);
@@ -262,6 +278,12 @@ export default function InternalPage() {
 
   async function reset(): Promise<void> {
     if (!tokens || !selectedId || !selectedBase) return;
+    if (
+      selectedStored?.created &&
+      !window.confirm('Delete this manually added centre? This cannot be restored from the source feed.')
+    ) {
+      return;
+    }
     setBusy(true);
     setMessage(null);
     setError(null);
@@ -270,7 +292,10 @@ export default function InternalPage() {
         internalApiUrl(`/internal-api/centres/${encodeURIComponent(selectedId)}`),
         {
           method: 'DELETE',
-          headers: { authorization: `Bearer ${tokens.idToken}` },
+          headers: {
+            authorization: `Bearer ${tokens.idToken}`,
+            'if-match': selectedStored?.updatedAt ?? '',
+          },
         },
       );
       if (!response.ok) throw new Error(await response.text());
@@ -279,11 +304,47 @@ export default function InternalPage() {
         delete next[selectedId];
         return next;
       });
-      setEditorValue(JSON.stringify(selectedBase, null, 2));
+      if (selectedStored?.created) {
+        setSelectedId(null);
+        setEditorValue('');
+      } else {
+        setEditorValue(JSON.stringify(selectedBase, null, 2));
+      }
       setConfirmedCoordinateToken(null);
-      setMessage('Override removed. The source-backed centre record is active again.');
+      setMessage(
+        selectedStored?.created
+          ? 'The manually added centre was deleted.'
+          : 'Override removed. The source-backed centre record is active again.',
+      );
     } catch (cause) {
       setError(errorMessage(cause));
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function createCentre(centre: Centre): Promise<void> {
+    if (!tokens) return;
+    setBusy(true);
+    setMessage(null);
+    setError(null);
+    try {
+      const saved = await fetch(internalApiUrl('/internal-api/centres'), {
+        method: 'POST',
+        headers: {
+          authorization: `Bearer ${tokens.idToken}`,
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify({ centre }),
+      }).then(requireJson<StoredOverride>);
+      setOverrides((current) => ({ ...current, [saved.centreId]: saved }));
+      setAddingCentre(false);
+      setSelectedId(saved.centreId);
+      setEditorValue(JSON.stringify(centre, null, 2));
+      setMessage('Centre added. It will appear in the public directory within about one minute.');
+    } catch (cause) {
+      setError(errorMessage(cause));
+      throw cause;
     } finally {
       setBusy(false);
     }
@@ -353,9 +414,23 @@ export default function InternalPage() {
             {locationReviewCentres.length.toLocaleString()} location approvals pending
           </p>
         </div>
-        <button type="button" onClick={logout} className="rounded border border-line px-3 py-2 text-sm">
-          Sign out
-        </button>
+        <div className="flex gap-2">
+          <button
+            type="button"
+            onClick={() => {
+              setAddingCentre(true);
+              setSelectedId(null);
+              setMessage(null);
+              setError(null);
+            }}
+            className="rounded bg-brand px-3 py-2 text-sm font-medium text-white"
+          >
+            Add centre
+          </button>
+          <button type="button" onClick={logout} className="rounded border border-line px-3 py-2 text-sm">
+            Sign out
+          </button>
+        </div>
       </div>
 
       {error && <ErrorNotice message={error} />}
@@ -394,7 +469,7 @@ export default function InternalPage() {
             id="internal-search"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="Name, city, country, id…"
+            placeholder="Name, city, country or region, id…"
             className="mt-2 w-full rounded-md border border-line px-3 py-2"
           />
           <p className="mt-2 text-xs text-muted">
@@ -415,7 +490,11 @@ export default function InternalPage() {
                   <span className="block font-medium">{centre.name}</span>
                   <span className="block truncate text-xs text-muted">
                     {centre.address.country} · {centre.address.raw}
-                    {overrides[centre.id] ? ' · edited' : ''}
+                    {overrides[centre.id]?.created
+                      ? ' · added manually'
+                      : overrides[centre.id]
+                        ? ' · edited'
+                        : ''}
                   </span>
                   {locationQueueOnly && (
                     <span className="mt-1 block text-xs text-amber-700">
@@ -429,7 +508,13 @@ export default function InternalPage() {
         </section>
 
         <section className="rounded-lg border border-line bg-white p-4">
-          {selectedCentre ? (
+          {addingCentre ? (
+            <NewCentreForm
+              busy={busy}
+              onCancel={() => setAddingCentre(false)}
+              onCreate={createCentre}
+            />
+          ) : selectedCentre ? (
             <>
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
@@ -443,7 +528,7 @@ export default function InternalPage() {
                     disabled={busy || !overrides[selectedCentre.id]}
                     className="rounded border border-line px-3 py-2 text-sm disabled:opacity-40"
                   >
-                    Remove override
+                    {selectedStored?.created ? 'Delete centre' : 'Remove override'}
                   </button>
                   <button
                     type="button"
@@ -456,9 +541,9 @@ export default function InternalPage() {
                 </div>
               </div>
               <p className="mt-3 text-xs text-muted">
-                Edit the complete JSON record. The stable id and IELTS.org route slug are read-only.
-                Changed top-level fields become durable overrides; untouched fields continue
-                following the source crawl.{' '}
+                {selectedStored?.created
+                  ? 'Edit the complete generated record. Its stable id and reserved live route are read-only.'
+                  : 'Edit the complete JSON record. The stable id and IELTS.org route slug are read-only. Changed top-level fields become durable overrides; untouched fields continue following the source crawl.'}{' '}
                 <a
                   href="https://github.com/ZhengQ2/ielts_app/blob/main/docs/INTERNAL_ADMIN.md"
                   target="_blank"
@@ -485,7 +570,9 @@ export default function InternalPage() {
                       Inspect coordinate on Google Maps ↗
                     </a>
                     <a
-                      href={`/centres/${selectedCentre.ieltsOrgSlug}/`}
+                      href={selectedStored?.created
+                        ? `/centres/added/?id=${encodeURIComponent(selectedCentre.id)}`
+                        : `/centres/${selectedCentre.ieltsOrgSlug}/`}
                       target="_blank"
                       rel="noreferrer"
                       className="font-medium text-brand underline"

@@ -19,6 +19,7 @@ import type {
   LineString,
   Point,
 } from 'geojson';
+import { countryName } from '@ielts-map/core';
 
 type MatchStatus = 'strong_candidate' | 'possible_candidate';
 type StatusFilter = 'all' | MatchStatus | 'no_candidate';
@@ -231,7 +232,7 @@ export function NeutralComparisonMap() {
   const countries = useMemo(
     () =>
       [...new Set(payload?.records.map((record) => record.centre.country) ?? [])]
-        .sort((a, b) => a.localeCompare(b)),
+        .sort((a, b) => countryName(a).localeCompare(countryName(b), 'en')),
     [payload],
   );
 
@@ -603,16 +604,16 @@ export function NeutralComparisonMap() {
           );
         })}
         <label className="ml-auto flex items-center gap-2 text-sm text-muted">
-          Country
+          Country or Region
           <select
             value={country}
             onChange={(event) => setCountry(event.target.value)}
             className="rounded-lg border border-line bg-white px-3 py-1.5 text-ink"
           >
-            <option value="">All countries</option>
+            <option value="">All countries or regions</option>
             {countries.map((code) => (
               <option key={code} value={code}>
-                {code}
+                {countryName(code)}
               </option>
             ))}
           </select>

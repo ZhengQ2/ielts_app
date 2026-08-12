@@ -16,10 +16,13 @@ export interface CorrectionReportOptions {
  * until a maintainer verifies its evidence and commits an override.
  */
 export function correctionReportUrl(
-  centre: Pick<Centre, 'name' | 'ieltsOrgSlug' | 'sources'>,
+  centre: Pick<Centre, 'id' | 'name' | 'ieltsOrgSlug' | 'sources'>,
   options?: CorrectionReportOptions,
 ): string {
-  const listingUrl = `${DIRECTORY_ORIGIN}/centres/${encodeURIComponent(centre.ieltsOrgSlug)}/`;
+  const listingUrl =
+    centre.ieltsOrgSlug === 'added'
+      ? `${DIRECTORY_ORIGIN}/centres/added/?id=${encodeURIComponent(centre.id)}`
+      : `${DIRECTORY_ORIGIN}/centres/${encodeURIComponent(centre.ieltsOrgSlug)}/`;
   const sourceUrl = centre.sources[0]?.url ?? 'Not available';
   const location = options?.location;
   const latitude = location?.lat.toFixed(6);

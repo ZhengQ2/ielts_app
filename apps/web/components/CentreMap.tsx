@@ -26,17 +26,46 @@ interface Props {
   /** Explicit selection from a user click; this is the only focus trigger. */
   selectedId: string | null;
   detailFilterSearch: string;
+  displayMode?: 'full_test' | 'osr';
   onSelect: (id: string | null) => void;
   onViewportChange: (
     viewport: GeoBounds & { zoom: number; center: { lat: number; lng: number } },
   ) => void;
 }
 
-// Google can emit the map-level click after retargeting the same pointer event
-// that activated an AdvancedMarker. The retargeted event no longer exposes
-// the marker element, so DOM ancestry alone cannot reliably distinguish it
-// from a deliberate background click.
-const MARKER_CLICK_GUARD_MS = 500;
+// Google can surface the same native event through both AdvancedMarker content
+// and the map. Remember only that exact event object: a separate background
+// click must never be mistaken for the preceding marker interaction.
+const MARKER_EVENT_EXPIRY_MS = 2_000;
+
+interface MarkerEventGuard {
+  events: WeakSet<Event>;
+  signatures: Set<string>;
+}
+
+function markerEventSignature(event: Event): string | null {
+  return event.timeStamp > 0 ? `${event.type}:${event.timeStamp}` : null;
+}
+
+function rememberMarkerEvent(guard: MarkerEventGuard, event: Event): void {
+  guard.events.add(event);
+  const signature = markerEventSignature(event);
+  if (signature) guard.signatures.add(signature);
+  window.setTimeout(() => {
+    guard.events.delete(event);
+    if (signature) guard.signatures.delete(signature);
+  }, MARKER_EVENT_EXPIRY_MS);
+}
+
+function consumeMarkerEvent(guard: MarkerEventGuard, event: Event): boolean {
+  const signature = markerEventSignature(event);
+  const matches = guard.events.has(event) || Boolean(signature && guard.signatures.has(signature));
+  if (matches) {
+    guard.events.delete(event);
+    if (signature) guard.signatures.delete(signature);
+  }
+  return matches;
+}
 
 export default function CentreMap({
   centres,
@@ -44,6 +73,7 @@ export default function CentreMap({
   highlightedId,
   selectedId,
   detailFilterSearch,
+  displayMode = 'full_test',
   onSelect,
   onViewportChange,
 }: Props) {
@@ -58,13 +88,18 @@ export default function CentreMap({
   const centresRef = useRef(centres);
   const selectedIdRef = useRef(selectedId);
   const detailFilterSearchRef = useRef(detailFilterSearch);
+  const displayModeRef = useRef(displayMode);
   const focusLocationRef = useRef(focusLocation);
-  const lastMarkerInteractionAt = useRef(Number.NEGATIVE_INFINITY);
+  const markerEventGuard = useRef<MarkerEventGuard>({
+    events: new WeakSet<Event>(),
+    signatures: new Set<string>(),
+  });
   const [mapReady, setMapReady] = useState(false);
   const [loadError, setLoadError] = useState(false);
   centresRef.current = centres;
   selectedIdRef.current = selectedId;
   detailFilterSearchRef.current = detailFilterSearch;
+  displayModeRef.current = displayMode;
   focusLocationRef.current = focusLocation;
 
   const onSelectRef = useRef(onSelect);
@@ -154,12 +189,14 @@ export default function CentreMap({
               // MapMouseEvent on the map. Never let that second event clear a
               // selection which the marker has just made.
               const target = event.domEvent.target;
+              const sameMarkerEvent = consumeMarkerEvent(
+                markerEventGuard.current,
+                event.domEvent,
+              );
               if (
-                performance.now() - lastMarkerInteractionAt.current <
-                  MARKER_CLICK_GUARD_MS ||
+                sameMarkerEvent ||
                 event.domEvent.defaultPrevented ||
-                (target instanceof Element &&
-                  target.closest('.google-map-pin'))
+                (target instanceof Element && target.closest('.google-map-pin'))
               ) {
                 return;
               }
@@ -216,8 +253,28 @@ export default function CentreMap({
         el.style.setProperty('--pin', operatorStyle(centre.operator).base);
         el.dataset.shape = operatorShape(centre.operator);
 
-        el.addEventListener('pointerdown', () => {
-          lastMarkerInteractionAt.current = performance.now();
+        el.addEventListener('pointerdown', (event) => {
+          rememberMarkerEvent(markerEventGuard.current, event);
+        });
+
+        el.addEventListener('pointerup', (event) => {
+          // Google occasionally consumes the subsequent DOM click after a map
+          // background click. Pointer-up is still delivered to the marker, so
+          // select here as well; setting the same id again from `click` is
+          // intentionally idempotent.
+          rememberMarkerEvent(markerEventGuard.current, event);
+          event.preventDefault();
+          event.stopPropagation();
+          if (
+            event.metaKey ||
+            event.ctrlKey ||
+            event.shiftKey ||
+            event.altKey ||
+            event.button !== 0
+          ) {
+            return;
+          }
+          onSelectRef.current(centre.id);
         });
 
         el.addEventListener('click', (event) => {
@@ -225,7 +282,7 @@ export default function CentreMap({
           // background click. A marker used to be an anchor; when Maps
           // remapped a later touch/pointer click, its default navigation could
           // win and make the page appear to jump to the top.
-          lastMarkerInteractionAt.current = performance.now();
+          rememberMarkerEvent(markerEventGuard.current, event);
           event.preventDefault();
           event.stopPropagation();
           if (
@@ -246,6 +303,7 @@ export default function CentreMap({
             centreDetailHref(
               centre.ieltsOrgSlug,
               detailFilterSearchRef.current,
+              centre.id,
             ),
           );
         });
@@ -298,7 +356,9 @@ export default function CentreMap({
               centreDetailHref(
                 selectedCentre.ieltsOrgSlug,
                 detailFilterSearchRef.current,
+                selectedCentre.id,
               ),
+              displayModeRef.current,
             ),
           );
           // The clusterer may temporarily hide the selected marker after a
@@ -381,7 +441,9 @@ export default function CentreMap({
         centreDetailHref(
           centre.ieltsOrgSlug,
           detailFilterSearchRef.current,
+          centre.id,
         ),
+        displayModeRef.current,
       ),
       ariaLabel: centre.name,
     });
@@ -396,19 +458,20 @@ export default function CentreMap({
     const centre = centresRef.current.find((item) => item.id === selectedId);
     if (!centre?.geo) {
       popup.current.close();
-      popup.current = null;
       return;
     }
     popup.current.setContent(
       popupContent(
         centre,
-        centreDetailHref(centre.ieltsOrgSlug, detailFilterSearch),
+        centreDetailHref(centre.ieltsOrgSlug, detailFilterSearch, centre.id),
+        displayMode,
       ),
     );
   }, [
     selectedId,
     selectedPopupSignature,
     detailFilterSearch,
+    displayMode,
     mapReady,
   ]);
 
@@ -522,7 +585,11 @@ export default function CentreMap({
   );
 }
 
-function popupContent(centre: Centre, detailHref: string): HTMLElement {
+function popupContent(
+  centre: Centre,
+  detailHref: string,
+  displayMode: 'full_test' | 'osr',
+): HTMLElement {
   const root = document.createElement('div');
   root.className = 'centre-popup';
   root.appendChild(popupOperatorBadge(centre.operator));
@@ -540,7 +607,10 @@ function popupContent(centre: Centre, detailHref: string): HTMLElement {
 
   const price = document.createElement('p');
   price.className = 'centre-popup__price';
-  price.textContent = formatPublishedPrice(centre.priceFromText);
+  price.textContent =
+    displayMode === 'osr'
+      ? 'One Skill Retake available'
+      : formatPublishedPrice(centre.priceFromText);
   root.appendChild(price);
 
   return root;

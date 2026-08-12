@@ -9,6 +9,10 @@ import namesJson from '../data/country-names.json' with { type: 'json' };
  */
 const NAMES: Record<string, string> = namesJson;
 
+export function isKnownCountryOrRegionCode(code: string): boolean {
+  return Object.hasOwn(NAMES, code.toUpperCase());
+}
+
 /** Falls back to the bare code if a name was never captured for it. */
 export function countryName(code: string | null | undefined): string {
   if (!code) return '';

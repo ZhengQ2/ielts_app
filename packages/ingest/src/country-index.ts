@@ -5,7 +5,16 @@ import {
   LISTING_CACHE_DIR,
 } from './config.ts';
 import { fetchText } from './fetcher.ts';
-import { sliceElement, stripTags } from './html.ts';
+import { hrefs, sliceElement, stripTags } from './html.ts';
+
+export type OnlineTestOperator = 'British Council' | 'IDP';
+
+export interface OnlineTestAvailability {
+  version: 1;
+  source: typeof COUNTRY_LISTING_URL;
+  updatedAt: string;
+  operators: Record<OnlineTestOperator, string[]>;
+}
 
 /**
  * Authoritative slug → country mapping, taken from IELTS.org itself.
@@ -30,14 +39,76 @@ export interface CountryIndex {
   osrSlugs: Set<string>;
   /** OSR-badged source cards that publish no full-test delivery format. */
   osrOnlySlugs: Set<string>;
+  /** Current IELTS Online booking cards published by IELTS.org, by operator. */
+  onlineCountries: Map<OnlineTestOperator, Set<string>>;
   /** Countries enumerated, and slugs attributed. */
   stats: {
     countries: number;
     slugs: number;
     globalOsrSlugs: number;
     chinaSupplementalOsrSlugs: number;
+    onlineCountries: Record<OnlineTestOperator, number>;
     unmappedCodes: string[];
   };
+}
+
+const ONLINE_BOOKING_HOSTS: Record<string, OnlineTestOperator> = {
+  'ieltsregistration.britishcouncil.org': 'British Council',
+  'book.ielts.idp.com': 'IDP',
+};
+
+/** Parse only the distinct IELTS Online booking card in a country result. */
+export function parseOnlineTestOperators(html: string): OnlineTestOperator[] {
+  const operators = new Set<OnlineTestOperator>();
+  const cardRe = /<div\b[^>]*class="[^"]*\bbooking-card\b[^"]*"[^>]*>/gi;
+  for (const match of html.matchAll(cardRe)) {
+    const card = sliceElement(html, match.index ?? 0, 'div');
+    if (!/<h5\b[^>]*>\s*IELTS Online\s*<\/h5>/i.test(card)) continue;
+    let recognized = false;
+    for (const href of hrefs(card)) {
+      try {
+        const operator = ONLINE_BOOKING_HOSTS[new URL(href).hostname.toLowerCase()];
+        if (operator) {
+          operators.add(operator);
+          recognized = true;
+        }
+      } catch {
+        // An invalid or unrecognized URL is not operator evidence.
+      }
+    }
+    if (!recognized) {
+      throw new Error(
+        'IELTS.org published an IELTS Online card with an unrecognized booking destination; ' +
+          'review the operator before updating availability.',
+      );
+    }
+  }
+  return [...operators];
+}
+
+export function assertOnlineListingCoverage(
+  next: Map<OnlineTestOperator, Set<string>>,
+  previous?: OnlineTestAvailability | null,
+): void {
+  const total = [...next.values()].reduce((sum, countries) => sum + countries.size, 0);
+  if (total < 50) {
+    throw new Error(
+      `IELTS.org Online parser found ${total} operator-country records; expected at least 50. ` +
+        'The listing markup may have changed, so the availability write is blocked.',
+    );
+  }
+  if (!previous) return;
+  for (const operator of ['British Council', 'IDP'] as const) {
+    const before = new Set(previous.operators[operator] ?? []);
+    const removed = [...before].filter((country) => !next.get(operator)?.has(country));
+    const threshold = Math.max(3, Math.ceil(before.size * 0.2));
+    if (removed.length >= threshold) {
+      throw new Error(
+        `IELTS.org Online availability removed ${removed.length}/${before.size} ${operator} markets ` +
+          `(${removed.join(', ')}); the guarded write is blocked pending review.`,
+      );
+    }
+  }
 }
 
 const OPTION_RE = /<option[^>]*value="([^"]*)"[^>]*>\s*([^<]*?)\s*<\/option>/g;
@@ -183,6 +254,10 @@ export async function fetchCountryIndex(force = false): Promise<CountryIndex> {
   const names = new Map<string, string>();
   const osrSlugs = new Set<string>();
   const osrOnlySlugs = new Set<string>();
+  const onlineCountries = new Map<OnlineTestOperator, Set<string>>([
+    ['British Council', new Set()],
+    ['IDP', new Set()],
+  ]);
   const unmappedCodes: string[] = [];
 
   for (const [i, { code3, name }] of options.entries()) {
@@ -203,6 +278,9 @@ export async function fetchCountryIndex(force = false): Promise<CountryIndex> {
     }
     for (const slug of parseOsrCentreSlugs(res.body)) osrSlugs.add(slug);
     for (const slug of parseOsrOnlyCentreSlugs(res.body)) osrOnlySlugs.add(slug);
+    for (const operator of parseOnlineTestOperators(res.body)) {
+      onlineCountries.get(operator)!.add(alpha2);
+    }
 
     if ((i + 1) % 25 === 0 || i === options.length - 1) {
       process.stdout.write(`\r  ${i + 1}/${options.length} countries, ${bySlug.size} centres`);
@@ -232,11 +310,16 @@ export async function fetchCountryIndex(force = false): Promise<CountryIndex> {
     names,
     osrSlugs,
     osrOnlySlugs,
+    onlineCountries,
     stats: {
       countries: options.length,
       slugs: bySlug.size,
       globalOsrSlugs,
       chinaSupplementalOsrSlugs: chinaSupplementalSlugs.length,
+      onlineCountries: {
+        'British Council': onlineCountries.get('British Council')!.size,
+        IDP: onlineCountries.get('IDP')!.size,
+      },
       unmappedCodes,
     },
   };
