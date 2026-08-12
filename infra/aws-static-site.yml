@@ -8,22 +8,7 @@ Parameters:
   HostedZoneId:
     Type: String
     Description: Route 53 hosted zone containing the production domain
-  GitHubRepository:
-    Type: String
-    Default: ZhengQ2/ielts_app
-    Description: GitHub owner/repository allowed to publish the monitored policy feed
-
 Resources:
-  GitHubActionsOidcProvider:
-    Type: AWS::IAM::OIDCProvider
-    Properties:
-      Url: https://token.actions.githubusercontent.com
-      ClientIdList:
-        - sts.amazonaws.com
-      Tags:
-        - Key: Purpose
-          Value: !Sub '${AWS::StackName} GitHub Actions'
-
   SiteBucket:
     Type: AWS::S3::Bucket
     DeletionPolicy: Retain
@@ -41,39 +26,6 @@ Resources:
         BlockPublicPolicy: true
         IgnorePublicAcls: true
         RestrictPublicBuckets: true
-
-  GitHubPolicyPublisherRole:
-    Type: AWS::IAM::Role
-    Properties:
-      RoleName: !Sub '${AWS::StackName}-github-policy-publisher'
-      AssumeRolePolicyDocument:
-        Version: '2012-10-17'
-        Statement:
-          - Effect: Allow
-            Principal:
-              Federated: !Ref GitHubActionsOidcProvider
-            Action: sts:AssumeRoleWithWebIdentity
-            Condition:
-              StringEquals:
-                token.actions.githubusercontent.com:aud: sts.amazonaws.com
-                token.actions.githubusercontent.com:sub: !Sub 'repo:${GitHubRepository}:ref:refs/heads/main'
-      Policies:
-        - PolicyName: PublishAfterTestPolicy
-          PolicyDocument:
-            Version: '2012-10-17'
-            Statement:
-              - Sid: ReadStackOutputs
-                Effect: Allow
-                Action: cloudformation:DescribeStacks
-                Resource: '*'
-              - Sid: WritePolicyObject
-                Effect: Allow
-                Action: s3:PutObject
-                Resource: !Sub '${SiteBucket.Arn}/data/after-test-policy.json'
-              - Sid: InvalidatePolicyObject
-                Effect: Allow
-                Action: cloudfront:CreateInvalidation
-                Resource: !Sub 'arn:${AWS::Partition}:cloudfront::${AWS::AccountId}:distribution/${Distribution}'
 
   Certificate:
     Type: AWS::CertificateManager::Certificate
@@ -862,5 +814,3 @@ Outputs:
     Value: !Ref AdminUserPoolClient
   AdminApiUrl:
     Value: !GetAtt AdminApi.ApiEndpoint
-  GitHubPolicyPublisherRoleArn:
-    Value: !GetAtt GitHubPolicyPublisherRole.Arn

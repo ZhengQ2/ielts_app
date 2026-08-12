@@ -40,9 +40,36 @@ LOC_RE = re.compile(r"<loc>\s*([^<]+?)\s*</loc>", re.I)
 TC_RE = re.compile(r"<loc>\s*https?://ielts\.org/test-centres/([^<\s]+?)\s*</loc>", re.I)
 
 
-def fetch(url: str, required_suffix: str, timeout: int = 30) -> str:
+def is_trusted_sitemap_url(value: str, test_centres: bool) -> bool:
+    try:
+        parsed = urllib.parse.urlsplit(value)
+        path = parsed.path.lower()
+        return (
+            parsed.scheme == "https"
+            and parsed.hostname == "ielts.org"
+            and not parsed.port
+            and not parsed.username
+            and not parsed.password
+            and not parsed.query
+            and not parsed.fragment
+            and path.endswith(".xml")
+            and (("testcentres" in path) if test_centres else path == "/sitemap.xml")
+        )
+    except ValueError:
+        return False
+
+
+def fetch(
+    url: str,
+    required_suffix: str,
+    test_centres: bool,
+    timeout: int = 30,
+) -> str:
     req = urllib.request.Request(url, headers={"User-Agent": UA})
     with urllib.request.urlopen(req, timeout=timeout) as r:
+        final_url = r.geturl()
+        if not is_trusted_sitemap_url(final_url, test_centres):
+            raise RuntimeError(f"untrusted sitemap redirect target: {final_url}")
         body = r.read().decode("utf-8", "replace")
     if not body.rstrip().endswith(required_suffix):
         raise RuntimeError(
@@ -55,22 +82,7 @@ def sub_sitemaps(index_xml: str):
     locs = LOC_RE.findall(index_xml)
     subs = []
     for value in locs:
-        try:
-            parsed = urllib.parse.urlsplit(value)
-            trusted = (
-                parsed.scheme == "https"
-                and parsed.hostname == "ielts.org"
-                and not parsed.port
-                and not parsed.username
-                and not parsed.password
-                and not parsed.query
-                and not parsed.fragment
-                and "testcentres" in parsed.path.lower()
-                and parsed.path.lower().endswith(".xml")
-            )
-        except ValueError:
-            trusted = False
-        if trusted:
+        if is_trusted_sitemap_url(value, test_centres=True):
             subs.append(value)
     # keep page order p1..pN
     def pageno(u):
@@ -104,7 +116,7 @@ def main():
     args = ap.parse_args()
     print(f"[*] index: {INDEX}")
     try:
-        idx = fetch(INDEX, "</sitemapindex>")
+        idx = fetch(INDEX, "</sitemapindex>", test_centres=False)
     except Exception as e:
         sys.exit(f"failed to fetch index: {e}")
 
@@ -123,7 +135,7 @@ def main():
         m = re.search(r"-p(\d+)\.xml", url)
         page = m.group(1) if m else "x"
         try:
-            xml = fetch(url, "</urlset>")
+            xml = fetch(url, "</urlset>", test_centres=True)
         except Exception as e:
             print(f"    [!] p{page} fetch failed: {e}")
             failures.append(f"p{page}: {e}")

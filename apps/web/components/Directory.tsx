@@ -595,6 +595,12 @@ function DirectoryView({ centres }: { centres: Centre[] }) {
             selected={Boolean(searchLocation)}
             onValueChange={(value) =>
               updateFilter(() => {
+                // Browser geolocation cannot be cancelled, so invalidate its
+                // callbacks before accepting this newer manual search input.
+                geolocationRequestId.current++;
+                if (geolocationStatus === 'requesting') {
+                  setGeolocationStatus(userLocation ? 'ready' : 'idle');
+                }
                 setQuery(value);
                 setSearchLocation(null);
                 setSort(null);
