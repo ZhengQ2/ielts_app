@@ -6,6 +6,7 @@ import {
   fetchProviderResponse,
   gcj02ToWgs84,
   GeocodeCache,
+  google,
   googlePlaces,
   localProviderFor,
   mappls,
@@ -403,6 +404,154 @@ test('Mappls retries cannot exceed the request budget', async (t) => {
   assert.equal(cache.stats.mapplsCalls, 1);
   assert.equal(cache.stats.budgetSkips, 1);
   assert.equal(cache.stats.cacheHits, 0);
+});
+
+test('Google retries cannot exceed the physical request budget', async (t) => {
+  const originalFetch = globalThis.fetch;
+  const originalKey = process.env.GOOGLE_MAPS_API_KEY;
+  t.after(() => {
+    globalThis.fetch = originalFetch;
+    restoreEnv('GOOGLE_MAPS_API_KEY', originalKey);
+  });
+
+  process.env.GOOGLE_MAPS_API_KEY = 'test-google-key';
+  let calls = 0;
+  globalThis.fetch = async () => {
+    calls++;
+    if (calls === 1) return new Response(null, { status: 503 });
+    return Response.json({ status: 'ZERO_RESULTS', results: [] });
+  };
+
+  const cache = new GeocodeCache({ googleBudget: 1 });
+  const result = await cache.lookup(google, {
+    text: '1 Test Street, Toronto',
+    country: 'CA',
+  });
+
+  assert.deepEqual(result, []);
+  assert.equal(calls, 1);
+  assert.equal(cache.stats.googleCalls, 1);
+  assert.equal(cache.stats.budgetSkips, 1);
+});
+
+test('empty provider results expire instead of becoming permanent', async () => {
+  let calls = 0;
+  const emptyProvider = {
+    name: 'nominatim' as const,
+    async lookup() {
+      calls++;
+      return [];
+    },
+  };
+  const cache = new GeocodeCache({ emptyResultTtlMs: 0 });
+
+  await cache.lookup(emptyProvider, { text: 'Missing venue', country: 'CA' });
+  await cache.lookup(emptyProvider, { text: 'Missing venue', country: 'CA' });
+
+  assert.equal(calls, 2);
+  assert.equal(cache.stats.cacheHits, 0);
+});
+
+test('force refresh bypasses a positive cache entry once per run', async () => {
+  let calls = 0;
+  const provider = {
+    name: 'nominatim' as const,
+    async lookup() {
+      calls++;
+      return [{
+        lat: 40 + calls,
+        lng: -79.4,
+        coordinateSystem: 'WGS84' as const,
+        precision: 'street' as const,
+        echoedPostcode: null,
+        echoedCity: 'Toronto',
+        echoedRegion: 'Ontario',
+        echoedCountry: 'CA',
+      }];
+    },
+  };
+  const cache = new GeocodeCache();
+  const query = { text: '1 Test Street', country: 'CA' };
+
+  const original = await cache.lookup(provider, query);
+  const cached = await cache.lookup(provider, query);
+  const refreshed = await cache.lookup(provider, query, { force: true });
+  const refreshedAgain = await cache.lookup(provider, query, { force: true });
+
+  assert.equal(original[0]?.lat, 41);
+  assert.equal(cached[0]?.lat, 41);
+  assert.equal(refreshed[0]?.lat, 42);
+  assert.equal(refreshedAgain[0]?.lat, 42);
+  assert.equal(calls, 2);
+});
+
+test('failed force refresh preserves the last successful cached result', async () => {
+  let calls = 0;
+  const provider = {
+    name: 'nominatim' as const,
+    async lookup() {
+      calls++;
+      if (calls === 2) throw new Error('temporary transport failure');
+      return [{
+        lat: 43.65,
+        lng: -79.38,
+        coordinateSystem: 'WGS84' as const,
+        precision: 'street' as const,
+        echoedPostcode: null,
+        echoedCity: 'Toronto',
+        echoedRegion: 'Ontario',
+        echoedCountry: 'CA',
+      }];
+    },
+  };
+  const cache = new GeocodeCache();
+  const query = { text: '1 Cached Street', country: 'CA' };
+
+  const original = await cache.lookup(provider, query);
+  const fallback = await cache.lookup(provider, query, { force: true });
+  const fallbackAgain = await cache.lookup(provider, query, { force: true });
+
+  assert.deepEqual(fallback, original);
+  assert.deepEqual(fallbackAgain, original);
+  assert.equal(calls, 2);
+});
+
+test('concurrent force refreshes share one provider request', async () => {
+  let calls = 0;
+  let releaseRefresh: (() => void) | undefined;
+  const refreshStarted = new Promise<void>((resolve) => {
+    releaseRefresh = resolve;
+  });
+  const provider = {
+    name: 'nominatim' as const,
+    async lookup() {
+      calls++;
+      if (calls === 2) await refreshStarted;
+      return [{
+        lat: 43 + calls,
+        lng: -79.38,
+        coordinateSystem: 'WGS84' as const,
+        precision: 'street' as const,
+        echoedPostcode: null,
+        echoedCity: 'Toronto',
+        echoedRegion: 'Ontario',
+        echoedCountry: 'CA',
+      }];
+    },
+  };
+  const cache = new GeocodeCache();
+  const query = { text: '1 Shared Street', country: 'CA' };
+  await cache.lookup(provider, query);
+
+  const first = cache.lookup(provider, query, { force: true });
+  const second = cache.lookup(provider, query, { force: true });
+  await Promise.resolve();
+  assert.equal(calls, 2);
+  releaseRefresh?.();
+  const [firstResult, secondResult] = await Promise.all([first, second]);
+
+  assert.deepEqual(firstResult, secondResult);
+  assert.equal(calls, 2);
 });
 
 test('local providers are gated by both country and configured key', (t) => {

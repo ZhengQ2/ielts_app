@@ -36,14 +36,15 @@ export function LocationPickerMap({
   onChangeRef.current = onChange;
 
   useEffect(() => {
-    if (!container.current || map.current) return;
+    const containerElement = container.current;
+    if (!containerElement || map.current) return;
     let cancelled = false;
 
     importGoogleMapLibraries()
       .then(({ maps, marker: markerLibrary }) => {
-        if (cancelled || !container.current) return;
+        if (cancelled) return;
 
-        const instance = new maps.Map(container.current, {
+        const instance = new maps.Map(containerElement, {
           center: initialCenter,
           zoom: initialZoom,
           mapId: googleMapId,
@@ -87,7 +88,7 @@ export function LocationPickerMap({
       if (marker.current) marker.current.map = null;
       marker.current = null;
       map.current = null;
-      container.current?.replaceChildren();
+      containerElement.replaceChildren();
     };
   }, [initialCenter, initialZoom]);
 

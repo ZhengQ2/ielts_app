@@ -8,7 +8,6 @@ Parameters:
   HostedZoneId:
     Type: String
     Description: Route 53 hosted zone containing the production domain
-
 Resources:
   SiteBucket:
     Type: AWS::S3::Bucket

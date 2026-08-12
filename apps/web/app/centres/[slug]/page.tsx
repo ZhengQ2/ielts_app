@@ -9,7 +9,11 @@ interface Props {
 }
 
 export function generateStaticParams() {
-  return centres.map((c) => ({ slug: c.ieltsOrgSlug }));
+  return [
+    ...new Set(
+      centres.flatMap((centre) => [centre.ieltsOrgSlug, ...centre.mergedSlugs]),
+    ),
+  ].map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

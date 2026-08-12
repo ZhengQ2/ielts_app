@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "britishCouncilUnitedStates": {
+    "oneSkillRetakeUnavailable": true,
+    "sourceUrl": "https://takeielts.britishcouncil.org/take-ielts/one-skill-retake",
+    "monitorUrl": "https://r.jina.ai/https://takeielts.britishcouncil.org/take-ielts/one-skill-retake",
+    "monitoredClaim": "IELTS One Skill Retake is currently not available for tests taken in the USA."
+  }
+}

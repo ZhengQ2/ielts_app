@@ -310,6 +310,10 @@ async function resolveLocation(
   const expect = { postcode: address.postcode, city: address.city, country };
   const street = streetLine(address.lines);
   const plusCode = extractPlusCode(address.raw);
+  const lookup = (
+    provider: GeocodeProvider,
+    query: Parameters<GeocodeProvider['lookup']>[0],
+  ) => cache.lookup(provider, query, { force: options.regeocode });
 
   // Preserve plausible embedded points as candidates. Mainland-China embeds
   // have historically mixed WGS-84 and GCJ-02 semantics, so test both
@@ -348,7 +352,7 @@ async function resolveLocation(
       evidencePath: GeoCandidate['evidencePath'],
     ) => {
       target.push(
-        ...toCandidates(await cache.lookup(provider, q), provider.name, evidencePath),
+        ...toCandidates(await lookup(provider, q), provider.name, evidencePath),
       );
     };
 
@@ -400,7 +404,7 @@ async function resolveLocation(
   ) {
     candidates.push(
       ...toCandidates(
-        await cache.lookup(providerChain(country, true)[0]!, {
+        await lookup(providerChain(country, true)[0]!, {
           text: [
             plusCode,
             address.city ?? safeLegacyCity(prior?.address.city ?? null),
@@ -439,7 +443,7 @@ async function resolveLocation(
     for (const venueQuery of venueQueries) {
       candidates.push(
         ...toCandidates(
-          await cache.lookup(
+          await lookup(
             googlePlaces,
             { text: venueQuery, country },
           ),
@@ -477,7 +481,7 @@ async function resolveLocation(
     for (const placeId of placeIds) {
       candidates.push(
         ...toCandidates(
-          await cache.lookup(amapPlaces, {
+          await lookup(amapPlaces, {
             text: [name, address.city, country].filter(Boolean).join(', '),
             country,
             placeId,
@@ -494,7 +498,7 @@ async function resolveLocation(
     if (!text) return;
     candidates.push(
       ...toCandidates(
-        await cache.lookup(nominatim, { text, country }),
+        await lookup(nominatim, { text, country }),
         'nominatim',
         'address',
       ),

@@ -11,14 +11,14 @@ struct PilotRecord: Decodable {
     let searchRegion: SearchRegion?
 }
 
-struct SearchRegion: Decodable {
+struct SearchRegion: Codable, Equatable {
     let centerLatitude: Double
     let centerLongitude: Double
     let latitudeDelta: Double
     let longitudeDelta: Double
 }
 
-struct PilotQuery: Codable {
+struct PilotQuery: Codable, Equatable {
     let kind: String
     let text: String
 }
@@ -42,7 +42,15 @@ struct SearchAttempt: Codable {
 
 struct CentreResult: Codable {
     let centreId: String
+    let inputFingerprint: String?
     let searches: [SearchAttempt]
+}
+
+struct CacheInput: Encodable {
+    let version: Int
+    let queries: [PilotQuery]
+    let searchRegion: SearchRegion?
+    let maximumCandidates: Int
 }
 
 struct PilotOutput: Codable {
@@ -67,10 +75,15 @@ struct AppleMapSearch {
             from: Data(contentsOf: arguments.input)
         )
         var completed = try existingResults(at: arguments.output)
-        let completedIds = Set(completed.map(\.centreId))
 
         for (index, record) in input.records.enumerated() {
-            if completedIds.contains(record.id) {
+            let inputFingerprint = try cacheFingerprint(
+                for: record,
+                maximumCandidates: arguments.maximumCandidates
+            )
+            if completed.contains(where: {
+                $0.centreId == record.id && $0.inputFingerprint == inputFingerprint
+            }) {
                 fputs("[\(index + 1)/\(input.records.count)] cached \(record.id)\n", stderr)
                 continue
             }
@@ -90,10 +103,32 @@ struct AppleMapSearch {
                     )
                 }
             }
-            completed.append(CentreResult(centreId: record.id, searches: searches))
+            completed.removeAll(where: { $0.centreId == record.id })
+            completed.append(
+                CentreResult(
+                    centreId: record.id,
+                    inputFingerprint: inputFingerprint,
+                    searches: searches
+                )
+            )
             try write(completed, to: arguments.output)
             fputs("[\(index + 1)/\(input.records.count)] searched \(record.id)\n", stderr)
         }
+    }
+
+    private static func cacheFingerprint(
+        for record: PilotRecord,
+        maximumCandidates: Int
+    ) throws -> String {
+        let input = CacheInput(
+            version: 2,
+            queries: record.queries,
+            searchRegion: record.searchRegion,
+            maximumCandidates: maximumCandidates
+        )
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.sortedKeys]
+        return try encoder.encode(input).base64EncodedString()
     }
 
     private static func search(
@@ -160,7 +195,7 @@ struct AppleMapSearch {
 
     private static func write(_ records: [CentreResult], to url: URL) throws {
         let output = PilotOutput(
-            version: 1,
+            version: 2,
             generatedAt: ISO8601DateFormatter().string(from: Date()),
             records: records
         )

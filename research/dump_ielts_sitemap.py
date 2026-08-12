@@ -29,6 +29,7 @@ import os
 import re
 import sys
 import urllib.request
+import urllib.parse
 
 INDEX = "https://ielts.org/sitemap.xml"
 UA = "Mozilla/5.0 (sitemap-audit; personal research)"
@@ -39,15 +40,50 @@ LOC_RE = re.compile(r"<loc>\s*([^<]+?)\s*</loc>", re.I)
 TC_RE = re.compile(r"<loc>\s*https?://ielts\.org/test-centres/([^<\s]+?)\s*</loc>", re.I)
 
 
-def fetch(url: str, timeout: int = 30) -> str:
+def is_trusted_sitemap_url(value: str, test_centres: bool) -> bool:
+    try:
+        parsed = urllib.parse.urlsplit(value)
+        path = parsed.path.lower()
+        return (
+            parsed.scheme == "https"
+            and parsed.hostname == "ielts.org"
+            and not parsed.port
+            and not parsed.username
+            and not parsed.password
+            and not parsed.query
+            and not parsed.fragment
+            and path.endswith(".xml")
+            and (("testcentres" in path) if test_centres else path == "/sitemap.xml")
+        )
+    except ValueError:
+        return False
+
+
+def fetch(
+    url: str,
+    required_suffix: str,
+    test_centres: bool,
+    timeout: int = 30,
+) -> str:
     req = urllib.request.Request(url, headers={"User-Agent": UA})
     with urllib.request.urlopen(req, timeout=timeout) as r:
-        return r.read().decode("utf-8", "replace")
+        final_url = r.geturl()
+        if not is_trusted_sitemap_url(final_url, test_centres):
+            raise RuntimeError(f"untrusted sitemap redirect target: {final_url}")
+        body = r.read().decode("utf-8", "replace")
+    if not body.rstrip().endswith(required_suffix):
+        raise RuntimeError(
+            f"truncated response: expected document to end with {required_suffix}"
+        )
+    return body
 
 
 def sub_sitemaps(index_xml: str):
     locs = LOC_RE.findall(index_xml)
-    subs = [u for u in locs if "testcentres" in u.lower()]
+    subs = []
+    for value in locs:
+        if is_trusted_sitemap_url(value, test_centres=True):
+            subs.append(value)
     # keep page order p1..pN
     def pageno(u):
         m = re.search(r"-p(\d+)\.xml", u)
@@ -78,11 +114,9 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", default="ielts_dump")
     args = ap.parse_args()
-    os.makedirs(args.out, exist_ok=True)
-
     print(f"[*] index: {INDEX}")
     try:
-        idx = fetch(INDEX)
+        idx = fetch(INDEX, "</sitemapindex>", test_centres=False)
     except Exception as e:
         sys.exit(f"failed to fetch index: {e}")
 
@@ -92,6 +126,8 @@ def main():
         sys.exit("no testCentres sub-sitemaps found — sitemap layout may have changed")
 
     combined = []
+    pages = []
+    failures = []
     totals = {"british-council": 0, "idp": 0, "no-prefix": 0}
     china_hits, idp_china_hits = [], []
 
@@ -99,13 +135,13 @@ def main():
         m = re.search(r"-p(\d+)\.xml", url)
         page = m.group(1) if m else "x"
         try:
-            xml = fetch(url)
+            xml = fetch(url, "</urlset>", test_centres=True)
         except Exception as e:
             print(f"    [!] p{page} fetch failed: {e}")
+            failures.append(f"p{page}: {e}")
             continue
         slugs = slugs_from(xml)
-        with open(os.path.join(args.out, f"p{page}_slugs.txt"), "w") as f:
-            f.write("\n".join(slugs) + "\n")
+        pages.append((page, slugs))
         for s in slugs:
             totals[classify(s)] += 1
             combined.append(s)
@@ -114,6 +150,17 @@ def main():
             if "idp-ielts-china" in s.lower():
                 idp_china_hits.append(s)
         print(f"    p{page}: {len(slugs)} centres")
+
+    if failures:
+        sys.exit(
+            "refusing to publish an incomplete dump; failed pages: "
+            + "; ".join(failures)
+        )
+
+    os.makedirs(args.out, exist_ok=True)
+    for page, slugs in pages:
+        with open(os.path.join(args.out, f"p{page}_slugs.txt"), "w") as f:
+            f.write("\n".join(slugs) + "\n")
 
     with open(os.path.join(args.out, "ALL_slugs.txt"), "w") as f:
         f.write("\n".join(combined) + "\n")

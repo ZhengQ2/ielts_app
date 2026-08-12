@@ -34,6 +34,7 @@ import {
 import { CentreOfferingsTable } from '@/components/CentreOfferingsTable';
 import { FutureOpeningNotice } from '@/components/FutureOpeningNotice';
 import { OneSkillRetakeOnlyNotice } from '@/components/OneSkillRetakeOnlyNotice';
+import { UnitedStatesOsrWarning } from '@/components/UnitedStatesOsrWarning';
 
 interface CentreFeed {
   centres: Centre[];
@@ -91,6 +92,7 @@ export function LiveCentrePage({ initialCentre }: { initialCentre: Centre }) {
   const rawScoreUrl = centre.futureOpening ? null : rawScoreInquiryUrl(centre);
   const correctionUrl = correctionReportUrl(centre);
   const pickerStart = locationPickerStart(centre, allCentres);
+  const isUnitedStatesCentre = centre.address.country?.toUpperCase() === 'US';
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-8">
@@ -187,7 +189,12 @@ export function LiveCentrePage({ initialCentre }: { initialCentre: Centre }) {
           </a>
         )}
       </div>
-      {resultsUrl && !centre.offersOneSkillRetake && (
+      {isUnitedStatesCentre && (
+        <UnitedStatesOsrWarning
+          showCentreAvailabilityFallback={Boolean(resultsUrl && !centre.offersOneSkillRetake)}
+        />
+      )}
+      {resultsUrl && !isUnitedStatesCentre && !centre.offersOneSkillRetake && (
         <p className="mt-3 text-sm text-muted">
           One Skill Retake may not be available at this test centre. Check your test portal for
           eligible centres and dates.
@@ -213,8 +220,8 @@ export function LiveCentrePage({ initialCentre }: { initialCentre: Centre }) {
             <h2 className="font-medium">Use the official WeChat mini-program</h2>
             <p className="mt-2 text-sm text-muted">
               In WeChat, scan this code to open “雅思考试官方服务平台”. Mainland British
-              Council candidates can view their test record and results there and, when eligible,
-              register for One Skill Retake.
+              Council candidates can view their test record and results there and register for One
+              Skill Retake at available test centres in select cities.
             </p>
             <p className="mt-2 text-sm text-muted">
               One Skill Retake is limited to an eligible full IELTS on computer test and must be

@@ -47,7 +47,11 @@ export function parseCentrePage(slug: string, html: string, fetchedAt: string): 
   const name = extractName(html);
   if (!name) throw new ParseError(`No centre title found for ${slug}`);
 
-  const address = parseAddress(extractAddressLines(html));
+  const addressLines = extractAddressLines(html);
+  if (addressLines.length === 0) {
+    throw new ParseError(`No centre address found for ${slug}`);
+  }
+  const address = parseAddress(addressLines);
   const contact = extractContactInformation(html, address.lines);
   const phone = contact.phones[0] ?? null;
   const embeddedGeo = extractEmbeddedGeo(html);
@@ -78,9 +82,7 @@ export function parseCentrePage(slug: string, html: string, fetchedAt: string): 
 
 function extractName(html: string): string | null {
   const m = /<h1[^>]*class="[^"]*test-center-header__title[^"]*"[^>]*>([\s\S]*?)<\/h1>/i.exec(html);
-  if (m?.[1]) return stripTags(m[1]);
-  const h1 = /<h1[^>]*>([\s\S]*?)<\/h1>/i.exec(html);
-  return h1?.[1] ? stripTags(h1[1]) : null;
+  return m?.[1] ? stripTags(m[1]) : null;
 }
 
 /** The `<p>` lines under the "Address" heading of the header block. */

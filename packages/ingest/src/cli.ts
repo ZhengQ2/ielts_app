@@ -110,7 +110,14 @@ function parseArgs(argv: string[]): Options {
     if (arg === '--country') opts.country = (argv[++i] ?? 'CA').toUpperCase();
     else if (arg === '--all') opts.country = 'ALL';
     else if (arg === '--force') opts.force = true;
-    else if (arg === '--limit') opts.limit = Number(argv[++i]);
+    else if (arg === '--limit') {
+      const value = Number(argv[++i]);
+      if (!Number.isSafeInteger(value) || value <= 0) {
+        console.error('--limit requires a positive integer');
+        process.exit(1);
+      }
+      opts.limit = value;
+    }
     else if (arg === '--no-geocode') opts.noGeocode = true;
     else if (arg === '--no-audit') opts.audit = false;
     else if (arg === '--google-budget') {
