@@ -38,7 +38,7 @@ export async function readSitemap(force = false): Promise<SitemapResult> {
     cacheDir: SITEMAP_CACHE_DIR,
     force,
     requireSuffix: '</sitemapindex>',
-    forbidRedirects: true,
+    isAllowedRedirect: isTrustedSitemapIndexRedirect,
   });
 
   const pages = locs(index.body)
@@ -91,6 +91,29 @@ export function isTrustedTestCentreSitemap(value: string): boolean {
       url.hash === '' &&
       /testcentres/i.test(url.pathname) &&
       /\.xml$/i.test(url.pathname)
+    );
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * IELTS.org's stable `/sitemap.xml` entry point redirects to a numbered
+ * generated sitemap. Allow only that exact same-origin shape; fetchText checks
+ * the target before contacting it, so redirects cannot escape IELTS.org.
+ */
+export function isTrustedSitemapIndexRedirect(value: string): boolean {
+  try {
+    const url = new URL(value);
+    return (
+      url.protocol === 'https:' &&
+      url.hostname === 'ielts.org' &&
+      url.port === '' &&
+      url.username === '' &&
+      url.password === '' &&
+      url.search === '' &&
+      url.hash === '' &&
+      /^\/sitemaps-\d+-sitemap\.xml$/i.test(url.pathname)
     );
   } catch {
     return false;
