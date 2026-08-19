@@ -28,6 +28,8 @@ export interface FetchOptions {
    * any request is sent to it.
    */
   isAllowedRedirect?: (url: string) => boolean;
+  /** Hard deadline for receiving headers and consuming the complete body. */
+  timeoutMs?: number;
 }
 
 export interface FetchResult {
@@ -46,10 +48,83 @@ function cachePath(dir: string, url: string): string {
   return path.join(dir, `${slug}.${hash}.html`);
 }
 
-const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+const sleep = (ms: number): Promise<void> =>
+  new Promise((resolve) => setTimeout(resolve, ms));
 const REDIRECT_STATUSES = new Set([301, 302, 303, 307, 308]);
 const MAX_REDIRECTS = 3;
 const MAX_RETRY_AFTER_MS = 60_000;
+const DEFAULT_RATE_LIMIT_COOLDOWN_MS = 10_000;
+const RATE_LIMIT_BUFFER_MS = 1_000;
+
+type Clock = () => number;
+type Sleeper = (ms: number) => Promise<void>;
+
+/**
+ * Stagger request starts and share server-directed cooldowns across concurrent
+ * workers. The queue protects only admission; admitted HTTP requests may still
+ * overlap, preserving the crawler's bounded concurrency.
+ */
+export class RequestGate {
+  private queue = Promise.resolve();
+  private nextStartAt = 0;
+  private cooldownUntil = 0;
+  private readonly intervalMs: number;
+  private readonly clock: Clock;
+  private readonly sleeper: Sleeper;
+
+  constructor(
+    intervalMs: number,
+    clock: Clock = Date.now,
+    sleeper: Sleeper = sleep,
+  ) {
+    this.intervalMs = intervalMs;
+    this.clock = clock;
+    this.sleeper = sleeper;
+  }
+
+  cooldown(ms: number): void {
+    this.cooldownUntil = Math.max(this.cooldownUntil, this.clock() + Math.max(0, ms));
+  }
+
+  async waitTurn(): Promise<void> {
+    let release!: () => void;
+    const previous = this.queue;
+    this.queue = new Promise<void>((resolve) => {
+      release = resolve;
+    });
+
+    await previous;
+    try {
+      while (true) {
+        const waitMs = Math.max(
+          0,
+          Math.max(this.nextStartAt, this.cooldownUntil) - this.clock(),
+        );
+        if (waitMs === 0) break;
+        await this.sleeper(waitMs);
+      }
+      this.nextStartAt = this.clock() + this.intervalMs;
+    } finally {
+      release();
+    }
+  }
+}
+
+const ieltsOrgRequestGate = new RequestGate(FETCH_DELAY_MS);
+
+function isIeltsOrgUrl(value: string): boolean {
+  try {
+    const url = new URL(value);
+    return url.protocol === 'https:' && url.hostname === 'ielts.org';
+  } catch {
+    return false;
+  }
+}
+
+/** Add a quiet recovery window before retrying sparse failed source pages. */
+export function cooldownIeltsOrgRequests(ms: number): void {
+  ieltsOrgRequestGate.cooldown(ms);
+}
 
 /** Parse an HTTP Retry-After value, bounding untrusted server input. */
 export function parseRetryAfterMs(value: string | null, now = Date.now()): number | null {
@@ -66,45 +141,55 @@ export function parseRetryAfterMs(value: string | null, now = Date.now()): numbe
 async function fetchWithRedirectPolicy(
   initialUrl: string,
   opts: FetchOptions,
-  signal: AbortSignal,
-): Promise<{ response: Response; url: string }> {
+): Promise<{ response: Response; url: string; body: string | null }> {
   let currentUrl = initialUrl;
 
   for (let redirects = 0; ; redirects++) {
-    const response = await fetch(currentUrl, {
-      headers: { 'user-agent': USER_AGENT, accept: 'text/html,application/xml,*/*' },
-      redirect: opts.isAllowedRedirect
-        ? 'manual'
-        : opts.forbidRedirects
-          ? 'error'
-          : 'follow',
-      signal,
-    });
-
-    if (!opts.isAllowedRedirect || !REDIRECT_STATUSES.has(response.status)) {
-      return { response, url: currentUrl };
-    }
-
-    const location = response.headers.get('location');
-    if (!location) {
-      throw Object.assign(new Error(`Redirect without Location header for ${currentUrl}`), {
-        permanent: true,
+    if (isIeltsOrgUrl(currentUrl)) await ieltsOrgRequestGate.waitTurn();
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), opts.timeoutMs ?? FETCH_TIMEOUT_MS);
+    try {
+      const response = await fetch(currentUrl, {
+        headers: { 'user-agent': USER_AGENT, accept: 'text/html,application/xml,*/*' },
+        redirect: opts.isAllowedRedirect
+          ? 'manual'
+          : opts.forbidRedirects
+            ? 'error'
+            : 'follow',
+        signal: controller.signal,
       });
-    }
-    if (redirects >= MAX_REDIRECTS) {
-      throw Object.assign(new Error(`Too many redirects for ${initialUrl}`), {
-        permanent: true,
-      });
-    }
 
-    const nextUrl = new URL(location, currentUrl).href;
-    if (!opts.isAllowedRedirect(nextUrl)) {
-      throw Object.assign(
-        new Error(`Rejected untrusted redirect from ${currentUrl} to ${nextUrl}`),
-        { permanent: true },
-      );
+      if (!opts.isAllowedRedirect || !REDIRECT_STATUSES.has(response.status)) {
+        // fetch() resolves after headers. Consume the successful response while
+        // the same abort timer remains active so a stalled body cannot hang a
+        // crawler worker indefinitely.
+        const body = response.ok ? await response.text() : null;
+        return { response, url: currentUrl, body };
+      }
+
+      const location = response.headers.get('location');
+      if (!location) {
+        throw Object.assign(new Error(`Redirect without Location header for ${currentUrl}`), {
+          permanent: true,
+        });
+      }
+      if (redirects >= MAX_REDIRECTS) {
+        throw Object.assign(new Error(`Too many redirects for ${initialUrl}`), {
+          permanent: true,
+        });
+      }
+
+      const nextUrl = new URL(location, currentUrl).href;
+      if (!opts.isAllowedRedirect(nextUrl)) {
+        throw Object.assign(
+          new Error(`Rejected untrusted redirect from ${currentUrl} to ${nextUrl}`),
+          { permanent: true },
+        );
+      }
+      currentUrl = nextUrl;
+    } finally {
+      clearTimeout(timer);
     }
-    currentUrl = nextUrl;
   }
 }
 
@@ -141,10 +226,8 @@ export async function fetchText(url: string, opts: FetchOptions = {}): Promise<F
   let attempts = 0;
   for (let attempt = 1; attempt <= FETCH_RETRIES; attempt++) {
     attempts = attempt;
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
     try {
-      const fetched = await fetchWithRedirectPolicy(url, opts, controller.signal);
+      const fetched = await fetchWithRedirectPolicy(url, opts);
       const res = fetched.response;
       if (!res.ok) {
         // 404s are a permanent answer; retrying wastes the crawl budget.
@@ -154,12 +237,18 @@ export async function fetchText(url: string, opts: FetchOptions = {}): Promise<F
             status: res.status,
           });
         }
+        const retryAfterMs = parseRetryAfterMs(res.headers.get('retry-after'));
+        if (isIeltsOrgUrl(fetched.url) && res.status === 429) {
+          ieltsOrgRequestGate.cooldown(
+            (retryAfterMs ?? DEFAULT_RATE_LIMIT_COOLDOWN_MS) + RATE_LIMIT_BUFFER_MS,
+          );
+        }
         throw Object.assign(new Error(`HTTP ${res.status} for ${fetched.url}`), {
-          retryAfterMs: parseRetryAfterMs(res.headers.get('retry-after')),
+          retryAfterMs,
           status: res.status,
         });
       }
-      const body = await res.text();
+      const body = fetched.body!;
       if (opts.requireSuffix && !body.trimEnd().endsWith(opts.requireSuffix)) {
         throw new Error(
           `Truncated response for ${url}: expected it to end with ${opts.requireSuffix}`,
@@ -178,13 +267,14 @@ export async function fetchText(url: string, opts: FetchOptions = {}): Promise<F
         const retryAfterMs = (err as { retryAfterMs?: number | null }).retryAfterMs;
         await sleep(Math.max(FETCH_DELAY_MS * 2 ** attempt, retryAfterMs ?? 0));
       }
-    } finally {
-      clearTimeout(timer);
     }
   }
-  throw new Error(
-    `Failed to fetch ${url} after ${attempts} attempt${attempts === 1 ? '' : 's'}: ${describeError(lastError)}`,
-    { cause: lastError },
+  throw Object.assign(
+    new Error(
+      `Failed to fetch ${url} after ${attempts} attempt${attempts === 1 ? '' : 's'}: ${describeError(lastError)}`,
+      { cause: lastError },
+    ),
+    { status: (lastError as { status?: number } | undefined)?.status },
   );
 }
 

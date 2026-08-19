@@ -353,7 +353,10 @@ export interface CentreDataset {
 }
 
 export interface DatasetStats {
+  /** Unique centre slugs discovered specifically through the XML sitemap. */
   sitemapSlugs: number;
+  /** Unique centre slugs in the union of sitemap and country-listing discovery. */
+  discoveredSlugs?: number;
   pagesParsed: number;
   matchedCountry: number;
   afterDedup: number;
