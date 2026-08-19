@@ -16,12 +16,21 @@ import {
   REPO_ROOT,
   RESOLVE_CONCURRENCY,
 } from './config.ts';
-import { fetchText, mapWithConcurrency } from './fetcher.ts';
-import { readSitemap } from './sitemap.ts';
-import { ParseError, parseCentrePage } from './parse.ts';
+import {
+  cooldownIeltsOrgRequests,
+  fetchText,
+  mapWithConcurrency,
+} from './fetcher.ts';
+import { readSitemap, unionCentreDiscoverySlugs } from './sitemap.ts';
+import { parseCentrePage } from './parse.ts';
+import {
+  classifySourcePageFailure,
+  type SourcePageFailure,
+} from './source-page-failure.ts';
 import {
   assertOnlineListingCoverage,
   fetchCountryIndex,
+  type CountryIndex,
   type OnlineTestAvailability,
 } from './country-index.ts';
 import { GeocodeCache } from './geocode.ts';
@@ -90,6 +99,9 @@ interface Options {
   /** Maximum centres whose location/city evidence may be retried per run. */
   remediationLimit: number;
 }
+
+const MAX_TRANSIENT_PAGE_RECOVERIES = 20;
+const SOURCE_RECOVERY_COOLDOWN_MS = 30_000;
 
 function parseArgs(argv: string[]): Options {
   const opts: Options = {
@@ -233,32 +245,66 @@ async function main(): Promise<void> {
 
   console.log(`\n▸ Reading sitemap`);
   const sitemap = await readSitemap(opts.force);
-  let slugs = sitemap.slugs;
-  console.log(`  ${slugs.length} unique centre slugs across ${sitemap.pages.length} pages`);
+  console.log(
+    `  ${sitemap.slugs.length} unique centre slugs across ${sitemap.pages.length} pages`,
+  );
+
+  let index: CountryIndex | null = null;
+  if (!opts.noCountryIndex) {
+    console.log(`\n▸ Reading IELTS.org's own country listing`);
+    index = await fetchCountryIndex(opts.force);
+    console.log(
+      `  ${index.stats.countries} countries, ${index.stats.slugs} centres attributed` +
+        (index.stats.unmappedCodes.length
+          ? ` (${index.stats.unmappedCodes.length} territory codes skipped: ${index.stats.unmappedCodes.join(', ')})`
+          : ''),
+    );
+  }
+
+  const discovery = unionCentreDiscoverySlugs(
+    sitemap.slugs,
+    index?.bySlug.keys() ?? [],
+  );
+  let slugs = discovery.slugs;
+  if (index) {
+    console.log(
+      `  crawl union: ${slugs.length} slugs ` +
+        `(${discovery.listingOnly.length} listing-only, ` +
+        `${discovery.sitemapOnly.length} sitemap-only)`,
+    );
+  }
   if (opts.limit) {
     slugs = slugs.slice(0, opts.limit);
     console.log(`  limited to ${slugs.length}`);
   }
 
   console.log(`\n▸ Fetching centre pages (concurrency ${FETCH_CONCURRENCY})`);
-  const failures: { slug: string; error: string }[] = [];
+  const failures: SourcePageFailure[] = [];
+  const removedSourcePages: SourcePageFailure[] = [];
   const parsed: ParsedCentre[] = [];
+
+  const recordSourceFailure = (slug: string, error: unknown): void => {
+    const failure = classifySourcePageFailure(slug, error);
+    if (failure.disposition === 'removed') removedSourcePages.push(failure);
+    else failures.push(failure);
+  };
+
+  const fetchCentre = async (slug: string): Promise<ParsedCentre> => {
+    const res = await fetchText(`${CENTRE_URL_PREFIX}${slug}`, {
+      cacheDir: PAGE_CACHE_DIR,
+      force: opts.force,
+    });
+    return parseCentrePage(slug, res.body, new Date().toISOString());
+  };
 
   await mapWithConcurrency(
     slugs,
     FETCH_CONCURRENCY,
     async (slug) => {
       try {
-        const res = await fetchText(`${CENTRE_URL_PREFIX}${slug}`, {
-          cacheDir: PAGE_CACHE_DIR,
-          force: opts.force,
-        });
-        parsed.push(parseCentrePage(slug, res.body, new Date().toISOString()));
+        parsed.push(await fetchCentre(slug));
       } catch (err) {
-        failures.push({
-          slug,
-          error: err instanceof ParseError ? `parse: ${err.message}` : (err as Error).message,
-        });
+        recordSourceFailure(slug, err);
       }
     },
     (done, total) => {
@@ -268,22 +314,48 @@ async function main(): Promise<void> {
     },
   );
   process.stdout.write('\n');
+
+  const recoveryCandidates = failures
+    .filter((failure) => failure.disposition === 'retryable')
+    .slice(0, MAX_TRANSIENT_PAGE_RECOVERIES);
+  if (recoveryCandidates.length) {
+    console.log(
+      `  cooling down before sequentially retrying ${recoveryCandidates.length} transient failure(s)`,
+    );
+    cooldownIeltsOrgRequests(SOURCE_RECOVERY_COOLDOWN_MS);
+    const attemptedSlugs = new Set(recoveryCandidates.map((failure) => failure.slug));
+    const remaining = failures.filter((failure) => !attemptedSlugs.has(failure.slug));
+    let recovered = 0;
+    for (const failure of recoveryCandidates) {
+      try {
+        parsed.push(await fetchCentre(failure.slug));
+        recovered++;
+      } catch (error) {
+        const retryFailure = classifySourcePageFailure(failure.slug, error);
+        if (retryFailure.disposition === 'removed') removedSourcePages.push(retryFailure);
+        else remaining.push(retryFailure);
+      }
+    }
+    failures.splice(0, failures.length, ...remaining);
+    console.log(`  recovery pass: ${recovered} recovered, ${failures.length} still failed`);
+  }
+
   console.log(`  parsed ${parsed.length}, failed ${failures.length}`);
   if (failures.length) {
     for (const f of failures.slice(0, 10)) console.log(`    ✗ ${f.slug}: ${f.error}`);
     if (failures.length > 10) console.log(`    … and ${failures.length - 10} more`);
   }
+  if (removedSourcePages.length) {
+    console.log(`  confirmed removed (HTTP 410): ${removedSourcePages.length}`);
+    for (const page of removedSourcePages.slice(0, 10)) {
+      console.log(`    − ${page.slug}`);
+    }
+    if (removedSourcePages.length > 10) {
+      console.log(`    … and ${removedSourcePages.length - 10} more`);
+    }
+  }
 
-  if (!opts.noCountryIndex) {
-    console.log(`\n▸ Reading IELTS.org's own country listing`);
-    const index = await fetchCountryIndex(opts.force);
-    console.log(
-      `  ${index.stats.countries} countries, ${index.stats.slugs} centres attributed` +
-        (index.stats.unmappedCodes.length
-          ? ` (${index.stats.unmappedCodes.length} territory codes skipped: ${index.stats.unmappedCodes.join(', ')})`
-          : ''),
-    );
-
+  if (index) {
     // Authoritative when it has an answer — the operator's own filing, not an
     // inference from address, currency or phone. Address parsing, the booking
     // link and the phone prefix remain the fallback for whatever this listing
@@ -569,7 +641,13 @@ async function main(): Promise<void> {
     if (original) centre.firstSeenAt = original;
   }
 
-  const stats = buildStats(sitemap.slugs.length, parsed.length, inCountry.length, centres);
+  const stats = buildStats(
+    sitemap.slugs.length,
+    index ? discovery.slugs.length : undefined,
+    parsed.length,
+    inCountry.length,
+    centres,
+  );
   const dataset: CentreDataset = {
     version: 3,
     country: opts.country,
@@ -882,6 +960,7 @@ async function reportToCi(
 
 function buildStats(
   sitemapSlugs: number,
+  discoveredSlugs: number | undefined,
   pagesParsed: number,
   matchedCountry: number,
   centres: Centre[],
@@ -895,6 +974,7 @@ function buildStats(
   }
   return {
     sitemapSlugs,
+    ...(discoveredSlugs === undefined ? {} : { discoveredSlugs }),
     pagesParsed,
     matchedCountry,
     afterDedup: centres.length,
@@ -907,6 +987,7 @@ function buildStats(
 
 function printSummary(s: DatasetStats): void {
   console.log(`\n  sitemap slugs   ${s.sitemapSlugs}`);
+  console.log(`  discovered slugs ${s.discoveredSlugs ?? s.sitemapSlugs}`);
   console.log(`  pages parsed    ${s.pagesParsed}`);
   console.log(`  in country      ${s.matchedCountry}`);
   console.log(`  after dedup     ${s.afterDedup}`);

@@ -16,6 +16,8 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   const { stats, generatedAt, country } = dataset;
+  const usesCombinedDiscovery = stats.discoveredSlugs !== undefined;
+  const discoveredSlugs = stats.discoveredSlugs ?? stats.sitemapSlugs;
   const precision = Object.entries(stats.byGeoPrecision).sort((a, b) => b[1] - a[1]);
 
   return (
@@ -26,25 +28,35 @@ export default function AboutPage() {
       </p>
 
       <Section title="Where listings come from">
+        {usesCombinedDiscovery ? (
+          <p>
+            Every centre here is taken from the public test-centre pages on IELTS.org. We discover
+            those pages through both IELTS.org&rsquo;s XML sitemap and its country or region
+            listings, then crawl the combined set. IELTS.org is used because it is the only
+            neutral, enumerable source that covers all operators — the individual operator sites
+            are either incomplete or not machine-readable.
+          </p>
+        ) : (
+          <p>
+            Every centre here is taken from the public test-centre pages on IELTS.org, enumerated
+            through that site&rsquo;s XML sitemap. IELTS.org is used because it is the only neutral,
+            enumerable list that covers all operators — the individual operator sites are either
+            incomplete or not machine-readable.
+          </p>
+        )}
         <p>
-          Every centre here is taken from the public test-centre pages on IELTS.org, enumerated
-          through that site&rsquo;s XML sitemap. IELTS.org is used because it is the only neutral,
-          enumerable list that covers all operators — the individual operator sites are either
-          incomplete or not machine-readable.
-        </p>
-        <p>
-          We read {stats.sitemapSlugs.toLocaleString()} centre pages worldwide
+          We discovered {discoveredSlugs.toLocaleString()} unique centre pages worldwide and
+          successfully read {stats.pagesParsed.toLocaleString()} of them.{' '}
           {country === 'ALL' ? (
-            <>, attributed {stats.matchedCountry.toLocaleString()} of them to a country or region</>
+            <>We attributed {stats.matchedCountry.toLocaleString()} to a country or region</>
           ) : (
             <>
-              {' '}
-              and kept the {stats.matchedCountry.toLocaleString()} whose address resolves to{' '}
+              We kept the {stats.matchedCountry.toLocaleString()} whose address resolves to{' '}
               {countryName(country)}
             </>
           )}
-          , and merged duplicate pages down to {stats.afterDedup.toLocaleString()} real centre
-          records.
+          . After merging duplicate pages, the dataset contains{' '}
+          {stats.afterDedup.toLocaleString()} real centre records.
         </p>
         <p>
           Country or region comes from IELTS.org&rsquo;s own{' '}

@@ -33,6 +33,37 @@ export interface SitemapResult {
   origin: Map<string, string>;
 }
 
+export interface CentreDiscoveryUnion {
+  /** Stable crawl order: sitemap entries first, then sorted listing-only entries. */
+  slugs: string[];
+  sitemapOnly: string[];
+  listingOnly: string[];
+}
+
+/**
+ * Combine independent IELTS.org discovery paths. A centre is eligible for
+ * removal only after both paths omit it; a transiently incomplete sitemap can
+ * therefore no longer manufacture a mass deletion.
+ */
+export function unionCentreDiscoverySlugs(
+  sitemapSlugs: Iterable<string>,
+  listingSlugs: Iterable<string>,
+): CentreDiscoveryUnion {
+  const sitemap = [...new Set(sitemapSlugs)].filter(Boolean);
+  const listing = [...new Set(listingSlugs)].filter(Boolean);
+  const sitemapSet = new Set(sitemap);
+  const listingSet = new Set(listing);
+  const listingOnly = listing
+    .filter((slug) => !sitemapSet.has(slug))
+    .sort((left, right) => left.localeCompare(right));
+
+  return {
+    slugs: [...sitemap, ...listingOnly],
+    sitemapOnly: sitemap.filter((slug) => !listingSet.has(slug)),
+    listingOnly,
+  };
+}
+
 export async function readSitemap(force = false): Promise<SitemapResult> {
   const index = await fetchText(SITEMAP_INDEX, {
     cacheDir: SITEMAP_CACHE_DIR,
