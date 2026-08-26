@@ -162,6 +162,7 @@ A centre with one 5★ review is pulled toward the city mean until it has enough
 | **IDP India** `ieltsidpindia.com` | separate site; India *is* on IELTS.org | ⚠️ | Use IELTS.org's India entries |
 | **IDP China** `idpielts.cn` | **client-rendered** (fetch returned head only, no body) | ❌ | Use IELTS.org's China entries |
 | **China booking (NEEA)** `ielts.neea.cn` | **login-gated** — not a data source | ❌ | Only the booking-redirect target |
+| **BC China OSR Mini Program** “雅思考试官方服务平台” | Official English/Chinese operational names, but no unattended public feed available | ⏸️ Deferred | Future guarded self-hosted collection and identity review; see [`BC_CHINA_OSR_FUTURE.md`](BC_CHINA_OSR_FUTURE.md) |
 | **Google Places** Geocoding + Places API | works | — | **Optional** enrichment (geocode fallback, ratings/photos where a listing exists) |
 | ~~ieltscanada.ca~~ | static, Conestoga only, self-declared "partial" | ❌ | **Skip** |
 

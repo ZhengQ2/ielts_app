@@ -110,7 +110,7 @@ the effective feed refreshes.
 | `parsedPriceFrom` | Numeric amount derived from `priceFromText`, or `null`. It is for sorting, not display. |
 | `parsedCurrency` | ISO currency code associated with the summary price, such as `CNY`, or `null`. |
 | `bookingUrl` | Operator booking/interest URL or `null`. Use an `https://` URL. |
-| `offersOneSkillRetake` | Source-managed boolean derived from official OSR listings: the IELTS.org country finder plus reviewed market supplements such as China IELTS. Override only when current operator evidence shows the listing is wrong. |
+| `offersOneSkillRetake` | Source-managed boolean derived only from the One Skill Retake badge in the IELTS.org country finder. No market supplement is currently imported. Override only when current operator evidence shows the IELTS.org listing is wrong. British Council mainland-China venue discovery is deferred; see [`BC_CHINA_OSR_FUTURE.md`](BC_CHINA_OSR_FUTURE.md). |
 | `oneSkillRetakeOnly` | Source-managed boolean for a centre that provides OSR but no full test. It is `true` only when no merged source page or offering supplies Academic, General Training, UKVI, or SELT. |
 | `futureOpening` | Optional operator-declared future-opening block. Do not infer this merely because dates are unavailable. |
 | `isPublishable` | Boolean. `false` hides an ordinary centre; future openings remain visible with their warning and interest form. |
@@ -243,9 +243,12 @@ supplied and owned by an administrator, use `source: "admin"`, `origin: "adminis
 
 ## One Skill Retake fields
 
-`offersOneSkillRetake` is maintained automatically from the One Skill Retake badge on IELTS.org's
-country listing and official market supplements, currently the China IELTS British Council venue
-list. Override this boolean only when current operator evidence shows that a source is wrong.
+`offersOneSkillRetake` is maintained automatically only from the One Skill Retake badge on
+IELTS.org's country listing. No market-specific supplement is currently fetched. In particular,
+the China IELTS British Council venue page is not an active source and must not be treated as
+current automated evidence. A future, review-gated collection process using the official WeChat
+Mini Program is described in [`BC_CHINA_OSR_FUTURE.md`](BC_CHINA_OSR_FUTURE.md). Override this
+boolean only when current operator evidence shows that the IELTS.org listing is wrong.
 `oneSkillRetakeOnly` is narrower: it is true only when an OSR-badged source card publishes no
 full-test format and no merged source page or offering supplies Academic, General Training, UKVI, or
 SELT. The next ingest run refreshes both fields for existing and newly discovered centres.

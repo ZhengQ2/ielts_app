@@ -379,10 +379,6 @@ async function main(): Promise<void> {
     }
     console.log(`  ${fromIndex}/${parsed.length} centres matched to a country this way`);
     console.log(`  ${osrCentres}/${parsed.length} source pages marked for One Skill Retake`);
-    console.log(
-      `    ${index.stats.globalOsrSlugs} global IELTS.org badge(s), ` +
-        `${index.stats.chinaSupplementalOsrSlugs} official China supplement(s)`,
-    );
     console.log(`  ${osrOnlySourcePages}/${parsed.length} source pages marked OSR-only before dedup`);
 
     const onlineAvailabilityFile = path.join(DATA_DIR, 'online-test-availability.json');

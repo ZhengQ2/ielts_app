@@ -70,9 +70,9 @@ jobs:
           # marketing pages. This includes centres first discovered by the
           # same run. Dedup then prevents
           # an OSR-only page from hiding a merged full-test offering. The same
-          # pass supplements British Council's six mainland-China OSR venues
-          # from the official China IELTS page because the global finder omits
-          # those badges. Parser sanity and change-rate gates block mass clears.
+          # parser sanity and change-rate gates block mass clears. British
+          # Council mainland-China OSR venues are intentionally not imported;
+          # see docs/BC_CHINA_OSR_FUTURE.md.
           cd packages/ingest
           node --experimental-strip-types src/cli.ts \
             --country "${{ inputs.country || 'ALL' }}" \

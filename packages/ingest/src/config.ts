@@ -47,9 +47,6 @@ export const CENTRE_URL_PREFIX = 'https://ielts.org/test-centres/';
  */
 export const COUNTRY_LISTING_URL = 'https://ielts.org/test-centres';
 export const LISTING_CACHE_DIR = path.join(CACHE_DIR, 'listings');
-/** Official mainland-China OSR venue list, used because the global finder omits BC's badges. */
-export const CHINA_OSR_LISTING_URL =
-  'https://www.chinaielts.org/book-ielts/one-skill-retake';
 
 /**
  * Identify ourselves honestly. robots.txt permits /test-centres/; we stay well
