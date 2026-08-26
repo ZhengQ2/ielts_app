@@ -1,7 +1,7 @@
 {
   "version": 1,
   "country": "ALL",
-  "centreCount": 1636,
+  "centreCount": 1649,
   "affected": [
     {
       "id": "aeo-faisalabad",
@@ -84,6 +84,16 @@
       ]
     },
     {
+      "id": "anand",
+      "country": "IN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:legacy_city",
+        "warning:location_not_verified"
+      ]
+    },
+    {
       "id": "angamaly",
       "country": "IN",
       "decision": "needs_review",
@@ -100,15 +110,6 @@
       "pinnable": true,
       "issues": [
         "warning:legacy_city"
-      ]
-    },
-    {
-      "id": "ata-hong-kong-kwun-tong",
-      "country": "HK",
-      "decision": "needs_review",
-      "pinnable": true,
-      "issues": [
-        "warning:missing_city"
       ]
     },
     {
@@ -320,6 +321,15 @@
       "pinnable": true,
       "issues": [
         "warning:legacy_city"
+      ]
+    },
+    {
+      "id": "bc-11926",
+      "country": "ES",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:missing_city"
       ]
     },
     {
@@ -590,16 +600,6 @@
       ]
     },
     {
-      "id": "bc-12378",
-      "country": "MY",
-      "decision": "needs_review",
-      "pinnable": false,
-      "issues": [
-        "warning:legacy_city",
-        "warning:location_not_verified"
-      ]
-    },
-    {
       "id": "bc-12389",
       "country": "MN",
       "decision": "needs_review",
@@ -805,6 +805,16 @@
       "issues": [
         "warning:legacy_city",
         "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-12996",
+      "country": "TN",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:location_not_verified",
+        "warning:missing_city"
       ]
     },
     {
@@ -1017,6 +1027,16 @@
       ]
     },
     {
+      "id": "bc-13322",
+      "country": "OM",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:location_not_verified",
+        "warning:missing_city"
+      ]
+    },
+    {
       "id": "bc-13336",
       "country": "LY",
       "decision": "needs_review",
@@ -1034,6 +1054,16 @@
       "issues": [
         "warning:legacy_city",
         "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "bc-13366",
+      "country": "IT",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:location_not_verified",
+        "warning:missing_city"
       ]
     },
     {
@@ -1262,6 +1292,16 @@
       ]
     },
     {
+      "id": "bc-13765",
+      "country": "PE",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:location_not_verified",
+        "warning:missing_city"
+      ]
+    },
+    {
       "id": "bc-13779",
       "country": "SA",
       "decision": "needs_review",
@@ -1269,6 +1309,15 @@
       "issues": [
         "warning:legacy_city",
         "warning:missing_location"
+      ]
+    },
+    {
+      "id": "bc-13787",
+      "country": "HK",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:missing_city"
       ]
     },
     {
@@ -1398,16 +1447,6 @@
     },
     {
       "id": "bc-300",
-      "country": "JO",
-      "decision": "needs_review",
-      "pinnable": false,
-      "issues": [
-        "warning:legacy_city",
-        "warning:location_not_verified"
-      ]
-    },
-    {
-      "id": "bc-303",
       "country": "JO",
       "decision": "needs_review",
       "pinnable": false,
@@ -1907,16 +1946,6 @@
       ]
     },
     {
-      "id": "bc-700",
-      "country": "UZ",
-      "decision": "needs_review",
-      "pinnable": false,
-      "issues": [
-        "warning:legacy_city",
-        "warning:location_not_verified"
-      ]
-    },
-    {
       "id": "bc-707",
       "country": "VN",
       "decision": "needs_review",
@@ -1971,15 +2000,6 @@
       "issues": [
         "warning:legacy_city",
         "warning:location_not_verified"
-      ]
-    },
-    {
-      "id": "bc-7665",
-      "country": "UZ",
-      "decision": "needs_review",
-      "pinnable": true,
-      "issues": [
-        "warning:legacy_city"
       ]
     },
     {
@@ -2453,16 +2473,6 @@
       ]
     },
     {
-      "id": "gurdaspur",
-      "country": "IN",
-      "decision": "needs_review",
-      "pinnable": false,
-      "issues": [
-        "warning:legacy_city",
-        "warning:location_not_verified"
-      ]
-    },
-    {
       "id": "harbin-engineering-university-ielts-on-computer-test-centre-songbei",
       "country": "CN",
       "decision": "needs_review",
@@ -2497,18 +2507,7 @@
       "decision": "needs_review",
       "pinnable": true,
       "issues": [
-        "warning:legacy_city",
-        "warning:pending_duplicate_candidate"
-      ]
-    },
-    {
-      "id": "hawthorn-muscat-english-language-center-hawthorn-sur",
-      "country": "OM",
-      "decision": "needs_review",
-      "pinnable": true,
-      "issues": [
-        "warning:missing_city",
-        "warning:pending_duplicate_candidate"
+        "warning:legacy_city"
       ]
     },
     {
@@ -2577,16 +2576,6 @@
       "pinnable": true,
       "issues": [
         "warning:legacy_city"
-      ]
-    },
-    {
-      "id": "idp-education-india-bengaluru-whitefield",
-      "country": "IN",
-      "decision": "needs_review",
-      "pinnable": false,
-      "issues": [
-        "warning:legacy_city",
-        "warning:location_not_verified"
       ]
     },
     {
@@ -2850,6 +2839,15 @@
       ]
     },
     {
+      "id": "idp-ielts-canada-action-global-consulting-inc",
+      "country": "CA",
+      "decision": "ready",
+      "pinnable": true,
+      "issues": [
+        "info:missing_contact_information"
+      ]
+    },
+    {
       "id": "idp-ielts-canada-anderson-college-brampton",
       "country": "CA",
       "decision": "ready",
@@ -3068,12 +3066,13 @@
       ]
     },
     {
-      "id": "idp-ielts-dubai-university-of-sharjah",
-      "country": "AE",
+      "id": "idp-ielts-egypt-alexandria-egyptian-british-international-school",
+      "country": "EG",
       "decision": "needs_review",
-      "pinnable": true,
+      "pinnable": false,
       "issues": [
-        "warning:legacy_city"
+        "warning:location_not_verified",
+        "warning:missing_city"
       ]
     },
     {
@@ -3094,15 +3093,6 @@
       "issues": [
         "warning:legacy_city",
         "warning:location_not_verified"
-      ]
-    },
-    {
-      "id": "idp-ielts-egypt-one-kattameya-cairo",
-      "country": "EG",
-      "decision": "needs_review",
-      "pinnable": true,
-      "issues": [
-        "warning:legacy_city"
       ]
     },
     {
@@ -3231,16 +3221,6 @@
       ]
     },
     {
-      "id": "idp-ielts-kazakhstan-shymkent",
-      "country": "KZ",
-      "decision": "needs_review",
-      "pinnable": false,
-      "issues": [
-        "warning:location_not_verified",
-        "warning:missing_city"
-      ]
-    },
-    {
       "id": "idp-ielts-kazakhstan-uralsk",
       "country": "KZ",
       "decision": "needs_review",
@@ -3251,31 +3231,12 @@
       ]
     },
     {
-      "id": "idp-ielts-kenya-eldoret-potters-house-academy",
-      "country": "KE",
+      "id": "idp-ielts-kuwait-kuwait-university-in-al-shadadiya",
+      "country": "KW",
       "decision": "needs_review",
       "pinnable": true,
       "issues": [
-        "warning:pending_duplicate_candidate"
-      ]
-    },
-    {
-      "id": "idp-ielts-kenya-eldoret-potters-house-academy-eldoret-breemic",
-      "country": "KE",
-      "decision": "needs_review",
-      "pinnable": true,
-      "issues": [
-        "warning:missing_city",
-        "warning:pending_duplicate_candidate"
-      ]
-    },
-    {
-      "id": "idp-ielts-kenya-nairobi",
-      "country": "KE",
-      "decision": "needs_review",
-      "pinnable": true,
-      "issues": [
-        "warning:pending_duplicate_candidate"
+        "warning:missing_city"
       ]
     },
     {
@@ -3315,15 +3276,6 @@
       "issues": [
         "warning:legacy_city",
         "warning:location_not_verified"
-      ]
-    },
-    {
-      "id": "idp-ielts-oman-code-academy-al-khoud",
-      "country": "OM",
-      "decision": "needs_review",
-      "pinnable": true,
-      "issues": [
-        "warning:legacy_city"
       ]
     },
     {
@@ -3421,16 +3373,6 @@
       ]
     },
     {
-      "id": "idp-ielts-oman-united-international-schools",
-      "country": "OM",
-      "decision": "needs_review",
-      "pinnable": false,
-      "issues": [
-        "warning:legacy_city",
-        "warning:location_not_verified"
-      ]
-    },
-    {
       "id": "idp-ielts-oman-university-of-technology-and-applied-sciences-ibra",
       "country": "OM",
       "decision": "needs_review",
@@ -3458,12 +3400,32 @@
       ]
     },
     {
+      "id": "idp-ielts-pakistan-global-study-linkers-wah-cantt",
+      "country": "PK",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:missing_city"
+      ]
+    },
+    {
       "id": "idp-ielts-philippines-besta-bohol",
       "country": "PH",
       "decision": "needs_review",
       "pinnable": true,
       "issues": [
-        "warning:legacy_city"
+        "warning:legacy_city",
+        "warning:pending_duplicate_candidate"
+      ]
+    },
+    {
+      "id": "idp-ielts-philippines-bestabohol",
+      "country": "PH",
+      "decision": "needs_review",
+      "pinnable": true,
+      "issues": [
+        "warning:missing_city",
+        "warning:pending_duplicate_candidate"
       ]
     },
     {
@@ -3504,15 +3466,6 @@
       "issues": [
         "warning:legacy_city",
         "warning:location_not_verified"
-      ]
-    },
-    {
-      "id": "idp-ielts-south-korea-busan-lexis",
-      "country": "KR",
-      "decision": "needs_review",
-      "pinnable": true,
-      "issues": [
-        "warning:legacy_city"
       ]
     },
     {
@@ -3603,13 +3556,12 @@
       ]
     },
     {
-      "id": "idp-ielts-turkey-gaziantep-head-english",
-      "country": "TR",
+      "id": "idp-ielts-vanuatu-port-vila",
+      "country": "VU",
       "decision": "needs_review",
-      "pinnable": false,
+      "pinnable": true,
       "issues": [
-        "warning:legacy_city",
-        "warning:location_not_verified"
+        "warning:missing_city"
       ]
     },
     {
@@ -3689,15 +3641,6 @@
       "pinnable": true,
       "issues": [
         "warning:missing_city"
-      ]
-    },
-    {
-      "id": "idp-kenya-nairobi",
-      "country": "KE",
-      "decision": "needs_review",
-      "pinnable": true,
-      "issues": [
-        "warning:pending_duplicate_candidate"
       ]
     },
     {
@@ -3809,16 +3752,6 @@
       ]
     },
     {
-      "id": "ielts-peru-international-house-san-borja",
-      "country": "PE",
-      "decision": "needs_review",
-      "pinnable": false,
-      "issues": [
-        "warning:legacy_city",
-        "warning:location_not_verified"
-      ]
-    },
-    {
       "id": "ielts-usa-davenport-ia",
       "country": "US",
       "decision": "quarantined",
@@ -3842,17 +3775,6 @@
     },
     {
       "id": "ielts-usa-lincoln-ne",
-      "country": "US",
-      "decision": "quarantined",
-      "pinnable": false,
-      "issues": [
-        "error:no_published_price",
-        "info:missing_contact_information",
-        "warning:location_not_verified"
-      ]
-    },
-    {
-      "id": "ielts-usa-new-haven-ct",
       "country": "US",
       "decision": "quarantined",
       "pinnable": false,
@@ -4046,6 +3968,16 @@
       "issues": [
         "warning:legacy_city",
         "warning:location_not_verified"
+      ]
+    },
+    {
+      "id": "mod-education-uyo",
+      "country": "NG",
+      "decision": "needs_review",
+      "pinnable": false,
+      "issues": [
+        "warning:location_not_verified",
+        "warning:missing_city"
       ]
     },
     {
@@ -4369,16 +4301,6 @@
       ]
     },
     {
-      "id": "vientiane-college-paper-based",
-      "country": "LA",
-      "decision": "needs_review",
-      "pinnable": false,
-      "issues": [
-        "warning:location_not_verified",
-        "warning:missing_city"
-      ]
-    },
-    {
       "id": "vijayawada",
       "country": "IN",
       "decision": "needs_review",
@@ -4479,13 +4401,13 @@
   "unresolvedSourceSlugs": [],
   "byCountry": {
     "AE": {
-      "centres": 55,
-      "ready": 32,
-      "needsReview": 23,
+      "centres": 53,
+      "ready": 31,
+      "needsReview": 22,
       "quarantined": 0,
       "nonPinnable": 13,
       "issues": {
-        "legacy_city": 21,
+        "legacy_city": 20,
         "location_not_verified": 13,
         "missing_city": 2
       }
@@ -4528,8 +4450,8 @@
       "issues": {}
     },
     "AU": {
-      "centres": 23,
-      "ready": 21,
+      "centres": 25,
+      "ready": 23,
       "needsReview": 2,
       "quarantined": 0,
       "nonPinnable": 2,
@@ -4648,12 +4570,12 @@
       "nonPinnable": 1,
       "issues": {
         "location_not_verified": 1,
-        "missing_contact_information": 12
+        "missing_contact_information": 13
       }
     },
     "CH": {
-      "centres": 10,
-      "ready": 9,
+      "centres": 11,
+      "ready": 10,
       "needsReview": 1,
       "quarantined": 0,
       "nonPinnable": 1,
@@ -4703,8 +4625,8 @@
       }
     },
     "CO": {
-      "centres": 14,
-      "ready": 12,
+      "centres": 16,
+      "ready": 14,
       "needsReview": 2,
       "quarantined": 0,
       "nonPinnable": 1,
@@ -4712,14 +4634,6 @@
         "legacy_city": 2,
         "location_not_verified": 1
       }
-    },
-    "CR": {
-      "centres": 1,
-      "ready": 1,
-      "needsReview": 0,
-      "quarantined": 0,
-      "nonPinnable": 0,
-      "issues": {}
     },
     "CY": {
       "centres": 11,
@@ -4741,8 +4655,8 @@
       "issues": {}
     },
     "DE": {
-      "centres": 13,
-      "ready": 12,
+      "centres": 14,
+      "ready": 13,
       "needsReview": 1,
       "quarantined": 0,
       "nonPinnable": 0,
@@ -4788,26 +4702,27 @@
       "issues": {}
     },
     "EG": {
-      "centres": 20,
-      "ready": 11,
+      "centres": 21,
+      "ready": 12,
       "needsReview": 9,
       "quarantined": 0,
-      "nonPinnable": 5,
+      "nonPinnable": 6,
       "issues": {
-        "legacy_city": 8,
-        "location_not_verified": 5,
-        "missing_city": 1,
+        "legacy_city": 7,
+        "location_not_verified": 6,
+        "missing_city": 2,
         "missing_contact_information": 1
       }
     },
     "ES": {
-      "centres": 18,
-      "ready": 16,
-      "needsReview": 2,
+      "centres": 21,
+      "ready": 18,
+      "needsReview": 3,
       "quarantined": 0,
       "nonPinnable": 0,
       "issues": {
-        "legacy_city": 2
+        "legacy_city": 2,
+        "missing_city": 1
       }
     },
     "ET": {
@@ -4973,13 +4888,13 @@
     },
     "IN": {
       "centres": 121,
-      "ready": 105,
-      "needsReview": 16,
+      "ready": 106,
+      "needsReview": 15,
       "quarantined": 0,
-      "nonPinnable": 12,
+      "nonPinnable": 11,
       "issues": {
-        "legacy_city": 12,
-        "location_not_verified": 12,
+        "legacy_city": 11,
+        "location_not_verified": 11,
         "pending_duplicate_candidate": 4
       }
     },
@@ -4995,14 +4910,15 @@
       }
     },
     "IT": {
-      "centres": 43,
+      "centres": 44,
       "ready": 41,
-      "needsReview": 2,
+      "needsReview": 3,
       "quarantined": 0,
-      "nonPinnable": 1,
+      "nonPinnable": 2,
       "issues": {
         "legacy_city": 2,
-        "location_not_verified": 1
+        "location_not_verified": 2,
+        "missing_city": 1
       }
     },
     "JE": {
@@ -5025,19 +4941,19 @@
       }
     },
     "JO": {
-      "centres": 5,
+      "centres": 4,
       "ready": 2,
-      "needsReview": 3,
+      "needsReview": 2,
       "quarantined": 0,
-      "nonPinnable": 3,
+      "nonPinnable": 2,
       "issues": {
-        "legacy_city": 3,
-        "location_not_verified": 3
+        "legacy_city": 2,
+        "location_not_verified": 2
       }
     },
     "JP": {
-      "centres": 15,
-      "ready": 13,
+      "centres": 12,
+      "ready": 10,
       "needsReview": 2,
       "quarantined": 0,
       "nonPinnable": 2,
@@ -5047,16 +4963,14 @@
       }
     },
     "KE": {
-      "centres": 12,
-      "ready": 6,
-      "needsReview": 6,
+      "centres": 10,
+      "ready": 8,
+      "needsReview": 2,
       "quarantined": 0,
       "nonPinnable": 1,
       "issues": {
         "legacy_city": 2,
-        "location_not_verified": 1,
-        "missing_city": 1,
-        "pending_duplicate_candidate": 4
+        "location_not_verified": 1
       }
     },
     "KG": {
@@ -5079,53 +4993,51 @@
       "issues": {}
     },
     "KR": {
-      "centres": 21,
-      "ready": 16,
-      "needsReview": 5,
+      "centres": 19,
+      "ready": 15,
+      "needsReview": 4,
       "quarantined": 0,
       "nonPinnable": 2,
       "issues": {
-        "legacy_city": 4,
+        "legacy_city": 3,
         "location_not_verified": 2,
         "missing_city": 1
       }
     },
     "KW": {
-      "centres": 6,
+      "centres": 7,
       "ready": 2,
-      "needsReview": 4,
+      "needsReview": 5,
       "quarantined": 0,
       "nonPinnable": 0,
       "issues": {
-        "legacy_city": 4
+        "legacy_city": 4,
+        "missing_city": 1
       }
     },
     "KZ": {
       "centres": 28,
-      "ready": 13,
-      "needsReview": 15,
+      "ready": 14,
+      "needsReview": 14,
       "quarantined": 0,
-      "nonPinnable": 15,
+      "nonPinnable": 14,
       "issues": {
         "legacy_city": 12,
-        "location_not_verified": 15,
-        "missing_city": 3
+        "location_not_verified": 14,
+        "missing_city": 2
       }
     },
     "LA": {
-      "centres": 4,
+      "centres": 3,
       "ready": 3,
-      "needsReview": 1,
+      "needsReview": 0,
       "quarantined": 0,
-      "nonPinnable": 1,
-      "issues": {
-        "location_not_verified": 1,
-        "missing_city": 1
-      }
+      "nonPinnable": 0,
+      "issues": {}
     },
     "LB": {
-      "centres": 4,
-      "ready": 2,
+      "centres": 5,
+      "ready": 3,
       "needsReview": 2,
       "quarantined": 0,
       "nonPinnable": 0,
@@ -5186,8 +5098,8 @@
       }
     },
     "MA": {
-      "centres": 8,
-      "ready": 3,
+      "centres": 9,
+      "ready": 4,
       "needsReview": 5,
       "quarantined": 0,
       "nonPinnable": 5,
@@ -5304,8 +5216,8 @@
       }
     },
     "MX": {
-      "centres": 28,
-      "ready": 22,
+      "centres": 27,
+      "ready": 21,
       "needsReview": 6,
       "quarantined": 0,
       "nonPinnable": 4,
@@ -5317,13 +5229,13 @@
     },
     "MY": {
       "centres": 32,
-      "ready": 27,
-      "needsReview": 5,
+      "ready": 28,
+      "needsReview": 4,
       "quarantined": 0,
-      "nonPinnable": 4,
+      "nonPinnable": 3,
       "issues": {
-        "legacy_city": 5,
-        "location_not_verified": 4
+        "legacy_city": 4,
+        "location_not_verified": 3
       }
     },
     "MZ": {
@@ -5353,15 +5265,15 @@
       "issues": {}
     },
     "NG": {
-      "centres": 49,
-      "ready": 37,
-      "needsReview": 12,
+      "centres": 51,
+      "ready": 38,
+      "needsReview": 13,
       "quarantined": 0,
-      "nonPinnable": 12,
+      "nonPinnable": 13,
       "issues": {
         "legacy_city": 11,
-        "location_not_verified": 12,
-        "missing_city": 1
+        "location_not_verified": 13,
+        "missing_city": 2
       }
     },
     "NL": {
@@ -5384,8 +5296,8 @@
       "issues": {}
     },
     "NP": {
-      "centres": 13,
-      "ready": 10,
+      "centres": 14,
+      "ready": 11,
       "needsReview": 3,
       "quarantined": 0,
       "nonPinnable": 3,
@@ -5395,8 +5307,8 @@
       }
     },
     "NZ": {
-      "centres": 8,
-      "ready": 5,
+      "centres": 9,
+      "ready": 6,
       "needsReview": 3,
       "quarantined": 0,
       "nonPinnable": 1,
@@ -5407,28 +5319,28 @@
       }
     },
     "OM": {
-      "centres": 42,
+      "centres": 40,
       "ready": 6,
-      "needsReview": 36,
+      "needsReview": 34,
       "quarantined": 0,
       "nonPinnable": 22,
       "issues": {
-        "legacy_city": 32,
+        "legacy_city": 30,
         "location_not_verified": 22,
         "missing_city": 4,
-        "missing_contact_information": 7,
-        "pending_duplicate_candidate": 2
+        "missing_contact_information": 7
       }
     },
     "PE": {
-      "centres": 6,
-      "ready": 4,
+      "centres": 7,
+      "ready": 5,
       "needsReview": 2,
       "quarantined": 0,
       "nonPinnable": 2,
       "issues": {
-        "legacy_city": 2,
-        "location_not_verified": 2
+        "legacy_city": 1,
+        "location_not_verified": 2,
+        "missing_city": 1
       }
     },
     "PF": {
@@ -5448,27 +5360,28 @@
       "issues": {}
     },
     "PH": {
-      "centres": 41,
-      "ready": 36,
-      "needsReview": 5,
+      "centres": 43,
+      "ready": 37,
+      "needsReview": 6,
       "quarantined": 0,
       "nonPinnable": 1,
       "issues": {
         "legacy_city": 3,
         "location_not_verified": 1,
-        "missing_city": 2
+        "missing_city": 3,
+        "pending_duplicate_candidate": 2
       }
     },
     "PK": {
-      "centres": 55,
-      "ready": 38,
-      "needsReview": 17,
+      "centres": 60,
+      "ready": 42,
+      "needsReview": 18,
       "quarantined": 0,
       "nonPinnable": 10,
       "issues": {
         "legacy_city": 10,
         "location_not_verified": 10,
-        "missing_city": 7,
+        "missing_city": 8,
         "missing_contact_information": 1,
         "pending_duplicate_candidate": 2
       }
@@ -5513,8 +5426,8 @@
       }
     },
     "RO": {
-      "centres": 8,
-      "ready": 8,
+      "centres": 9,
+      "ready": 9,
       "needsReview": 0,
       "quarantined": 0,
       "nonPinnable": 0,
@@ -5551,6 +5464,14 @@
         "missing_city": 1,
         "missing_location": 1
       }
+    },
+    "SB": {
+      "centres": 1,
+      "ready": 1,
+      "needsReview": 0,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {}
     },
     "SC": {
       "centres": 1,
@@ -5632,8 +5553,8 @@
       }
     },
     "TH": {
-      "centres": 43,
-      "ready": 35,
+      "centres": 41,
+      "ready": 33,
       "needsReview": 8,
       "quarantined": 0,
       "nonPinnable": 8,
@@ -5660,14 +5581,15 @@
       "issues": {}
     },
     "TN": {
-      "centres": 4,
+      "centres": 5,
       "ready": 1,
-      "needsReview": 3,
+      "needsReview": 4,
       "quarantined": 0,
-      "nonPinnable": 3,
+      "nonPinnable": 4,
       "issues": {
         "legacy_city": 3,
-        "location_not_verified": 3
+        "location_not_verified": 4,
+        "missing_city": 1
       }
     },
     "TO": {
@@ -5680,13 +5602,13 @@
     },
     "TR": {
       "centres": 24,
-      "ready": 19,
-      "needsReview": 5,
+      "ready": 20,
+      "needsReview": 4,
       "quarantined": 0,
-      "nonPinnable": 4,
+      "nonPinnable": 3,
       "issues": {
-        "legacy_city": 5,
-        "location_not_verified": 4
+        "legacy_city": 4,
+        "location_not_verified": 3
       }
     },
     "TT": {
@@ -5730,14 +5652,14 @@
     },
     "US": {
       "centres": 29,
-      "ready": 22,
+      "ready": 23,
       "needsReview": 1,
-      "quarantined": 6,
-      "nonPinnable": 7,
+      "quarantined": 5,
+      "nonPinnable": 6,
       "issues": {
-        "location_not_verified": 7,
-        "missing_contact_information": 6,
-        "no_published_price": 6
+        "location_not_verified": 6,
+        "missing_contact_information": 5,
+        "no_published_price": 5
       }
     },
     "UY": {
@@ -5752,14 +5674,14 @@
       }
     },
     "UZ": {
-      "centres": 32,
-      "ready": 14,
-      "needsReview": 18,
+      "centres": 31,
+      "ready": 15,
+      "needsReview": 16,
       "quarantined": 0,
-      "nonPinnable": 13,
+      "nonPinnable": 12,
       "issues": {
-        "legacy_city": 15,
-        "location_not_verified": 13,
+        "legacy_city": 13,
+        "location_not_verified": 12,
         "missing_city": 3,
         "pending_duplicate_candidate": 2
       }
@@ -5773,8 +5695,8 @@
       "issues": {}
     },
     "VN": {
-      "centres": 60,
-      "ready": 39,
+      "centres": 61,
+      "ready": 40,
       "needsReview": 21,
       "quarantined": 0,
       "nonPinnable": 20,
@@ -5782,6 +5704,16 @@
         "legacy_city": 17,
         "location_not_verified": 20,
         "missing_city": 4
+      }
+    },
+    "VU": {
+      "centres": 1,
+      "ready": 0,
+      "needsReview": 1,
+      "quarantined": 0,
+      "nonPinnable": 0,
+      "issues": {
+        "missing_city": 1
       }
     },
     "XK": {
