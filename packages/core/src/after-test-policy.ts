@@ -5,8 +5,6 @@ export interface AfterTestPolicy {
   britishCouncilUnitedStates: {
     oneSkillRetakeUnavailable: boolean;
     sourceUrl: string;
-    monitorUrl: string;
-    monitoredClaim: string;
   };
 }
 
